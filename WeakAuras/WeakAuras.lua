@@ -28,6 +28,8 @@ local prettyPrint = WeakAuras.prettyPrint
 WeakAurasTimers = setmetatable({}, {__tostring=function() return "WeakAuras" end})
 LibStub("AceTimer-3.0"):Embed(WeakAurasTimers)
 
+Private.watched_trigger_events = {}
+
 -- The worlds simplest callback system
 -- That supports 1:N, but no deregistration and breaks if registrating in a callback
 Private.callbacks = {}
@@ -3686,6 +3688,23 @@ local function ApplyStatesToRegions(id, activeTrigger, states)
   end
 end
 
+-- handle trigger updates that have been requested to be sent into custom
+-- we need the id and triggernum that's changing, but can't send the ScanEvents to the custom trigger until after UpdatedTriggerState has fired
+local delayed_watched_trigger = {}
+function Private.AddToWatchedTriggerDelay(id, triggernum)
+  delayed_watched_trigger[id] = delayed_watched_trigger[id] or {}
+  tinsert(delayed_watched_trigger[id], triggernum)
+end
+function Private.SendDelayedWatchedTriggers()
+  for id in pairs(delayed_watched_trigger) do
+    local watched = delayed_watched_trigger[id]
+    -- Since the observers are themselves observable, we set the list of observers to
+    -- empty here.
+    delayed_watched_trigger[id] = {}
+    Private.ScanEventsWatchedTrigger(id, watched)
+  end
+end
+
 function Private.UpdatedTriggerState(id)
   if (not triggerState[id]) then
     return;
@@ -3788,6 +3807,9 @@ function Private.UpdatedTriggerState(id)
       state.changed = false;
     end
   end
+  
+  -- once updatedTriggerStates is complete, and empty states removed, etc., then check for queued watched triggers update
+  Private.SendDelayedWatchedTriggers()
 end
 
 function Private.RunCustomTextFunc(region, customFunc)
