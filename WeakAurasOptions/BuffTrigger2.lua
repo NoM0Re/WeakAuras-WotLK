@@ -193,7 +193,8 @@ local function CreateNameOptions(aura_options, data, trigger, size, isExactSpell
         WeakAuras.UpdateThumbnail(data)
         WeakAuras.ClearAndUpdateOptions(data.id)
       end,
-      validate = isExactSpellId and WeakAuras.ValidateNumeric or nil
+      validate = isExactSpellId and WeakAuras.ValidateNumeric or nil,
+      control = "WeakAurasInputFocus",
     }
   end
   -- VALIDATE ?

@@ -743,6 +743,10 @@ L["Matches (Pattern)"] = "Correspond (format)"
 --[[Translation missing --]]
 L["Max Char "] = "Max Char "
 L["Max Charges"] = "Charges Max"
+--[[Translation missing --]]
+L["Max Health"] = "Max Health"
+--[[Translation missing --]]
+L["Max Power"] = "Max Power"
 L["Maximum"] = "Maximum"
 L["Maximum Estimate"] = "Estimation Maximale"
 L["Medium"] = "Moyen"

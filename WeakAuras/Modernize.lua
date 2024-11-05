@@ -1195,5 +1195,179 @@ function Private.Modernize(data)
     end
   end
 
+  if data.internalVersion < 53 then -- on Retail it's Version 67, not sure if i change it...
+    local function migrateToTable(tab, field)
+      local value = tab[field]
+      if value ~= nil and type(value) ~= "table" then
+        tab[field] = { value }
+      end
+    end
+
+    do
+      local trigger_migration = {
+        ["Cast"] = {
+          "stage",
+          "stage_operator",
+        },
+        ["Experience"] = {
+          "level",
+          "level_operator",
+          "currentXP",
+          "currentXP_operator",
+          "totalXP",
+          "totalXP_operator",
+          "percentXP",
+          "percentXP_operator",
+          "restedXP",
+          "restedXP_operator",
+          "percentrested",
+          "percentrested_operator",
+        },
+        ["Health"] = {
+          "health",
+          "health_operator",
+          "percenthealth",
+          "percenthealth_operator",
+          "deficit",
+          "deficit_operator",
+          "maxhealth",
+          "maxhealth_operator",
+        },
+        ["Power"] = {
+          "power",
+          "power_operator",
+          "percentpower",
+          "percentpower_operator",
+          "deficit",
+          "deficit_operator",
+          "maxpower",
+          "maxpower_operator",
+        },
+        ["Character Stats"] = {
+          "strength",
+          "strength_operator",
+          "agility",
+          "agility_operator",
+          "stamina",
+          "stamina_operator",
+          "intellect",
+          "intellect_operator",
+          "spirit",
+          "spirit_operator",
+          "meleecriticalrating",
+          "meleecriticalrating_operator",
+          "rangedcriticalrating",
+          "rangedcriticalrating_operator",
+          "spellcriticalrating",
+          "spellcriticalrating_operator",
+          "meleecriticalpercent",
+          "meleecriticalpercent_operator",
+          "rangedcriticalpercent",
+          "rangedcriticalpercent_operator",
+          "spellcriticalpercent",
+          "spellcriticalpercent_operator",
+          "meleehasterating",
+          "meleehasterating_operator",
+          "rangedhasterating",
+          "rangedhasterating_operator",
+          "spellhasterating",
+          "spellhasterating_operator",
+          "resistancefire",
+          "resistancefire_operator",
+          "resistancenature",
+          "resistancenature_operator",
+          "resistancefrost",
+          "resistancefrost_operator",
+          "resistanceshadow",
+          "resistanceshadow_operator",
+          "resistancearcane",
+          "resistancearcane_operator",
+          "movespeedpercent",
+          "movespeedpercent_operator",
+          "dodgerating",
+          "dodgerating_operator",
+          "dodgepercent",
+          "dodgepercent_operator",
+          "parryrating",
+          "parryrating_operator",
+          "parrypercent",
+          "parrypercent_operator",
+          "blockrating",
+          "blockrating_operator",
+          "blockpercent",
+          "blockpercent_operator",
+          "armorrating",
+          "armorrating_operator",
+          "armorpercent",
+          "armorpercent_operator",
+        },
+        ["Threat Situation"] = {
+          "threatpct",
+          "threatpct_operator",
+          "rawthreatpct",
+          "rawthreatpct_operator",
+          "threatvalue",
+          "threatvalue_operator",
+        },
+        ["Unit Characteristics"] = {
+          "level",
+          "level_operator",
+        },
+        ["Combat Log"] = {
+          "spellId",
+          "spellName",
+        },
+        ["Location"] = {
+          "zone",
+          "zone_operator",
+          "subzone",
+          "subzone_operator",
+        }
+      }
+      for _, triggerData in ipairs(data.triggers) do
+        local t = triggerData.trigger
+        local fieldsToMigrate = trigger_migration[t.event]
+        if fieldsToMigrate then
+          for _, field in ipairs(fieldsToMigrate) do
+            migrateToTable(t, field)
+          end
+        end
+        -- cast trigger move data from 'spell' & 'spellId' to 'spellIds' & 'spellNames'
+        if t.event == "Cast" and t.type == "unit" then
+          if t.spellId then
+            if t.useExactSpellId then
+              t.use_spellIds = t.use_spellId
+              t.spellIds = t.spellIds or {}
+              tinsert(t.spellIds, t.spellId)
+            else
+              t.use_spellNames = t.use_spellId
+              t.spellNames = t.spellNames or {}
+              tinsert(t.spellNames, t.spellId)
+            end
+          end
+          if t.use_spell and t.spell then
+            t.use_spellNames = true
+            t.spellNames = t.spellNames or {}
+            tinsert(t.spellNames, t.spell)
+          end
+          t.use_spellId = nil
+          t.spellId = nil
+          t.use_spell = nil
+          t.spell = nil
+        end
+      end
+    end
+    do
+      local loadFields = {
+        "level", "itemequiped", "itemequiped"
+      }
+
+      for _, field in ipairs(loadFields) do
+        migrateToTable(data.load, field)
+        migrateToTable(data.load, field .. "_operator")
+      end
+    end
+  end
+
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion());
 end

@@ -100,6 +100,7 @@ globals = {
 	"WeakAurasArchive",
 	"WeakAurasTooltipImportButtonText",
 	"AceGUIWeakAurasMultiLineEditBoxInsertLink",
+	"AceGUIWeakAurasMultiLineEditBoxWithEnterInsertLink",
 
 	-- Third Party Addons/Libs
 	"BigWigs",

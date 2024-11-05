@@ -853,6 +853,8 @@ L["Matches (Pattern)"] = "Coincidencias (Patrones)"
 L["Max Char "] = "Max Char "
 --[[Translation missing --]]
 L["Max Charges"] = "Max Charges"
+L["Max Health"] = "Salud máx."
+L["Max Power"] = "Poder máx."
 --[[Translation missing --]]
 L["Maximum"] = "Maximum"
 --[[Translation missing --]]

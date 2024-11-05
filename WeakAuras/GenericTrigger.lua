@@ -194,52 +194,98 @@ function TestForMultiSelect(trigger, arg)
   return test;
 end
 
-function ConstructTest(trigger, arg)
+local function singleTest(arg, trigger, name, value, operator, use_exact)
+  local number = tonumber(value)
+  if(arg.type == "tristate") then
+    return TestForTriState(trigger, arg);
+  elseif(arg.type == "multiselect") then
+    return TestForMultiSelect(trigger, arg);
+  elseif(arg.type == "toggle") then
+    return TestForToggle(trigger, arg);
+  elseif (arg.type == "spell" or arg.type == "item") then
+    if arg.test then
+      if arg.showExactOption then
+        return "("..arg.test:format(value, tostring(use_exact) or "false") ..")";
+      else
+        return "("..arg.test:format(value)..")";
+      end
+    else
+      return "(".. name .." and "..name.."==" ..(number or ("\""..(tostring(value) or "").."\""))..")";
+    end
+  elseif(arg.test) then
+    return "("..arg.test:format(tostring(value) or "")..")";
+  elseif(arg.type == "longstring" and operator) then
+    return TestForLongString(trigger, arg);
+  elseif (arg.type == "string" or arg.type == "select") then
+    return "(".. name .." and "..name.."==" ..(number or ("\""..(tostring(value) or "").."\""))..")";
+  elseif (arg.type == "number") then
+    return "(".. name .." and "..name..(operator or "==")..(number or 0) ..")";
+  else
+    -- Should be unused
+    return "(".. name .." and "..name..(operator or "==")..(number or ("\""..(tostring(value) or 0).."\""))..")";
+  end
+end
+
+function ConstructTest(trigger, arg, testGroups, preambleGroups)
   local test
   local preamble
   local name = arg.name;
-  if(arg.hidden or arg.type == "tristate" or arg.type == "toggle" or (arg.type == "multiselect" and trigger["use_"..name] ~= nil) or ((trigger["use_"..name] or arg.required) and trigger[name])) then
-    local number = tonumber(trigger[name]);
-    if(arg.type == "tristate") then
-      test = TestForTriState(trigger, arg);
-    elseif(arg.type == "multiselect") then
-      test = TestForMultiSelect(trigger, arg);
-    elseif(arg.type == "toggle") then
-      test = TestForToggle(trigger, arg);
-    elseif (arg.type == "spell") then
-      if arg.test then
-        if arg.showExactOption then
-          test = "("..arg.test:format(trigger[name], tostring(trigger["use_exact_" .. name]) or "false") ..")";
-        else
-          test = "("..arg.test:format(trigger[name])..")";
-        end
-      else
-        test = "(".. name .." and "..name.."==" ..(number or "\""..(trigger[name] or "").."\"")..")";
-      end
-    elseif(arg.test) then
-      test = "("..arg.test:format(tostring(trigger[name]) or "")..")";
-    elseif(arg.type == "longstring" and trigger[name.."_operator"]) then
-      test = TestForLongString(trigger, arg);
-    elseif (arg.type == "string" or arg.type == "select" or arg.type == "item") and not (type(trigger[name]) == "table") then
-      test = "(".. name .." and "..name.."==" ..(number or "\""..(trigger[name] or "").."\"")..")";
-    else
-      -- if (type(trigger[name]) == "table") or type(trigger[name.."_operator"]) == "table" then
-        -- 3.4.0 auras fix
-        if (type(trigger[name]) == "table") then
-          trigger[name] = trigger[name][1] or "error";
-        end
-        if (type(trigger[name.."_operator"]) == "table") then
-          trigger[name.."_operator"] = trigger[name.."_operator"][1] or "error";
-        end
-      test = "(".. name .." and "..name..(trigger[name.."_operator"] or "==")..(number or ("\""..(trigger[name])) or ("".."\""))..")";
+
+  if arg.preamble then
+    if not arg.preambleGroup or not preambleGroups[arg.preambleGroup] then
+      preamble = arg.preamble:format(trigger[name] or "")
+    end
+    if arg.preambleGroup then
+      preambleGroups[arg.preambleGroup] = true
     end
   end
 
-  if arg.preamble then
-    preamble = arg.preamble:format(trigger[name] or "")
+  if arg.hidden
+    or arg.type == "tristate"
+    or arg.type == "toggle"
+    or (arg.type == "multiselect" and trigger["use_"..name] ~= nil)
+    or ((trigger["use_"..name] or arg.required) and trigger[name])
+  then
+    if arg.multiEntry then
+      if type(trigger[name]) == "table" and #trigger[name] > 0 then
+        test = ""
+        for i, value in ipairs(trigger[name]) do
+          local operator = name and type(trigger[name.."_operator"]) == "table" and trigger[name.."_operator"][i]
+          local use_exact = name and type(trigger["use_exact_" .. name]) == "table" and trigger["use_exact_" .. name][i]
+
+          if arg.multiEntry.operator == "preamble" then
+            preamble = preamble and (preamble .. "\n") or ""
+            preamble = preamble .. arg.multiEntry.preambleAdd:format(value)
+          else
+            local single = singleTest(arg, trigger, name, value, operator, use_exact)
+            if single then
+              if test ~= "" then
+                test = test .. arg.multiEntry.operator
+              end
+              test = test .. single
+            end
+          end
+        end
+
+        if arg.multiEntry.operator == "preamble" then
+          test = arg.test
+        end
+
+        if test == "" then
+          test = nil
+        else
+          test = "(" .. test .. ")"
+        end
+      end
+    else
+      local value = trigger[name]
+      local operator = name and trigger[name.."_operator"]
+      local use_exact = name and trigger["use_exact_" .. name]
+      test = singleTest(arg, trigger, name, value, operator, use_exact)
+    end
   end
 
-  if (test == "(true)") then
+  if not test or test == "(true)" or arg.testGroup and testGroups[arg.testGroup] then
     return nil, preamble
   end
 
@@ -253,9 +299,17 @@ function ConstructFunction(prototype, trigger)
 
   local input;
   if (prototype.statesParameter) then
-    input = {"state", "event"};
+    if prototype.countEvents then
+      input = {"state", "counter", "event"};
+    else
+      input = {"state", "event"};
+    end
   else
-    input = {"event"};
+    if prototype.countEvents then
+      input = {"counter", "event"};
+    else
+      input = {"event"};
+    end
   end
 
   local required = {};
@@ -264,6 +318,9 @@ function ConstructFunction(prototype, trigger)
   local store = {};
   local init;
   local preambles = "\n"
+  local orConjunctionGroups = {}
+  local preambleGroups = {}
+  local testGroups = {}
   if(prototype.init) then
     init = prototype.init(trigger);
   else
@@ -289,12 +346,17 @@ function ConstructFunction(prototype, trigger)
         if (arg.store) then
           tinsert(store, name);
         end
-        local test, preamble = ConstructTest(trigger, arg);
+        local test, preamble = ConstructTest(trigger, arg, testGroups, preambleGroups);
         if (test) then
           if(arg.required) then
             tinsert(required, test);
           else
-            tinsert(tests, test);
+            if arg.orConjunctionGroup then
+              orConjunctionGroups[arg.orConjunctionGroup] = orConjunctionGroups[arg.orConjunctionGroup] or {}
+              tinsert(orConjunctionGroups[arg.orConjunctionGroup], test)
+            else
+              tinsert(tests, test);
+            end
           end
           if(arg.debug) then
             tinsert(debug, arg.debug:format(trigger[name]));
@@ -306,34 +368,51 @@ function ConstructFunction(prototype, trigger)
       end
     end
   end
-  local ret = preambles .. "return function("..tconcat(input, ", ")..")\n";
-  ret = ret..(init or "");
 
-  ret = ret..(#debug > 0 and tconcat(debug, "\n") or "");
+  for _, orConjunctionGroup in pairs(orConjunctionGroups) do
+    tinsert(tests, "("..table.concat(orConjunctionGroup, " or ")..")")
+  end
 
-  ret = ret.."if(";
-  ret = ret..((#required > 0) and tconcat(required, " and ").." and " or "");
-  ret = ret..(#tests > 0 and tconcat(tests, " and ") or "true");
-  ret = ret..") then\n";
+  local ret = {preambles .. "return function("..tconcat(input, ", ")..")\n"}
+  if init then
+    table.insert(ret, init)
+  end
+  if #debug > 0 then
+    table.insert(ret, tconcat(debug, "\n") or "")
+  end
+
+  table.insert(ret, "if("..((#required > 0) and tconcat(required, " and ").." and " or ""))
+  table.insert(ret, #tests > 0 and tconcat(tests, " and ") or "true")
+  table.insert(ret, ") then\n")
   if(#debug > 0) then
-    ret = ret.."print('ret: true');\n";
+    table.insert("print('ret: true');\n")
   end
 
   if (prototype.statesParameter == "all") then
-    ret = ret .. "  state[cloneId] = state[cloneId] or {}\n"
-    ret = ret .. "  state = state[cloneId]\n"
-    ret = ret .. "  state.changed = true\n"
+    table.insert(ret, "  state[cloneId] = state[cloneId] or {}\n")
+    table.insert(ret, "  state = state[cloneId]\n")
+    table.insert(ret, "  state.changed = true\n")
+  end
+
+  if prototype.countEvents then
+    table.insert(ret, "  local count = counter:GetNext()\n")
+    if trigger.use_count and type(trigger.count) == "string" and trigger.count ~= "" then
+      table.insert(ret, "  local match = counter:Match()")
+      table.insert(ret, "  if not match then return false end\n")
+    end
+    table.insert(ret, "  state.count = count\n")
+    table.insert(ret, "  state.changed = true\n")
   end
 
   for _, v in ipairs(store) do
-    ret = ret .. "    if (state." .. v .. " ~= " .. v .. ") then\n"
-    ret = ret .. "      state." .. v .. " = " .. v .. "\n"
-    ret = ret .. "      state.changed = true\n"
-    ret = ret .. "    end\n"
+    table.insert(ret, "    if (state." .. v .. " ~= " .. v .. ") then\n")
+    table.insert(ret, "      state." .. v .. " = " .. v .. "\n")
+    table.insert(ret, "      state.changed = true\n")
+    table.insert(ret, "    end\n")
   end
-  ret = ret.."return true else return false end end";
+  table.insert(ret, "return true else return false end end")
 
-  return ret;
+  return table.concat(ret);
 end
 
 function Private.EndEvent(id, triggernum, force, state)

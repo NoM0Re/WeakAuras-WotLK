@@ -1,6 +1,6 @@
 local AddonName, Private = ...
 
-local internalVersion = 52
+local internalVersion = 54
 
 -- Lua APIs
 local insert = table.insert
@@ -537,6 +537,147 @@ function Private.ParseNumber(numString)
   end
 end
 
+local function EvalBooleanArg(arg, trigger, default)
+  if(type(arg) == "function") then
+    return arg(trigger);
+  elseif type(arg) == "boolean" then
+    return arg
+  elseif type(arg) == "nil" then
+    return default
+  end
+end
+
+local function singleTest(arg, trigger, use, name, value, operator, use_exact, caseInsensitive)
+  local number = value and tonumber(value) or nil
+  if(arg.type == "tristate") then
+    if(use == false) then
+      return "(not "..name..")";
+    elseif(use) then
+      if(arg.test) then
+        return "("..arg.test:format(value)..")";
+      else
+        return name;
+      end
+    end
+  elseif(arg.type == "tristatestring") then
+    if(use == false) then
+      return "("..name.. "~=".. (number or string.format("%s", Private.QuotedString(value or ""))) .. ")"
+    elseif(use) then
+      return "("..name.. "==".. (number or string.format("%s", Private.QuotedString(value or ""))) .. ")"
+    end
+  elseif(arg.type == "multiselect") then
+    if arg.multiNoSingle then
+      -- convert single to multi
+      -- this is a lazy migration because multiNoSingle is not set for all game versions
+      if use == true then
+        trigger["use_"..name] = false
+        trigger[name] = trigger[name] or {}
+        trigger[name].multi = {};
+        if trigger[name].single ~= nil then
+          trigger[name].multi[trigger[name].single] = true;
+          trigger[name].single = nil
+        end
+      end
+    end
+    if(use == false) then -- multi selection
+      local any = false;
+      if (value and value.multi) then
+        local test = "(";
+        for value, positive in pairs(value.multi) do
+          local arg1 = tonumber(value) or ("[["..value.."]]")
+          local arg2
+          if arg.extraOption then
+            arg2 = trigger[name .. "_extraOption"] or 0
+          elseif arg.multiTristate then
+            arg2 = positive and 4 or 5
+          end
+          local testEnabled = true
+          if type(arg.enableTest) == "function" then
+            testEnabled = arg.enableTest(trigger, arg1, arg2)
+          end
+          if testEnabled then
+            local check
+            if not arg.test then
+              check = name.."=="..arg1
+            else
+              check = arg.test:format(arg1, arg2)
+            end
+            if arg.multiAll then
+              test = test..check.." and "
+            else
+              test = test..check.." or  "
+            end
+            any = true;
+          end
+        end
+        if(any) then
+          test = test:sub(1, -6);
+        else
+          test = "(false";
+        end
+        test = test..")"
+        if arg.inverse then
+          if type(arg.inverse) == "boolean" then
+            test = "not " .. test
+          elseif type(arg.inverse) == "function" then
+            if arg.inverse(trigger) then
+              test = "not " .. test
+            end
+          end
+        end
+        return test
+      end
+    elseif(use) then -- single selection
+      local value = value and value.single or nil;
+      if not arg.test then
+        return value and "("..name.."=="..(tonumber(value) or ("[["..value.."]]"))..")";
+      else
+        return value and "("..arg.test:format(tonumber(value) or ("[["..value.."]]"))..")";
+      end
+    end
+  elseif(arg.type == "toggle") then
+    if(use) then
+      if(arg.test) then
+        return "("..arg.test:format(value)..")";
+      else
+        return name;
+      end
+    end
+  elseif (arg.type == "spell") then
+    if arg.showExactOption then
+      return "("..arg.test:format(value, tostring(use_exact) or "false") ..")";
+    else
+      return "("..arg.test:format(value)..")";
+    end
+  elseif(arg.test) then
+    return "("..arg.test:format(value)..")";
+  elseif(arg.type == "longstring" and operator) then
+    if(operator == "==") then
+      if caseInsensitive then
+        return ("(%s and %s:lower() == [[%s]]:lower())"):format(name, name, value)
+      else
+        return "("..name.."==[["..value.."]])";
+      end
+    else
+      if caseInsensitive then
+        local op = operator:format(value:lower())
+        return ("(%s:lower():%s)"):format(name, op)
+      else
+        return "("..name..":"..operator:format(value)..")";
+      end
+    end
+  elseif(arg.type == "number") then
+    if number then
+      return "("..name..(operator or "==").. number ..")";
+    end
+  else
+    if(type(value) == "table") then
+      value = "error";
+    end
+    return "("..name..(operator or "==")..(number or ("[["..(value or "").."]]"))..")";
+  end
+end
+
 -- Used for the load function, could be simplified a bit
 -- It used to be also used for the generic trigger system
 local function ConstructFunction(prototype, trigger, skipOptional)
@@ -547,164 +688,108 @@ local function ConstructFunction(prototype, trigger, skipOptional)
   local events = {}
   local init;
   local preambles = ""
+  local orConjunctionGroups = {}
   if(prototype.init) then
     init = prototype.init(trigger);
   else
     init = "";
   end
   for index, arg in pairs(prototype.args) do
-    local enable = arg.type ~= "collpase";
-    if(type(arg.enable) == "function") then
-      enable = arg.enable(trigger);
-    elseif type(arg.enable) == "boolean" then
-      enable = arg.enable
+    local enable = EvalBooleanArg(arg.enable, trigger, true)
+    local init = arg.init
+    local name = arg.name;
+    if(arg.init == "arg") then
+      tinsert(input, name);
     end
-    if(enable) then
-      local name = arg.name;
-      if not(arg.name or arg.hidden) then
-        tinsert(input, "_");
-      else
-        if(arg.init == "arg") then
-          tinsert(input, name);
-        end
-        if (arg.optional and skipOptional) then
-        -- Do nothing
-        elseif(arg.hidden or arg.type == "tristate" or arg.type == "toggle" or arg.type == "tristatestring"
-               or (arg.type == "multiselect" and trigger["use_"..name] ~= nil)
-               or ((trigger["use_"..name] or arg.required) and trigger[name])) then
-          if(arg.init and arg.init ~= "arg") then
-            init = init.."local "..name.." = "..arg.init.."\n";
-          end
-          local number = trigger[name] and tonumber(trigger[name]);
-          local test;
-          if(arg.type == "tristate") then
-            if(trigger["use_"..name] == false) then
-              test = "(not "..name..")";
-            elseif(trigger["use_"..name]) then
-              if(arg.test) then
-                test = "("..arg.test:format(trigger[name])..")";
-              else
-                test = name;
-              end
-            end
-          elseif(arg.type == "tristatestring") then
-            if(trigger["use_"..name] == false) then
-              test = "("..name.. "~=".. (number or string.format("%s", Private.QuotedString(trigger[name] or ""))) .. ")"
-            elseif(trigger["use_"..name]) then
-              test = "("..name.. "==".. (number or string.format("%s", Private.QuotedString(trigger[name] or ""))) .. ")"
-            end
-          elseif(arg.type == "multiselect") then
-            if(trigger["use_"..name] == false) then -- multi selection
-              local any = false;
-              if (trigger[name] and trigger[name].multi) then
-                test = "(";
-                for value, _ in pairs(trigger[name].multi) do
-                  if not arg.test then
-                    test = test..name.."=="..(tonumber(value) or "[["..value.."]]").." or ";
-                  else
-                    if arg.extraOption then
-                      test = test..arg.test:format(tonumber(value) or "[["..value.."]]", trigger[name .. "_extraOption"] or 0).." or ";
-                    else
-                      test = test..arg.test:format(tonumber(value) or "[["..value.."]]").." or ";
-                    end
-                  end
-                  any = true;
-                end
-                if(any) then
-                  test = test:sub(1, -5);
-                else
-                  test = "(false";
-                end
-                test = test..")"
-                if arg.inverse then
-                  if type(arg.inverse) == "boolean" then
-                    test = "not " .. test
-                  elseif type(arg.inverse) == "function" then
-                    if arg.inverse(trigger) then
-                      test = "not " .. test
-                    end
-                  end
-                end
-              end
-            elseif(trigger["use_"..name]) then -- single selection
-              local value = trigger[name] and trigger[name].single;
-              if not arg.test then
-                test = trigger[name] and trigger[name].single and "("..name.."=="..(tonumber(value) or "[["..value.."]]")..")";
-              else
-                test = trigger[name] and trigger[name].single and "("..arg.test:format(tonumber(value) or "[["..value.."]]")..")";
-              end
-            end
-          elseif(arg.type == "toggle") then
-            if(trigger["use_"..name]) then
-              if(arg.test) then
-                test = "("..arg.test:format(trigger[name])..")";
-              else
-                test = name;
-              end
-            end
-          elseif (arg.type == "spell") then
-            if arg.showExactOption then
-              test = "("..arg.test:format(trigger[name], tostring(trigger["use_exact_" .. name]) or "false") ..")";
-            else
-              test = "("..arg.test:format(trigger[name])..")";
-            end
-          elseif(arg.test) then
-            test = "("..arg.test:format(trigger[name])..")";
-          elseif(arg.type == "longstring" and trigger[name.."_operator"]) then
-            if(trigger[name.."_operator"] == "==") then
-              test = "("..name.."==[["..trigger[name].."]])";
-            else
-              test = "("..name..":"..trigger[name.."_operator"]:format(trigger[name])..")";
-            end
-          elseif(arg.type == "number") then
-            if number then
-              test = "("..name..(trigger[name.."_operator"] or "==").. number ..")";
-            end
-          else
-            if(type(trigger[name]) == "table") then
-              trigger[name] = "error";
-            end
-            test = "("..name..(trigger[name.."_operator"] or "==")..(number or "[["..(trigger[name] or "").."]]")..")";
-          end
-          if (arg.preamble) then
-            preambles = preambles .. arg.preamble:format(trigger[name]) .. "\n"
-          end
 
-          if test ~= "(test)" then
-            if(arg.required) then
-              tinsert(required, test);
+    if(enable) then
+      if (arg.optional and skipOptional) then
+      -- Do nothing
+      elseif arg.type == "tristate"
+        or arg.type == "toggle"
+        or arg.type == "tristatestring"
+        or (arg.type == "multiselect" and trigger["use_"..name] ~= nil)
+        or ((trigger["use_"..name] or arg.required) and trigger[name])
+      then
+        local test;
+
+        if arg.multiEntry then
+          if type(trigger[name]) == "table" and #trigger[name] > 0 then
+            test = ""
+            for i, value in ipairs(trigger[name]) do
+              local operator = name and type(trigger[name.."_operator"]) == "table" and trigger[name.."_operator"][i]
+              local caseInsensitive = name and arg.canBeCaseInsensitive and type(trigger[name.."_caseInsensitive"]) == "table" and trigger[name.."_caseInsensitive"][i]
+              local use_exact = name and type(trigger["use_exact_" .. name]) == "table" and trigger["use_exact_" .. name][i]
+              local use = name and trigger["use_"..name]
+              local single = singleTest(arg, trigger, use, name, value, operator, use_exact, caseInsensitive)
+              if single then
+                if test ~= "" then
+                  test = test .. arg.multiEntry.operator
+                end
+                test = test .. single
+              end
+            end
+            if test == "" then
+              test = nil
+            else
+              test = "(" .. test .. ")"
+            end
+          end
+        else
+          local value = trigger[name]
+          local operator = name and trigger[name.."_operator"]
+          local caseInsensitive = name and trigger[name.."_caseInsensitive"]
+          local use_exact = name and trigger["use_exact_" .. name]
+          local use = name and trigger["use_"..name]
+          test = singleTest(arg, trigger, use, name, value, operator, use_exact, caseInsensitive)
+        end
+
+        if (arg.preamble) then
+          preambles = preambles .. arg.preamble:format(trigger[name]) .. "\n"
+        end
+
+        if test ~= "(test)" then
+          if(arg.required) then
+            tinsert(required, test);
+          elseif test ~= nil then
+            if arg.orConjunctionGroup then
+              orConjunctionGroups[arg.orConjunctionGroup ] = orConjunctionGroups[arg.orConjunctionGroup ] or {}
+              tinsert(orConjunctionGroups[arg.orConjunctionGroup ], test)
             else
               tinsert(tests, test);
             end
           end
+        end
 
-          if test and arg.events then
-            for index, event in ipairs(arg.events) do
-              events[event] = true
-            end
+        if test and arg.events then
+          for index, event in ipairs(arg.events) do
+            events[event] = true
           end
+        end
 
-          if(arg.debug) then
-            tinsert(debug, arg.debug:format(trigger[name]));
-          end
+        if(arg.debug) then
+          tinsert(debug, arg.debug:format(trigger[name]));
         end
       end
     end
   end
 
-  local ret = preambles .. "return function("..table.concat(input, ", ")..")\n";
-  ret = ret..(init or "");
-  ret = ret..(#debug > 0 and table.concat(debug, "\n") or "");
-  ret = ret.."if(";
-  ret = ret..((#required > 0) and table.concat(required, " and ").." and " or "");
-  ret = ret..(#tests > 0 and table.concat(tests, " and ") or "true");
-  ret = ret..") then\n";
-  if(#debug > 0) then
-    ret = ret.."print('ret: true');\n";
+  for _, orConjunctionGroup  in pairs(orConjunctionGroups) do
+    tinsert(tests, "("..table.concat(orConjunctionGroup , " or ")..")")
   end
-  ret = ret.."return true else return false end end";
+  local ret = {preambles .. "return function("..table.concat(input, ", ")..")\n"};
+  table.insert(ret, (init or ""));
+  table.insert(ret, (#debug > 0 and table.concat(debug, "\n") or ""));
+  table.insert(ret, "if(");
+  table.insert(ret, ((#required > 0) and table.concat(required, " and ").." and " or ""));
+  table.insert(ret, (#tests > 0 and table.concat(tests, " and ") or "true"));
+  table.insert(ret, ") then\n");
+  if(#debug > 0) then
+    table.insert(ret, "print('ret: true');\n");
+  end
+  table.insert(ret, "return true else return false end end");
 
-  return ret, events;
+  return table.concat(ret), events;
 end
 
 function WeakAuras.GetActiveConditions(id, cloneId)
@@ -4846,6 +4931,37 @@ function WeakAuras.IsAuraLoaded(id)
   return Private.loaded[id]
 end
 
+function Private.CreateSpellChecker()
+  local matcher = {
+    names = {},
+    spellIds = {},
+    AddName = function(self, name)
+      local spellId = tonumber(name)
+      if spellId then
+        name = GetSpellInfo(spellId)
+        if name then
+          self.names[name] = true
+        end
+      else
+        self.names[name] = true
+      end
+    end,
+    AddExact = function(self, spellId)
+      spellId = tonumber(spellId)
+      self.spellIds[spellId] = true
+    end,
+    Check = function(self, spellId)
+      if spellId then
+        return self.spellIds[spellId] or self.names[GetSpellInfo(spellId)]
+      end
+    end,
+    CheckName = function(self, name)
+      return self.names[name]
+    end
+  }
+  return matcher
+end
+
 function Private.IconSources(data)
   local values = {
     [-1] = L["Dynamic Information"],
@@ -4872,6 +4988,28 @@ end
 function WeakAuras.GetTriggerCategoryFor(triggerType)
   local prototype = Private.event_prototypes[triggerType]
   return prototype and prototype.type
+end
+
+function Private.SortOrderForValues(values)
+  local sortOrder = {}
+  for key, value in pairs(values) do
+    tinsert(sortOrder, key)
+  end
+  table.sort(sortOrder, function(aKey, bKey)
+    local aValue = values[aKey]
+    local bValue = values[bKey]
+
+    if aValue:sub(1, #WeakAuras.newFeatureString) == WeakAuras.newFeatureString then
+      aValue = aValue:sub(#WeakAuras.newFeatureString + 1)
+    end
+
+    if bValue:sub(1, #WeakAuras.newFeatureString) == WeakAuras.newFeatureString then
+      bValue = bValue:sub(#WeakAuras.newFeatureString + 1)
+    end
+
+    return aValue < bValue
+  end)
+  return sortOrder
 end
 
 do
