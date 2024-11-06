@@ -244,6 +244,8 @@ L["Buru the Gorger"] = "Buru the Gorger"
 L["Can be used for e.g. checking if \"boss1target\" is the same as \"player\"."] = "Può essere usato per esempio per controllare se \"boss1target\" sia uguale a \"player\"."
 L["Cancel"] = "Cancella"
 --[[Translation missing --]]
+L["Case Insensitive"] = "Case Insensitive"
+--[[Translation missing --]]
 L["Can't schedule timer with %i, due to a World of Warcraft bug with high computer uptime. (Uptime: %i). Please restart your computer."] = "Can't schedule timer with %i, due to a World of Warcraft bug with high computer uptime. (Uptime: %i). Please restart your computer."
 L["Cast"] = "Cast"
 --[[Translation missing --]]
@@ -1569,6 +1571,8 @@ L["Spacing"] = "Spacing"
 L["Spark"] = "Spark"
 --[[Translation missing --]]
 L["Spec Role"] = "Spec Role"
+--[[Translation missing --]]
+L["Specific Currency ID"] = "Specific Currency ID"
 --[[Translation missing --]]
 L["Specific Type"] = "Specific Type"
 --[[Translation missing --]]

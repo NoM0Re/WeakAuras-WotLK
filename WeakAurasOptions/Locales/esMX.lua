@@ -424,6 +424,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Event(s)"] = "Evento(s)"
 	--[[Translation missing --]]
 	L["Everything"] = "Everything"
+	L["Exact Item Match"] = "Coincidencia exacta de objeto"
 	--[[Translation missing --]]
 	L["Exact Spell ID(s)"] = "Exact Spell ID(s)"
 	--[[Translation missing --]]

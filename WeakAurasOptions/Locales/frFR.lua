@@ -365,6 +365,8 @@ Ne sautez pas cette version]=]
 	L["Event Type"] = "Type d'évènement"
 	L["Event(s)"] = "Évènement(s)"
 	L["Everything"] = "Tous"
+	--[[Translation missing --]]
+	L["Exact Item Match"] = "Exact Item Match"
 	L["Exact Spell ID(s)"] = "ID(s) de sort exact(s)"
 	L["Exact Spell Match"] = "Correspondance Exacte du Sort"
 	L["Expand"] = "Agrandir"

@@ -428,6 +428,8 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Event(s)"] = "Ereignis(se)"
 	L["Everything"] = "Alles"
 	--[[Translation missing --]]
+	L["Exact Item Match"] = "Exact Item Match"
+	--[[Translation missing --]]
 	L["Exact Spell ID(s)"] = "Exact Spell ID(s)"
 	--[[Translation missing --]]
 	L["Exact Spell Match"] = "Exact Spell Match"

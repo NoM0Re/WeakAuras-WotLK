@@ -310,6 +310,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Event Type"] = "事件類型"
 	L["Event(s)"] = "事件"
 	L["Everything"] = "全部"
+	L["Exact Item Match"] = "完全符合物品"
 	L["Exact Spell ID(s)"] = "正確的法術 ID"
 	L["Exact Spell Match"] = "完全符合法術"
 	L["Expand"] = "展開"

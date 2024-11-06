@@ -1005,7 +1005,9 @@ Private.load_prototype = {
       preamble = "local zoneChecker = WeakAuras.ParseStringCheck(%q)",
       test = "zoneChecker:Check(zone)",
       events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE"},
-      desc = L["Supports multiple entries, separated by commas"],
+      desc = function()
+        return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), L["Supports multiple entries, separated by commas"])
+      end,
       optional = true,
     },
     {
@@ -1030,7 +1032,9 @@ Private.load_prototype = {
       preamble = "local subzoneChecker = WeakAuras.ParseStringCheck(%q)",
       test = "subzoneChecker:Check(subzone)",
       events = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE" },
-      desc = L["Supports multiple entries, separated by commas"],
+      desc = function()
+        return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetMinimapZoneText(), L["Supports multiple entries, separated by commas"])
+      end,
       optional = true,
     },
     {
@@ -6865,6 +6869,9 @@ Private.event_prototypes = {
       {
         name = "zone",
         display = L["Zone Name"],
+        desc = function()
+          return ("|cffffd200%s|r%s"):format(L["Current Zone\n"], GetRealZoneText())
+        end,
         type = "string",
         conditionType = "string",
         store = true,
@@ -6876,7 +6883,9 @@ Private.event_prototypes = {
       {
         name = "subzone",
         display = L["Subzone Name"],
-        desc = L["Name of the (sub-)zone currently shown above the minimap."],
+        desc = function()
+          return ("%s\n\n|cffffd200%s|r%s"):format(L["Name of the (sub-)zone currently shown above the minimap."], L["Current Zone\n"], GetMinimapZoneText())
+        end,
         type = "string",
         conditionType = "string",
         store = true,

@@ -258,6 +258,8 @@ L["Buru the Gorger"] = "Buru the Gorger"
 L["Can be used for e.g. checking if \"boss1target\" is the same as \"player\"."] = "Kann genutzt werden um z.B zu checken ob \"Ziel\" dieselbe Einheit ist wie \"Spieler\""
 L["Cancel"] = "Abbrechen"
 --[[Translation missing --]]
+L["Case Insensitive"] = "Case Insensitive"
+--[[Translation missing --]]
 L["Can't schedule timer with %i, due to a World of Warcraft bug with high computer uptime. (Uptime: %i). Please restart your computer."] = "Can't schedule timer with %i, due to a World of Warcraft bug with high computer uptime. (Uptime: %i). Please restart your computer."
 L["Cast"] = "Zauberwirken"
 L["Cast Bar"] = "Zauberleiste"
@@ -1265,6 +1267,8 @@ L["Spark"] = "Spark"
 L["Spec Role"] = "Spec Role"
 --[[Translation missing --]]
 L["Specific Type"] = "Specific Type"
+--[[Translation missing --]]
+L["Specific Currency ID"] = "Specific Currency ID"
 L["Specific Unit"] = "Konkrete Einheit"
 L["Spell"] = "Zauber"
 L["Spell (Building)"] = "Zauber, Gebäude (SPELL_BUILDING)"

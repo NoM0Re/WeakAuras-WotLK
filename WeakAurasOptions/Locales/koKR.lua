@@ -358,6 +358,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Event Type"] = "이벤트 유형"
 	L["Event(s)"] = "이벤트"
 	L["Everything"] = "모두"
+	L["Exact Item Match"] = "정확한 아이템 일치"
 	L["Exact Spell ID(s)"] = "정확한 주문 ID"
 	L["Exact Spell Match"] = "정확한 주문 일치"
 	L["Expand"] = "확장"

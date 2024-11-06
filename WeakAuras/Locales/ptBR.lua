@@ -210,6 +210,8 @@ L["Buffed/Debuffed"] = "Buffado/Debuffado"
 L["Buru the Gorger"] = "Buru, o Banqueteador"
 L["Can be used for e.g. checking if \"boss1target\" is the same as \"player\"."] = "Pode ser usado, por exemplo, para checar se \"chefe1alvo\" é o mesmo que \"jogador\"."
 L["Cancel"] = "Cancelar"
+--[[Translation missing --]]
+L["Case Insensitive"] = "Case Insensitive"
 L["Can't schedule timer with %i, due to a World of Warcraft bug with high computer uptime. (Uptime: %i). Please restart your computer."] = "Não é possível agendar o cronômetro com %i, devido a um bug do World of Warcraft com alto tempo de atividade do computador. (Tempo de atividade: %i). Por favor, reinicie o seu computador."
 L["Cast"] = "Lançar"
 L["Cast Bar"] = "Barra de Lançamento"
@@ -1420,6 +1422,8 @@ L["Spacing"] = "Espaçamento"
 L["Spark"] = "Spark"
 --[[Translation missing --]]
 L["Spec Role"] = "Spec Role"
+--[[Translation missing --]]
+L["Specific Currency ID"] = "Specific Currency ID"
 --[[Translation missing --]]
 L["Specific Type"] = "Specific Type"
 L["Specific Unit"] = "Unidade específica"

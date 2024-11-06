@@ -428,6 +428,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Event Type"] = "Тип триггера"
 	L["Event(s)"] = "События"
 	L["Everything"] = "Всех вкладок"
+	L["Exact Item Match"] = "Точное совпадение"
 	L["Exact Spell ID(s)"] = "ID заклинания"
 	L["Exact Spell Match"] = "Точное совпадение"
 	L["Expand"] = "Развернуть"
