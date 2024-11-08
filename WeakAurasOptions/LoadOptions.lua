@@ -91,7 +91,7 @@ local function setValue(trigger, field, value, multiEntry, entryNumber)
         trigger[field] = { trigger[field] }
       end
     end
-    if value == "" then
+    if value == "" or value == nil then
       shiftTable(trigger[field], entryNumber)
     else
       trigger[field][entryNumber] = value
@@ -669,6 +669,10 @@ function OptionsPrivate.ConstructOptions(prototype, data, startorder, triggernum
                   if useExactSpellId then
                     local itemId = tonumber(value)
                     if itemId and itemId ~= 0 then
+                      local itemName = GetItemInfo(value)
+                      if itemName then
+                        return ("%s (%s)"):format(itemId, itemName) .. "\0" .. value
+                      end
                       return tostring(value)
                     end
                   else

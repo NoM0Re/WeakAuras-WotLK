@@ -1004,7 +1004,7 @@ Private.load_prototype = {
       init = "arg",
       preamble = "local zoneChecker = WeakAuras.ParseStringCheck(%q)",
       test = "zoneChecker:Check(zone)",
-      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE"},
+      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       desc = function()
         return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), L["Supports multiple entries, separated by commas"])
       end,
@@ -1017,7 +1017,7 @@ Private.load_prototype = {
       multiline = true,
       init = "arg",
       test = "WeakAuras.CheckNumericIds(%q, zoneId)",
-      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE"},
+      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       desc = function()
 	    return ("\n|cffffd200%s|r%s: %d\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), GetCurrentMapAreaID(), L["Supports multiple entries, separated by commas"])
 	    end,
@@ -1031,7 +1031,7 @@ Private.load_prototype = {
       init = "arg",
       preamble = "local subzoneChecker = WeakAuras.ParseStringCheck(%q)",
       test = "subzoneChecker:Check(subzone)",
-      events = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE" },
+      events = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       desc = function()
         return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetMinimapZoneText(), L["Supports multiple entries, separated by commas"])
       end,
@@ -1044,7 +1044,7 @@ Private.load_prototype = {
       values = "instance_types",
       sorted = true,
       init = "arg",
-      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA"},
+      events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       optional = true,
     },
     {
@@ -1054,7 +1054,7 @@ Private.load_prototype = {
       values = "difficulty_types",
       sorted = true,
       init = "arg",
-      events = {"PLAYER_DIFFICULTY_CHANGED", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA"},
+      events = {"PLAYER_DIFFICULTY_CHANGED", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       optional = true,
     },
     {
@@ -6822,7 +6822,8 @@ Private.event_prototypes = {
         "ZONE_CHANGED",
         "ZONE_CHANGED_INDOORS",
         "ZONE_CHANGED_NEW_AREA",
-        "PLAYER_DIFFICULTY_CHANGED"
+        "PLAYER_DIFFICULTY_CHANGED",
+        "WA_DELAYED_PLAYER_ENTERING_WORLD",
       }
     },
     internal_events = {"INSTANCE_LOCATION_CHECK"},

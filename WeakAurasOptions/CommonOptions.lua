@@ -1100,7 +1100,13 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
       hidden = function()
         return IsParentDynamicGroup() or IsGroupByFrame()
       end,
-      values = (data.regionType == "group" or data.regionType == "dynamicgroup") and OptionsPrivate.Private.anchor_frame_types_group or OptionsPrivate.Private.anchor_frame_types,
+      values = (data.regionType == "group" or data.regionType == "dynamicgroup")
+                and OptionsPrivate.Private.anchor_frame_types_group
+                or OptionsPrivate.Private.anchor_frame_types,
+      sorting = OptionsPrivate.Private.SortOrderForValues(
+                (data.regionType == "group" or data.regionType == "dynamicgroup")
+                and OptionsPrivate.Private.anchor_frame_types_group
+                or OptionsPrivate.Private.anchor_frame_types),
     },
     -- Input field to select frame to anchor on
     anchorFrameFrame = {
