@@ -68,6 +68,7 @@ local function createOptions(parentData, data, index, subIndex)
     },
     text_fontSize = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Size"],
       order = 14,
@@ -159,6 +160,7 @@ local function createOptions(parentData, data, index, subIndex)
     },
     text_shadowXOffset = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth - indentWidth,
       name = L["Shadow X Offset"],
       softMin = -15,
@@ -169,6 +171,7 @@ local function createOptions(parentData, data, index, subIndex)
     },
     text_shadowYOffset = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Shadow Y Offset"],
       softMin = -15,
@@ -227,6 +230,7 @@ local function createOptions(parentData, data, index, subIndex)
       width = WeakAuras.normalWidth - indentWidth,
       order = 53,
       type = "range",
+      control = "WeakAurasSpinBox",
       min = 1,
       softMax = 200,
       bigStep = 1,
@@ -353,6 +357,7 @@ local function createOptions(parentData, data, index, subIndex)
 
   options.text_anchorXOffset = {
     type = "range",
+    control = "WeakAurasSpinBox",
     width = WeakAuras.normalWidth - indentWidth,
     name = L["X Offset"],
     order = 60.4,
@@ -364,6 +369,7 @@ local function createOptions(parentData, data, index, subIndex)
 
   options.text_anchorYOffset = {
     type = "range",
+    control = "WeakAurasSpinBox",
     width = WeakAuras.normalWidth,
     name = L["Y Offset"],
     order = 60.5,

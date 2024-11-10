@@ -565,6 +565,7 @@ local globalConditions =
   ["rangecheck"] = {
     display = WeakAuras.newFeatureString .. L["Range Check"],
     type = "range",
+    control = "WeakAurasSpinBox",
     events = {"WA_SPELL_RANGECHECK"}
   },
   ["attackabletarget"] = {

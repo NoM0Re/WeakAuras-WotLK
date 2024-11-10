@@ -39,6 +39,7 @@ local function createOptions(id, data)
     },
     sequence = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Animation Sequence"],
       min = 0,
@@ -50,6 +51,7 @@ local function createOptions(id, data)
     },
     model_z = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Z Offset"],
       softMin = -20,
@@ -60,6 +62,7 @@ local function createOptions(id, data)
     },
     model_x = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["X Offset"],
       softMin = -20,
@@ -70,6 +73,7 @@ local function createOptions(id, data)
     },
     model_y = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Y Offset"],
       softMin = -20,
@@ -80,6 +84,7 @@ local function createOptions(id, data)
     },
     rotation = {
       type = "range",
+      control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
       name = L["Rotation"],
       min = 0,
