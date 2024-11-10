@@ -865,6 +865,7 @@ Supports multiple entries, separated by commas
 	L["UnitName Filter"] = "유닛명 필터"
 	--[[Translation missing --]]
 	L["Unknown property '%s' found in '%s'"] = "Unknown property '%s' found in '%s'"
+	L["Unknown Spell"] = "알 수 없는 주문"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "시작 또는 종료 애니메이션과 달리 메인 애니메이션은 디스플레이가 숨겨질 때까지 계속 반복됩니다."
 	--[[Translation missing --]]
 	L["Update %s by %s"] = "Update %s by %s"

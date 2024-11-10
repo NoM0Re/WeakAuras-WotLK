@@ -922,6 +922,8 @@ Seule une unique valeur peut être choisie]=]
 	L["UnitName Filter"] = "UnitName Filter"
 	--[[Translation missing --]]
 	L["Unknown property '%s' found in '%s'"] = "Unknown property '%s' found in '%s'"
+	--[[Translation missing --]]
+	L["Unknown Spell"] = "Unknown Spell"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "Contrairement aux animations de début et de fin, l'animation principale bouclera tant que l'affichage est visible."
 	--[[Translation missing --]]
 	L["Update %s by %s"] = "Update %s by %s"

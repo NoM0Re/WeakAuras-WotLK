@@ -1112,6 +1112,7 @@ Sólo un valor coincidente puede ser escogido.]=]
 	L["UnitName Filter"] = "UnitName Filter"
 	--[[Translation missing --]]
 	L["Unknown property '%s' found in '%s'"] = "Unknown property '%s' found in '%s'"
+	L["Unknown Spell"] = "Hechizo desconocido"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "Ignorar animaciones de inicio y final: la animación principal se repetirá hasta que el aura se oculte."
 	--[[Translation missing --]]
 	L["Update %s by %s"] = "Update %s by %s"

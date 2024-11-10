@@ -170,7 +170,19 @@ local function CreateNameOptions(aura_options, data, trigger, size, isExactSpell
       desc = desc,
       order = baseOrder + i / 100 + 0.0003,
       hidden = hiddenFunction,
-      get = function(info) return trigger[optionKey] and trigger[optionKey][i] end,
+      get = function(info)
+        local rawString = trigger[optionKey] and trigger[optionKey][i]
+        if not rawString then return "" end
+        local spellID = WeakAuras.SafeToNumber(rawString)
+        local spellName = spellID and GetSpellInfo(spellID)
+        if spellName and spellID then
+          return ("%s (%s)"):format(spellID, spellName) .. "\0" .. rawString
+        elseif spellID then
+          return ("%s (%s)"):format(rawString, L["Unknown Spell"]) .. "\0" .. rawString
+        else
+          return rawString .. "\0" .. rawString
+        end
+      end,
       set = function(info, v)
         trigger[optionKey] = trigger[optionKey] or {}
         if v == "" then
@@ -179,10 +191,9 @@ local function CreateNameOptions(aura_options, data, trigger, size, isExactSpell
           if isExactSpellId then
             trigger[optionKey][i] = v
           else
-            local spellId = tonumber(v)
+            local _, spellId = WeakAuras.spellCache.CorrectAuraName(v)
             if spellId then
-              WeakAuras.spellCache.CorrectAuraName(v)
-              trigger[optionKey][i] = v
+              trigger[optionKey][i] = tostring(spellId)
             else
               trigger[optionKey][i] = spellCache.BestKeyMatch(v)
             end

@@ -877,6 +877,7 @@ Supports multiple entries, separated by commas
 	L["Unit Name Filter"] = "Фильтр по имени единицы"
 	L["UnitName Filter"] = "Фильтр по имени единицы"
 	L["Unknown property '%s' found in '%s'"] = "Неизвестное свойство %s в переменной %s."
+	L["Unknown Spell"] = "Неизвестное заклинание"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "В отличие от начальной или конечной анимации, основная зациклена и будет повторяться пока индикация не пропадет."
 	L["Update %s by %s"] = "Обновить %s (автор %s)"
 	L["Update Auras"] = "Обновить индикации"

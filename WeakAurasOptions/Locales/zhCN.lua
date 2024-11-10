@@ -747,6 +747,7 @@ Supports multiple entries, separated by commas
 	L["Unit Name Filter"] = "单位名称过滤方式"
 	L["UnitName Filter"] = "单位名称过滤"
 	L["Unknown property '%s' found in '%s'"] = "发现'%2$s'的未知属性'%1$s'"
+	L["Unknown Spell"] = "未知法术"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "不同于开始或结束动画，主动画将不停循环，直到图示被隐藏。"
 	L["Update %s by %s"] = "更新%s，来自%s"
 	L["Update Auras"] = "更新光环"

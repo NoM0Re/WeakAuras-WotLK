@@ -1178,6 +1178,8 @@ Supports multiple entries, separated by commas
 	--[[Translation missing --]]
 	L["Unknown property '%s' found in '%s'"] = "Unknown property '%s' found in '%s'"
 	--[[Translation missing --]]
+	L["Unknown Spell"] = "Unknown Spell"
+	--[[Translation missing --]]
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."
 	--[[Translation missing --]]
 	L["Update %s by %s"] = "Update %s by %s"
