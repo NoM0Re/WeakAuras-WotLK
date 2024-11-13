@@ -1,6 +1,6 @@
 local AddonName, Private = ...
 
-local internalVersion = 54
+local internalVersion = 67
 
 -- Lua APIs
 local insert = table.insert
@@ -4931,7 +4931,7 @@ function WeakAuras.IsAuraLoaded(id)
   return Private.loaded[id]
 end
 
-function Private.CreateSpellChecker()
+function WeakAuras.CreateSpellChecker()
   local matcher = {
     names = {},
     spellIds = {},

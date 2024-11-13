@@ -338,6 +338,8 @@ L["Debuff Class"] = "Debuff Class"
 L["Debuff Class Icon"] = "Debuff Class Icon"
 --[[Translation missing --]]
 L["Debuff Type"] = "Debuff Type"
+--[[Translation missing --]]
+L["Defensive Stats"] = "Defensive Stats"
 L["Deflect"] = "Déviation"
 L["Desaturate"] = "Désaturer"
 L["Desaturate Background"] = "Désaturer l'Arrière-plan"
@@ -349,6 +351,8 @@ L["Dest Raid Mark"] = "Marqueurs de Raid"
 L["Destination Affiliation"] = "Destination Affiliation"
 --[[Translation missing --]]
 L["Destination GUID"] = "Destination GUID"
+--[[Translation missing --]]
+L["Destination Info"] = "Destination Info"
 L["Destination Name"] = "Nom de destination"
 --[[Translation missing --]]
 L["Destination NPC Id"] = "Destination NPC Id"
@@ -426,6 +430,7 @@ L["Entering/Leaving Combat"] = "Entrer/Sortir de Combat"
 L["Entry Order"] = "Entry Order"
 L["Environment Type"] = "Type d'environnement"
 L["Environmental"] = "Environnement"
+L["Equipment"] = "Équipement"
 L["Equipment Set"] = "Ensemble d'Equipement"
 L["Equipment Set Equipped"] = "Ensemble d'Equipement Équipé"
 L["Equipment Slot"] = "Emplacement d'équipement"
@@ -521,6 +526,8 @@ L["Gained"] = "Gagné"
 L["Garr"] = "Garr"
 --[[Translation missing --]]
 L["Gehennas"] = "Gehennas"
+--[[Translation missing --]]
+L["General"] = "General"
 --[[Translation missing --]]
 L["General Rajaxx"] = "General Rajaxx"
 L["Glancing"] = "Erafle"
@@ -619,6 +626,8 @@ L["Inherited"] = "Hérité"
 L["Instakill"] = "Mort instant."
 L["Instance"] = "Instance"
 L["Instance Difficulty"] = "Difficulté de l'Instance"
+--[[Translation missing --]]
+L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
 L["Instance Size Type"] = "Instance Size Type"
 L["Instance Type"] = "Type d'instance"
@@ -763,6 +772,8 @@ L["Minimum Estimate"] = "Estimation minimale"
 --[[Translation missing --]]
 L["Minus (Small Nameplate)"] = "Minus (Small Nameplate)"
 L["Mirror"] = "Miroir"
+--[[Translation missing --]]
+L["Miscellaneous"] = "Miscellaneous"
 L["Miss"] = "Raté"
 L["Miss Type"] = "Type de raté"
 L["Missed"] = "Raté"
@@ -943,6 +954,8 @@ L["Power Type"] = "Type de puissance"
 L["Precision"] = "Précision"
 L["Preset"] = "Préréglé"
 --[[Translation missing --]]
+L["Primary Stats"] = "Primary Stats"
+--[[Translation missing --]]
 L["Princess Huhuran"] = "Princess Huhuran"
 --[[Translation missing --]]
 L["Print Profiling Results"] = "Print Profiling Results"
@@ -1017,6 +1030,8 @@ L["Requested display not authorized"] = "L'affichage demandé n'est pas autoris�
 L["Requesting display information from %s ..."] = "Demande des informations de l'affichage depuis %s ..."
 L["Require Valid Target"] = "Nécessite une cible valide"
 L["Resist"] = "Résiste"
+--[[Translation missing --]]
+L["Resistances"] = "Resistances"
 L["Resisted"] = "Résisté"
 L["Resolve collisions dialog"] = [=[
 Vous avez activé un addon qui crée des graphiques |cFF8800FFWeakAuras|r ayant les même noms que certains de vos graphiques existants.
@@ -1081,6 +1096,8 @@ L["Scenario (Normal)"] = "Scenario (Normal)"
 L["Screen/Parent Group"] = "Écran/Groupe parent"
 L["Second"] = "Deuxième"
 L["Second Value of Tooltip Text"] = "Deuxième valeur du texte de l'info-bulle"
+--[[Translation missing --]]
+L["Secondary Stats"] = "Secondary Stats"
 L["Seconds"] = "Secondes"
 L["Select Frame"] = "Sélectionner le cadre"
 L["Separator"] = "Séparateur"
@@ -1144,6 +1161,7 @@ L["Source"] = "Source"
 L["Source Affiliation"] = "Source Affiliation"
 --[[Translation missing --]]
 L["Source GUID"] = "Source GUID"
+L["Source Info"] = "Source Info"
 L["Source Name"] = "Nom de source"
 --[[Translation missing --]]
 L["Source NPC Id"] = "Source NPC Id"
@@ -1201,6 +1219,8 @@ L["Stop"] = "Arrêter"
 L["Strength"] = "Force"
 L["String"] = "Séquence"
 --[[Translation missing --]]
+L["Subevent Info"] = "Subevent Info"
+--[[Translation missing --]]
 L["Subtract Cast"] = "Subtract Cast"
 --[[Translation missing --]]
 L["Subtract Channel"] = "Subtract Channel"
@@ -1235,6 +1255,8 @@ L["Tanking And Highest"] = "Tank et le plus haut"
 L["Tanking But Not Highest"] = "Tank mais pas le plus haut"
 L["Target"] = "Cible"
 L["Targeted"] = "Ciblé"
+--[[Translation missing --]]
+L["Tertiary Stats"] = "Tertiary Stats"
 L["Text"] = "Texte"
 --[[Translation missing --]]
 L["Thaddius"] = "Thaddius"

@@ -803,6 +803,11 @@ end
 Private.load_prototype = {
   args = {
     {
+      name ="generalTitle",
+      display = L["General"],
+      type = "description",
+    },
+    {
       name = "combat",
       display = L["In Combat"],
       type = "tristate",
@@ -871,6 +876,11 @@ Private.load_prototype = {
       values = "group_types",
       events = {"PARTY_MEMBERS_CHANGED", "RAID_ROSTER_UPDATE"},
       optional = true,
+    },
+    {
+      name ="playerTitle",
+      display = L["Player"],
+      type = "description",
     },
     {
       name = "player",
@@ -997,6 +1007,11 @@ Private.load_prototype = {
       optional = true,
     },
     {
+      name ="locationTitle",
+      display = L["Location"],
+      type = "description",
+    },
+    {
       name = "zone",
       display = L["Zone Name"],
       type = "string",
@@ -1056,6 +1071,11 @@ Private.load_prototype = {
       init = "arg",
       events = {"PLAYER_DIFFICULTY_CHANGED", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       optional = true,
+    },
+    {
+      name ="equipmentTitle",
+      display = L["Equipment"],
+      type = "description",
     },
     {
       name = "itemequiped",
@@ -1631,6 +1651,11 @@ Private.event_prototypes = {
         },
       },
       {
+        type = "header",
+        name = "restedExperienceHeader",
+        display = L["Rested Experience"],
+      },
+      {
         name = "showRested",
         display = L["Show Rested Overlay"],
         type = "toggle",
@@ -1813,6 +1838,11 @@ Private.event_prototypes = {
         test = "true"
       },
       {
+        type = "header",
+        name = "unitCharacteristicsHeader",
+        display = L["Unit Characteristics"],
+      },
+      {
         name = "namerealm",
         display = L["Unit Name/Realm"],
         type = "string",
@@ -1888,6 +1918,14 @@ Private.event_prototypes = {
         hidden = true,
         test = "true",
         init = "raidMarkIndex > 0 and '{rt'..raidMarkIndex..'}' or ''"
+      },
+      {
+        type = "header",
+        name = "miscellaneousHeader",
+        display = L["Miscellaneous"],
+        enable = function(trigger)
+          return trigger.unit == "nameplate" or trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
+        end,
       },
       {
         name = "includePets",
@@ -2136,6 +2174,11 @@ Private.event_prototypes = {
         test = "true"
       },
       {
+        type = "header",
+        name = "unitCharacteristicsHeader",
+        display = L["Unit Characteristics"],
+      },
+      {
         name = "namerealm",
         display = L["Unit Name/Realm"],
         type = "string",
@@ -2213,6 +2256,14 @@ Private.event_prototypes = {
         init = "raidMarkIndex > 0 and '{rt'..raidMarkIndex..'}' or ''"
       },
       {
+        type = "header",
+        name = "miscellaneousHeader",
+        display = L["Miscellaneous"],
+        enable = function(trigger)
+          return trigger.unit == "nameplate" or trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
+        end,
+      },
+      {
         name = "includePets",
         display = WeakAuras.newFeatureString .. L["Include Pets"],
         type = "select",
@@ -2286,6 +2337,11 @@ Private.event_prototypes = {
       {}, -- timestamp ignored with _ argument
       {}, -- messageType ignored with _ argument (it is checked before the dynamic function)
       {
+        type = "header",
+        name = "sourceHeader",
+        display = L["Source Info"],
+      },
+      {
         name = "sourceGUID",
         init = "arg",
         hidden = "true",
@@ -2325,7 +2381,7 @@ Private.event_prototypes = {
         display = L["Source NPC Id"],
         type = "string",
         multiline = true,
-        init = "tostring(tonumber(string.sub(sourceGUID(unit) or '', 8, 12), 16) or '')",
+        init = "tostring(tonumber(string.sub(sourceGUID or '', 8, 12), 16) or '')",
         store = true,
         conditionType = "string",
         preamble = "local sourceNpcIdChecker = WeakAuras.ParseStringCheck(%q)",
@@ -2378,6 +2434,14 @@ Private.event_prototypes = {
         end
       },
       {
+        type = "header",
+        name = "destHeader",
+        display = L["Destination Info"],
+        enable = function(trigger)
+          return not (trigger.subeventPrefix == "SPELL" and trigger.subeventSuffix == "_CAST_START");
+        end,
+      },
+      {
         name = "destGUID",
         init = "arg",
         hidden = "true",
@@ -2420,7 +2484,7 @@ Private.event_prototypes = {
         display = L["Destination NPC Id"],
         type = "string",
         multiline = true,
-        init = "tostring(tonumber(string.sub(destGUID(unit) or '', 8, 12), 16) or '')",
+        init = "tostring(tonumber(string.sub(destGUID or '', 8, 12), 16) or '')",
         store = true,
         conditionType = "string",
         preamble = "local destNpcIdChecker = WeakAuras.ParseStringCheck(%q)",
@@ -2492,6 +2556,37 @@ Private.event_prototypes = {
         end,
       },
       {
+        type = "header",
+        name = "subeventHeader",
+        display = L["Subevent Info"],
+        enable = function(trigger)
+          return trigger.subeventPrefix and (
+            trigger.subeventPrefix == "RANGE"
+            or trigger.subeventPrefix == "ENVIRONMENTAL"
+            or trigger.subeventPrefix:find("DAMAGE")
+            or trigger.subeventPrefix:find("SPELL"))
+
+            or trigger.subeventSuffix and (
+              trigger.subeventSuffix == "_ABSORBED"
+              or trigger.subeventSuffix == "_INTERRUPT"
+              or trigger.subeventSuffix == "_DISPEL"
+              or trigger.subeventSuffix == "_DISPEL_FAILED"
+              or trigger.subeventSuffix == "_STOLEN"
+              or trigger.subeventSuffix == "_AURA_BROKEN_SPELL"
+              or trigger.subeventSuffix == "_DAMAGE"
+              or trigger.subeventSuffix == "_HEAL"
+              or trigger.subeventSuffix == "_ENERGIZE"
+              or trigger.subeventSuffix == "_DRAIN"
+              or trigger.subeventSuffix == "_LEECH"
+              or trigger.subeventSuffix == "_DAMAGE"
+              or trigger.subeventSuffix == "_MISSED"
+              or trigger.subeventSuffix == "_EXTRA_ATTACKS"
+              or trigger.subeventSuffix == "_CAST_FAILED"
+              or trigger.subeventSuffix:find("DOSE")
+              or trigger.subeventSuffix:find("AURA"))
+        end,
+      },
+      {
         name = "spellId",
         display = L["Spell Id"],
         init = "arg",
@@ -2500,7 +2595,7 @@ Private.event_prototypes = {
         end,
         store = true,
         preambleGroup = "spell",
-        preamble = "local spellChecker = Private.CreateSpellChecker()",
+        preamble = "local spellChecker = WeakAuras.CreateSpellChecker()",
         multiEntry = {
           operator = "preamble",
           preambleAdd = "spellChecker:AddExact(%q)"
@@ -2510,20 +2605,20 @@ Private.event_prototypes = {
         conditionType = "number",
         type = "spell",
         showExactOption = false,
-        --noProgressSource = true
+        noProgressSource = true
       },
       {
         name = "spellName",
         display = L["Spell Name"],
         type = "spell",
-        noValidation = true,
+        --noValidation = true,
         init = "arg",
         enable = function(trigger)
           return trigger.subeventPrefix and (trigger.subeventPrefix:find("SPELL") or trigger.subeventPrefix == "RANGE" or trigger.subeventPrefix:find("DAMAGE"))
         end,
         store = true,
         preambleGroup = "spell",
-        preamble = "local spellChecker = Private.CreateSpellChecker()",
+        preamble = "local spellChecker = WeakAuras.CreateSpellChecker()",
         multiEntry = {
           operator = "preamble",
           preambleAdd = "spellChecker:AddName(%q)"
@@ -2751,6 +2846,11 @@ Private.event_prototypes = {
           return trigger.subeventSuffix == "_CAST_FAILED"
         end
       }, -- failedType ignored with _ argument - theoretically this is not necessary because it is the last argument in the event, but it is added here for completeness
+      {
+        type = "header",
+        name = "miscellaneousHeader",
+        display = L["Miscellaneous"],
+      },
       {
         name = "cloneId",
         display = L["Clone per Event"],
@@ -5433,6 +5533,7 @@ Private.event_prototypes = {
     init = function(trigger)
       local ret = [[
         local unit = %s
+        local name = UnitName(unit)
         local ok = true
         local aggro, status, threatpct, rawthreatpct, threatvalue, threattotal
         if unit then
@@ -5511,6 +5612,48 @@ Private.event_prototypes = {
           operator = "and",
           limit = 2
         },
+      },
+      {
+        type = "header",
+        name = "unitCharacteristicsHeader",
+        display = L["Unit Characteristics"],
+      },
+      {
+        name = "name",
+        display = L["Unit Name"],
+        type = "string",
+        store = true,
+        multiline = true,
+        preamble = "local nameChecker = WeakAuras.ParseStringCheck(%q)",
+        test = "nameChecker:Check(name)",
+        conditionType = "string",
+        conditionPreamble = function(input)
+          return WeakAuras.ParseStringCheck(input)
+        end,
+        conditionTest = function(state, needle, op, preamble)
+          return preamble:Check(state.name)
+        end,
+        operator_types = "none",
+        desc = L["Supports multiple entries, separated by commas"]
+      },
+      {
+        name = "npcId",
+        display = L["Npc ID"],
+        type = "string",
+        multiline = true,
+        store = true,
+        init = "tostring(tonumber(string.sub(UnitGUID(unit) or '', 8, 12), 16) or '')",
+        conditionType = "string",
+        preamble = "local npcIdChecker = WeakAuras.ParseStringCheck(%q)",
+        test = "npcIdChecker:Check(npcId)",
+        conditionPreamble = function(input)
+          return WeakAuras.ParseStringCheck(input)
+        end,
+        conditionTest = function(state, needle, op, preamble)
+          return preamble:Check(state.npcId)
+        end,
+        operator_types = "none",
+        desc = L["Supports multiple entries, separated by commas"]
       },
       {
         name = "value",
@@ -5666,14 +5809,14 @@ Private.event_prototypes = {
         type = "spell",
         enable = function(trigger) return not trigger.use_inverse end,
         preambleGroup = "spell",
-        preamble = "local spellChecker = Private.CreateSpellChecker()",
+        preamble = "local spellChecker = WeakAuras.CreateSpellChecker()",
         multiEntry = {
           operator = "preamble",
           preambleAdd = "spellChecker:AddName(%q)"
         },
         test = "spellChecker:Check(spellId)",
         testGroup = "spell",
-        noValidation = true,
+        --noValidation = true,
       },
       {
         name = "spellIds",
@@ -5681,7 +5824,7 @@ Private.event_prototypes = {
         type = "spell",
         enable = function(trigger) return not trigger.use_inverse end,
         preambleGroup = "spell",
-        preamble = "local spellChecker = Private.CreateSpellChecker()",
+        preamble = "local spellChecker = WeakAuras.CreateSpellChecker()",
         multiEntry = {
           operator = "preamble",
           preambleAdd = "spellChecker:AddExact(%q)"
@@ -5696,7 +5839,7 @@ Private.event_prototypes = {
         store = true,
         test = "true",
         hidden = true,
-        --noProgressSource = true
+        noProgressSource = true
       },
       {
         name = "spell",
@@ -5778,6 +5921,11 @@ Private.event_prototypes = {
         init = "true",
         test = "true",
         store = true
+      },
+      {
+        type = "header",
+        name = "unitCharacteristicsHeader",
+        display = L["Unit Characteristics"],
       },
       {
         name = "npcId",
@@ -5952,6 +6100,11 @@ Private.event_prototypes = {
         desc = constants.nameRealmFilterDesc,
       },
       {
+        type = "header",
+        name = "miscellaneousHeader",
+        display = L["Miscellaneous"],
+      },
+      {
         name = "showLatency",
         display = L["Overlay Latency"],
         type = "toggle",
@@ -6046,6 +6199,11 @@ Private.event_prototypes = {
     statesParameter = "one",
     args = {
       {
+        type = "header",
+        name = "primaryStatsHeader",
+        display = L["Primary Stats"],
+      },
+      {
         name = "strength",
         display = L["Strength"],
         type = "number",
@@ -6104,6 +6262,11 @@ Private.event_prototypes = {
           operator = "and",
           limit = 2
         },
+      },
+      {
+        type = "header",
+        name = "secondaryStatsHeader",
+        display = L["Secondary Stats"],
       },
       {
         name = "meleecriticalrating",
@@ -6214,6 +6377,11 @@ Private.event_prototypes = {
         },
       },
       {
+        type = "header",
+        name = "resistanceHeader",
+        display = L["Resistances"],
+      },
+      {
         name = "resistancefire",
         display = L["Fire Resistance"],
         type = "number",
@@ -6274,6 +6442,11 @@ Private.event_prototypes = {
         },
       },
       {
+        type = "header",
+        name = "tertiaryStatsHeader",
+        display = L["Tertiary Stats"],
+      },
+      {
         name = "moveSpeed",
         display = L["Continuously update Movement Speed"],
         type = "boolean",
@@ -6291,6 +6464,11 @@ Private.event_prototypes = {
           operator = "and",
           limit = 2
         },
+      },
+      {
+        type = "header",
+        name = "defensiveStatsHeader",
+        display = L["Defensive Stats"],
       },
       {
         name = "dodgerating",
@@ -6894,6 +7072,11 @@ Private.event_prototypes = {
         multiEntry = {
           operator = "or",
         },
+      },
+      {
+        type = "header",
+        name = "instanceHeader",
+        display = L["Instance Info"],
       },
       {
         name = "instance",

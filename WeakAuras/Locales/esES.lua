@@ -378,6 +378,7 @@ L["Debuff"] = "Perjuicio"
 L["Debuff Class"] = "Clase del perjuicio"
 L["Debuff Class Icon"] = "Icono de clase del perjuicio"
 L["Debuff Type"] = "Tipo de Perjuicio"
+L["Defensive Stats"] = "Estadísticas defensivas"
 L["Deflect"] = "Desviar"
 --[[Translation missing --]]
 L["Desaturate"] = "Desaturate"
@@ -394,6 +395,7 @@ L["Dest Raid Mark"] = "Dest Raid Mark"
 L["Destination Affiliation"] = "Destination Affiliation"
 --[[Translation missing --]]
 L["Destination GUID"] = "Destination GUID"
+L["Destination Info"] = "Info del destino"
 L["Destination Name"] = "Nombre del Destino"
 --[[Translation missing --]]
 L["Destination NPC Id"] = "Destination NPC Id"
@@ -486,6 +488,7 @@ L["Entering/Leaving Combat"] = "Entering/Leaving Combat"
 L["Entry Order"] = "Entry Order"
 L["Environment Type"] = "Tipo de Entorno"
 L["Environmental"] = "Ambiental"
+L["Equipment"] = "Equipo"
 --[[Translation missing --]]
 L["Equipment Set"] = "Equipment Set"
 --[[Translation missing --]]
@@ -603,6 +606,7 @@ L["Gained"] = "Obtenido"
 L["Garr"] = "Garr"
 --[[Translation missing --]]
 L["Gehennas"] = "Gehennas"
+L["General"] = "General"
 --[[Translation missing --]]
 L["General Rajaxx"] = "General Rajaxx"
 L["Glancing"] = "de refilón"
@@ -725,6 +729,7 @@ L["Instakill"] = "Muerte Instantanea"
 L["Instance"] = "Instance"
 --[[Translation missing --]]
 L["Instance Difficulty"] = "Instance Difficulty"
+L["Instance Info"] = "Info de estancia"
 --[[Translation missing --]]
 L["Instance Size Type"] = "Instance Size Type"
 L["Instance Type"] = "Tipo de Instancia"
@@ -908,6 +913,7 @@ L["Minimum Estimate"] = "Minimum Estimate"
 L["Minus (Small Nameplate)"] = "Minus (Small Nameplate)"
 --[[Translation missing --]]
 L["Mirror"] = "Mirror"
+L["Miscellaneous"] = "Misceláneos"
 L["Miss"] = "Fallo"
 L["Miss Type"] = "Tipo de Fallo"
 L["Missed"] = "Fallado"
@@ -1124,6 +1130,7 @@ L["Power Type"] = "Tipo de Poder"
 --[[Translation missing --]]
 L["Precision"] = "Precision"
 L["Preset"] = "Predefinido"
+L["Primary Stats"] = "Estadísticas primarias"
 --[[Translation missing --]]
 L["Princess Huhuran"] = "Princess Huhuran"
 --[[Translation missing --]]
@@ -1219,6 +1226,7 @@ L["Requested display not authorized"] = "El aura requerida no está autorizada"
 L["Requesting display information from %s ..."] = "Requesting display information from %s ..."
 L["Require Valid Target"] = "Requiere Objetivo Válido"
 L["Resist"] = "Resistir"
+L["Resistances"] = "Resistencias"
 L["Resisted"] = "Resistido"
 L["Resolve collisions dialog"] = "Resolver colisiones en dialogos"
 L["Resolve collisions dialog singular"] = "Resolver colisiones en dialogos singulares"
@@ -1284,6 +1292,7 @@ L["Screen/Parent Group"] = "Screen/Parent Group"
 L["Second"] = "Second"
 --[[Translation missing --]]
 L["Second Value of Tooltip Text"] = "Second Value of Tooltip Text"
+L["Secondary Stats"] = "Estadísticas secundarias"
 L["Seconds"] = "Segundos"
 --[[Translation missing --]]
 L["Select Frame"] = "Select Frame"
@@ -1366,6 +1375,7 @@ L["Source"] = "Source"
 L["Source Affiliation"] = "Source Affiliation"
 --[[Translation missing --]]
 L["Source GUID"] = "Source GUID"
+L["Source Info"] = "Info de la fuente"
 L["Source Name"] = "Nombre de Origen"
 --[[Translation missing --]]
 L["Source NPC Id"] = "Source NPC Id"
@@ -1441,6 +1451,7 @@ L["Stop"] = "Stop"
 L["Strength"] = "Strength"
 --[[Translation missing --]]
 L["String"] = "String"
+L["Subevent Info"] = "Info de subevento"
 --[[Translation missing --]]
 L["Subtract Cast"] = "Subtract Cast"
 --[[Translation missing --]]
@@ -1484,6 +1495,7 @@ L["Tanking But Not Highest"] = "Tanqueando pero no el mas alto"
 L["Target"] = "Objetivo"
 --[[Translation missing --]]
 L["Targeted"] = "Targeted"
+L["Tertiary Stats"] = "Estadísticas terciarias"
 --[[Translation missing --]]
 L["Text"] = "Text"
 --[[Translation missing --]]

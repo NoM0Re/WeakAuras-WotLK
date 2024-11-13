@@ -385,7 +385,7 @@ function ConstructFunction(prototype, trigger)
   table.insert(ret, #tests > 0 and tconcat(tests, " and ") or "true")
   table.insert(ret, ") then\n")
   if(#debug > 0) then
-    table.insert("print('ret: true');\n")
+    table.insert(ret, "print('ret: true');\n")
   end
 
   if (prototype.statesParameter == "all") then

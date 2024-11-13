@@ -369,6 +369,8 @@ L["Debuff Class"] = "Debuff Class"
 L["Debuff Class Icon"] = "Debuff Class Icon"
 --[[Translation missing --]]
 L["Debuff Type"] = "Debuff Type"
+--[[Translation missing --]]
+L["Defensive Stats"] = "Defensive Stats"
 L["Deflect"] = "Umlenken"
 L["Desaturate"] = "Entsättigen"
 L["Desaturate Background"] = "Hintergrund entsättigen"
@@ -380,6 +382,8 @@ L["Dest Raid Mark"] = "Zielmarkierung"
 L["Destination Affiliation"] = "Destination Affiliation"
 --[[Translation missing --]]
 L["Destination GUID"] = "Destination GUID"
+--[[Translation missing --]]
+L["Destination Info"] = "Destination Info"
 L["Destination Name"] = "Zielname"
 --[[Translation missing --]]
 L["Destination NPC Id"] = "Destination NPC Id"
@@ -460,6 +464,8 @@ L["Entering/Leaving Combat"] = "Kampf Betreten/Verlassen"
 L["Entry Order"] = "Entry Order"
 L["Environment Type"] = "Umgebungstyp"
 L["Environmental"] = "Umgebung (ENVIRONMENTAL)"
+--[[Translation missing --]]
+L["Equipment"] = "Equipment"
 L["Equipment Set"] = "Ausrüstungsset"
 L["Equipment Set Equipped"] = "Angelegtes Ausrüstungsset"
 L["Equipment Slot"] = "Ausrüstungsplatz"
@@ -563,6 +569,8 @@ L["Garr"] = "Garr"
 --[[Translation missing --]]
 L["Gehennas"] = "Gehennas"
 --[[Translation missing --]]
+L["General"] = "General"
+--[[Translation missing --]]
 L["General Rajaxx"] = "General Rajaxx"
 L["Glancing"] = "Gestreift (GLANCING)"
 L["Global Cooldown"] = "Globale Abklingzeit"
@@ -664,6 +672,8 @@ L["Inherited"] = "Vererbt"
 L["Instakill"] = "Sofortiger Tod (INSTAKILL)"
 L["Instance"] = "Instanz"
 L["Instance Difficulty"] = "Instanzschwierigkeit"
+--[[Translation missing --]]
+L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
 L["Instance Size Type"] = "Instance Size Type"
 L["Instance Type"] = "Instanztyp"
@@ -829,6 +839,8 @@ L["Minimum Estimate"] = "Minimum Estimate"
 --[[Translation missing --]]
 L["Minus (Small Nameplate)"] = "Minus (Small Nameplate)"
 L["Mirror"] = "Spiegel"
+--[[Translation missing --]]
+L["Miscellaneous"] = "Miscellaneous"
 L["Miss"] = "Verfehlen"
 L["Miss Type"] = "Verfehlengrund"
 L["Missed"] = "Verfehlt (MISSED)"
@@ -1023,6 +1035,8 @@ L["Power Type"] = "Ressourcentyp"
 L["Precision"] = "Precision"
 L["Preset"] = "Standard"
 --[[Translation missing --]]
+L["Primary Stats"] = "Primary Stats"
+--[[Translation missing --]]
 L["Princess Huhuran"] = "Princess Huhuran"
 --[[Translation missing --]]
 L["Print Profiling Results"] = "Print Profiling Results"
@@ -1106,6 +1120,8 @@ L["Requested display not authorized"] = "Angeforderte Anzeige ist nicht autorisi
 L["Requesting display information from %s ..."] = "Requesting display information from %s ..."
 L["Require Valid Target"] = "Erfordert gültiges Ziel"
 L["Resist"] = "Widerstehen"
+--[[Translation missing --]]
+L["Resistances"] = "Resistances"
 L["Resisted"] = "Widerstanden (RESISTED)"
 L["Resolve collisions dialog"] = [=[
 Ein aktiviertes externes Addon definiert |cFF8800FFWeakAuras|r-Anzeigen, die den selben Namen besitzen wie bereits existierende Anzeigen.
@@ -1177,6 +1193,8 @@ L["Screen/Parent Group"] = "Bildschirm/Elterngruppe"
 L["Second"] = "Second"
 --[[Translation missing --]]
 L["Second Value of Tooltip Text"] = "Second Value of Tooltip Text"
+--[[Translation missing --]]
+L["Secondary Stats"] = "Secondary Stats"
 L["Seconds"] = "Sekunden"
 L["Select Frame"] = "Frame auswählen"
 --[[Translation missing --]]
@@ -1246,6 +1264,8 @@ L["Source"] = "Source"
 L["Source Affiliation"] = "Source Affiliation"
 --[[Translation missing --]]
 L["Source GUID"] = "Source GUID"
+--[[Translation missing --]]
+L["Source Info"] = "Source Info"
 L["Source Name"] = "Quellname"
 --[[Translation missing --]]
 L["Source NPC Id"] = "Source NPC Id"
@@ -1310,6 +1330,8 @@ L["Strength"] = "Stärke"
 --[[Translation missing --]]
 L["String"] = "String"
 --[[Translation missing --]]
+L["Subevent Info"] = "Subevent Info"
+--[[Translation missing --]]
 L["Subtract Cast"] = "Subtract Cast"
 --[[Translation missing --]]
 L["Subtract Channel"] = "Subtract Channel"
@@ -1350,6 +1372,8 @@ L["Tanking And Highest"] = "Höchster und Aggro"
 L["Tanking But Not Highest"] = "Aggro aber nicht höchste"
 L["Target"] = "Ziel"
 L["Targeted"] = "Anvisiert"
+--[[Translation missing --]]
+L["Tertiary Stats"] = "Tertiary Stats"
 L["Text"] = "Text"
 --[[Translation missing --]]
 L["Thaddius"] = "Thaddius"

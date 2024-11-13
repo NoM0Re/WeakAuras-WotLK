@@ -1195,7 +1195,7 @@ function Private.Modernize(data)
     end
   end
 
-  if data.internalVersion < 53 then -- on Retail it's Version 67, not sure if i change it...
+  if data.internalVersion < 67 then
     local function migrateToTable(tab, field)
       local value = tab[field]
       if value ~= nil and type(value) ~= "table" then
