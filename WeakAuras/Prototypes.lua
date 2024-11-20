@@ -5533,7 +5533,6 @@ Private.event_prototypes = {
     init = function(trigger)
       local ret = [[
         local unit = %s
-        local name = UnitName(unit)
         local ok = true
         local aggro, status, threatpct, rawthreatpct, threatvalue, threattotal
         if unit then
@@ -5612,48 +5611,6 @@ Private.event_prototypes = {
           operator = "and",
           limit = 2
         },
-      },
-      {
-        type = "header",
-        name = "unitCharacteristicsHeader",
-        display = L["Unit Characteristics"],
-      },
-      {
-        name = "name",
-        display = L["Unit Name"],
-        type = "string",
-        store = true,
-        multiline = true,
-        preamble = "local nameChecker = WeakAuras.ParseStringCheck(%q)",
-        test = "nameChecker:Check(name)",
-        conditionType = "string",
-        conditionPreamble = function(input)
-          return WeakAuras.ParseStringCheck(input)
-        end,
-        conditionTest = function(state, needle, op, preamble)
-          return preamble:Check(state.name)
-        end,
-        operator_types = "none",
-        desc = L["Supports multiple entries, separated by commas"]
-      },
-      {
-        name = "npcId",
-        display = L["Npc ID"],
-        type = "string",
-        multiline = true,
-        store = true,
-        init = "tostring(tonumber(string.sub(UnitGUID(unit) or '', 8, 12), 16) or '')",
-        conditionType = "string",
-        preamble = "local npcIdChecker = WeakAuras.ParseStringCheck(%q)",
-        test = "npcIdChecker:Check(npcId)",
-        conditionPreamble = function(input)
-          return WeakAuras.ParseStringCheck(input)
-        end,
-        conditionTest = function(state, needle, op, preamble)
-          return preamble:Check(state.npcId)
-        end,
-        operator_types = "none",
-        desc = L["Supports multiple entries, separated by commas"]
       },
       {
         name = "value",
