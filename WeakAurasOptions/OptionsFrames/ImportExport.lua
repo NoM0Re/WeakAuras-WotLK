@@ -17,15 +17,10 @@ local importexport
 local function ConstructImportExport(frame)
   local group = AceGUI:Create("WeakAurasInlineGroup");
   group.frame:SetParent(frame);
-  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -16);
+  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -63);
   group.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 46);
   group.frame:Hide();
   group:SetLayout("flow");
-
-  local title = AceGUI:Create("Label")
-  title:SetFontObject(GameFontNormalHuge)
-  title:SetFullWidth(true)
-  group:AddChild(title)
 
   local input = AceGUI:Create("MultiLineEditBox");
   input:DisableButton(true)
@@ -52,7 +47,7 @@ local function ConstructImportExport(frame)
     frame.window = "importexport";
     frame:UpdateFrameVisible()
     if(mode == "export" or mode == "table") then
-      title:SetText(L["Exporting"])
+      OptionsPrivate.SetTitle(L["Exporting"])
       if(id) then
         local displayStr;
         if(mode == "export") then
@@ -71,7 +66,7 @@ local function ConstructImportExport(frame)
         input:SetFocus();
       end
     elseif(mode == "import") then
-      title:SetText(L["Importing"])
+      OptionsPrivate.SetTitle(L["Importing"])
       input.editBox:SetScript("OnTextChanged", function(self)
         local pasted = self:GetText()
         pasted = pasted:match("^%s*(.-)%s*$")

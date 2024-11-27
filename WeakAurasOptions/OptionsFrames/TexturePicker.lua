@@ -76,10 +76,10 @@ end
 local texturePicker
 
 local function ConstructTexturePicker(frame)
-  local group = AceGUI:Create("InlineGroup");
+  local group = AceGUI:Create("SimpleGroup");
   group.frame:SetParent(frame);
-  group.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 42);
-  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 17, -10);
+  group.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 46);
+  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 17, -50);
   group.frame:Hide();
   group.children = {};
   group.categories = {};
@@ -247,7 +247,7 @@ local function ConstructTexturePicker(frame)
 
   local cancel = CreateFrame("Button", nil, group.frame, "UIPanelButtonTemplate")
   cancel:SetScript("OnClick", group.CancelClose)
-  cancel:SetPoint("BOTTOMRIGHT", -27, -23)
+  cancel:SetPoint("BOTTOMRIGHT", -20, -24)
   cancel:SetSize(100, 20)
   cancel:SetText(L["Cancel"])
 

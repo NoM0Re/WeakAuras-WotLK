@@ -14,6 +14,8 @@
 ## Dependencies: WeakAuras
 ## SavedVariables: WeakAurasOptionsSaved
 
+Templates.lua
+Templates.xml
 locales.xml
 
 ForAllIndentsAndPurposes.lua

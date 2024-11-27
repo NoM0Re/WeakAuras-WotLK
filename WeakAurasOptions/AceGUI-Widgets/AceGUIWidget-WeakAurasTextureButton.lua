@@ -1,6 +1,6 @@
 if not WeakAuras.IsCorrectVersion() then return end
 
-local Type, Version = "WeakAurasTextureButton", 23
+local Type, Version = "WeakAurasTextureButton", 25
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -96,7 +96,7 @@ local function Constructor()
     tile = true, tileSize = 16, edgeSize = 16,
     insets = { left = 4, right = 4, top = 4, bottom = 4 }
   });
-  button:SetBackdropColor(0.1,0.1,0.1);
+  button:SetBackdropColor(0.1,0.1,0.1,0.2);
   button:SetBackdropBorderColor(0.4,0.4,0.4);
 
   local highlighttexture = button:CreateTexture(nil, "OVERLAY");
