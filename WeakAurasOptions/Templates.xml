@@ -76,7 +76,7 @@
                         </Texture>
                         <!-- Top Edge -->
                         <Texture name="$parentTopEdge" file="Interface\AddOns\WeakAuras\Media\Textures\UIFrameMetalHorizontal2x" parentKey="TopEdge" horizTile="true">
-                            <Size x="256" y="75"/>
+                            <Size x="32" y="75"/>
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeTo="$parentTopLeftCorner" relativePoint="TOPRIGHT">
                                     <Offset>
@@ -93,7 +93,7 @@
                         </Texture>
                         <!-- Bottom Edge -->
                         <Texture name="$parentBottomEdge" file="Interface\AddOns\WeakAuras\Media\Textures\UIFrameMetalHorizontal2x" parentKey="BottomEdge" horizTile="true">
-                            <Size x="256" y="32"/>
+                            <Size x="32" y="32"/>
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" relativeTo="$parentBottomLeftCorner" relativePoint="BOTTOMRIGHT">
                                     <Offset>
@@ -126,7 +126,7 @@
                             <TexCoords left="0.00195312" right="0.294922" top="0" bottom="1"/>
                         </Texture>
                         <!-- Right Edge -->
-                        <Texture name="RightEdge" file="Interface\AddOns\WeakAuras\Media\Textures\UIFrameMetalVertical2x" parentKey="RightEdge" vertTile="true">
+                        <Texture name="$parentRightEdge" file="Interface\AddOns\WeakAuras\Media\Textures\UIFrameMetalVertical2x" parentKey="RightEdge" vertTile="true">
                             <Size x="75" y="8"/>
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeTo="$parentTopRightCorner" relativePoint="BOTTOMLEFT">
@@ -226,6 +226,9 @@
             <OnLoad>
                 WA_ButtonFrameTemplate_Mixin(self);
             </OnLoad>
+            <OnSizeChanged>
+                WA_UpdateNineSliceBorders(self);
+            </OnSizeChanged>
 		</Scripts>
     </Frame>
 
