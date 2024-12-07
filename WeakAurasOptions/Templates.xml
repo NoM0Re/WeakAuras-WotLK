@@ -293,4 +293,50 @@
 		</Scripts>
     </Frame>
 
+    <!--
+    *******************************************************************************
+        InputBoxTemplate (Retail 11.0.5 (57171))
+    *******************************************************************************
+    -->
+
+	<EditBox name="WA_InputBoxTemplate" enableMouse="true" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentLeft" parentKey="Left" file="Interface\AddOns\WeakAuras\Media\Textures\CommonSearch">
+                    <Size x="8" y="20"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="-5" y="0"/>
+                    </Anchors>
+					<TexCoords left="0.886719" right="0.949219" top="0.335938" bottom="0.648438"/>
+				</Texture>
+				<Texture name="$parentRight" parentKey="Right" file="Interface\AddOns\WeakAuras\Media\Textures\CommonSearch">
+                    <Size x="8" y="20"/>
+                    <Anchors>
+                        <Anchor point="RIGHT" x="0" y="0"/>
+                    </Anchors>
+					<TexCoords left="0.00390625" right="0.0664062" top="0.664062" bottom="0.976562"/>
+				</Texture>
+				<Texture name="$parentMiddle" parentKey="Middle" file="Interface\AddOns\WeakAuras\Media\Textures\CommonSearch">
+                    <Size x="10" y="20"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+                        <Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+                    </Anchors>
+					<TexCoords left="0.00390625" right="0.878906" top="0.335938" bottom="0.648438"/>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnEscapePressed>
+				EditBox_ClearFocus(self);
+			</OnEscapePressed>
+			<OnEditFocusLost>
+				EditBox_ClearHighlight(self);
+			</OnEditFocusLost>
+			<OnEditFocusGained>
+				EditBox_HighlightText(self);
+			</OnEditFocusGained>
+		</Scripts>
+		<FontString inherits="ChatFontNormal"/>
+	</EditBox>
 </Ui>
