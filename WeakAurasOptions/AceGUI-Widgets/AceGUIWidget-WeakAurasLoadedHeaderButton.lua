@@ -1,6 +1,6 @@
 if not WeakAuras.IsCorrectVersion() then return end
 
-local Type, Version = "WeakAurasLoadedHeaderButton", 20
+local Type, Version = "WeakAurasLoadedHeaderButton", 22
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -151,7 +151,7 @@ local function Constructor()
   button.background = background;
   background:SetTexture("Interface\\BUTTONS\\UI-Listbox-Highlight2.blp");
   background:SetBlendMode("ADD");
-  background:SetVertexColor(0.5, 0.5, 0.5, 0.25);
+  background:SetVertexColor(0.5, 0.5, 0.5, 0.6);
   background:SetAllPoints(button);
 
   local expand = CreateFrame("BUTTON", nil, button);
