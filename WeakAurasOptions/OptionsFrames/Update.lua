@@ -1835,6 +1835,7 @@ local methods = {
         button:SetGroupOrder(nil, nil)
       end
       button.callbacks.UpdateExpandButton()
+      button:UpdateParentWarning()
       WeakAuras.UpdateGroupOrders(data)
       WeakAuras.UpdateThumbnail(data)
       WeakAuras.ClearAndUpdateOptions(data.id)
@@ -1896,6 +1897,7 @@ local methods = {
         button:SetGroupOrder(nil, nil)
       end
       button.callbacks.UpdateExpandButton()
+      button:UpdateParentWarning()
       WeakAuras.UpdateGroupOrders(data)
       WeakAuras.UpdateThumbnail(data)
       WeakAuras.ClearAndUpdateOptions(data.id)
@@ -1998,7 +2000,7 @@ local updateFrame
 local function ConstructUpdateFrame(frame)
   local group = AceGUI:Create("ScrollFrame");
   group.frame:SetParent(frame);
-  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -16);
+  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -63);
   group.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 46);
   group.frame:Hide();
   group:SetLayout("flow");

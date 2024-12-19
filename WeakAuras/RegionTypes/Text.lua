@@ -140,8 +140,11 @@ local function modify(parent, region, data)
       if(region.height ~= height) then
         region.height = height
         region:SetHeight(height)
-        if(data.parent and WeakAuras.regions[data.parent].region.PositionChildren) then
-          WeakAuras.regions[data.parent].region:PositionChildren();
+        if data.parent then
+          Private.EnsureRegion(data.parent)
+          if WeakAuras.regions[data.parent].region.PositionChildren then
+            WeakAuras.regions[data.parent].region:PositionChildren()
+          end
         end
       end
     end
