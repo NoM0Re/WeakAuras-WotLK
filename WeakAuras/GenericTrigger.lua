@@ -100,7 +100,7 @@ end
 function WeakAuras.split(input)
   input = input or "";
   local ret = {};
-  local split, element = true;
+  local split, element = nil, nil;
   split = input:find("[,%s]");
   while(split) do
     element, input = input:sub(1, split-1), input:sub(split+1);
@@ -111,6 +111,36 @@ function WeakAuras.split(input)
   end
   if(input ~= "") then
     tinsert(ret, input);
+  end
+  return ret;
+end
+
+local function findFirstOf(input, words, start, plain)
+  local startPos, endPos
+  for _, w in ipairs(words) do
+    local s, e = input:find(w, start, plain)
+    if s and (not startPos or startPos > s) then
+      startPos, endPos = s, e
+    end
+  end
+  return startPos, endPos
+end
+
+function Private.splitAtOr(input)
+  input = input or ""
+  local ret = {}
+  local splitStart, splitEnd, element = nil, nil, nil
+  local separators = { "|", " or "}
+  splitStart, splitEnd = findFirstOf(input, separators, 1, true);
+  while(splitStart) do
+    element, input = input:sub(1, splitStart -1 ), input:sub(splitEnd + 1)
+    if(element ~= "") then
+      tinsert(ret, element)
+    end
+    splitStart, splitEnd = findFirstOf(input, separators, 1, true);
+  end
+  if(input ~= "") then
+    tinsert(ret, input)
   end
   return ret;
 end
@@ -1315,6 +1345,8 @@ function GenericTrigger.Add(data, region)
   events[id] = nil;
   watched_trigger_events[id] = nil
 
+  local warnAboutCLEUEvents = false
+
   for triggernum, triggerData in ipairs(data.triggers) do
     local trigger, untrigger = triggerData.trigger, triggerData.untrigger
     local triggerType;
@@ -1474,6 +1506,9 @@ function GenericTrigger.Add(data, region)
               local isCLEU = false
               local isUnitEvent = false
               local isTrigger = false
+              if event == "CLEU" or event == "COMBAT_LOG_EVENT_UNFILTERED" then
+                warnAboutCLEUEvents = true
+              end
               for i in event:gmatch("[^:]+") do
                 if not trueEvent then
                   trueEvent = string.upper(i)
@@ -1574,7 +1609,13 @@ function GenericTrigger.Add(data, region)
     end
   end
 
-
+  if warnAboutCLEUEvents then
+    Private.AuraWarnings.UpdateWarning(data.uid, "spamy_event_warning", "warning",
+                L["COMBAT_LOG_EVENT_UNFILTERED with no filter can trigger frame drops in raid environment. Find more information:\nhttps://github.com/WeakAuras/WeakAuras2/wiki/Deprecated-CLEU"],
+                  true)
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "spamy_event_warning")
+  end
 end
 
 do

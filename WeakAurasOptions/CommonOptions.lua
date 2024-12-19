@@ -936,7 +936,7 @@ end
 local function CreateSetAll(subOption, getAll)
   return function(data, info, ...)
     OptionsPrivate.Private.pauseOptionsProcessing(true);
-    OptionsPrivate.Private.PauseAllDynamicGroups()
+    local suspended = OptionsPrivate.Private.PauseAllDynamicGroups()
     local before = getAll(data, info, ...)
     for child in OptionsPrivate.Private.TraverseLeafs(data) do
       local childOptions = OptionsPrivate.EnsureOptions(child, subOption)
@@ -974,7 +974,7 @@ local function CreateSetAll(subOption, getAll)
       end
     end
 
-    OptionsPrivate.Private.ResumeAllDynamicGroups()
+    OptionsPrivate.Private.ResumeAllDynamicGroups(suspended)
     OptionsPrivate.Private.pauseOptionsProcessing(false);
     OptionsPrivate.Private.ScanForLoads();
     OptionsPrivate.SortDisplayButtons(nil, true);

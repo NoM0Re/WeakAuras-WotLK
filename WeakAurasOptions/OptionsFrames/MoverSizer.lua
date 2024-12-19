@@ -383,7 +383,7 @@ local function BuildAlignLines(mover)
   end
 
   for k, v in pairs(WeakAuras.displayButtons) do
-    local region = v.view.region
+    local region = WeakAuras.GetRegion(v.data.id)
     if not skipIds[k] and v.view.visibility ~= 0 and region then
       local scale = region:GetEffectiveScale() / UIParent:GetEffectiveScale()
       if not IsControlKeyDown() then
@@ -652,7 +652,8 @@ local function ConstructMoverSizer(parent)
       end
       OptionsPrivate.Private.AddParents(data)
       WeakAuras.FillOptions()
-      OptionsPrivate.Private.Animate("display", data.uid, "main", data.animation.main, WeakAuras.regions[data.id].region, false, nil, true)
+      OptionsPrivate.Private.Animate("display", data.uid, "main", data.animation.main,
+                                      OptionsPrivate.Private.EnsureRegion(data.id), false, nil, true)
       -- hide alignment lines
       frame.lineY:Hide()
       frame.lineX:Hide()
@@ -776,7 +777,8 @@ local function ConstructMoverSizer(parent)
         frame.text:Hide()
         frame:SetScript("OnUpdate", nil)
         WeakAuras.FillOptions()
-        OptionsPrivate.Private.Animate("display", data.uid, "main", data.animation.main, WeakAuras.regions[data.id].region, false, nil, true)
+        OptionsPrivate.Private.Animate("display", data.uid, "main", data.animation.main,
+                                        OptionsPrivate.Private.EnsureRegion(data.id), false, nil, true)
         -- hide alignment lines
         frame.lineY:Hide()
         frame.lineX:Hide()

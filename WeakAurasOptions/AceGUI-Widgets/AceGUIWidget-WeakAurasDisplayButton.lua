@@ -5,7 +5,7 @@ local tinsert, tconcat, tremove, wipe = table.insert, table.concat, table.remove
 local select, pairs, next, type, unpack = select, pairs, next, type, unpack
 local tostring, error = tostring, error
 
-local Type, Version = "WeakAurasDisplayButton", 58
+local Type, Version = "WeakAurasDisplayButton", 59
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -236,6 +236,7 @@ end
 
 local function Show_Tooltip(owner, line1, line2)
   GameTooltip:SetOwner(owner, "ANCHOR_NONE");
+  GameTooltip:ClearAllPoints()
   GameTooltip:SetPoint("LEFT", owner, "RIGHT");
   GameTooltip:ClearLines();
   GameTooltip:AddLine(line1);
@@ -245,6 +246,7 @@ end
 
 local function Show_Long_Tooltip(owner, description)
   GameTooltip:SetOwner(owner, "ANCHOR_NONE");
+  GameTooltip:ClearAllPoints()
   GameTooltip:SetPoint("LEFT", owner, "RIGHT");
   GameTooltip:ClearLines();
   local line = 1;
@@ -271,6 +273,8 @@ end
 local function ensure(t, k, v)
   return t and k and v and t[k] == v
 end
+
+local statusIconPool = CreateFramePool("Button")
 
 --[[     Actions     ]]--
 
@@ -303,19 +307,17 @@ local Actions = {
           WeakAuras.UpdateGroupOrders(group.data)
           WeakAuras.ClearAndUpdateOptions(group.data.id)
           WeakAuras.ClearAndUpdateOptions(source.data.id)
-          WeakAuras.FillOptions()
           group.callbacks.UpdateExpandButton();
+          group:UpdateParentWarning()
           group:ReloadTooltip()
         else
           WeakAuras.Add(source.data)
           WeakAuras.ClearAndUpdateOptions(source.data.id)
-          WeakAuras.FillOptions()
         end
       else
         -- move source into the top-level list
         WeakAuras.Add(source.data)
         WeakAuras.ClearAndUpdateOptions(source.data.id)
-        WeakAuras.FillOptions()
       end
     else
       error("Calling 'Group' with invalid source. Reload your UI to fix the display list.")
@@ -337,6 +339,7 @@ local Actions = {
         WeakAuras.ClearAndUpdateOptions(parent.id);
         local group = WeakAuras.GetDisplayButton(parent.id)
         group.callbacks.UpdateExpandButton();
+        group:UpdateParentWarning()
         group:ReloadTooltip()
       else
         error("Display thinks it is a member of a group which does not control it")
@@ -425,6 +428,12 @@ local function IsParentRecursive(needle, parent)
   end
 end
 
+local tabsForWarning = {
+  sound_condition = "conditions",
+  sound_action = "action",
+  spammy_event_warning = "trigger"
+}
+
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
@@ -474,7 +483,11 @@ local methods = {
             UpdateClipboardMenuEntry(self.data);
             EasyMenu(self.menu, WeakAuras_DropDownMenu, self.frame, 0, 0, "MENU");
             if not(OptionsPrivate.IsDisplayPicked(self.data.id)) then
-              WeakAuras.PickDisplay(self.data.id);
+              if self.data.controlledChildren then
+                WeakAuras.PickDisplay(self.data.id, "group")
+              else
+                WeakAuras.PickDisplay(self.data.id);
+              end
             end
           end
         else
@@ -531,6 +544,7 @@ local methods = {
       WeakAuras.Add(self.data);
       OptionsPrivate.Private.AddParents(self.data)
       self.callbacks.UpdateExpandButton();
+      self:UpdateParentWarning();
       OptionsPrivate.StopGrouping();
       OptionsPrivate.ClearOptions(self.data.id);
       WeakAuras.FillOptions();
@@ -600,22 +614,24 @@ local methods = {
         -- This builds the group skeleton
         DuplicateGroups(self.data, newGroup, mapping)
         -- Do this after duplicating all groups
-        OptionsPrivate.Private.PauseAllDynamicGroups()
+        local suspended = OptionsPrivate.Private.PauseAllDynamicGroups()
         -- And this fills in the leafs
         DuplicateAuras(self.data, newGroup, mapping)
 
         local button = WeakAuras.GetDisplayButton(newGroup.id)
         button.callbacks.UpdateExpandButton()
+        button:UpdateParentWarning()
 
         for old, new in pairs(mapping) do
           local button = WeakAuras.GetDisplayButton(new.id)
           button.callbacks.UpdateExpandButton()
+          button:UpdateParentWarning()
         end
 
         OptionsPrivate.SortDisplayButtons(nil, true)
         OptionsPrivate.PickAndEditDisplay(newGroup.id)
 
-        OptionsPrivate.Private.ResumeAllDynamicGroups()
+        OptionsPrivate.Private.ResumeAllDynamicGroups(suspended)
       else
         local new = OptionsPrivate.DuplicateAura(self.data)
         OptionsPrivate.SortDisplayButtons(nil, true)
@@ -627,7 +643,6 @@ local methods = {
       if (WeakAuras.IsImporting()) then return end;
       local toDelete = {}
       if(self.data.controlledChildren) then
-        local region = WeakAuras.regions[self.data.id];
         for child in OptionsPrivate.Private.TraverseAllChildren(self.data) do
           tinsert(toDelete, child);
         end
@@ -721,7 +736,7 @@ local methods = {
     end
 
     function self.callbacks.OnViewClick()
-      OptionsPrivate.Private.PauseAllDynamicGroups();
+      local suspended = OptionsPrivate.Private.PauseAllDynamicGroups()
       if(self.view.visibility == 2) then
         for child in OptionsPrivate.Private.TraverseAllChildren(self.data) do
           WeakAuras.GetDisplayButton(child.id):PriorityHide(2);
@@ -734,7 +749,7 @@ local methods = {
         self:PriorityShow(2)
       end
       self:RecheckParentVisibility()
-      OptionsPrivate.Private.ResumeAllDynamicGroups();
+      OptionsPrivate.Private.ResumeAllDynamicGroups(suspended)
     end
 
     function self.callbacks.OnRenameClick()
@@ -755,6 +770,7 @@ local methods = {
       if not(newid == oldid) then
         WeakAuras.Rename(self.data, newid);
       end
+      self:UpdateParentWarning()
     end
 
     function self.callbacks.OnDragStart()
@@ -889,13 +905,10 @@ local methods = {
       func = function() WeakAuras_DropDownMenu:Hide() end
     });
     if(self.data.controlledChildren) then
-      self.loaded:Hide();
       self.expand:Show();
       self.callbacks.UpdateExpandButton();
       self:SetOnExpandCollapse(function() OptionsPrivate.SortDisplayButtons(nil, true) end);
     else
-      self:SetViewRegion(WeakAuras.regions[self.data.id].region);
-      self.loaded:Show();
       self.expand:Hide();
     end
     self.group:Show();
@@ -945,6 +958,9 @@ local methods = {
         for index, childId in pairs(data.controlledChildren) do
           tinsert(namestable, indent .. childId);
           local childData = WeakAuras.GetData(childId)
+          if not childData then
+            return
+          end
           if (childData.controlledChildren) then
             addChildrenNames(childData, indent .. "  ")
           end
@@ -1011,13 +1027,13 @@ local methods = {
       Show_Long_Tooltip(self.frame, self.frame.description);
     end
   end,
-  ["StartGrouping"] = function(self, groupingData, selected, groupingGroup, childOfGrouing)
+  ["StartGrouping"] = function(self, groupingData, selected, groupingGroup, childOfGrouping)
     self.grouping = groupingData;
     self:UpdateIconsVisible()
     if(selected) then
       self.frame:SetScript("OnClick", self.callbacks.OnClickGroupingSelf);
       self:SetDescription(L["Cancel"], L["Do not group this display"]);
-    elseif (childOfGrouing) then
+    elseif (childOfGrouping) then
       self:Disable();
     else
       if(self.data.regionType == "dynamicgroup" and groupingGroup) then
@@ -1031,11 +1047,13 @@ local methods = {
     end
   end,
   ["StopGrouping"] = function(self)
-    self.grouping = nil;
-    self:UpdateIconsVisible()
-    self:SetNormalTooltip();
-    self.frame:SetScript("OnClick", self.callbacks.OnClickNormal);
-    self:Enable();
+    if self.grouping then
+      self.grouping = nil
+      self:UpdateIconsVisible()
+      self:SetNormalTooltip()
+      self.frame:SetScript("OnClick", self.callbacks.OnClickNormal)
+      self:Enable()
+    end
   end,
   ["Ungroup"] = function(self)
     if (WeakAuras.IsImporting()) then return end;
@@ -1073,10 +1091,11 @@ local methods = {
     end
     WeakAuras.ClearAndUpdateOptions(self.data.id);
     WeakAuras.UpdateGroupOrders(parentData);
+    local parentButton = WeakAuras.GetDisplayButton(parentData.id)
     if(#parentData.controlledChildren == 0) then
-      local parentButton = WeakAuras.GetDisplayButton(parentData.id)
       parentButton:DisableExpand()
     end
+    parentButton:UpdateParentWarning()
 
     for child in OptionsPrivate.Private.TraverseAllChildren(self.data) do
       local button = WeakAuras.GetDisplayButton(child.id)
@@ -1108,7 +1127,7 @@ local methods = {
     self.frame:SetScript("OnClick", nil)
     self.view:Hide()
     self.expand:Hide()
-    self.loaded:Hide()
+    self.statusIcons:Hide()
     Hide_Tooltip()
     if picked then
       self.frame:EnableKeyboard(true)
@@ -1152,7 +1171,6 @@ local methods = {
         Show_DropIndicator(id)
       end
       self:UpdateIconsVisible()
-      OptionsPrivate.UpdateButtonsScroll()
     else
       -- Are we a valid target?
       -- Top level auras that aren't groups aren't
@@ -1201,10 +1219,9 @@ local methods = {
     self.frame:SetScript("OnClick", self.callbacks.OnClickNormal)
     self.frame:EnableKeyboard(false); -- disables self.callbacks.OnKeyDown
     self.view:Show()
+    self.statusIcons:Show()
     if self.data.controlledChildren then
       self.expand:Show()
-    else
-      self.loaded:Show()
     end
     self:Enable()
 
@@ -1254,9 +1271,6 @@ local methods = {
   end,
   ["SetDescription"] = function(self, ...)
     self.frame.description = {...};
-  end,
-  ["SetViewRegion"] = function(self, region)
-    self.view.region = region;
   end,
   ["SetRenameAction"] = function(self, func)
     self.renamebox.func = function()
@@ -1329,12 +1343,18 @@ local methods = {
     return not OptionsPrivate.IsCollapsed(self.data.id, "displayButton", "", true)
   end,
   ["DisableExpand"] = function(self)
+    if self.expand.disabled then
+      return
+    end
     self.expand:Disable();
     self.expand.disabled = true;
     self.expand.expanded = false;
     self.expand:SetNormalTexture("Interface\\BUTTONS\\UI-PlusButton-Disabled.blp");
   end,
   ["EnableExpand"] = function(self)
+    if not self.expand.disabled then
+      return
+    end
     self.expand.disabled = false;
     if(self:GetExpanded()) then
       self:Expand();
@@ -1342,23 +1362,119 @@ local methods = {
       self:Collapse();
     end
   end,
-  ["UpdateWarning"] = function(self)
-    local icon, title, warningText = OptionsPrivate.Private.AuraWarnings.FormatWarnings(self.data.uid)
-    if warningText then
-      self.warning:Show()
-      self.warning:SetNormalTexture(icon)
-      self.warning:SetScript("OnEnter", function()
+  ["UpdateStatusIcon"] = function(self, key, prio, icon, title, tooltip, onClick, color)
+    local iconButton
+    for _, button in ipairs(self.statusIcons.buttons) do
+      if button.key == key then
+        iconButton = button
+        break
+      end
+    end
+    if not iconButton then
+      iconButton = statusIconPool:Acquire()
+      iconButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+      tinsert(self.statusIcons.buttons, iconButton)
+      iconButton:SetParent(self.statusIcons)
+      iconButton.key = key
+      iconButton:SetSize(16, 16)
+    end
+    iconButton.prio = prio
+    iconButton:SetNormalTexture(icon.path)
+    if icon.texCoords then
+      iconButton:GetNormalTexture():SetTexCoord(unpack(icon.texCoords))
+    end
+    if title then
+      iconButton:SetScript("OnEnter", function()
         Show_Tooltip(
           self.frame,
           title,
-          warningText
+          tooltip
         )
       end)
-      self.warning:SetScript("OnClick", function()
-        WeakAuras.PickDisplay(self.data.id, "information")
-      end)
+      iconButton:SetScript("OnLeave", Hide_Tooltip)
     else
-      self.warning:Hide()
+      iconButton:SetScript("OnEnter", nil)
+    end
+    if color then
+      iconButton:GetNormalTexture():SetVertexColor(unpack(color))
+    else
+      iconButton:GetNormalTexture():SetVertexColor(1, 1, 1, 1)
+    end
+    iconButton:SetScript("OnClick", onClick)
+    iconButton:Show()
+  end,
+  ["ClearStatusIcon"] = function(self, key)
+    for index, button in ipairs(self.statusIcons.buttons) do
+      if button.key == key then
+        statusIconPool:Release(button)
+        table.remove(self.statusIcons.buttons, index)
+        return
+      end
+    end
+  end,
+  ["SortStatusIcons"] = function(self)
+    table.sort(self.statusIcons.buttons, function(a, b)
+      return a.prio < b.prio
+    end)
+    local lastAnchor = self.statusIcons
+    if self:IsGroup() then
+      self.statusIcons:SetWidth(17)
+    else
+      self.statusIcons:SetWidth(1)
+    end
+    for _, button in ipairs(self.statusIcons.buttons) do
+      button:ClearAllPoints()
+      button:SetPoint("BOTTOMLEFT", lastAnchor, "BOTTOMRIGHT", 4, 0)
+      lastAnchor = button
+    end
+  end,
+  ["UpdateWarning"] = function(self)
+    local warnings = OptionsPrivate.Private.AuraWarnings.GetAllWarnings(self.data.uid)
+    local warningTypes = {"info", "sound", "warning", "error"}
+    for _, key in ipairs(warningTypes) do
+      self:ClearStatusIcon(key)
+    end
+    if warnings then
+      for severity, warning in pairs(warnings) do
+        local onClick
+        if severity == "sound" then
+          local soundText = L["Show Sound Setting"]
+          local removeText = L["Remove All Sounds"]
+          onClick = function()
+            local menu = {
+              {
+                text = soundText,
+                func = function()
+                  WeakAuras.PickDisplay(warning.auraId, tabsForWarning[warning.key] or "information")
+                end
+              },
+              {
+                text = removeText,
+                func = function()
+                  OptionsPrivate.Private.ClearSounds(self.data.uid)
+                end
+              }
+            }
+            EasyMenu(menu, WeakAuras_DropDownMenu, "cursor", 0, 0, "MENU");
+          end
+        else
+          onClick = function()
+            WeakAuras.PickDisplay(warning.auraId, tabsForWarning[warning.key] or "information")
+          end
+        end
+
+        self:UpdateStatusIcon(severity, warning.prio, warning.icon, warning.title, warning.message, onClick)
+      end
+    end
+    self:SortStatusIcons()
+  end,
+  ["UpdateParentWarning"] = function(self)
+    self:UpdateWarning()
+    for parent in OptionsPrivate.Private.TraverseParents(self.data) do
+      local parentButton = WeakAuras.GetDisplayButton(parent.id)
+      if parentButton then
+        parentButton:UpdateWarning()
+      end
     end
   end,
   ["SetGroupOrder"] = function(self, order, max)
@@ -1387,15 +1503,22 @@ local methods = {
   ["GetGroupOrder"] = function(self)
     return self.frame.dgrouporder;
   end,
-  ["DisableLoaded"] = function(self)
-    self.loaded.title = L["Not Loaded"];
-    self.loaded.desc = L["This display is not currently loaded"];
-    self.loaded:SetNormalTexture("Interface\\BUTTONS\\UI-GuildButton-OfficerNote-Disabled.blp");
+  ["ClearLoaded"] = function(self)
+    self:ClearStatusIcon("load")
+    self:SortStatusIcons()
   end,
-  ["EnableLoaded"] = function(self)
-    self.loaded.title = L["Loaded"];
-    self.loaded.desc = L["This display is currently loaded"];
-    self.loaded:SetNormalTexture("Interface\\BUTTONS\\UI-GuildButton-OfficerNote-Up.blp");
+  ["SetLoaded"] = function(self, prio, color, title, description)
+    self:UpdateStatusIcon("load", prio, {path="Interface\\AddOns\\WeakAuras\\Media\\Textures\\loaded"}, title, description, nil, color)
+    self:SortStatusIcons()
+  end,
+  ["IsLoaded"] = function(self)
+    return OptionsPrivate.Private.loaded[self.data.id] == true
+  end,
+  ["IsStandby"] = function(self)
+    return OptionsPrivate.Private.loaded[self.data.id] == false
+  end,
+  ["IsUnloaded"] = function(self)
+    return OptionsPrivate.Private.loaded[self.data.id] == nil
   end,
   ["Pick"] = function(self)
     self.frame:LockHighlight();
@@ -1414,24 +1537,25 @@ local methods = {
       return;
     end
     if self.view.visibility >= 1 then
-      if(self.view.region and self.view.region.Expand) then
-        OptionsPrivate.Private.FakeStatesFor(self.view.region.id, true)
-        --if (OptionsPrivate.Private.personalRessourceDisplayFrame) then
-          --OptionsPrivate.Private.personalRessourceDisplayFrame:expand(self.view.region.id);
-        --end
-        if (OptionsPrivate.Private.mouseFrame) then
-          OptionsPrivate.Private.mouseFrame:expand(self.view.region.id);
-        end
+
+      if not OptionsPrivate.Private.IsGroupType(self.data) then
+        OptionsPrivate.Private.FakeStatesFor(self.data.id, true)
+      end
+      --if (OptionsPrivate.Private.personalRessourceDisplayFrame) then
+        --OptionsPrivate.Private.personalRessourceDisplayFrame:expand(self.data.id);
+      --end
+      if (OptionsPrivate.Private.mouseFrame) then
+        OptionsPrivate.Private.mouseFrame:expand(self.data.id);
       end
     else
-      if(self.view.region and self.view.region.Collapse) then
-        OptionsPrivate.Private.FakeStatesFor(self.view.region.id, false)
-        if (OptionsPrivate.Private.personalRessourceDisplayFrame) then
-          OptionsPrivate.Private.personalRessourceDisplayFrame:collapse(self.view.region.id);
-        end
-        if (OptionsPrivate.Private.mouseFrame) then
-          OptionsPrivate.Private.mouseFrame:collapse(self.view.region.id);
-        end
+      if not OptionsPrivate.Private.IsGroupType(self.data) then
+        OptionsPrivate.Private.FakeStatesFor(self.data.id, false)
+      end
+      if (OptionsPrivate.Private.personalRessourceDisplayFrame) then
+        OptionsPrivate.Private.personalRessourceDisplayFrame:collapse(self.data.id);
+      end
+      if (OptionsPrivate.Private.mouseFrame) then
+        OptionsPrivate.Private.mouseFrame:collapse(self.data.id);
       end
     end
   end,
@@ -1444,8 +1568,9 @@ local methods = {
       self:SyncVisibility()
       self:UpdateViewTexture()
     end
-    if self.view.region and self.view.region.ClickToPick then
-      self.view.region:ClickToPick();
+    local region = OptionsPrivate.Private.EnsureRegion(self.data.id)
+    if region and region.ClickToPick then
+      region:ClickToPick();
     end
   end,
   ["PriorityHide"] = function(self, priority)
@@ -1514,8 +1639,10 @@ local methods = {
     self.view:Disable();
     self.group:Disable();
     self.ungroup:Disable();
-    self.loaded:Disable();
     self.expand:Disable();
+    for _, button in ipairs(self.statusIcons.buttons) do
+      button:Disable();
+    end
     self:UpdateUpDownButtons()
   end,
   ["Enable"] = function(self)
@@ -1524,7 +1651,9 @@ local methods = {
     self.view:Enable();
     self.group:Enable();
     self.ungroup:Enable();
-    self.loaded:Enable();
+    for _, button in ipairs(self.statusIcons.buttons) do
+      button:Enable();
+    end
     self:UpdateUpDownButtons()
     if not(self.expand.disabled) then
       self.expand:Enable();
@@ -1535,7 +1664,6 @@ local methods = {
   end,
   ["OnRelease"] = function(self)
     self:ReleaseThumbnail()
-    self:SetViewRegion();
     self:Enable();
     self:SetGroup();
     self.renamebox:Hide();
@@ -1549,6 +1677,10 @@ local methods = {
     --self.frame:EnableMouse(false);
     self.frame:ClearAllPoints();
     self.frame:Hide();
+    for _, button in ipairs(self.statusIcons.buttons) do
+      statusIconPool:Release(button)
+    end
+    wipe(self.statusIcons.buttons)
     self.frame = nil;
     self.data = nil;
   end,
@@ -1638,7 +1770,8 @@ Constructor
 
 local function Constructor()
   local name = "WeakAurasDisplayButton"..AceGUI:GetNextWidgetNum(Type);
-  local button = CreateFrame("BUTTON", name, UIParent, "OptionsListButtonTemplate");
+  ---@class Button
+  local button = CreateFrame("Button", name, UIParent, "OptionsListButtonTemplate");
   button:SetHeight(32);
   button:SetWidth(1000);
   button.dgroup = nil;
@@ -1677,7 +1810,8 @@ local function Constructor()
 
   button.description = {};
 
-  local view = CreateFrame("BUTTON", nil, button);
+  ---@class Button
+  local view = CreateFrame("Button", nil, button);
   button.view = view;
   view:SetWidth(16);
   view:SetHeight(16);
@@ -1694,21 +1828,7 @@ local function Constructor()
 
   view.visibility = 0;
 
-  local loaded = CreateFrame("BUTTON", nil, button);
-  button.loaded = loaded;
-  loaded:SetWidth(16);
-  loaded:SetHeight(16);
-  loaded:SetPoint("BOTTOM", button, "BOTTOM");
-  loaded:SetPoint("LEFT", icon, "RIGHT", 0, 0);
-  loaded:SetNormalTexture("Interface\\BUTTONS\\UI-GuildButton-OfficerNote-Up.blp");
-  loaded:SetDisabledTexture("Interface\\BUTTONS\\UI-GuildButton-OfficerNote-Disabled.blp");
-  --loaded:SetHighlightTexture("Interface\\BUTTONS\\UI-Panel-MinimizeButton-Highlight.blp");
-  loaded.title = L["Loaded"];
-  loaded.desc = L["This display is currently loaded"];
-  loaded:SetScript("OnEnter", function() Show_Tooltip(button, loaded.title, loaded.desc) end);
-  loaded:SetScript("OnLeave", Hide_Tooltip);
-
-  local renamebox = CreateFrame("EDITBOX", nil, button, "InputBoxTemplate");
+  local renamebox = CreateFrame("EditBox", nil, button, "InputBoxTemplate");
   renamebox:SetHeight(14);
   renamebox:SetPoint("TOP", button, "TOP");
   renamebox:SetPoint("LEFT", icon, "RIGHT", 6, 0);
@@ -1815,13 +1935,12 @@ local function Constructor()
   expand:SetScript("OnEnter", function() Show_Tooltip(button, expand.title, expand.desc) end);
   expand:SetScript("OnLeave", Hide_Tooltip);
 
-  local warning = CreateFrame("BUTTON", nil, button);
-  button.warning = warning
-  warning:SetWidth(16)
-  warning:SetHeight(16)
-  warning:SetPoint("RIGHT", button, "RIGHT", -60, 0)
-  warning:SetScript("OnLeave", Hide_Tooltip)
-  warning:Hide()
+  local statusIcons = CreateFrame("Frame", nil, button);
+  button.statusIcons = statusIcons
+  statusIcons:SetPoint("BOTTOM", button, "BOTTOM", 0, 1);
+  statusIcons:SetPoint("LEFT", icon, "RIGHT");
+  statusIcons:SetSize(1,1)
+  statusIcons.buttons = {}
 
   local widget = {
     frame = button,
@@ -1833,10 +1952,9 @@ local function Constructor()
     ungroup = ungroup,
     upgroup = upgroup,
     downgroup = downgroup,
-    loaded = loaded,
     background = background,
     expand = expand,
-    warning = warning,
+    statusIcons = statusIcons,
     type = Type,
     offset = offset
   }
