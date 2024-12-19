@@ -1835,6 +1835,7 @@ local methods = {
         button:SetGroupOrder(nil, nil)
       end
       button.callbacks.UpdateExpandButton()
+      button:UpdateParentWarning()
       WeakAuras.UpdateGroupOrders(data)
       WeakAuras.UpdateThumbnail(data)
       WeakAuras.ClearAndUpdateOptions(data.id)
@@ -1896,6 +1897,7 @@ local methods = {
         button:SetGroupOrder(nil, nil)
       end
       button.callbacks.UpdateExpandButton()
+      button:UpdateParentWarning()
       WeakAuras.UpdateGroupOrders(data)
       WeakAuras.UpdateThumbnail(data)
       WeakAuras.ClearAndUpdateOptions(data.id)
