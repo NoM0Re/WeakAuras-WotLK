@@ -994,6 +994,7 @@ Private.load_prototype = {
       init = "arg",
       values = "group_types",
       events = {"PARTY_MEMBERS_CHANGED", "RAID_ROSTER_UPDATE"},
+      optional = true,
     },
     {
       name = "group_leader",
@@ -1003,6 +1004,7 @@ Private.load_prototype = {
       events = {"PARTY_LEADER_CHANGED", "RAID_ROSTER_UPDATE"},
       values = "group_member_types",
       test = "WeakAuras.CheckGroupMemberType(%s, group_leader)",
+      optional = true,
     },
     {
       name ="locationTitle",
@@ -1021,6 +1023,7 @@ Private.load_prototype = {
       desc = function()
         return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), L["Supports multiple entries, separated by commas"])
       end,
+      optional = true,
     },
     {
       name = "zoneId",
@@ -1033,6 +1036,7 @@ Private.load_prototype = {
       desc = function()
 	    return ("\n|cffffd200%s|r%s: %d\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), GetCurrentMapAreaID(), L["Supports multiple entries, separated by commas"])
 	    end,
+      optional = true,
     },
     {
       name = "subzone",
@@ -1046,6 +1050,7 @@ Private.load_prototype = {
       desc = function()
         return ("\n|cffffd200%s|r%s\n\n%s"):format(L["Current Zone\n"], GetMinimapZoneText(), L["Supports multiple entries, separated by commas"])
       end,
+      optional = true,
     },
     {
       name = "size",
@@ -1055,6 +1060,7 @@ Private.load_prototype = {
       sorted = true,
       init = "arg",
       events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
+      optional = true,
     },
     {
       name = "difficulty",
@@ -1064,6 +1070,7 @@ Private.load_prototype = {
       sorted = true,
       init = "arg",
       events = {"PLAYER_DIFFICULTY_CHANGED", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
+      optional = true,
     },
     {
       name ="equipmentTitle",

@@ -181,7 +181,6 @@ local loadEvents = {}
 
 -- All regions keyed on id, has properties: region, regionType, also see clones
 WeakAuras.regions = {};
-local regions = WeakAuras.regions;
 
 -- keyed on id, contains bool indicating whether the aura is loaded
 Private.loaded = {};
@@ -1073,7 +1072,12 @@ function Private.Login(initialTime, takeNewSnapshots)
     end
 
     loginFinished = true
-    Private.ResumeAllDynamicGroups();
+    -- Tell Dynamic Groups that we are done with login
+    for _, region in pairs(WeakAuras.regions) do
+      if (region.region.RunDelayedActions) then
+        region.region:RunDelayedActions();
+      end
+    end
   end)
 
   if initialTime then
@@ -1098,10 +1102,10 @@ function Private.Login(initialTime, takeNewSnapshots)
   end
 end
 
-local frame = CreateFrame("FRAME", "WeakAurasFrame", UIParent);
-WeakAuras.frames["WeakAuras Main Frame"] = frame;
-frame:SetAllPoints(UIParent);
-frame:SetFrameStrata("BACKGROUND");
+local WeakAurasFrame = CreateFrame("FRAME", "WeakAurasFrame", UIParent);
+WeakAuras.frames["WeakAuras Main Frame"] = WeakAurasFrame;
+WeakAurasFrame:SetAllPoints(UIParent);
+WeakAurasFrame:SetFrameStrata("BACKGROUND");
 
 local loadedFrame = CreateFrame("FRAME");
 WeakAuras.frames["Addon Initialization Handler"] = loadedFrame;
@@ -1230,17 +1234,21 @@ function Private.SquelchingActions()
 end
 
 function Private.PauseAllDynamicGroups()
-  for id, region in pairs(regions) do
+  local suspended = {}
+  for id, region in pairs(WeakAuras.regions) do
     if (region.region.Suspend) then
       region.region:Suspend();
+      tinsert(suspended, id)
     end
   end
+  return suspended
 end
 
-function Private.ResumeAllDynamicGroups()
-  for id, region in pairs(regions) do
-    if (region.region.Resume) then
-      region.region:Resume();
+function Private.ResumeAllDynamicGroups(suspended)
+  for _, id in ipairs(suspended) do
+    local region = WeakAuras.GetRegion(id)
+    if (region and region.Resume) then
+      region:Resume();
     end
   end
 end
@@ -1369,6 +1377,7 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
       if(shouldBeLoaded and not loaded[id]) then
         changed = changed + 1;
         toLoad[id] = true;
+        Private.EnsureRegion(id)
         for parent in Private.TraverseParents(data) do
           parentsToCheck[parent.id] = true
         end
@@ -1418,8 +1427,12 @@ function Private.ScanForLoadsGroup(toCheck)
             any_loaded = nil
           end
         end
+        if any_loaded then
+          Private.EnsureRegion(id)
+        end
         loaded[id] = any_loaded;
       else
+        Private.EnsureRegion(id)
         loaded[id] = true;
       end
     end
@@ -1488,7 +1501,9 @@ end
 local function UnloadAll()
   -- Even though auras are collapsed, their finish animation can be running
   for id in pairs(loaded) do
-    Private.CancelAnimation(WeakAuras.regions[id].region, true, true, true, true, true, true)
+    if WeakAuras.regions[id] and WeakAuras.regions[id].region then
+      Private.CancelAnimation(WeakAuras.regions[id].region, true, true, true, true, true, true)
+    end
     if clones[id] then
       for cloneId, region in pairs(clones[id]) do
         Private.CancelAnimation(region, true, true, true, true, true, true)
@@ -1526,9 +1541,9 @@ end
 function Private.Resume()
   paused = false;
 
-  Private.PauseAllDynamicGroups();
+  local suspended = Private.PauseAllDynamicGroups()
 
-  for id, region in pairs(regions) do
+  for id, region in pairs(WeakAuras.regions) do
     region.region:Collapse();
   end
 
@@ -1545,7 +1560,7 @@ function Private.Resume()
     Private.ScanForLoadsGroup(loadEvents["GROUP"])
   end
 
-  Private.ResumeAllDynamicGroups();
+  Private.ResumeAllDynamicGroups(suspended)
 end
 
 function Private.LoadDisplays(toLoad, ...)
@@ -1661,21 +1676,20 @@ function WeakAuras.Delete(data)
     end
   end
 
-  regions[id].region:Collapse()
-  Private.CollapseAllClones(id);
-
-  Private.CancelAnimation(WeakAuras.regions[id].region, true, true, true, true, true, true)
+  if WeakAuras.regions[id] then
+    WeakAuras.regions[id].region:Collapse()
+    Private.CancelAnimation(WeakAuras.regions[id].region, true, true, true, true, true, true)
+    WeakAuras.regions[id].region = nil
+    WeakAuras.regions[id] = nil
+  end
 
   if clones[id] then
     for cloneId, region in pairs(clones[id]) do
-      Private.CancelAnimation(region, true, true, true, true, true, true)
+        region:Collapse();
+        Private.CancelAnimation(region, true, true, true, true, true, true)
     end
+    clones[id] = nil
   end
-
-  regions[id].region:SetScript("OnUpdate", nil);
-  regions[id].region:SetScript("OnShow", nil);
-  regions[id].region:SetScript("OnHide", nil);
-  regions[id].region:Hide();
 
   db.registered[id] = nil;
 
@@ -1683,8 +1697,6 @@ function WeakAuras.Delete(data)
     triggerSystem.Delete(id);
   end
 
-  regions[id].region = nil;
-  regions[id] = nil;
   loaded[id] = nil;
   loadFuncs[id] = nil;
   loadFuncsForOptions[id] = nil;
@@ -1739,9 +1751,18 @@ function WeakAuras.Rename(data, newid)
   end
 
   UIDtoID[data.uid] = newid
-  regions[newid] = regions[oldid];
-  regions[oldid] = nil;
-  regions[newid].region.id = newid;
+  WeakAuras.regions[newid] = WeakAuras.regions[oldid];
+  WeakAuras.regions[oldid] = nil;
+  if WeakAuras.regions[newid] then
+    WeakAuras.regions[newid].region.id = newid
+  end
+  if(clones[oldid]) then
+    clones[newid] = clones[oldid]
+    clones[oldid] = nil
+    for cloneid, clone in pairs(clones[newid]) do
+      clone.id = newid
+    end
+  end
 
   for _, triggerSystem in pairs(triggerSystems) do
     triggerSystem.Rename(oldid, newid);
@@ -1771,14 +1792,6 @@ function WeakAuras.Rename(data, newid)
   db.displays[newid] = db.displays[oldid];
   db.displays[oldid] = nil;
 
-  if(clones[oldid]) then
-    clones[newid] = clones[oldid];
-    clones[oldid] = nil;
-    for cloneid, clone in pairs(clones[newid]) do
-      clone.id = newid;
-    end
-  end
-
   db.displays[newid].id = newid;
 
   if(data.controlledChildren) then
@@ -1787,9 +1800,6 @@ function WeakAuras.Rename(data, newid)
       if(childData) then
         childData.parent = data.id;
       end
-    end
-    if regions[newid].ReloadControlledChildren then
-      regions[newid]:ReloadControlledChildren()
     end
   end
 
@@ -1823,14 +1833,13 @@ end
 
 function Private.Convert(data, newType)
   local id = data.id;
-  regions[id].region:SetScript("OnUpdate", nil);
-  regions[id].region:Hide();
-  Private.EndEvent(id, 0, true);
 
   Private.FakeStatesFor(id, false)
 
-  regions[id].region = nil;
-  regions[id] = nil;
+  if WeakAuras.regions[id] then
+    WeakAuras.regions[id].region = nil
+    WeakAuras.regions[id] = nil
+  end
 
   data.regionType = newType;
 
@@ -2113,7 +2122,9 @@ function WeakAuras.AddMany(table, takeSnapshots)
   end
   for data in pairs(groups) do
     if data.type == "dynamicgroup" then
-      regions[data.id].region:ReloadControlledChildren()
+      if WeakAuras.regions[data.id] then
+        WeakAuras.regions[data.id].region:ReloadControlledChildren()
+      end
     else
       WeakAuras.Add(data)
     end
@@ -2418,6 +2429,36 @@ function Private.UpdateSoundIcon(data)
 
 end
 
+function Private.ClearSounds(uid)
+  local data = Private.GetDataByUID(uid)
+  for child in Private.TraverseLeafsOrAura(data) do
+    local changed = false
+    -- Conditions
+    if child.conditions then
+      for _, condition in ipairs(child.conditions) do
+        for changeIndex = #condition.changes, 1, -1 do
+          local change = condition.changes[changeIndex]
+          if change.property == "sound" then
+            tremove(condition.changes, changeIndex)
+            changed = true
+          end
+        end
+      end
+    end
+    -- Actions
+    if child.actions.start.do_sound or child.actions.finish.do_sound then
+      child.actions.start.do_sound = false
+      child.actions.finish.do_sound = false
+      changed = true
+    end
+    if changed then
+      WeakAuras.Add(child)
+    end
+  end
+  WeakAuras.ClearAndUpdateOptions(data.id, true)
+  WeakAuras.FillOptions()
+end
+
 function WeakAuras.PreAdd(data)
   -- Readd what Compress removed before version 8
   if (not data.internalVersion or data.internalVersion < 7) then
@@ -2489,7 +2530,9 @@ local function pAdd(data, simpleChange)
 
   if simpleChange then
     db.displays[id] = data
-    WeakAuras.SetRegion(data)
+    if WeakAuras.GetRegion(data.id) then
+      WeakAuras.SetRegion(data)
+    end
     if clones[id] then
       for cloneId, region in pairs(clones[id]) do
         WeakAuras.SetRegion(data, cloneId)
@@ -2503,7 +2546,9 @@ local function pAdd(data, simpleChange)
         Private.ClearAuraEnvironment(parent.id);
       end
       db.displays[id] = data;
-      WeakAuras.SetRegion(data);
+      if WeakAuras.GetRegion(data.id) then
+        WeakAuras.SetRegion(data)
+      end
       Private.ScanForLoadsGroup({[id] = true});
       loadEvents["GROUP"] = loadEvents["GROUP"] or {}
       loadEvents["GROUP"][id] = true
@@ -2572,7 +2617,9 @@ local function pAdd(data, simpleChange)
         timers[id] = nil;
       end
 
-      local region = WeakAuras.SetRegion(data);
+      if WeakAuras.GetRegion(data.id) then
+        WeakAuras.SetRegion(data)
+      end
 
       triggerState[id] = {
         disjunctive = data.triggers.disjunctive or "all",
@@ -2648,7 +2695,7 @@ function WeakAuras.SetRegion(data, cloneId)
           if(clonePool[data.regionType] and clonePool[data.regionType][1]) then
             clones[id][cloneId] = tremove(clonePool[data.regionType]);
           else
-            local clone = regionTypes[data.regionType].create(frame, data);
+            local clone = regionTypes[data.regionType].create(WeakAurasFrame, data);
             clone.regionType = data.regionType;
             clone:Hide();
             clones[id][cloneId] = clone;
@@ -2656,9 +2703,9 @@ function WeakAuras.SetRegion(data, cloneId)
           region = clones[id][cloneId];
         end
       else
-        if((not regions[id]) or (not regions[id].region) or regions[id].regionType ~= regionType) then
-          region = regionTypes[regionType].create(frame, data);
-          regions[id] = {
+        if((not WeakAuras.regions[id]) or (not WeakAuras.regions[id].region) or WeakAuras.regions[id].regionType ~= regionType) then
+          region = regionTypes[regionType].create(WeakAurasFrame, data);
+          WeakAuras.regions[id] = {
             regionType = regionType,
             region = region
           };
@@ -2669,17 +2716,17 @@ function WeakAuras.SetRegion(data, cloneId)
             region.toShow = true
           end
         else
-          region = regions[id].region;
+          region = WeakAuras.regions[id].region
         end
       end
       region.id = id;
       region.cloneId = cloneId or "";
       WeakAuras.validate(data, regionTypes[regionType].default);
 
-      local parent = frame;
+      local parent = WeakAurasFrame;
       if(data.parent) then
-        if(regions[data.parent]) then
-          parent = regions[data.parent].region;
+        if WeakAuras.GetData(data.parent) then
+          parent = Private.EnsureRegion(data.parent)
         else
           data.parent = nil;
         end
@@ -2717,19 +2764,78 @@ function WeakAuras.SetRegion(data, cloneId)
 end
 
 local function EnsureClone(id, cloneId)
-  clones[id] = clones[id] or {};
+  clones[id] = clones[id] or {}
   if not(clones[id][cloneId]) then
-    local data = WeakAuras.GetData(id);
-    WeakAuras.SetRegion(data, cloneId);
+    local data = WeakAuras.GetData(id)
+    WeakAuras.SetRegion(data, cloneId)
   end
-  return clones[id][cloneId];
+  return clones[id][cloneId]
 end
 
-function WeakAuras.GetRegion(id, cloneId)
+local creatingRegions = false
+function Private.CreatingRegions()
+  return creatingRegions
+end
+--- Ensures that a region exists
+local function EnsureRegion(id)
+  if not WeakAuras.regions[id] or not WeakAuras.regions[id].region then
+    WeakAuras.regions[id] = WeakAuras.regions[id] or {}
+    -- The region doesn't yet exist
+    -- But we must also ensure that our parents exists
+    -- and as an additional wrinkle, for dynamic groups, all children must exist!
+    -- and we have to call ReloadControlledChildren at the end
+    -- So we go up the list of parents and collect auras that must be created
+    -- If we find a parent already exists, we can stop
+    -- And dynamic groups require creating all children, thus we don't need
+    -- to care which path we came to them
+
+    local aurasToCreate = {}
+    local dynamicGroups = {}
+    creatingRegions = true
+    while(id) do
+      local data = WeakAuras.GetData(id)
+      if (data.regionType == "dynamicgroup") then
+        wipe(aurasToCreate)
+        tinsert(aurasToCreate, data.id)
+        tinsert(dynamicGroups, data.id)
+      else
+        tinsert(aurasToCreate, data.id)
+      end
+      id = data.parent
+    end
+    for _, toCreateId in ipairs_reverse(aurasToCreate) do
+      local data = WeakAuras.GetData(toCreateId)
+      WeakAuras.SetRegion(data)
+      if (data.regionType == "dynamicgroup") then
+        for child in Private.TraverseAllChildren(data) do
+          WeakAuras.SetRegion(child)
+        end
+      end
+    end
+    creatingRegions = false
+    for _, dynamicGroupId in ipairs_reverse(dynamicGroups) do
+      local dgRegion = WeakAuras.regions[dynamicGroupId].region
+      dgRegion:ReloadControlledChildren()
+    end
+  end
+  return WeakAuras.regions[id] and WeakAuras.regions[id].region
+end
+--- Ensures that a region/clone exists and returns it
+-- Even if we are asked to only create a clone, we create the default region too.
+function Private.EnsureRegion(id, cloneId)
+  EnsureRegion(id)
   if(cloneId and cloneId ~= "") then
     return EnsureClone(id, cloneId);
   end
-  return WeakAuras.regions[id] and WeakAuras.regions[id].region;
+  return WeakAuras.GetRegion(id)
+end
+
+---returns the region, if it exists
+function WeakAuras.GetRegion(id, cloneId)
+  if(cloneId and cloneId ~= "") then
+    return clones[id] and clones[id][cloneId]
+  end
+  return WeakAuras.regions[id] and WeakAuras.regions[id].region
 end
 
 -- Note, does not create a clone!
@@ -2960,8 +3066,11 @@ function Private.HandleGlowAction(actions, region)
     if actions.glow_frame_type == "FRAMESELECTOR" then
       if actions.glow_frame:sub(1, 10) == "WeakAuras:" then
         local frame_name = actions.glow_frame:sub(11)
-        if regions[frame_name] then
-          glow_frame = regions[frame_name].region
+        if WeakAuras.GetData(frame_name) then
+          Private.EnsureRegion(frame_name)
+        end
+        if WeakAuras.regions[frame_name] then
+          glow_frame = WeakAuras.regions[frame_name].region
         end
       else
         glow_frame = Private.GetSanitizedGlobal(actions.glow_frame)
@@ -3534,7 +3643,7 @@ do
   local UpdateFakeTimesHandle
 
   local function UpdateFakeTimers()
-    Private.PauseAllDynamicGroups()
+    local suspended = Private.PauseAllDynamicGroups()
     local t = GetTime()
     for id, triggers in pairs(triggerState) do
       local changed = false
@@ -3551,7 +3660,7 @@ do
         Private.UpdatedTriggerState(id)
       end
     end
-    Private.ResumeAllDynamicGroups()
+    Private.ResumeAllDynamicGroups(suspended)
   end
 
   function Private.SetFakeStates()
@@ -3738,14 +3847,14 @@ local function ApplyStatesToRegions(id, activeTrigger, states)
   local data = WeakAuras.GetData(id)
   local parent
   if data and data.parent then
-    parent = WeakAuras.GetRegion(data.parent)
+    parent = Private.EnsureRegion(data.parent)
   end
   if parent and parent.Suspend then
     parent:Suspend()
   end
   for cloneId, state in pairs(states) do
     if (state.show) then
-      local region = WeakAuras.GetRegion(id, cloneId);
+      local region = Private.EnsureRegion(id, cloneId);
       local applyChanges = not region.toShow or state.changed or region.state ~= state
       region.state = state
       region.states = region.states or {}
@@ -3876,7 +3985,9 @@ function Private.UpdatedTriggerState(id)
     for cloneId, clone in pairs(clones[id]) do
       clone:Collapse()
     end
-    WeakAuras.regions[id].region:Collapse()
+    if WeakAuras.regions[id] then
+      WeakAuras.regions[id].region:Collapse()
+    end
   elseif (show and oldShow) then -- Already shown, update regions
     -- Hide old clones
     for cloneId, clone in pairs(clones[id]) do
@@ -3885,7 +3996,9 @@ function Private.UpdatedTriggerState(id)
       end
     end
     if (not activeTriggerState[""] or not activeTriggerState[""].show) then
-      WeakAuras.regions[id].region:Collapse()
+      if WeakAuras.regions[id] then
+        WeakAuras.regions[id].region:Collapse()
+      end
     end
     -- Show new states
     ApplyStatesToRegions(id, newActiveTrigger, activeTriggerState);
@@ -4649,9 +4762,9 @@ local function tryAnchorAgain()
     local data = WeakAuras.GetData(id);
     local region = WeakAuras.GetRegion(id);
     if (data and region) then
-      local parent = frame;
-      if (data.parent and regions[data.parent]) then
-        parent = regions[data.parent].region;
+      local parent = WeakAurasFrame;
+      if (data.parent and WeakAuras.GetData(data.parent) and Private.EnsureRegion(data.parent)) then
+        parent = WeakAuras.regions[data.parent].region;
       end
       Private.AnchorFrame(data, region, parent);
     end
@@ -4728,8 +4841,8 @@ local function GetAnchorFrame(data, region, parent)
       if (frame_name == id) then
         return parent;
       end
-      if(regions[frame_name]) then
-        return regions[frame_name].region;
+      if(WeakAuras.regions[frame_name]) then
+        return WeakAuras.regions[frame_name].region;
       end
       postponeAnchor(id);
     else
@@ -4786,7 +4899,7 @@ function Private.AnchorFrame(data, region, parent, force)
         errorhandler(ret)
       end
     else
-      region:SetParent(parent or frame);
+      region:SetParent(parent or WeakAurasFrame);
     end
 
     local anchorPoint = data.anchorPoint
@@ -5272,6 +5385,11 @@ do
 
   function Private.TraverseParents(data)
     return coroutine.wrap(TraverseParents), data
+  end
+
+  -- Returns whether the data is a group or dynamicgroup
+  function Private.IsGroupType(data)
+    return data.regionType == "group" or data.regionType == "dynamicgroup"
   end
 end
 

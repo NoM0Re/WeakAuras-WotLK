@@ -2,7 +2,7 @@ if not WeakAuras.IsCorrectVersion() then return end
 local AddonName, OptionsPrivate = ...
 
 -- Lua APIs
-local pairs, rad = pairs, rad
+local rad = rad
 
 -- WoW APIs
 local CreateFrame = CreateFrame
@@ -50,10 +50,10 @@ local function ConstructModelPicker(frame)
     end
   end
 
-  local group = AceGUI:Create("InlineGroup");
+  local group = AceGUI:Create("SimpleGroup");
   group.frame:SetParent(frame);
   group.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 87);
-  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 17, -15);
+  group.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 17, -63);
   group.frame:Hide();
   group:SetLayout("flow");
 
@@ -355,7 +355,7 @@ local function ConstructModelPicker(frame)
 
   local cancel = CreateFrame("Button", nil, group.frame, "UIPanelButtonTemplate");
   cancel:SetScript("OnClick", group.CancelClose);
-  cancel:SetPoint("bottomright", frame, "bottomright", -27, 16);
+  cancel:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -27, 20);
   cancel:SetHeight(20);
   cancel:SetWidth(100);
   cancel:SetText(L["Cancel"]);

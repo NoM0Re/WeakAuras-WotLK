@@ -50,10 +50,10 @@ local severityLevel = {
 }
 
 local icons = {
-  info = [[Interface/friendsframe/informationicon.blp]],
-  sound = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\voicechat",
-  warning = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\alert",
-  error =  [[Interface/DialogFrame/UI-Dialog-Icon-AlertNew]]
+  info = { path = [[Interface\friendsframe\informationicon]] },
+  sound = { path = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ChatFrame", texCoords = {0.757812, 0.871094, 0.0078125, 0.234375} },
+  warning = { path = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ServicesAtlas", texCoords = {0.000976562, 0.0419922, 0.961914, 0.998047} },
+  error = { path = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\HelpIcon-Bug" },
 }
 
 local titles = {
@@ -72,7 +72,13 @@ local function AddMessages(result, messages, icon, mixedSeverity)
       result = result .. "\n\n"
     end
     if mixedSeverity then
-      result = result .. "|T" .. icon .. ":12:12:0:0:64:64:4:60:4:60|t"
+      local iconPath = icon.path
+      local texCoords = icon.texCoords
+      if texCoords then
+      result = result .. string.format("|T%s:12:12:0:0:64:64:%d:%d:%d:%d|t", iconPath, texCoords[1] * 64, texCoords[2] * 64, texCoords[3] * 64, texCoords[4] * 64)
+      else
+      result = result .. string.format("|T%s:12:12:0:0:64:64:4:60:4:60|t", iconPath)
+      end
     end
     result = result .. message
   end
@@ -113,6 +119,48 @@ local function FormatWarnings(uid)
   return icons[maxSeverity], titles[maxSeverity], result
 end
 
+local function GetAllWarnings(uid)
+  local results = {}
+  local thisWarnings
+  local data = Private.GetDataByUID(uid)
+  if data.regionType == "group" or data.regionType == "dynamicgroup" then
+    thisWarnings = {}
+    for child in Private.TraverseLeafs(data) do
+      local childWarnings = warnings[child.uid]
+      if childWarnings then
+        for key, warning in pairs(childWarnings) do
+          if not thisWarnings[key] then
+            thisWarnings[key] = {
+              severity = warning.severity,
+              message = warning.message,
+              auraId = child.id
+            }
+          end
+        end
+      end
+    end
+  else
+    thisWarnings = CopyTable(warnings[uid])
+    local auraId = Private.UIDtoID(uid)
+    for key in pairs(thisWarnings) do
+      thisWarnings[key].auraId = auraId
+    end
+  end
+  -- Order them by severity, keeping just one per severity
+  for key, warning in pairs(thisWarnings) do
+    results[warning.severity] = {
+      icon = icons[warning.severity],
+      prio = 5 + severityLevel[warning.severity],
+      title = titles[warning.severity] or warning.severity,
+      message = warning.message,
+      auraId = warning.auraId,
+      key = key
+    }
+  end
+  return results
+end
+
 Private.AuraWarnings = {}
 Private.AuraWarnings.UpdateWarning = UpdateWarning
 Private.AuraWarnings.FormatWarnings = FormatWarnings
+Private.AuraWarnings.GetAllWarnings = GetAllWarnings
