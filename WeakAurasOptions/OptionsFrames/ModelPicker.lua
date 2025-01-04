@@ -57,7 +57,7 @@ local function ConstructModelPicker(frame)
   group.frame:Hide();
   group:SetLayout("flow");
 
-  local filterInput = CreateFrame("editbox", "WeakAurasModelFilterInput", group.frame, "InputBoxTemplate")
+  local filterInput = CreateFrame("editbox", "WeakAurasModelFilterInput", group.frame, "WA_InputBoxTemplate")
   filterInput:SetAutoFocus(false)
   filterInput:SetTextInsets(16, 20, 0, 0)
 
@@ -123,8 +123,7 @@ local function ConstructModelPicker(frame)
     group.modelTree:RefreshTree()
   end)
   filterInput:SetHeight(15)
-  filterInput:SetPoint("TOP", group.frame, "TOP", 0, 1)
-  filterInput:SetPoint("LEFT", group.frame, "LEFT", 7, 0)
+  filterInput:SetPoint("BOTTOMRIGHT", group.frame, "TOPRIGHT", -3, 5)
   filterInput:SetWidth(200)
   filterInput:SetFont(STANDARD_TEXT_FONT, 10)
   group.frame.filterInput = filterInput

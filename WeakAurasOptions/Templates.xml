@@ -224,7 +224,7 @@
         </Layers>
         <Scripts>
             <OnLoad>
-                WA_ButtonFrameTemplate_Mixin(self);
+                WA_PortraitFrameTemplate_Mixin(self);
             </OnLoad>
             <OnSizeChanged>
                 WA_UpdateNineSliceBorders(self);

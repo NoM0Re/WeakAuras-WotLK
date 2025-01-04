@@ -1828,7 +1828,7 @@ local function Constructor()
 
   view.visibility = 0;
 
-  local renamebox = CreateFrame("EditBox", nil, button, "InputBoxTemplate");
+  local renamebox = CreateFrame("EditBox", nil, button, "WA_InputBoxTemplate");
   renamebox:SetHeight(14);
   renamebox:SetPoint("TOP", button, "TOP");
   renamebox:SetPoint("LEFT", icon, "RIGHT", 6, 0);

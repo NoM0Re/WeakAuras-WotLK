@@ -277,7 +277,7 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-  local widgetName = ("%s%d"):format(Type, AceGUI:GetNextWidgetNum(Type)) -- Needs a name for 3.3.5 (InputBoxTemplate ($parent))
+  local widgetName = ("%s%d"):format(Type, AceGUI:GetNextWidgetNum(Type))
 
   local frame = CreateFrame("Frame", widgetName, UIParent)
   frame:SetScript("OnEnter", Frame_OnEnter)

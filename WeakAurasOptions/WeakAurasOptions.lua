@@ -914,8 +914,8 @@ function OptionsPrivate.ConvertDisplay(data, newType)
   local visibility = displayButtons[id]:GetVisibility();
   displayButtons[id]:PriorityHide(2);
 
-  if OptionsPrivate.WeakAuras.regions[id] then
-    OptionsPrivate.WeakAuras.regions[id].region:Collapse()
+  if WeakAuras.regions[id] then
+    WeakAuras.regions[id].region:Collapse()
   end
   OptionsPrivate.Private.CollapseAllClones(id);
 
