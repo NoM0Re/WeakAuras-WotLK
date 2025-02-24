@@ -667,11 +667,12 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       else
         ok, returnValue = pcall(data.triggerFunc, allStates, event, arg1, arg2, ...);
       end
-      if not ok then
-        errorHandler(returnValue)
-      elseif ok and returnValue then
+      if (ok and (returnValue or (returnValue ~= false and allStates.__changed))) then
         updateTriggerState = true;
+      else
+        errorHandler(returnValue)
       end
+      allStates.__changed = nil
       for key, state in pairs(allStates) do
         if (type(state) ~= "table") then
           errorHandler(string.format(L["All States table contains a non table at key: '%s'."], key))
@@ -3852,7 +3853,7 @@ function GenericTrigger.GetOverlayInfo(data, triggernum)
           count = variables.additionalProgress;
         end
       else
-        local allStates = {};
+        local allStates = setmetatable({}, Private.allstatesMetatable)
         Private.ActivateAuraEnvironment(data.id);
         RunTriggerFunc(allStates, events[data.id][triggernum], data.id, triggernum, "OPTIONS");
         Private.ActivateAuraEnvironment(nil);
