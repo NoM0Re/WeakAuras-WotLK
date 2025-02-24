@@ -4,45 +4,31 @@ local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
 OptionsPrivate.changelog = {
-  versionString = '5.19.2',
-  dateString = '2025-02-20',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.19.1...5.19.2',
+  versionString = '5.19.3',
+  dateString = '2025-02-24',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.19.2...5.19.3',
   highlightText = [==[
-This is mainly a release to bump the TOC version for Cata.
+- Remove left-over debug output]==],  commitText = [==[InfusOnWoW (2):
 
-Otherwise it contains minor fixes]==],  commitText = [==[InfusOnWoW (7):
-
-- Update Atlas File List from wago.tools
-- Regions\Text.lua: Add types
-- Fix font justify missing after update
-- Fix lua error if a group contains an aura with a texture sub element
-- Classic Era: Fix Minimize Button
-- Update Atlas File List from wago.tools
 - Update Discord List
+- Update Atlas File List from wago.tools
 
-Stanzilla (3):
+Stanzilla (1):
 
 - Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
 
-dependabot[bot] (1):
+anon1231823 (1):
 
-- Bump cbrgm/mastodon-github-action from 2.1.10 to 2.1.12
+- Add esMX to toc files
 
 emptyrivers (1):
 
-- only nag user on /reload or /camp, instead of every loading screen
+- deduplicate localization phrases
 
-its-riece (1):
+mrbuds (2):
 
-- Add itemInRange condition support to more Item Triggers (#5639)
-
-mrbuds (3):
-
-- Fix integer overflow error with SpellKnow checks
-- Update toc files for Cataclysm new patch
-- smoll fix (#5678)
+- Allstates helper methods (#5195)
+- Cleanup leftover debug print in item in range condition
 
 ]==]
 }

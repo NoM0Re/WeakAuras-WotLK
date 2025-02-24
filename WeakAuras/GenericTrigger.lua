@@ -669,7 +669,7 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       end
       if (ok and (returnValue or (returnValue ~= false and allStates.__changed))) then
         updateTriggerState = true;
-      else
+      elseif not ok then
         errorHandler(returnValue)
       end
       allStates.__changed = nil

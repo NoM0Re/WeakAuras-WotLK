@@ -684,16 +684,12 @@ function lib.GetUnitNameplate(unit)
   local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
   if nameplate then
     -- credit to Exality for https://wago.io/explosiveorbs
+    if nameplate.UnitFrame and nameplate.UnitFrame.Health then
       -- elvui bunny
-    if nameplate.UnitFrame and nameplate.UnitFrame.Health and nameplate.UnitFrame.Health:IsShown() then
       return nameplate.UnitFrame.Health
-    elseif nameplate.UnitFrame and nameplate.UnitFrame.Name and nameplate.UnitFrame.Name:IsShown() then
-      return nameplate.UnitFrame.Name
+    elseif nameplate.unitFrame and nameplate.unitFrame.Health then
       -- elvui someday
-    elseif nameplate.unitFrame and nameplate.unitFrame.Health and nameplate.unitFrame.Health:IsShown() then
       return nameplate.unitFrame.Health
-    elseif nameplate.unitFrame and nameplate.unitFrame.Name and nameplate.unitFrame.Name:IsShown() then
-      return nameplate.unitFrame.Name
     elseif nameplate.unitFramePlater and nameplate.unitFramePlater.healthBar then
       -- plater
       -- fallback to default nameplate in case plater is not on screen and uses blizzard default (module disabled, force-blizzard functionality)
