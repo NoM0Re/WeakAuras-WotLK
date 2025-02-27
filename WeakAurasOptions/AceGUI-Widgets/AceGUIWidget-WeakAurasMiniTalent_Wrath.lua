@@ -94,7 +94,7 @@ local function Button_ShowToolTip(self)
   if self.spellId then
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     --DEPRECATED GameTooltip:SetSpellByID(self.spellId)
-    GameTooltip:SetHyperlink(GetSpellLink(self.spellId));
+    GameTooltip:SetHyperlink("|Hspell:"..(self.spellId or 0).."|h|h")
   end
 end
 local function Button_HideToolTip(self)
