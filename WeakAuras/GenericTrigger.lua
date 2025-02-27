@@ -3887,7 +3887,7 @@ function GenericTrigger.SetToolTip(trigger, state)
       return true
     elseif (state.spellId) then
       --DEPRECATED GameTooltip:SetSpellByID(state.spellId);
-      GameTooltip:SetHyperlink("|Hspell:"..(state.spellId or 0).."|h|h");
+      GameTooltip:SetHyperlink("spell:"..(state.spellId or 0));
       return true
     elseif (state.link) then
       GameTooltip:SetHyperlink(state.link);
@@ -3911,7 +3911,7 @@ function GenericTrigger.SetToolTip(trigger, state)
   if prototype then
     if prototype.hasSpellID then
       --DEPRECATED GameTooltip:SetSpellByID(trigger.spellName or 0);
-      GameTooltip:SetHyperlink("|Hspell:"..(trigger.spellName or 0).."|h|h");
+      GameTooltip:SetHyperlink("spell:"..(trigger.spellName or 0));
       return true
     elseif prototype.hasItemID then
       GameTooltip:SetHyperlink("item:"..(trigger.itemName or 0)..":0:0:0:0:0:0:0")
