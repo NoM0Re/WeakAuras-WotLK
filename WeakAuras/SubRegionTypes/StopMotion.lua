@@ -195,7 +195,7 @@ local function modify(parent, region, parentData, data, first)
     -- Special anchoring for clipping !
     region:SetScript("OnSizeChanged", nil)
     region:ClearAllPoints()
-    region:SetAllPoints(parent.bar.fgFrame)
+    region:SetAllPoints(parent.bar.fgMask)
     region.stopMotion:ClearAllPoints()
     region.stopMotion:SetAllPoints(region.parent.bar)
   else

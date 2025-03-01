@@ -138,12 +138,32 @@ local function createOptions(id, data)
       name = L["Bar Color Settings"],
       order = 39
     },
+    enableGradient = {
+      type = "toggle",
+      width = WeakAuras.normalWidth,
+      name = L["Enable Gradient"],
+      order = 39.1
+    },
+    gradientOrientation = {
+      type = "select",
+      width = WeakAuras.normalWidth,
+      values = OptionsPrivate.Private.gradient_orientations,
+      name = L["Gradient Orientation"],
+      order = 39.2
+    },
     barColor = {
       type = "color",
       width = WeakAuras.normalWidth,
-      name = L["Bar Color"],
+      name = L["Bar Color/Gradient Start"],
       hasAlpha = true,
       order = 39.3
+    },
+    barColor2 = {
+      type = "color",
+      width = WeakAuras.normalWidth,
+      name = L["Gradient End"],
+      hasAlpha = true,
+      order = 39.4
     },
     backgroundColor = {
       type = "color",
