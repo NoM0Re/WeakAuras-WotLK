@@ -45,6 +45,7 @@ Private.DiscordList = {
   [=[ParkSaeRoyi]=],
   [=[phoenix7700]=],
   [=[Pseiko]=],
+  [=[Raysur]=],
   [=[reggie]=],
   [=[Reloe]=],
   [=[Spaten]=],
