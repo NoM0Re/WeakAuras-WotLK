@@ -1357,7 +1357,7 @@ local function GetInstanceTypeAndSize()
   local size, difficulty
   local inInstance, Type = IsInInstance()
   local _, instanceType, difficultyIndex, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
-  if (inInstance) then
+  if inInstance or instanceType ~= "none" then
     local ZoneMapID = GetCurrentMapAreaID()
     size = Type
     if Type == "raid" then
@@ -2943,8 +2943,8 @@ function Private.SetRegion(data, cloneId)
       Private.validate(data, regionTypes[regionType].default);
 
       local parent = WeakAurasFrame;
-      if(data.parent) then
-        local parentRegion = WeakAuras.GetRegion(data.parent)
+      if data.parent then
+        local parentRegion = Private.EnsureRegion(data.parent)
         if parentRegion then
           parent = parentRegion
         else
