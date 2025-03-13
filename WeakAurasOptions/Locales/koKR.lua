@@ -102,7 +102,7 @@ local L = WeakAuras.L
 • |cffffff00Multi-target|r attempts to use the Combat Log events, rather than unitID, to track affected units.
 |cffff0000Note|r: Without a direct relationship to actual unitIDs, results may vary.
 
-|cffffff00*|r Yellow Unit settings can match multiple units and will default to being active even while no affected units are found without a Unit Count or Match Count setting.]=] ] = [=[• |cff00ff00플레이어|r, |cff00ff00대상|r, |cff00ff00주시대상|r 및 |cff00ff00소환수|r는 각각의 유닛ID에 직접 대응됩니다.
+|cffffff00*|r Yellow Unit settings can match multiple units and will default to being active even while no affected units are found without a Unit Count or Match Count setting.]=] ] = [=[• |cff00ff00플레이어|r, |cff00ff00대상|r, |cff00ff00주시 대상|r 및 |cff00ff00소환수|r는 각각의 유닛ID에 직접 대응됩니다.
 
 • |cff00ff00유닛 직접 지정|r으로 추적할 유닛ID를 직접 입력할 수 있습니다.
 
@@ -128,7 +128,7 @@ local L = WeakAuras.L
 Enable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer]=] ] = "타이머가 기본 인터페이스 설정(일부 애드온에 의해 설정이 무시됨)에 따라 자동으로 표시됩니다. 이 타이머를 숨기거나 WeakAuras의 텍스트를 사용해서 표시하고 싶으면 이 설정을 켜세요."
 	L["A Unit ID (e.g., party1)."] = "유닛 ID입니다. (party1 같은식)"
 	L["Ace: Funkeh, Nevcairiel"] = "Ace: Funkeh, Nevcairiel"
-	L["Active Aura Filters and Info"] = "활성 오라 필터와 정보"
+	L["Active Aura Filters and Info"] = "활성화된 오라의 필터 및 정보"
 	L["Actual Spec"] = "실제 전문화"
 	L["Add %s"] = "%s 추가"
 	L["Add a new display"] = "새 디스플레이 추가"
@@ -146,7 +146,7 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Add Trigger"] = "활성 조건 추가"
 	L["Additional Events"] = "추가 이벤트"
 	L["Advanced"] = "고급 제작"
-	L["Affected Unit Filters and Info"] = "오라에 걸린 유닛 필터와 정보"
+	L["Affected Unit Filters and Info"] = "오라에 걸린 유닛의 필터 및 정보"
 	L["Align"] = "정렬"
 	L["Alignment"] = "정렬"
 	L["All maintainers of the libraries we use, especially:"] = "특히 우리가 사용 중인 라이브러리를 관리하시는 모든 분들:"
@@ -898,8 +898,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "URL: %s"
 	L["Use Display Info Id"] = "디스플레이 정보 ID 사용"
 	L["Use SetTransform"] = "SetTransform 사용"
-	L["Used in Auras:"] = "위크오라에서 사용됨:"
-	L["Used in auras:"] = "위크오라에서 사용됨:"
+	L["Used in Auras:"] = "사용 중인 위크오라:"
+	L["Used in auras:"] = "사용 중인 위크오라:"
 	L["Uses Texture Coordinates to rotate the texture."] = "회전에 텍스처 좌표를 사용합니다."
 	L["Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."] = "UnitIsVisible()을 사용해서 게임 클라이언트가 이 유닛의 오브젝트를 불러왔는지를 검사합니다. 검사 거리는 약 100미터 정도입니다. 매 초마다 검사합니다."
 	L["Value"] = "값"

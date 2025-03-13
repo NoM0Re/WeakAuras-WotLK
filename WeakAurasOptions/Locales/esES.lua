@@ -768,7 +768,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Text %s"] = "Texto %s"
 	L["Text Color"] = "Color del Texto"
 	L["Text Settings"] = "Configuración de texto"
-	L["Texture %s"] = "Textura de %"
+	L["Texture %s"] = "Textura de %s"
 	L["Texture Info"] = "Información de textura"
 	L["Texture Selection Mode"] = "Modo de selección de textura"
 	L["Texture Settings"] = "Configuración de textura"

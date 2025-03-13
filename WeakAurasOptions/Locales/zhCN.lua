@@ -833,8 +833,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["This is a modified version of your group: |cff9900FF%s|r"] = "这是一个你群组的修改版本：|cff9900FF%s|r"
 	L["This region of type \"%s\" is not supported."] = "不支持域类型\"%s\"。"
 	L["This setting controls what widget is generated in user mode."] = "这些设置用来控制在用户模式下生成的控件。"
-	--[[Translation missing --]]
-	L["Thumbnail Icon"] = "Thumbnail Icon"
+	L["Thumbnail Icon"] = "缩略图标"
 	L["Tick %s"] = "进度指示 %s"
 	L["Tick Area %s"] = "进度指示区域%s"
 	L["Tick Center %s"] = "进度指示中心%s"

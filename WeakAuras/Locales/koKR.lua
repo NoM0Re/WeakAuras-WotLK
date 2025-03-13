@@ -39,7 +39,7 @@ L[ [=[• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00f
 • |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.
 • |cffffff00Smart Group|r adjusts to your current group type, matching just the "player" when solo, "party" units (including "player") in a party or "raid" units in a raid.
 
-|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura.]=] ] = [=[• |cff00ff00플레이어|r, |cff00ff00대상|r, |cff00ff00주시대상|r 및 |cff00ff00소환수|r는 각각의 유닛ID에 직접 대응됩니다.
+|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura.]=] ] = [=[• |cff00ff00플레이어|r, |cff00ff00대상|r, |cff00ff00주시 대상|r 및 |cff00ff00소환수|r는 각각의 유닛ID에 직접 대응됩니다.
 
 • |cff00ff00유닛 직접 지정|r으로 추적할 유닛ID를 직접 입력할 수 있습니다.
 
@@ -310,7 +310,7 @@ L["Color Animation"] = "색상 애니메이션"
 L["Combat Log"] = "전투 기록"
 L["Communities"] = "커뮤니티"
 L["Condition Custom Test"] = "조건 사용자 정의 테스트"
-L["Conditions"] = "상태"
+L["Conditions"] = "조건"
 L["Contains"] = "포함"
 L["Continuously update Movement Speed"] = "이동 속도 계속 업데이트"
 L["Cooldown"] = "쿨타임"
@@ -865,8 +865,7 @@ Note: This trigger will use BigWigs or DBM, in that order if both are installed.
 L["No Extend"] = "늘리지 않음"
 L["No Instance"] = "인스턴스가 아닐 때"
 L["No Profiling information saved."] = "저장된 분석 정보가 없습니다."
---[[Translation missing --]]
-L["No Progress Information available."] = "No Progress Information available."
+L["No Progress Information available."] = "진행 내역을 알 수 없습니다."
 L["None"] = "없음"
 L["Non-player Character"] = "NPC"
 L["Normal"] = "일반"
@@ -1049,7 +1048,7 @@ L["Profiling stopped."] = "분석이 중단되었습니다."
 L["Progress"] = "진행"
 L["Progress Source"] = "진행 출처"
 L["Progress Total"] = "진행 현황"
-L["Progress Value"] = "진행 수치"
+L["Progress Value"] = "진행도 값"
 L["Pulse"] = "맥박"
 L["PvP Flagged"] = "플레이어 간 전투 활성화"
 L["PvP Talent selected"] = "선택한 PvP 특성"
@@ -1087,8 +1086,7 @@ L["Reagent Quality Texture"] = "재료 품질 텍스처"
 L["Realm"] = "서버"
 L["Realm Name"] = "서버명"
 L["Realm of Caster's Target"] = "시전 대상의 서버"
---[[Translation missing --]]
-L["Receiving %s Bytes"] = "Receiving %s Bytes"
+L["Receiving %s Bytes"] = "%s바이트 받는 중"
 L["Receiving display information"] = "디스플레이 정보 수신 중"
 L["Reflect"] = "반사함"
 L["Region type %s not supported"] = "구역(Region) 종류 %s|1은;는; 지원되지 않습니다"
@@ -1188,7 +1186,7 @@ L["Show Rested Overlay"] = "휴식 오버레이 표시"
 L["Shrink"] = "축소"
 L["Silithid Royalty"] = "실리시드 왕실"
 L["Silver"] = "실버"
-L["Simple"] = "단순"
+L["Simple"] = "간편 제작"
 L["Since Apply"] = "오라에 걸린 이후부터의 시간"
 L["Since Apply/Refresh"] = "오라 걸림/지속시간 초기화 이후부터의 시간"
 L["Since Charge Gain"] = "충전량 획득 후"
