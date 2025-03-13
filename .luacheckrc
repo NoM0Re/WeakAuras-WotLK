@@ -72,7 +72,6 @@ globals = {
 	"APIDocumentation",
 	"APIDocumentation_LoadUI",
 	"BigWigs",
-	"BigWigsAPI",
 	"BigWigsLoader",
 	"CUSTOM_CLASS_COLORS",
 	"DBM",
