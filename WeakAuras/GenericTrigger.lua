@@ -4383,15 +4383,37 @@ do
   end
 end
 
-WeakAuras.CheckForItemEquipped = function(itemName, specificSlot)
+WeakAuras.CheckForItemEquipped = function(itemId, specificSlot)
   if not specificSlot then
-    return IsEquippedItem(itemName)
+    if type(itemId) == "number" then
+      return IsEquippedItem(itemId or '')
+    else
+      for slot in pairs(Private.item_slot_types) do
+        if WeakAuras.CheckForItemEquipped(itemId, slot) then
+          return true
+        end
+      end
+    end
   end
   local equippedItemID = GetInventoryItemID("player", specificSlot)
-  return itemName and equippedItemID and (
-    (type(itemName) == "number" and itemName == equippedItemID)
-    or itemName == GetItemInfo(equippedItemID)
+  return itemId and equippedItemID and (
+    (type(itemId) == "number" and itemId == equippedItemID)
+    or itemId == GetItemInfo(equippedItemID)
   )
+end
+
+Private.ExecEnv.IsEquippedItemForLoad = function(item, exact)
+  if not item then
+    return
+  end
+  if exact then
+    return WeakAuras.CheckForItemEquipped(item)
+  else
+    item = GetItemInfo(item)
+    if item then
+      return WeakAuras.CheckForItemEquipped(item)
+    end
+  end
 end
 
 WeakAuras.GetCritChance = function()

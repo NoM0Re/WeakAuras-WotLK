@@ -88,6 +88,7 @@ end
 local constants = {
   nameRealmFilterDesc = L[" Filter formats: 'Name', 'Name-Realm', '-Realm'. \n\nSupports multiple entries, separated by commas\nCan use \\ to escape -."],
   instanceFilterDeprecated = L["This filter has been moved to the Location trigger. Change your aura to use the new Location trigger or join the WeakAuras Discord server for help."],
+  guildFilterDesc = L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."]
 }
 
 WeakAuras.UnitRaidRole = function(unit)
@@ -998,6 +999,13 @@ Private.load_prototype = {
       init = "arg",
       test = "true"
     },
+
+    {
+      name = "guild",
+      init = "arg",
+      enable = false,
+      hidden = true
+    },
     {
       name = "namerealm",
       display = L["Player Name/Realm"],
@@ -1015,6 +1023,16 @@ Private.load_prototype = {
       test = "not nameRealmIgnoreChecker:Check(player, realm)",
       preamble = "local nameRealmIgnoreChecker = Private.ExecEnv.ParseNameCheck(%q)",
       desc = constants.nameRealmFilterDesc,
+    },
+    {
+      name = "guildcheck",
+      display = L["Guild"],
+      type = "string",
+      multiline = true,
+      preamble = "local guildChecker = Private.ExecEnv.ParseStringCheck(%q)",
+      test = "guildChecker:Check(guild)",
+      desc = constants.guildFilterDesc,
+      events = {"GUILD_ROSTER_UPDATE"}
     },
     {
       name = "class",
@@ -1283,8 +1301,9 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "IsEquippedItem(GetItemInfo(%s))",
-      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
+      test = "Private.ExecEnv.IsEquippedItemForLoad(%s, %s)",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      showExactOption = true
     },
     {
       name = "not_itemequiped",
@@ -1293,7 +1312,7 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "not IsEquippedItem(GetItemInfo(%s))",
+      test = "not IsEquippedItem(GetItemInfo(%s) or '')",
       events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
     },
   }

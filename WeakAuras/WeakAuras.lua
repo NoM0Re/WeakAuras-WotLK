@@ -8,8 +8,8 @@ local insert = table.insert
 -- WoW APIs
 local IsAddOnLoaded, LoadAddOn
   = IsAddOnLoaded, LoadAddOn
-local UnitName, GetRealmName, UnitRace, UnitFactionGroup, UnitClass
-  = UnitName, GetRealmName, UnitRace, UnitFactionGroup, UnitClass
+local UnitName, GetRealmName, GetGuildInfo, UnitRace, UnitFactionGroup, UnitClass
+  = UnitName, GetRealmName, GetGuildInfo, UnitRace, UnitFactionGroup, UnitClass
 local IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
   = IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
 local InCombatLockdown, UnitAffectingCombat, GetInstanceInfo, IsInInstance
@@ -704,7 +704,7 @@ local function singleTest(arg, trigger, use, name, value, operator, use_exact, c
         return name;
       end
     end
-  elseif (arg.type == "spell") then
+  elseif arg.type == "spell" or arg.type == "item" then
     if arg.showExactOption then
       return "("..arg.test:format(value, tostring(use_exact) or "false") ..")";
     else
@@ -1415,6 +1415,7 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
   end
 
   local player, realm, zone, subzone = UnitName("player"), GetRealmName(), GetRealZoneText(), GetSubZoneText();
+  local guild = GetGuildInfo("player")
   local _, race = UnitRace("player")
   local faction = UnitFactionGroup("player")
   local zoneId = GetCurrentMapAreaID()
@@ -1457,8 +1458,8 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
     if (data and not data.controlledChildren) then
       local loadFunc = loadFuncs[id];
       local loadOpt = loadFuncsForOptions[id];
-      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, pvp, vehicle, vehicleUi, mounted, player, realm, class, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
-      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, pvp, vehicle, vehicleUi, mounted, player, realm, class, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
+      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, pvp, vehicle, vehicleUi, mounted, player, realm, guild, class, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
+      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, pvp, vehicle, vehicleUi, mounted, player, realm, guild, class, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
 
       if(shouldBeLoaded and not loaded[id]) then
         changed = changed + 1;
@@ -1557,6 +1558,7 @@ loadFrame:RegisterEvent("PLAYER_ALIVE")
 loadFrame:RegisterEvent("PLAYER_UNGHOST")
 loadFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
 loadFrame:RegisterEvent("PARTY_LEADER_CHANGED")
+loadFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 
 local unitLoadFrame = CreateFrame("Frame");
 Private.frames["Display Load Handling 2"] = unitLoadFrame;

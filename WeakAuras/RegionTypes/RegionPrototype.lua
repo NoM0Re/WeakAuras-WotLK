@@ -405,7 +405,22 @@ local function UpdateProgressFromState(self, minMaxConfig, state, progressSource
   local remainingProperty = progressSource[7]
   local useAdditionalProgress = progressSource[8]
 
-  if progressType == "number" then
+  if not state or not state.show then
+    self.minProgress, self.maxProgress = nil, nil
+    self.progressType = "timed"
+    self.duration = 0
+    self.expirationTime = math.huge
+    self.modRate = nil
+    self.inverse = false
+    self.paused = true
+    self.remaining = math.huge
+    if self.UpdateTime then
+      self:UpdateTime()
+    end
+    if self.SetAdditionalProgress then
+      self:SetAdditionalProgress(nil)
+    end
+  elseif progressType == "number" then
     local value = state[property]
     if type(value) ~= "number" then value = 0 end
     local total = totalProperty and state[totalProperty]
@@ -614,6 +629,7 @@ end
 -- For regions
 local function UpdateProgress(self)
   UpdateProgressFrom(self, self.progressSource, self, self.state, self.states)
+  self.subRegionEvents:Notify("UpdateProgress")
 end
 
 Private.UpdateProgressFrom = UpdateProgressFrom
