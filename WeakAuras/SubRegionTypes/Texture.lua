@@ -138,7 +138,6 @@ local function modify(parent, region, parentData, data, first)
     blendMode = data.textureBlendMode,
     mirror = data.textureMirror,
     rotation = data.textureRotation,
-    textureWrapMode = "CLAMPTOBLACKADDITIVE"
   })
 
   region:SetVisible(data.textureVisible)
