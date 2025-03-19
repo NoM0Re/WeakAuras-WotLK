@@ -28,10 +28,11 @@ local function createOptions(id, data)
         OptionsPrivate.OpenTexturePicker(data, paths, {
           texture = "foregroundTexture",
           color = "foregroundColor",
-          rotation = "rotation",
+          texRotation = "rotation",
+          auraRotation = "auraRotation",
           mirror = "mirror",
           blendMode = "blendMode"
-        }, OptionsPrivate.Private.texture_types);
+        }, OptionsPrivate.Private.texture_types)
       end,
       imageWidth = 24,
       imageHeight = 24,
@@ -60,10 +61,11 @@ local function createOptions(id, data)
         OptionsPrivate.OpenTexturePicker(data, paths, {
           texture = "backgroundTexture",
           color = "backgroundColor",
-          rotation = "rotation",
+          texRotation = "rotation",
+          auraRotation = "auraRotation",
           mirror = "mirror",
           blendMode = "blendMode"
-        }, OptionsPrivate.Private.texture_types);
+        }, OptionsPrivate.Private.texture_types)
       end,
       disabled = function() return data.sameTexture; end,
       imageWidth = 24,
@@ -227,16 +229,6 @@ local function createOptions(id, data)
         OptionsPrivate.ResetMoverSizer();
       end,
     },
-    rotation = {
-      type = "range",
-      control = "WeakAurasSpinBox",
-      width = WeakAuras.normalWidth,
-      name = L["Rotation"],
-      order = 52,
-      min = 0,
-      max = 360,
-      bigStep = 1
-    },
     alpha = {
       type = "range",
       control = "WeakAurasSpinBox",
@@ -247,6 +239,27 @@ local function createOptions(id, data)
       max = 1,
       bigStep = 0.01,
       isPercent = true
+    },
+    rotation = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Texture Rotation"],
+      desc = L["Uses Texture Coordinates to rotate the texture."],
+      order = 52,
+      min = 0,
+      max = 360,
+      bigStep = 1
+    },
+    auraRotation = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Rotation"],
+      order = 53,
+      min = 0,
+      max = 360,
+      bigStep = 1
     },
     smoothProgress = {
       type = "toggle",
@@ -381,10 +394,6 @@ local function ApplyTransform(x, y, region)
   end
 
   -- 5) Rotate texture by user-defined value
-  --[[local x_tmp = region.cos_rotation * x - region.sin_rotation * y
-  local y_tmp = region.sin_rotation * x + region.cos_rotation * y
-  x = x_tmp
-  y = y_tmp]]
   x, y = region.cos_rotation * x - region.sin_rotation * y, region.sin_rotation * x + region.cos_rotation * y
 
   -- 6) Translate texture-coords back to (0,0)
@@ -427,8 +436,8 @@ local function createThumbnail()
   local foreground = region:CreateTexture(nil, "ARTWORK");
   borderframe.foreground = foreground;
 
-  borderframe.backgroundSpinner = WeakAuras.createSpinner(region, "BACKGROUND", region:GetFrameLevel() + 1);
-  borderframe.foregroundSpinner = WeakAuras.createSpinner(region, "ARTWORK", region:GetFrameLevel() + 2);
+  borderframe.backgroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "BACKGROUND", 1)
+  borderframe.foregroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "ARTWORK", 1)
 
   return borderframe;
 end
@@ -445,10 +454,6 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     region:SetHeight(size);
     foreground:SetWidth(scale * data.width);
     foreground:SetHeight(size);
-    foregroundSpinner:SetWidth(scale * data.width);
-    foregroundSpinner:SetHeight(size);
-    backgroundSpinner:SetWidth(scale * data.width)
-    backgroundSpinner:SetHeight(size);
     region.width = scale * data.width;
     region.height = size;
   else
@@ -457,10 +462,6 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     region:SetHeight(scale * data.height);
     foreground:SetWidth(size);
     foreground:SetHeight(scale * data.height);
-    foregroundSpinner:SetWidth(size);
-    foregroundSpinner:SetHeight(scale * data.height);
-    backgroundSpinner:SetWidth(size)
-    backgroundSpinner:SetHeight(scale * data.height);
     region.width = size;
     region.height = scale * data.height;
   end
@@ -473,18 +474,18 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   background:SetVertexColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
   background:SetBlendMode(data.blendMode);
 
-  backgroundSpinner:SetTexture(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
+  backgroundSpinner:SetTextureOrAtlas(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
   backgroundSpinner:SetDesaturated(data.desaturateBackground)
-  backgroundSpinner:Color(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
+  backgroundSpinner:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
   backgroundSpinner:SetBlendMode(data.blendMode);
 
   foreground:SetTexture(data.foregroundTexture);
   foreground:SetVertexColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4]);
   foreground:SetBlendMode(data.blendMode);
 
-  foregroundSpinner:SetTexture(data.foregroundTexture);
+  foregroundSpinner:SetTextureOrAtlas(data.foregroundTexture);
   foregroundSpinner:SetDesaturated(data.desaturateForeground);
-  foregroundSpinner:Color(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
+  foregroundSpinner:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
   foregroundSpinner:SetBlendMode(data.blendMode);
 
   background:ClearAllPoints();
@@ -495,9 +496,10 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   region.mirror_h = data.mirror;
   region.scale_x = 1 + (data.crop_x or 0.41);
   region.scale_y = 1 + (data.crop_y or 0.41);
-  region.rotation = data.rotation or 0;
-  region.cos_rotation = cos(region.rotation);
-  region.sin_rotation = sin(region.rotation);
+  region.texRotation = data.rotation or 0
+  region.auraRotation = data.auraRotation or 0
+  region.cos_rotation = cos(region.texRotation)
+  region.sin_rotation = sin(region.texRotation)
   region.user_x = -1 * (data.user_x or 0);
   region.user_y = data.user_y or 0;
   region.aspect = 1;
@@ -517,7 +519,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetWidth(region:GetWidth() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     else
       function region:SetValue(progress)
@@ -532,7 +536,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx , URy , LRx , LRy );
         foreground:SetWidth(region:GetWidth() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx, LLy, URx_, URy_, LRx_, LRy_);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     end
   end
@@ -551,7 +557,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetWidth(region:GetWidth() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     else
       function region:SetValue(progress)
@@ -566,7 +574,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx , ULy , LLx , LLy , URx, URy, LRx, LRy);
         foreground:SetWidth(region:GetWidth() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx_, ULy_, LLx_, LLy_, URx, URy, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     end
   end
@@ -586,7 +596,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetHeight(region:GetHeight() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     else
       function region:SetValue(progress)
@@ -601,7 +613,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetHeight(region:GetHeight() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx_, ULy_, LLx, LLy, URx_, URy_, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     end
   end
@@ -621,7 +635,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetHeight(region:GetHeight() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     else
       function region:SetValue(progress)
@@ -636,7 +652,9 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
 
         foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
         foreground:SetHeight(region:GetHeight() * progress);
+        foreground:SetRotation(region.auraRotation / 180 * math.pi)
         background:SetTexCoord(ULx, ULy, LLx_, LLy_, URx, URy, LRx_, LRy_);
+        background:SetRotation(region.auraRotation / 180 * math.pi)
       end
     end
   end
@@ -645,23 +663,39 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     local startAngle = data.startAngle % 360;
     local endAngle = data.endAngle % 360;
 
-    if (data.inverse) then
-      startAngle, endAngle = endAngle, startAngle
-      startAngle = 360 - startAngle;
-      endAngle = 360 - endAngle;
-      clockwise = not clockwise;
-    end
     if (endAngle <= startAngle) then
       endAngle = endAngle + 360;
     end
 
-    backgroundSpinner:SetProgress(region, startAngle, endAngle, 0, clockwise);
+    backgroundSpinner:SetWidth(30)
+    backgroundSpinner:SetHeight(30)
+    foregroundSpinner:SetWidth(30)
+    foregroundSpinner:SetHeight(30)
+    backgroundSpinner:SetProgress(startAngle, endAngle);
+    foregroundSpinner:SetProgress(startAngle, endAngle);
 
     function region:SetValue(progress)
-      progress = progress or 0;
       region.progress = progress;
 
-      foregroundSpinner:SetProgress(region, startAngle, endAngle, progress, clockwise);
+      if (progress < 0) then
+        progress = 0;
+      end
+
+      if (progress > 1) then
+        progress = 1;
+      end
+
+      if (not clockwise) then
+        progress = 1 - progress;
+      end
+
+      local pAngle = (endAngle - startAngle) * progress + startAngle;
+
+      if (clockwise) then
+        foregroundSpinner:SetProgress(startAngle, pAngle);
+      else
+        foregroundSpinner:SetProgress(pAngle, endAngle);
+      end
     end
   end
 
@@ -750,7 +784,7 @@ local templates = {
       xOffset = 0,
       yOffset = 150,
       mirror = true,
-      foregroundTexture = "Textures\\SpellActivationOverlays\\Backlash",
+      foregroundTexture = "Textures\\SpellActivationOverlays\\Backlash", -- "460830"
       orientation = "HORIZONTAL",
       inverse = true,
     },
