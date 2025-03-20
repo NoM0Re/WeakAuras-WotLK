@@ -134,10 +134,10 @@ local funcs = {
   end,
 
   Apply = function(self)
-    self.texture:SetVertexOffset(UPPER_RIGHT_VERTEX, self.URvx, self.URvy)
-    self.texture:SetVertexOffset(UPPER_LEFT_VERTEX, self.ULvx, self.ULvy)
-    self.texture:SetVertexOffset(LOWER_RIGHT_VERTEX, self.LRvx, self.LRvy)
-    self.texture:SetVertexOffset(LOWER_LEFT_VERTEX, self.LLvx, self.LLvy)
+    --self.texture:SetVertexOffset(UPPER_RIGHT_VERTEX, self.URvx, self.URvy)
+    --self.texture:SetVertexOffset(UPPER_LEFT_VERTEX, self.ULvx, self.ULvy)
+    --self.texture:SetVertexOffset(LOWER_RIGHT_VERTEX, self.LRvx, self.LRvy)
+    --self.texture:SetVertexOffset(LOWER_LEFT_VERTEX, self.LLvx, self.LLvy)
 
     self.texture:SetTexCoord(self.ULx, self.ULy, self.LLx, self.LLy, self.URx, self.URy, self.LRx, self.LRy)
   end,
