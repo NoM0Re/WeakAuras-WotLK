@@ -93,7 +93,6 @@ local funcs = {
 
 local function create()
   local region = CreateFrame("Frame", nil, UIParent)
-  --region:SetFlattensRenderLayers(true)
 
   for k, v in pairs(funcs) do
     region[k] = v
@@ -137,7 +136,6 @@ local function modify(parent, region, parentData, data, first)
     blendMode = data.textureBlendMode,
     mirror = data.textureMirror,
     rotation = data.textureRotation,
-    textureWrapMode = "CLAMPTOBLACKADDITIVE"
   })
 
   region:SetVisible(data.textureVisible)

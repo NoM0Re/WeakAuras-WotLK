@@ -161,7 +161,6 @@ local ProgressFuncs = {
 
 local function create()
   local region = CreateFrame("Frame", nil, UIParent)
-  --region:SetFlattensRenderLayers(true)
 
   for k, v in pairs(funcs) do
     region[k] = v

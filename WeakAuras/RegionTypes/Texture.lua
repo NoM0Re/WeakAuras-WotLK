@@ -108,7 +108,6 @@ local function modify(parent, region, data)
     blendMode = data.blendMode,
     mirror = data.mirror,
     rotation = data.rotation,
-    textureWrapMode = data.textureWrapMode
   })
 
   function region:Scale(scalex, scaley)
