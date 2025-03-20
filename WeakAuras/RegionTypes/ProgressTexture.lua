@@ -728,7 +728,7 @@ local function create(parent)
   region.regionType = "progresstexture"
   region:SetMovable(true);
   region:SetResizable(true);
-  region:SetResizeBounds(1, 1)
+  region:SetMinResize(1, 1);
 
   local background = Private.LinearProgressTextureBase.create(region, "BACKGROUND", 0);
   region.background = background;
@@ -746,7 +746,7 @@ local function create(parent)
   -- Use a dummy object for the SmoothStatusBarMixin, because our SetValue
   -- is used for a different purpose
   region.smoothProgress = {};
-  Mixin(region.smoothProgress, Private.SmoothStatusBarMixin);
+  WeakAuras.Mixin(region.smoothProgress, Private.SmoothStatusBarMixin);
   region.smoothProgress.SetValue = function(self, progress)
     region:SetValueOnTexture(progress);
     region:ReapplyAdditionalProgress()
