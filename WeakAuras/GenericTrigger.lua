@@ -3770,9 +3770,11 @@ function GenericTrigger.GetDelay(data)
 end
 
 function GenericTrigger.GetTsuConditionVariables(id, triggernum)
-  local ok, variables = xpcall(events[id][triggernum].tsuConditionVariables, Private.GetErrorHandlerId(id, L["Custom Variables"]));
+  local ok, variables = pcall(events[id][triggernum].tsuConditionVariables);
   if ok then
     return variables
+  else
+    Private.GetErrorHandlerId(id, L["Custom Variables"])
   end
 end
 

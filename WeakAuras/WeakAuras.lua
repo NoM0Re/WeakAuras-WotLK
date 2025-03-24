@@ -3378,7 +3378,10 @@ function Private.PerformActions(data, when, region)
     local func = Private.customActionsFunctions[data.id][when]
     if func then
       Private.ActivateAuraEnvironment(region.id, region.cloneId, region.state, region.states);
-      xpcall(func, Private.GetErrorHandlerId(data.id, L["Custom Action"]));
+      local ok = pcall(func);
+      if not ok then
+        Private.GetErrorHandlerId(data.id, L["Custom Action"])
+      end
       Private.ActivateAuraEnvironment(nil);
     end
   end
@@ -5376,7 +5379,10 @@ local function GetAnchorFrame(data, region, parent)
     Private.StartProfileSystem("custom region anchor")
     Private.StartProfileAura(region.id)
     Private.ActivateAuraEnvironment(region.id, region.cloneId, region.state)
-    local ok, frame = xpcall(region.customAnchorFunc, Private.GetErrorHandlerId(region.id, L["Custom Anchor"]))
+    local ok, frame = pcall(region.customAnchorFunc)
+    if not ok then
+      Private.GetErrorHandlerId(region.id, L["Custom Anchor"])
+    end
     Private.ActivateAuraEnvironment()
     Private.StopProfileSystem("custom region anchor")
     Private.StopProfileAura(region.id)

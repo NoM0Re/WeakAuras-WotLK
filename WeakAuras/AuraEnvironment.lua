@@ -351,7 +351,10 @@ function Private.ActivateAuraEnvironment(id, cloneId, state, states, onlyConfig)
       if(actions and actions.do_custom and actions.custom) then
         local func = Private.customActionsFunctions[id]["init"]
         if func then
-          xpcall(func, Private.GetErrorHandlerId(id, "init"))
+          local ok = pcall(func)
+          if not ok then
+            Private.GetErrorHandlerId(id, "init")
+          end
         end
       end
     end

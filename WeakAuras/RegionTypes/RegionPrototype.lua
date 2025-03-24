@@ -241,7 +241,10 @@ end
 local function RunCode(self, func)
   if func and not WeakAuras.IsOptionsOpen() then
     Private.ActivateAuraEnvironment(self.id, self.cloneId, self.state, self.states);
-    xpcall(func, Private.GetErrorHandlerId(self.id, L["Custom Condition Code"]));
+    local ok = pcall(func);
+    if not ok then
+      Private.GetErrorHandlerId(self.id, L["Custom Condition Code"])
+    end
     Private.ActivateAuraEnvironment(nil);
   end
 end
