@@ -1,15 +1,10 @@
---- @type string, Private
-local AddonName, Private = ...
+local AddonName = ...
+local Private = select(2, ...)
 
---- @type table<auraId, auraId>
 local attachedToTarget = {}
---- @type table<auraId, table<auraId, boolean>>
 local targetToAttached = {}
 
 -- Handles
-
-
---- @type fun(_: any, uid: uid, id: auraId)
 local function OnDelete(_, uid, id)
   local target = attachedToTarget[id]
   if target then
@@ -20,7 +15,6 @@ local function OnDelete(_, uid, id)
   end
 end
 
---- @type fun(_: any, uid: uid, oldId: auraId, newId: auraId)
 local function OnRename(_, uid, oldId, newId)
 
   local target = attachedToTarget[oldId]
@@ -50,7 +44,6 @@ local function OnRename(_, uid, oldId, newId)
 
 end
 
---- @type fun(_: any, uid: uid, id: auraId, data: auraData, simpleChange: boolean)
 local function OnAdd(_, uid, id, data, simpleChange)
   if simpleChange then
     return

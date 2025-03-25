@@ -2,7 +2,8 @@
 Button Widget for our Expand button
 -------------------------------------------------------------------------------]]
 if not WeakAuras.IsLibsOK() then return end
-local AddonName, OptionsPrivate = ...
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
 
 local Type, Version = "WeakAurasExpandSmall", 4
 

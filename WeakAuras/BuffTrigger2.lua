@@ -44,7 +44,8 @@ GetTriggerConditions(data, triggernum)
 Returns the potential conditions for a trigger
 ]=]--
 if not WeakAuras.IsLibsOK() then return end
-local AddonName, Private = ...
+local AddonName = ...
+local Private = select(2, ...)
 
 local function FixDebuffClass(debuffClass)
   if debuffClass == nil then

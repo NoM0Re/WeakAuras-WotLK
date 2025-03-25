@@ -1,7 +1,8 @@
 if not WeakAuras.IsLibsOK() then return end
 
 local L = WeakAuras.L
-local AddonName, OptionsPrivate = ...
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
 
 local texture_types = WeakAuras.StopMotion.texture_types;
 local texture_data = WeakAuras.StopMotion.texture_data;

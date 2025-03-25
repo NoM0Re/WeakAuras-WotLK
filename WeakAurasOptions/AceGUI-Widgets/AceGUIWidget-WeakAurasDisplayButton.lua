@@ -1,5 +1,6 @@
 if not WeakAuras.IsLibsOK() then return end
-local AddonName, OptionsPrivate = ...
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
 
 local tinsert, tremove = table.insert, table.remove
 local select, pairs, type, unpack = select, pairs, type, unpack

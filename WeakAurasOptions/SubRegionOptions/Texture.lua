@@ -1,6 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
 
-local AddonName, OptionsPrivate = ...
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L;
 

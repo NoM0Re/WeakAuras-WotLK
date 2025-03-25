@@ -1,4 +1,5 @@
-local AddonName, Private = ...
+local AddonName = ...
+local Private = select(2, ...)
 WeakAuras = {}
 WeakAuras.L = {}
 Private.frames = {}

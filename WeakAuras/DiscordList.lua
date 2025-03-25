@@ -1,6 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
 
-local AddonName, Private = ...
+local AddonName = ...
+local Private = select(2, ...)
 
 Private.DiscordList = {
   [=[007bb]=],

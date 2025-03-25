@@ -46,7 +46,8 @@ GetTriggerConditions(data, triggernum)
 Returns potential conditions that this trigger provides.
 ]]--
 if not WeakAuras.IsLibsOK() then return end
-local AddonName, Private = ...
+local AddonName = ...
+local Private = select(2, ...)
 
 -- Lua APIs
 local tinsert, tconcat, wipe = table.insert, table.concat, wipe
