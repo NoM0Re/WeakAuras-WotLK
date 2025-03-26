@@ -3663,6 +3663,7 @@ local function CreateFallbackState(id, triggernum)
   local triggerSystem = GetTriggerSystem(data, triggernum);
   if (triggerSystem) then
     triggerSystem.CreateFallbackState(data, triggernum, state)
+    state.id = id
     state.trigger = data.triggers[triggernum].trigger
     state.triggernum = triggernum
   else
@@ -4910,12 +4911,6 @@ function WeakAuras.IsAuraActive(id)
   local active = triggerState[id]
 
   return active and active.show
-end
-
-function Private.ActiveTrigger(uid)
-  local id = Private.UIDtoID(uid)
-
-  return triggerState[id] and triggerState[id].activeTrigger
 end
 
 -- Attach to Cursor/Frames code
