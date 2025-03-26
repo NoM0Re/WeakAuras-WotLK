@@ -308,8 +308,7 @@ local function Constructor()
   -- follow link button
   local followLink = CreateFrame("Button", nil, button)
   button.followLink = followLink
-  followLink:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\LootToastAtlas")
-  followLink:GetNormalTexture():SetTexCoords(0.857422, 0.87793, 0.158203, 0.207031)
+  followLink:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\loottoast-arrow-green")
   followLink:GetNormalTexture():SetRotation(math.rad(-90))
   followLink:SetSize(24, 24)
   followLink:SetPoint("RIGHT", button, "RIGHT", -2, 0)
