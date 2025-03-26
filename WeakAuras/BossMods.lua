@@ -1772,11 +1772,12 @@ Private.event_prototypes["Boss Mod Timer"] = {
 Private.category_event_prototype.addons["Boss Mod Timer"] = L["Boss Mod Timer"]
 
 -- Disable DBM for users with an outdated DBM version and always disable BigWigs triggers
--- Only disable DBM triggers if the DBM version is older than 2025-Feb-09
+-- Only disable DBM triggers if the DBM version is older than 2025-Feb-09 and 2025-Mar-12
 -- References:
--- Commit: https://github.com/Zidras/DBM-Warmane/commit/5791dac460a07225c5d617d0252a88ce1e210618
+-- Commit: https://github.com/Zidras/DBM-Warmane/commit/5791dac460a07225c5d617d0252a88ce1e210618 - 20250209000000
+-- Commit2: https://github.com/Zidras/DBM-Warmane/commit/b6804570cab39a1c0412f964d1f2c15a63b96eed - 20250312000000
 -- Download: https://github.com/Zidras/DBM-Warmane/archive/refs/heads/main.zip
-if not (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250209000000) then
+if not (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250312000000) then
   local dbm_trigger = {
     "DBM Stage",
     "DBM Announce",
