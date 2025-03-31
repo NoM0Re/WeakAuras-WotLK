@@ -2054,6 +2054,41 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
+  if data.internalVersion < 83.25 then
+    local function clearSpecData(trigger, field)
+      if trigger and trigger[field] then
+        for _, key in pairs({"multi", "single"}) do
+          if trigger[field][key] then
+            for specKey in pairs(trigger[field][key]) do
+              if specKey and type(specKey) == "string" then
+                trigger[field] = nil
+                trigger["use_" .. field] = nil
+                return
+              end
+            end
+          end
+        end
+      end
+    end
+
+    if data.load then
+      for _, loadData in ipairs(data.load) do
+        clearSpecData(loadData.trigger, "class_and_spec")
+      end
+    end
+
+    if data.triggers then
+      for _, triggerData in ipairs(data.triggers) do
+        local trigger = triggerData.trigger
+        if trigger and (trigger.event == "Unit Characteristics" or trigger.event == "Power" or
+                        trigger.event == "Health" or trigger.event == "Class/Spec") then
+          clearSpecData(trigger, "specId")
+        end
+      end
+    end
+  end
+
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
 end
 

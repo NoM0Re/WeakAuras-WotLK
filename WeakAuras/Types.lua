@@ -3373,7 +3373,7 @@ do
       }
     },
   }
-
+  -- Creates the options layout. Due to CUSTOM_CLASS_COLORS, it needs to be created dynamically.
   local function createSpecString(class, specID)
     local data = classData[class]
     if not data then return "" end
@@ -3386,46 +3386,79 @@ do
   Private.spec_types_all = {}
   Private.spec = {}
   for class, data in pairs(classData) do
-    for specID, specData in pairs(data.specs) do
+    for specID in pairs(data.specs) do
       Private.spec_types_all[specID] = createSpecString(class, specID)
-      Private.spec[specID] = specData.icon
     end
   end
   wipe(classData)
 end
 
-Private.spec_ids = {
-  [250] = "Blood",
-  [251] = "Frost",
-  [252] = "Unholy",
-  [102] = "Balance",
-  [103] = "Feral",
-  [104] = "Guardian",
-  [105] = "Restoration",
-  [253] = "Beast Mastery",
-  [254] = "Marksmanship",
-  [255] = "Survival",
-  [62] = "Arcane",
-  [63] = "Fire",
-  [64] = "Frost",
-  [65] = "Holy",
-  [66] = "Protection",
-  [70] = "Retribution",
-  [256] = "Discipline",
-  [257] = "Holy",
-  [258] = "Shadow",
-  [259] = "Assassination",
-  [260] = "Combat",
-  [261] = "Subtlety",
-  [262] = "Elemental",
-  [263] = "Enhancement",
-  [264] = "Restoration",
-  [265] = "Affliction",
-  [266] = "Demonology",
-  [267] = "Destruction",
-  [71] = "Arms",
-  [72] = "Fury",
-  [73] = "Protection"
+Private.specid_to_icon = {
+  [250] = "Interface\\Icons\\Spell_Deathknight_BloodPresence",
+  [251] = "Interface\\Icons\\Spell_Deathknight_FrostPresence",
+  [252] = "Interface\\Icons\\Spell_Deathknight_UnholyPresence",
+  [102] = "Interface\\Icons\\Spell_Nature_StarFall",
+  [103] = "Interface\\Icons\\Ability_Racial_BearForm",
+  [104] = "Interface\\Icons\\Ability_Racial_BearForm",
+  [105] = "Interface\\Icons\\Spell_Nature_HealingTouch",
+  [253] = "Interface\\Icons\\Ability_Hunter_BeastTaming",
+  [254] = "Interface\\Icons\\Ability_Marksmanship",
+  [255] = "Interface\\Icons\\Ability_Hunter_SwiftStrike",
+  [62] = "Interface\\Icons\\Spell_Holy_MagicalSentry",
+  [63] = "Interface\\Icons\\Spell_Fire_FireBolt02",
+  [64] = "Interface\\Icons\\Spell_Frost_FrostBolt02",
+  [65] = "Interface\\Icons\\Spell_Holy_HolyBolt",
+  [66] = "Interface\\Icons\\Spell_Holy_DevotionAura",
+  [70] = "Interface\\Icons\\Spell_Holy_AuraOfLight",
+  [256] = "Interface\\Icons\\Spell_Holy_WordFortitude",
+  [257] = "Interface\\Icons\\Spell_Holy_GuardianSpirit",
+  [258] = "Interface\\Icons\\Spell_Shadow_ShadowWordPain",
+  [259] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+  [260] = "Interface\\Icons\\Ability_BackStab",
+  [261] = "Interface\\Icons\\Ability_Stealth",
+  [262] = "Interface\\Icons\\Spell_Nature_Lightning",
+  [263] = "Interface\\Icons\\Spell_Nature_LightningShield",
+  [264] = "Interface\\Icons\\Spell_Nature_MagicImmunity",
+  [265] = "Interface\\Icons\\Spell_Shadow_DeathCoil",
+  [266] = "Interface\\Icons\\Spell_Shadow_Metamorphosis",
+  [267] = "Interface\\Icons\\Spell_Shadow_RainOfFire",
+  [71] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+  [72] = "Interface\\Icons\\Ability_Warrior_InnerRage",
+  [73] = "Interface\\Icons\\INV_Shield_06",
+}
+
+Private.specname_to_id = {
+  ["DEATHKNIGHT" .. L["Blood"]] = 250,
+  ["DEATHKNIGHT" .. L["Frost"]] = 251,
+  ["DEATHKNIGHT" .. L["Unholy"]] = 252,
+  ["DRUID" .. L["Balance"]] = 102,
+  ["DRUID" .. L["Feral"]] = 103,
+  ["DRUID" .. L["Guardian"]] = 104,
+  ["DRUID" .. L["Restoration"]] = 105,
+  ["HUNTER" .. L["Beast Mastery"]] = 253,
+  ["HUNTER" .. L["Marksmanship"]] = 254,
+  ["HUNTER" .. L["Survival"]] = 255,
+  ["MAGE" .. L["Arcane"]] = 62,
+  ["MAGE" .. L["Fire"]] = 63,
+  ["MAGE" .. L["Frost"]] = 64,
+  ["PALADIN" .. L["Holy"]] = 65,
+  ["PALADIN" .. L["Protection"]] = 66,
+  ["PALADIN" .. L["Retribution"]] = 70,
+  ["PRIEST" .. L["Discipline"]] = 256,
+  ["PRIEST" .. L["Holy"]] = 257,
+  ["PRIEST" .. L["Shadow"]] = 258,
+  ["ROGUE" .. L["Assassination"]] = 259,
+  ["ROGUE" .. L["Combat"]] = 260,
+  ["ROGUE" .. L["Subtlety"]] = 261,
+  ["SHAMAN" .. L["Elemental"]] = 262,
+  ["SHAMAN" .. L["Enhancement"]] = 263,
+  ["SHAMAN" .. L["Restoration"]] = 264,
+  ["WARLOCK" .. L["Affliction"]] = 265,
+  ["WARLOCK" .. L["Demonology"]] = 266,
+  ["WARLOCK" .. L["Destruction"]] = 267,
+  ["WARRIOR" .. L["Arms"]] = 71,
+  ["WARRIOR" .. L["Fury"]] = 72,
+  ["WARRIOR" .. L["Protection"]] = 73,
 }
 
 --[=[[ Old unused Talent List
