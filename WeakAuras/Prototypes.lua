@@ -667,17 +667,11 @@ Private.tinySecondFormat = function(value)
 end
 
 function Private.ExecEnv.GetSpecIcon(specID)
-  if specID then
-      return Private.specid_to_icon[specID] or ""
-  end
-  return ""
+  return specID and Private.specid_to_icon[specID] or ""
 end
 
 function Private.ExecEnv.GetSpecName(specID)
-  if specID then
-    return Private.specname_to_id[specID] or ""
-  end
-  return ""
+  return specID and Private.specname_to_id[specID] or ""
 end
 
 function WeakAuras.SpecForUnit(unit)
