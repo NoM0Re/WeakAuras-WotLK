@@ -2054,10 +2054,19 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  if data.internalVersion < 83.25 then
   -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
-  if data.internalVersion < 82.25 then
-    local function replaceSpecData(data, field)
+    local function replaceSpecData(data, field, bt2)
       if data[field] then
+        if bt2 then
+          for specKey in pairs(data[field]) do
+            if type(specKey) == "string" then
+              data[field] = nil
+              data[bt2] = nil
+            end
+          end
+          return
+        end
         if data[field].multi then
           for specKey in pairs(data[field].multi) do
             if type(specKey) == "string" then
@@ -2083,6 +2092,8 @@ function Private.Modernize(data, oldSnapshot)
         if trigger and (trigger.event == "Unit Characteristics" or trigger.event == "Power" or
                         trigger.event == "Health" or trigger.event == "Class/Spec") then
           replaceSpecData(trigger, "specId")
+        elseif trigger and trigger.type == "aura2" then
+          replaceSpecData(trigger, "actualSpec", "useActualSpec")
         end
       end
     end
