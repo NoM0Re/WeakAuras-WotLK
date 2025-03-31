@@ -671,14 +671,18 @@ function Private.ExecEnv.GetSpecIcon(specID)
 end
 
 function Private.ExecEnv.GetSpecName(specID)
-  return specID and Private.specname_to_id[specID] or ""
+  return specID and Private.specid_to_name[specID] or ""
+end
+
+function Private.ExecEnv.GetSpecID(specName)
+  return specName and Private.specname_to_id[specName] or 0
 end
 
 function WeakAuras.SpecForUnit(unit)
   if not unit then return 0 end
   local spec = WeakAuras.LGT:GetUnitTalentSpec(unit)
   local class = select(2, UnitClass(unit))
-  return (spec and class) and Private.ExecEnv.GetSpecName(class .. spec) or 0
+  return (spec and class) and Private.ExecEnv.GetSpecID(class .. spec) or 0
 end
 
 function Private.ExecEnv.ParseStringCheck(input)
@@ -4842,7 +4846,7 @@ Private.event_prototypes = {
       local class = select(2, UnitClass("player")) or "UNKNOWN"
       return ([[
         local specName = WeakAuras.LGT:GetUnitTalentSpec("player") or "Unknown"
-        local specId = Private.ExecEnv.GetSpecName("%s" .. specName)
+        local specId = Private.ExecEnv.GetSpecID("%s" .. specName)
         local specIcon = Private.ExecEnv.GetSpecIcon(specId)
       ]]):format(class)
     end,

@@ -3461,6 +3461,40 @@ Private.specname_to_id = {
   ["WARRIOR" .. L["Protection"]] = 73,
 }
 
+Private.specid_to_name = {
+  [250] = "DEATHKNIGHT" .. L["Blood"],
+  [251] = "DEATHKNIGHT" .. L["Frost"],
+  [252] = "DEATHKNIGHT" .. L["Unholy"],
+  [102] = "DRUID" .. L["Balance"],
+  [103] = "DRUID" .. L["Feral"],
+  [104] = "DRUID" .. L["Guardian"],
+  [105] = "DRUID" .. L["Restoration"],
+  [253] = "HUNTER" .. L["Beast Mastery"],
+  [254] = "HUNTER" .. L["Marksmanship"],
+  [255] = "HUNTER" .. L["Survival"],
+  [62] = "MAGE" .. L["Arcane"],
+  [63] = "MAGE" .. L["Fire"],
+  [64] = "MAGE" .. L["Frost"],
+  [65] = "PALADIN" .. L["Holy"],
+  [66] = "PALADIN" .. L["Protection"],
+  [70] = "PALADIN" .. L["Retribution"],
+  [256] = "PRIEST" .. L["Discipline"],
+  [257] = "PRIEST" .. L["Holy"],
+  [258] = "PRIEST" .. L["Shadow"],
+  [259] = "ROGUE" .. L["Assassination"],
+  [260] = "ROGUE" .. L["Combat"],
+  [261] = "ROGUE" .. L["Subtlety"],
+  [262] = "SHAMAN" .. L["Elemental"],
+  [263] = "SHAMAN" .. L["Enhancement"],
+  [264] = "SHAMAN" .. L["Restoration"],
+  [265] = "WARLOCK" .. L["Affliction"],
+  [266] = "WARLOCK" .. L["Demonology"],
+  [267] = "WARLOCK" .. L["Destruction"],
+  [71] = "WARRIOR" .. L["Arms"],
+  [72] = "WARRIOR" .. L["Fury"],
+  [73] = "WARRIOR" .. L["Protection"],
+}
+
 --[=[[ Old unused Talent List
 Private.talents_ids = {
   DEATHKNIGHT = {{48979,48997,49182,48978,49004,55107,48982,48987,49467,48985,49145,49015,48977,49006,49005,48988,53137,49027,49016,50365,62905,49018,55233,49189,55050,49023,61154,49028}, {49175,49455,49042,55061,49140,49226,50880,49039,51468,51123,49149,49137,49186,49471,49796,55610,49024,49188,50040,49203,50384,65661,54639,51271,49200,49143,50187,49202,49184}, {51745,48962,55129,49036,48963,49588,48965,49013,51459,49158,49146,49219,55620,49194,49220,49223,55666,49224,49208,52143,66799,51052,50391,63560,49032,49222,49217,51099,55090,50117,49206}},
