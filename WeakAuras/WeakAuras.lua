@@ -1657,9 +1657,9 @@ function Private.LoadDisplays(toLoad, ...)
     local uid = WeakAuras.GetData(id).uid
     Private.RegisterForGlobalConditions(uid);
     triggerState[id].triggers = {};
+    triggerState[id].activationTime = {}
     triggerState[id].triggerCount = 0;
     triggerState[id].show = false;
-    triggerState[id].activeTrigger = nil;
     triggerState[id].activatedConditions = {};
     if Private.DebugLog.IsEnabled(uid) then
       WeakAuras.prettyPrint(L["Debug Logging enabled for '%s'"]:format(id))
@@ -1684,7 +1684,6 @@ function Private.UnloadDisplays(toUnload, ...)
       end
     end
     triggerState[id].show = nil;
-    triggerState[id].activeTrigger = nil;
 
     if (timers[id]) then
       for _, trigger in pairs(timers[id]) do
@@ -2848,6 +2847,7 @@ function pAdd(data, simpleChange)
         activeTriggerMode = data.triggers.activeTriggerMode or Private.trigger_modes.first_active,
         triggerLogicFunc = triggerLogicFunc,
         triggers = {},
+        activationTime = {},
         triggerCount = 0,
         activatedConditions = {},
       };
@@ -3646,6 +3646,24 @@ function Private.GetTriggerConditions(data)
           return (state and state.id and triggerState[state.id].triggers[i] or false) == (needle == 1);
         end
       }
+      conditions[i].activationTime = {
+        display = L["Since Active"],
+        type = "elapsedTimer",
+        operator_types = "without_equal",
+
+        test = function(state, needle, op)
+          if state and state.id and triggerState[state.id] and triggerState[state.id].activationTime[i] then
+            local activationTime = triggerState[state.id].activationTime[i]
+            return (GetTime() <= activationTime + needle) == (op == "<=")
+          end
+        end,
+        recheckTime = function(state, needle)
+          if state and state.id and triggerState[state.id] and triggerState[state.id].activationTime[i] then
+            return triggerState[state.id].activationTime[i] + needle
+          end
+        end,
+
+      }
     end
   end
   return conditions;
@@ -4267,12 +4285,12 @@ local function applyToTriggerStateTriggers(stateShown, id, triggernum)
   if (stateShown and not triggerState[id].triggers[triggernum]) then
     triggerState[id].triggers[triggernum] = true;
     triggerState[id].triggerCount = triggerState[id].triggerCount + 1;
-
+    triggerState[id].activationTime[triggernum] = GetTime()
     return true;
   elseif (not stateShown and triggerState[id].triggers[triggernum]) then
     triggerState[id].triggers[triggernum] = false;
     triggerState[id].triggerCount = triggerState[id].triggerCount - 1;
-
+    triggerState[id].activationTime[triggernum] = nil
     return true;
   end
 
@@ -4424,7 +4442,6 @@ function Private.UpdatedTriggerState(id)
   end
 
   local oldShow = triggerState[id].show;
-  triggerState[id].activeTrigger = newActiveTrigger;
   triggerState[id].show = show;
   triggerState[id].fallbackStates = nil
 
@@ -4711,16 +4728,15 @@ local function ValueForSymbol(symbol, region, customFunc, regionState, regionSta
     if(useHiddenStates or regionState.show) then
       local value = regionState[symbol]
       if formatters[symbol] then
-        return tostring(formatters[symbol](value, regionState, triggerState[regionState.id].activeTrigger) or "") or ""
+        return tostring(formatters[symbol](value, regionState, regionState.triggernum) or "") or ""
       else
         return tostring(value) or ""
       end
     end
     return ""
   else
-    local activeTrigger = triggerState[regionState.id].activeTrigger
     local value = (useHiddenStates or regionState.show)
-                  and ReplaceValuePlaceHolders(symbol, region, customFunc, regionState, formatters[symbol], activeTrigger)
+                  and ReplaceValuePlaceHolders(symbol, region, customFunc, regionState, formatters[symbol], regionState.triggernum)
     return value or ""
   end
 end

@@ -251,6 +251,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
     local conditionTemplate = allConditionsTemplate[trigger] and allConditionsTemplate[trigger][variable];
     local cType = conditionTemplate and conditionTemplate.type;
     local test = conditionTemplate and conditionTemplate.test;
+    local recheckTime = conditionTemplate and conditionTemplate.recheckTime
     local preamble = conditionTemplate and conditionTemplate.preamble;
     local progressSource
     local pausedProperty
@@ -261,7 +262,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
       remainingProperty = progressSource[7]
     end
 
-    local stateCheck = "state[" .. trigger .. "] and state[" .. trigger .. "].show and ";
+    local stateCheck = "state[" .. trigger .. "] and ";
     local stateVariableCheck = string.format("state[" .. trigger .. "][%q]", variable) .. "~= nil and ";
 
     local preambleString
@@ -405,7 +406,22 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
     end
     -- If adding a new condition type, don't forget to adjust the validator in the options code
 
-    if (cType == "timer" and value) then
+    if recheckTime then
+      if (value) then
+        Private.ExecEnv.conditionHelpers[uid] = Private.ExecEnv.conditionHelpers[uid] or {}
+        Private.ExecEnv.conditionHelpers[uid].customTestFunctions
+          = Private.ExecEnv.conditionHelpers[uid].customTestFunctions or {}
+        tinsert(Private.ExecEnv.conditionHelpers[uid].customTestFunctions, recheckTime);
+        local testFunctionNumber = #(Private.ExecEnv.conditionHelpers[uid].customTestFunctions);
+        local valueString = type(value) == "string" and string.format("%q", value) or value;
+
+        recheckCode = string.format("  nextTime = Private.ExecEnv.CallCustomConditionTest(%q, %s, state[%s], %s) \n",
+                                    uid, testFunctionNumber, trigger, valueString)
+        recheckCode = recheckCode .. "  if (nextTime and (not recheckTime or nextTime < recheckTime) and nextTime >= now) then\n"
+        recheckCode = recheckCode .. "    recheckTime = nextTime\n";
+        recheckCode = recheckCode .. "  end\n"
+      end
+    elseif (cType == "timer" and value) then
       local variableString =  "state[" .. trigger .. "]" .. string.format("[%q]",  variable)
       local andNotPaused = pausedProperty
             and "and not " .. "state[" .. trigger .. "]" .. string.format("[%q]",  pausedProperty)
