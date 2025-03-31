@@ -2056,70 +2056,34 @@ function Private.Modernize(data, oldSnapshot)
 
   -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
   if data.internalVersion < 82.25 then
-    local function processTrigger(trigger)
-      if not trigger then return end
-      local found
-      if trigger.class_and_spec then
-        for keyType in pairs({ multi = true, single = true }) do
-          if trigger.class_and_spec[keyType] then
-            local tmp = {}
-            for key in pairs(trigger.class_and_spec[keyType]) do
-              if key and type(key) == "string" then
-                local specID = Private.ExecEnv.GetSpecID(key)
-                if specID and specID ~= 0 then
-                  tinsert(tmp, specID)
-                end
-              end
-            end
-            if next(tmp) then
-              trigger.class_and_spec[keyType] = tmp
-              found = true
-            else
-              trigger.class_and_spec[keyType] = nil
+    local function replaceSpecData(data, field)
+      if data[field] then
+        if data[field].multi then
+          for specKey in pairs(data[field].multi) do
+            if type(specKey) == "string" then
+              data[field] = { multi = {} }
+              data["use_" .. field] = nil
+              return
             end
           end
         end
-        if not found then
-          trigger.use_class_and_spec = nil
-          trigger.class_and_spec = nil
-        end
-      end
-      if trigger.specId then
-        local foundSpec
-        for keyType in pairs({ multi = true, single = true }) do
-          if trigger.specId[keyType] then
-            local tmp = {}
-            for key in pairs(trigger.specId[keyType]) do
-              if key and type(key) == "string" then
-                local specID = Private.ExecEnv.GetSpecID(key)
-                if specID and specID ~= 0 then
-                  tinsert(tmp, specID)
-                end
-              end
-            end
-            if next(tmp) then
-              trigger.specId[keyType] = tmp
-              foundSpec = true
-            else
-              trigger.specId[keyType] = nil
-            end
-          end
-        end
-        if not foundSpec then
-          trigger.use_specId = nil
-          trigger.specId = nil
+        if type(data[field].single) == "string" then
+          data[field] = { multi = {} }
+          data["use_" .. field] = nil
         end
       end
     end
 
     if data.load then
-      for _, loadData in ipairs(data.load) do
-        processTrigger(loadData.trigger)
-      end
+      replaceSpecData(data.load, "class_and_spec")
     end
     if data.triggers then
       for _, triggerData in ipairs(data.triggers) do
-        processTrigger(triggerData.trigger)
+        local trigger = triggerData.trigger
+        if trigger and (trigger.event == "Unit Characteristics" or trigger.event == "Power" or
+                        trigger.event == "Health" or trigger.event == "Class/Spec") then
+          replaceSpecData(trigger, "specId")
+        end
       end
     end
   end

@@ -576,6 +576,8 @@ function WeakAuras.CheckTalentByIndex(index, extraOption)
 end
 
 function WeakAuras.CheckClassSpec(specID)
+  specID = tonumber(specID)
+  if not specID then return end
   local class = select(2, UnitClass("player")) or ""
   local currentSpec = WeakAuras.LGT:GetUnitTalentSpec("player") or ""
   return specID and Private.ExecEnv.GetSpecName(specID) == class .. currentSpec
@@ -1035,7 +1037,7 @@ Private.load_prototype = {
       display = L["Class and Specialization"],
       type = "multiselect",
       values = "spec_types_all",
-      test = "WeakAuras.CheckClassSpec(%d)",
+      test = "WeakAuras.CheckClassSpec(%s)",
       events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
     },
     {
