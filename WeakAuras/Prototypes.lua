@@ -2793,7 +2793,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and ((state.sourceGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
+          return state and state.show and ((state.sourceGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
         end
       },
       {
@@ -2840,7 +2840,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlags(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlags(state.sourceFlags, needle)  == (op == "==")
           end
         end
@@ -2853,7 +2853,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsReaction(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlagsReaction(state.sourceFlags, needle)  == (op == "==")
           end
         end
@@ -2866,7 +2866,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsObjectType(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlagsObjectType(state.sourceFlags, needle) == (op == "==")
           end
         end
@@ -2899,7 +2899,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and ((state.destGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
+          return state and state.show and ((state.destGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
         end
       },
       {
@@ -2954,7 +2954,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlags(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlags(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -2970,7 +2970,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsReaction(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlagsReaction(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -2986,7 +2986,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsObjectType(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state then
+          if state and state.show then
             return Private.ExecEnv.CheckCombatLogFlagsObjectType(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -3515,7 +3515,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
+          return state and state.show and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
         end,
       },
       {
@@ -3531,7 +3531,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and
+          return state and state.show and
           ((IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = {
@@ -3547,7 +3547,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and
+          return state and state.show and
           ((select(2, IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname)) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = {
@@ -3563,7 +3563,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (UnitExists('target') and state.spellname and WeakAuras.IsSpellInRange(state.spellname, 'target') == needle)
+          return state and state.show and (UnitExists('target') and state.spellname and WeakAuras.IsSpellInRange(state.spellname, 'target') == needle)
         end,
         conditionEvents = {
           "PLAYER_TARGET_CHANGED",
@@ -3761,7 +3761,7 @@ Private.event_prototypes = {
         conditionType = "select",
         conditionValues = "charges_change_condition_type";
         conditionTest = function(state, needle)
-          return state and state.direction and Private.ExecEnv.CheckChargesDirection(state.direction, needle)
+          return state and state.show and state.direction and Private.ExecEnv.CheckChargesDirection(state.direction, needle)
         end,
       },
       {
@@ -3923,7 +3923,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime() or state.enabled == 0) == (needle == 1)
+          return state and state.show and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime() or state.enabled == 0) == (needle == 1)
         end,
       },
       {
@@ -4177,7 +4177,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1);
+          return state and state.show and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1);
         end,
       },
       {
@@ -4703,7 +4703,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (UnitExists('target') and state.spellName and WeakAuras.IsSpellInRange(state.spellName, 'target') == needle)
+          return state and state.show and (UnitExists('target') and state.spellName and WeakAuras.IsSpellInRange(state.spellName, 'target') == needle)
         end,
         conditionEvents = {
           "PLAYER_TARGET_CHANGED",
@@ -5454,7 +5454,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.enchanted == (needle == 1)
+          return state and state.show and state.enchanted == (needle == 1)
         end,
       },
       {
@@ -5649,7 +5649,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and (UnitIsUnit(needle, state.unit or '') == (op == "=="))
+          return state and state.show and (UnitIsUnit(needle, state.unit or '') == (op == "=="))
         end
       },
       {
@@ -5884,7 +5884,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and (state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
+          return state and state.show and (state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
         end,
         enable = function(trigger) return trigger.use_rune end
       },
@@ -6699,7 +6699,7 @@ Private.event_prototypes = {
         values = "actual_unit_types_with_specific",
         conditionType = "unit",
         conditionTest = function(state, unit, op)
-          return state and state.unit and ((UnitIsUnit(state.sourceUnit, unit) == 1 and true or false) == (op == "=="))
+          return state and state.show and state.unit and ((UnitIsUnit(state.sourceUnit, unit) == 1 and true or false) == (op == "=="))
         end,
         store = true,
         hidden = true,
@@ -6749,7 +6749,7 @@ Private.event_prototypes = {
         values = "actual_unit_types_with_specific",
         conditionType = "unit",
         conditionTest = function(state, unit, op)
-          return state and state.destUnit and ((UnitIsUnit(state.destUnit, unit) == 1 and true or false) == (op == "=="))
+          return state and state.show and state.destUnit and ((UnitIsUnit(state.destUnit, unit) == 1 and true or false) == (op == "=="))
         end,
         store = true,
         enable = function(trigger) return not trigger.use_inverse end,
@@ -7833,7 +7833,7 @@ Private.event_prototypes = {
         test = "triggerResult",
         conditionType = "number",
         conditionTest = function(state, needle, needle2)
-          return state and WeakAuras.CheckRange(state.unit, needle, needle2);
+          return state and state.show and WeakAuras.CheckRange(state.unit, needle, needle2);
         end,
       },
       {

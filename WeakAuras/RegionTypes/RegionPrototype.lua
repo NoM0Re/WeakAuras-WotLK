@@ -406,7 +406,7 @@ local function UpdateProgressFromState(self, minMaxConfig, state, progressSource
   local remainingProperty = progressSource[7]
   local useAdditionalProgress = progressSource[8]
 
-  if not state then
+  if not state or not state.show then
     self.minProgress, self.maxProgress = nil, nil
     self.progressType = "timed"
     self.duration = 0
