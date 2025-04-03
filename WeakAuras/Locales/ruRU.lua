@@ -139,6 +139,8 @@ L["At Percent"] = "В процентах"
 L["At Value"] = "От значения"
 L["At War"] = "На войне"
 L["Attach to End"] = "Прикрепить к концу"
+--[[Translation missing --]]
+L["Attach to End, backwards"] = "Attach to End, backwards"
 L["Attach to Point"] = "Прикрепить к точке"
 L["Attach to Start"] = "Прикрепить к началу"
 L["Attack Power"] = "Сила атаки"
@@ -180,6 +182,12 @@ L["Back and Forth"] = "Назад и вперед"
 L["Background"] = "Задний план"
 L["Background Color"] = "Цвет заднего плана"
 L["Bar Color/Gradient Start"] = "Цвет полосы / Начало градиента"
+--[[Translation missing --]]
+L["Bar enabled in BigWigs settings"] = "Bar enabled in BigWigs settings"
+--[[Translation missing --]]
+L["Bar enabled in Boss Mod addon settings"] = "Bar enabled in Boss Mod addon settings"
+--[[Translation missing --]]
+L["Bar enabled in DBM settings"] = "Bar enabled in DBM settings"
 L["Bar Texture"] = "Текстура полосы"
 L["Baron Geddon"] = "Барон Геддон"
 L["Battle for Azeroth"] = "Battle for Azeroth"
@@ -798,6 +806,8 @@ Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=] ] = [=[Совпадает с номером фазы в журнале сражения с боссом. Смена фаз нумеруется как x.5
 Например: 1, 2, 1, 2, 2.5, 3.]=]
 L["Max Char "] = "Макс. количество символов"
+--[[Translation missing --]]
+L["Max Char"] = "Max Char"
 L["Max Charges"] = "Макс. количество зарядов"
 L["Max Health"] = "Макс. запас здоровья"
 L["Max Power"] = "Макс. запас энергии"
@@ -958,6 +968,12 @@ L["Overlay %s"] = "Наложение %s"
 L["Overlay Charged Combo Points"] = "Показать заряженные анимой приемы серии (наложение)"
 L["Overlay Cost of Casts"] = "Показать стоимость применения заклинаний (наложение)"
 L["Overlay Latency"] = "Показать задержку (наложение)"
+--[[Translation missing --]]
+L["Pad"] = "Pad"
+--[[Translation missing --]]
+L["Pad Mode"] = "Pad Mode"
+--[[Translation missing --]]
+L["Pad to"] = "Pad to"
 L["Paragon Reputation"] = "Репутация идеала"
 L["Paragon Reward Pending"] = "Награда идела в ожидании"
 L["Parent Frame"] = "Родительский фрейм"
@@ -1163,6 +1179,8 @@ L["Shrink"] = "Сжатие"
 L["Silithid Royalty"] = "Силитидская знать"
 L["Silver"] = "Серебро"
 L["Simple"] = "Простой"
+--[[Translation missing --]]
+L["Since Active"] = "Since Active"
 L["Since Apply"] = "Время после применения эф."
 L["Since Apply/Refresh"] = "Время после обновления эф."
 L["Since Charge Gain"] = "Время после получения заряда"
@@ -1275,6 +1293,8 @@ L[ [=[Supports multiple entries, separated by commas
 ]=] ] = [=[Можно указать несколько значений, разделенных запятыми.
 ]=]
 L["Supports multiple entries, separated by commas. Escape ',' with \\. Prefix with '-' for negation."] = "Поддерживает несколько записей, разделенных запятыми. Экранируйте ',' с \\. Префикс '-' для отрицания."
+--[[Translation missing --]]
+L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."] = "Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."
 L["Supports multiple entries, separated by commas. Prefix with '-' for negation."] = "Поддерживает несколько записей, разделённых запятыми. Используйте префикс '-' для отрицания."
 L[ [=[Supports multiple entries, separated by commas. To include child zone ids, prefix with 'c', e.g. 'c2022'.
 Group Zone IDs must be prefixed with 'g', e.g. 'g277'. 
@@ -1300,6 +1320,12 @@ L["Tanking But Not Highest"] = "Вы основная цель; не макс. �
 L["Target"] = "Цель"
 L["Targeted"] = "Цель"
 L["Tertiary Stats"] = "Третичная характеристика"
+--[[Translation missing --]]
+L["Test if bar is enabled in BigWigs settings"] = "Test if bar is enabled in BigWigs settings"
+--[[Translation missing --]]
+L["Test if bar is enabled in Boss Mod addon settings"] = "Test if bar is enabled in Boss Mod addon settings"
+--[[Translation missing --]]
+L["Test if bar is enabled in DBM settings"] = "Test if bar is enabled in DBM settings"
 L["Text"] = "Текст"
 L["Text To Speech"] = "Текст в речь"
 L["Text-to-speech"] = "Текст в речь"

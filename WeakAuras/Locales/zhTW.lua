@@ -5,7 +5,7 @@ end
 local L = WeakAuras.L
 
 -- WeakAuras
-L[ [=[ Filter formats: 'Name', 'Name-Realm', '-Realm'. 
+L[ [=[ Filter formats: 'Name', 'Name-Realm', '-Realm'.
 
 Supports multiple entries, separated by commas
 Can use \ to escape -.]=] ] = [=[過濾格式: '名字'、'名字-伺服器'、'-伺服器'。
@@ -134,6 +134,7 @@ L["At Percent"] = "在百分比"
 L["At Value"] = "在數值"
 L["At War"] = "戰爭中"
 L["Attach to End"] = "附加到結尾"
+L["Attach to End, backwards"] = "往後黏附到末端"
 L["Attach to Point"] = "附加到點"
 L["Attach to Start"] = "附加到開頭"
 L["Attack Power"] = "攻擊強度"
@@ -175,6 +176,9 @@ L["Back and Forth"] = "往返"
 L["Background"] = "背景"
 L["Background Color"] = "背景顏色"
 L["Bar Color/Gradient Start"] = "進度條顏色/漸層開始"
+L["Bar enabled in BigWigs settings"] = "BigWigs 設定中已啟用進度條"
+L["Bar enabled in Boss Mod addon settings"] = "首領模組插件的設定中已啟用進度條"
+L["Bar enabled in DBM settings"] = "DBM 設定中已啟用進度條"
 L["Bar Texture"] = "進度條材質"
 L["Baron Geddon"] = "迦頓男爵"
 L["Battle for Azeroth"] = "決戰艾澤拉斯"
@@ -775,6 +779,7 @@ L[ [=[Matches stage number of encounter journal.
 Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=] ] = "匹配戰鬥日誌的階段號碼。中場為 0.5 例如1;2;1;2;2.5;3"
 L["Max Char "] = "最多字元數"
+L["Max Char"] = "最大字元"
 L["Max Charges"] = "最大可用次數"
 L["Max Health"] = "最大血量"
 L["Max Power"] = "最大能量"
@@ -956,6 +961,9 @@ L["Overlay %s"] = "疊加圖層 %s"
 L["Overlay Charged Combo Points"] = "疊加已有的連擊點數"
 L["Overlay Cost of Casts"] = "疊加施法消耗量"
 L["Overlay Latency"] = "疊加延遲"
+L["Pad"] = "襯墊"
+L["Pad Mode"] = "襯墊模式"
+L["Pad to"] = "墊到"
 L["Paragon Reputation"] = "巔峰聲望"
 L["Paragon Reward Pending"] = "巔峰獎勵待決"
 L["Parent Frame"] = "母框架"
@@ -1080,7 +1088,7 @@ L["Requested display does not exist"] = "需求的提醒效果不存在"
 L["Requested display not authorized"] = "需求的提醒效果沒有授權"
 L["Requesting display information from %s ..."] = "正在請求來自於 %s 的顯示資訊..."
 L["Require Valid Target"] = "需要有效目標"
-L["Requires syncing the specialization via LibSpecialization."] = "需要透由LibSpecialization同步專精。"
+L["Requires syncing the specialization via LibGroupTalents."] = "需要透由LibGroupTalents同步專精。"
 L["Resilience (%)"] = "韌性 (%)"
 L["Resilience Rating"] = "韌性等級"
 L["Resist"] = "抵抗"
@@ -1158,6 +1166,7 @@ L["Shrink"] = "收縮"
 L["Silithid Royalty"] = "異種蠍皇族"
 L["Silver"] = "銀"
 L["Simple"] = "簡單"
+L["Since Active"] = "自啟動以來"
 L["Since Apply"] = "自從套用"
 L["Since Apply/Refresh"] = "自從套用/更新"
 L["Since Charge Gain"] = "自從獲得充能"
@@ -1267,10 +1276,11 @@ L["Supports multiple entries, separated by commas"] = "支援輸入多個項目�
 L[ [=[Supports multiple entries, separated by commas
 ]=] ] = "支援輸入多個項目，使用逗號分隔。"
 L["Supports multiple entries, separated by commas. Escape ',' with \\. Prefix with '-' for negation."] = "支援輸入多個項目，使用逗號分隔。用 \\ 跳脫 ','。前面加上 '-' 表示否定。"
+L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."] = "支持多個條目，由逗號隔開。用\\換行。前綴為“ - ”進行否定。"
 L["Supports multiple entries, separated by commas. Prefix with '-' for negation."] = "支援輸入多個項目，使用逗號分隔。前面加上 '-' 表示否定。"
 L[ [=[Supports multiple entries, separated by commas. To include child zone ids, prefix with 'c', e.g. 'c2022'.
-Group Zone IDs must be prefixed with 'g', e.g. 'g277'. 
-Supports Area IDs from https://wago.tools/db2/AreaTable prefixed with 'a'. 
+Group Zone IDs must be prefixed with 'g', e.g. 'g277'.
+Supports Area IDs from https://wago.tools/db2/AreaTable prefixed with 'a'.
 Supports Instance IDs prefixed with 'i'.
 Entries can be prefixed with '-' to negate.]=] ] = [=[支援輸入多個項目，以逗號分隔。若要包含子區域 ID，請在前面加上 'c'，例如「c2022」。
 群組區域 ID 必須以 'g' 開頭，例如 'g277'。
@@ -1296,6 +1306,9 @@ L["Tanking But Not Highest"] = "坦怪中但不是最高"
 L["Target"] = "目標"
 L["Targeted"] = "當前目標"
 L["Tertiary Stats"] = "第三屬性"
+L["Test if bar is enabled in BigWigs settings"] = "測試 BigWigs 設定中是否已啟用進度條"
+L["Test if bar is enabled in Boss Mod addon settings"] = "測試首領模組插件的設定中是否已啟用進度條"
+L["Test if bar is enabled in DBM settings"] = "測試 DBM 設定中是否已啟用進度條"
 L["Text"] = "文字"
 L["Text To Speech"] = "文字轉語音"
 L["Text-to-speech"] = "文字轉語音"
@@ -1457,7 +1470,7 @@ Last upgrade: %s
 
 |cffff0000You should BACKUP your WTF folder BEFORE pressing this button.|r]=] ] = [=[WeakAuras 偵測到它被降回舊版本，你所儲存的提醒效果已無法正常運作。
 是否要執行|cffff0000實驗性的|r修復工具? 將會覆蓋自上次資料庫升級以來所做的任何更改。
-上次升級是: %s 
+上次升級是: %s
 
 |cffff0000在按下此按鈕之前，你應該先備份 WTF 資料夾。|r]=]
 L["WeakAuras is creating a rollback snapshot of your auras. This snapshot will allow you to revert to the current state of your auras if something goes wrong. This process may cause your framerate to drop until it is complete."] = "WeakAuras 正在建立提醒效果的還原快照。如果出現問題，此快照將允許您恢復到提醒效果目前的狀態。此過程可能會導致幀速下降，直到完成為止。"

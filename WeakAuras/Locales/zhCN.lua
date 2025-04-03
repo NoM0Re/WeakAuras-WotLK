@@ -5,7 +5,7 @@ end
 local L = WeakAuras.L
 
 -- WeakAuras
-L[ [=[ Filter formats: 'Name', 'Name-Realm', '-Realm'. 
+L[ [=[ Filter formats: 'Name', 'Name-Realm', '-Realm'.
 
 Supports multiple entries, separated by commas
 Can use \ to escape -.]=] ] = [=[过滤格式：'名称'，'名称-服务器'，'-服务器'。
@@ -144,6 +144,7 @@ L["At Percent"] = "于百分比"
 L["At Value"] = "于值"
 L["At War"] = "交战状态"
 L["Attach to End"] = "依附到末尾"
+L["Attach to End, backwards"] = "反向依附到末尾"
 L["Attach to Point"] = "依附到点"
 L["Attach to Start"] = "依附到开头"
 L["Attack Power"] = "攻击强度"
@@ -185,6 +186,9 @@ L["Back and Forth"] = "往返"
 L["Background"] = "背景"
 L["Background Color"] = "背景颜色"
 L["Bar Color/Gradient Start"] = "进度条颜色/渐变开始颜色"
+L["Bar enabled in BigWigs settings"] = "BigWigs 设置中已启用进度条"
+L["Bar enabled in Boss Mod addon settings"] = "首领模组插件设置中已启用进度条"
+L["Bar enabled in DBM settings"] = "DBM 设置中已启用进度条"
 L["Bar Texture"] = "进度条材质"
 L["Baron Geddon"] = "迦顿男爵"
 L["Battle for Azeroth"] = "争霸艾泽拉斯"
@@ -785,6 +789,7 @@ L[ [=[Matches stage number of encounter journal.
 Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=] ] = "符合冒险指南的阶段。转阶段为.5。例如1;2;1;2;2.5;3"
 L["Max Char "] = "最大字符数"
+L["Max Char"] = "最大字符数"
 L["Max Charges"] = "最大充能次数"
 L["Max Health"] = "最大生命值"
 L["Max Power"] = "最大能量值"
@@ -979,6 +984,9 @@ L["Overlay %s"] = "覆盖层 %s"
 L["Overlay Charged Combo Points"] = "充能连击点覆盖层"
 L["Overlay Cost of Casts"] = "覆盖层显示施法消耗"
 L["Overlay Latency"] = "延迟覆盖层"
+L["Pad"] = "衬垫"
+L["Pad Mode"] = "衬垫模式"
+L["Pad to"] = "垫到"
 L["Paragon Reputation"] = "典范声望"
 L["Paragon Reward Pending"] = "典范奖励待领取"
 L["Parent Frame"] = "父框体"
@@ -1103,7 +1111,7 @@ L["Requested display does not exist"] = "请求接收的图示不存在"
 L["Requested display not authorized"] = "请求接收的图示没有授权"
 L["Requesting display information from %s ..."] = "请求来 %s 的图示信息"
 L["Require Valid Target"] = "需要有效目标"
-L["Requires syncing the specialization via LibSpecialization."] = "需要通过LibSpecialization同步专精。"
+L["Requires syncing the specialization via LibGroupTalents."] = "需要通过LibGroupTalents同步专精。"
 L["Resilience (%)"] = "韧性 (%)"
 L["Resilience Rating"] = "韧性等级"
 L["Resist"] = "抵抗"
@@ -1181,6 +1189,7 @@ L["Shrink"] = "收缩"
 L["Silithid Royalty"] = "安其拉三宝"
 L["Silver"] = "银"
 L["Simple"] = "简单"
+L["Since Active"] = "自从激活"
 L["Since Apply"] = "自从获得"
 L["Since Apply/Refresh"] = "自从获得/刷新"
 L["Since Charge Gain"] = "自从获得充能"
@@ -1290,12 +1299,13 @@ L["Supports multiple entries, separated by commas"] = "支持多个条目，由�
 L[ [=[Supports multiple entries, separated by commas
 ]=] ] = "支持多个条目，由英文逗号分隔"
 L["Supports multiple entries, separated by commas. Escape ',' with \\. Prefix with '-' for negation."] = "支持多个条目，由英文逗号分隔。用 \\ 转义 ','。用 '-' 前缀表示否定。"
+L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."] = "支持多个条目，由英文逗号分隔。用 \\ 转义编码，用 '-' 前缀表示否定。"
 L["Supports multiple entries, separated by commas. Prefix with '-' for negation."] = "支持多个条目，由英文逗号分隔。用 '-' 前缀表示否定。"
 L[ [=[Supports multiple entries, separated by commas. To include child zone ids, prefix with 'c', e.g. 'c2022'.
-Group Zone IDs must be prefixed with 'g', e.g. 'g277'. 
-Supports Area IDs from https://wago.tools/db2/AreaTable prefixed with 'a'. 
+Group Zone IDs must be prefixed with 'g', e.g. 'g277'.
+Supports Area IDs from https://wago.tools/db2/AreaTable prefixed with 'a'.
 Supports Instance IDs prefixed with 'i'.
-Entries can be prefixed with '-' to negate.]=] ] = [=[支持多个条目，由英文逗号分隔。若要包含子区域 ID，则前缀为 'c'，如 'c2022'。组区域 ID 必须以 
+Entries can be prefixed with '-' to negate.]=] ] = [=[支持多个条目，由英文逗号分隔。若要包含子区域 ID，则前缀为 'c'，如 'c2022'。组区域 ID 必须以
  'g' 为前缀，如 'g277'。支持的区域 ID 以 'a' 为前缀，详见表格： https://wago.tools/db2/AreaTable 。条目可用 '-' 前缀表示否定。]=]
 L["Swing"] = "近战攻击"
 L["Swing Timer"] = "近战攻击计时器"
@@ -1316,6 +1326,9 @@ L["Tanking But Not Highest"] = "做T但不是最高"
 L["Target"] = "目标"
 L["Targeted"] = "被选中"
 L["Tertiary Stats"] = "第三属性"
+L["Test if bar is enabled in BigWigs settings"] = "测试 BigWigs 设置中是否已启用进度条"
+L["Test if bar is enabled in Boss Mod addon settings"] = "测试首领模组插件设置中是否已启用进度条"
+L["Test if bar is enabled in DBM settings"] = "测试 DBM 设置中是否已启用进度条"
 L["Text"] = "文本"
 L["Text To Speech"] = "文字转语音"
 L["Text-to-speech"] = "文本转语音"
