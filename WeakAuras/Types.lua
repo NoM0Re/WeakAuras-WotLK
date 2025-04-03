@@ -3294,104 +3294,206 @@ do
     DEATHKNIGHT = {
       icon = "Interface\\Icons\\Spell_Deathknight_ClassIcon",
       specs = {
-        [L["Unholy"]] = "Interface\\Icons\\Spell_Deathknight_UnholyPresence",
-        [L["Frost"]] = "Interface\\Icons\\Spell_Deathknight_FrostPresence",
-        [L["Blood"]] = "Interface\\Icons\\Spell_Deathknight_BloodPresence",
+        [250] = { name = L["Blood"], icon = "Interface\\Icons\\Spell_Deathknight_BloodPresence" },
+        [251] = { name = L["Frost"], icon = "Interface\\Icons\\Spell_Deathknight_FrostPresence" },
+        [252] = { name = L["Unholy"], icon = "Interface\\Icons\\Spell_Deathknight_UnholyPresence" },
       }
     },
     DRUID = {
       icon = "Interface\\Icons\\Ability_Druid_Maul",
       specs = {
-        [L["Balance"]] = "Interface\\Icons\\Spell_Nature_StarFall",
-        [L["Restoration"]] = "Interface\\Icons\\Spell_Nature_HealingTouch",
-        [L["Feral Combat"]] = "Interface\\Icons\\Ability_Racial_BearForm",
-        [L["Guardian"]] = "Interface\\Icons\\Ability_Racial_BearForm",
+        [102] = { name = L["Balance"], icon = "Interface\\Icons\\Spell_Nature_StarFall" },
+        [103] = { name = L["Feral Combat"], icon = "Interface\\Icons\\Ability_Racial_BearForm" },
+        [104] = { name = L["Guardian"], icon = "Interface\\Icons\\Ability_Racial_BearForm" },
+        [105] = { name = L["Restoration"], icon = "Interface\\Icons\\Spell_Nature_HealingTouch" },
       }
     },
     HUNTER = {
       icon = "Interface\\Icons\\INV_Weapon_Bow_07",
       specs = {
-        [L["Marksmanship"]] = "Interface\\Icons\\Ability_Marksmanship",
-        [L["Beast Mastery"]] = "Interface\\Icons\\Ability_Hunter_BeastTaming",
-        [L["Survival"]] = "Interface\\Icons\\Ability_Hunter_SwiftStrike",
+        [253] = { name = L["Beast Mastery"], icon = "Interface\\Icons\\Ability_Hunter_BeastTaming" },
+        [254] = { name = L["Marksmanship"], icon = "Interface\\Icons\\Ability_Marksmanship" },
+        [255] = { name = L["Survival"], icon = "Interface\\Icons\\Ability_Hunter_SwiftStrike" },
       }
     },
     MAGE = {
       icon = "Interface\\Icons\\INV_Staff_13",
       specs = {
-        [L["Fire"]] = "Interface\\Icons\\Spell_Fire_FireBolt02",
-        [L["Frost"]] = "Interface\\Icons\\Spell_Frost_FrostBolt02",
-        [L["Arcane"]] = "Interface\\Icons\\Spell_Holy_MagicalSentry",
+        [62] = { name = L["Arcane"], icon = "Interface\\Icons\\Spell_Holy_MagicalSentry" },
+        [63] = { name = L["Fire"], icon = "Interface\\Icons\\Spell_Fire_FireBolt02" },
+        [64] = { name = L["Frost"], icon = "Interface\\Icons\\Spell_Frost_FrostBolt02" },
       }
     },
     PALADIN = {
       icon = "Interface\\Icons\\INV_Hammer_01",
       specs = {
-        [L["Protection"]] = "Interface\\Icons\\Spell_Holy_DevotionAura",
-        [L["Holy"]] = "Interface\\Icons\\Spell_Holy_HolyBolt",
-        [L["Retribution"]] = "Interface\\Icons\\Spell_Holy_AuraOfLight",
+        [65] = { name = L["Holy"], icon = "Interface\\Icons\\Spell_Holy_HolyBolt" },
+        [66] = { name = L["Protection"], icon = "Interface\\Icons\\Spell_Holy_DevotionAura" },
+        [70] = { name = L["Retribution"], icon = "Interface\\Icons\\Spell_Holy_AuraOfLight" },
       }
     },
     PRIEST = {
       icon = "Interface\\Icons\\INV_Staff_30",
       specs = {
-        [L["Discipline"]] = "Interface\\Icons\\Spell_Holy_WordFortitude",
-        [L["Holy"]] = "Interface\\Icons\\Spell_Holy_GuardianSpirit",
-        [L["Shadow"]] = "Interface\\Icons\\Spell_Shadow_ShadowWordPain",
+        [256] = { name = L["Discipline"], icon = "Interface\\Icons\\Spell_Holy_WordFortitude" },
+        [257] = { name = L["Holy"], icon = "Interface\\Icons\\Spell_Holy_GuardianSpirit" },
+        [258] = { name = L["Shadow"], icon = "Interface\\Icons\\Spell_Shadow_ShadowWordPain" },
       }
     },
     ROGUE = {
       icon = "Interface\\Icons\\INV_ThrowingKnife_04",
       specs = {
-        [L["Subtlety"]] = "Interface\\Icons\\Ability_Stealth",
-        [L["Combat"]] = "Interface\\Icons\\Ability_BackStab",
-        [L["Assassination"]] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+        [259] = { name = L["Assassination"], icon = "Interface\\Icons\\Ability_Rogue_Eviscerate" },
+        [260] = { name = L["Combat"], icon = "Interface\\Icons\\Ability_BackStab" },
+        [261] = { name = L["Subtlety"], icon = "Interface\\Icons\\Ability_Stealth" },
       }
     },
     SHAMAN = {
       icon = "Interface\\Icons\\Spell_Nature_BloodLust",
       specs = {
-        [L["Enhancement"]] = "Interface\\Icons\\Spell_Nature_LightningShield",
-        [L["Elemental"]] = "Interface\\Icons\\Spell_Nature_Lightning",
-        [L["Restoration"]] = "Interface\\Icons\\Spell_Nature_MagicImmunity",
+        [262] = { name = L["Elemental"], icon = "Interface\\Icons\\Spell_Nature_Lightning" },
+        [263] = { name = L["Enhancement"], icon = "Interface\\Icons\\Spell_Nature_LightningShield" },
+        [264] = { name = L["Restoration"], icon = "Interface\\Icons\\Spell_Nature_MagicImmunity" },
       }
     },
     WARLOCK = {
       icon = "Interface\\Icons\\Spell_Nature_FaerieFire",
       specs = {
-        [L["Demonology"]] = "Interface\\Icons\\Spell_Shadow_Metamorphosis",
-        [L["Affliction"]] = "Interface\\Icons\\Spell_Shadow_DeathCoil",
-        [L["Destruction"]] = "Interface\\Icons\\Spell_Shadow_RainOfFire",
+        [265] = { name = L["Affliction"], icon = "Interface\\Icons\\Spell_Shadow_DeathCoil" },
+        [266] = { name = L["Demonology"], icon = "Interface\\Icons\\Spell_Shadow_Metamorphosis" },
+        [267] = { name = L["Destruction"], icon = "Interface\\Icons\\Spell_Shadow_RainOfFire" },
       }
     },
     WARRIOR = {
       icon = "Interface\\Icons\\INV_Sword_27",
       specs = {
-        [L["Arms"]] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
-        [L["Protection"]] = "Interface\\Icons\\INV_Shield_06",
-        [L["Fury"]] = "Interface\\Icons\\Ability_Warrior_InnerRage",
+        [71] = { name = L["Arms"], icon = "Interface\\Icons\\Ability_Rogue_Eviscerate" },
+        [72] = { name = L["Fury"], icon = "Interface\\Icons\\Ability_Warrior_InnerRage" },
+        [73] = { name = L["Protection"], icon = "Interface\\Icons\\INV_Shield_06" },
       }
     },
   }
-
-  local function createSpecString(class, spec)
+  -- Creates the options layout. Due to CUSTOM_CLASS_COLORS, it needs to be created dynamically.
+  local function createSpecString(class, specID)
     local data = classData[class]
+    if not data then return "" end
     local classIcon = data.icon or "Interface\\Icons\\INV_Misc_QuestionMark"
-    local specIcon = data.specs[spec] or "Interface\\Icons\\INV_Misc_QuestionMark"
+    local specData = data.specs[specID] or { icon = "Interface\\Icons\\INV_Misc_QuestionMark", name = "Unknown" }
     local color = WA_GetClassColor(class)
-    return ("|T%s:0|t |T%s:0|t |c%s%s|r"):format(classIcon, specIcon, color, spec)
+    return ("|T%s:0|t |T%s:0|t |c%s%s|r"):format(classIcon, specData.icon, color, specData.name)
   end
 
   Private.spec_types_all = {}
   Private.spec = {}
   for class, data in pairs(classData) do
-    for specName, specIcon in pairs(data.specs) do
-      local key = class .. specName
-      Private.spec_types_all[key] = createSpecString(class, specName)
-      Private.spec[key] = specIcon
+    for specID in pairs(data.specs) do
+      Private.spec_types_all[specID] = createSpecString(class, specID)
     end
   end
+  wipe(classData)
 end
+
+Private.specid_to_icon = {
+  [250] = "Interface\\Icons\\Spell_Deathknight_BloodPresence",
+  [251] = "Interface\\Icons\\Spell_Deathknight_FrostPresence",
+  [252] = "Interface\\Icons\\Spell_Deathknight_UnholyPresence",
+  [102] = "Interface\\Icons\\Spell_Nature_StarFall",
+  [103] = "Interface\\Icons\\Ability_Racial_BearForm",
+  [104] = "Interface\\Icons\\Ability_Racial_BearForm",
+  [105] = "Interface\\Icons\\Spell_Nature_HealingTouch",
+  [253] = "Interface\\Icons\\Ability_Hunter_BeastTaming",
+  [254] = "Interface\\Icons\\Ability_Marksmanship",
+  [255] = "Interface\\Icons\\Ability_Hunter_SwiftStrike",
+  [62] = "Interface\\Icons\\Spell_Holy_MagicalSentry",
+  [63] = "Interface\\Icons\\Spell_Fire_FireBolt02",
+  [64] = "Interface\\Icons\\Spell_Frost_FrostBolt02",
+  [65] = "Interface\\Icons\\Spell_Holy_HolyBolt",
+  [66] = "Interface\\Icons\\Spell_Holy_DevotionAura",
+  [70] = "Interface\\Icons\\Spell_Holy_AuraOfLight",
+  [256] = "Interface\\Icons\\Spell_Holy_WordFortitude",
+  [257] = "Interface\\Icons\\Spell_Holy_GuardianSpirit",
+  [258] = "Interface\\Icons\\Spell_Shadow_ShadowWordPain",
+  [259] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+  [260] = "Interface\\Icons\\Ability_BackStab",
+  [261] = "Interface\\Icons\\Ability_Stealth",
+  [262] = "Interface\\Icons\\Spell_Nature_Lightning",
+  [263] = "Interface\\Icons\\Spell_Nature_LightningShield",
+  [264] = "Interface\\Icons\\Spell_Nature_MagicImmunity",
+  [265] = "Interface\\Icons\\Spell_Shadow_DeathCoil",
+  [266] = "Interface\\Icons\\Spell_Shadow_Metamorphosis",
+  [267] = "Interface\\Icons\\Spell_Shadow_RainOfFire",
+  [71] = "Interface\\Icons\\Ability_Rogue_Eviscerate",
+  [72] = "Interface\\Icons\\Ability_Warrior_InnerRage",
+  [73] = "Interface\\Icons\\INV_Shield_06",
+}
+
+Private.specname_to_id = {
+  ["DEATHKNIGHT" .. L["Blood"]] = 250,
+  ["DEATHKNIGHT" .. L["Frost"]] = 251,
+  ["DEATHKNIGHT" .. L["Unholy"]] = 252,
+  ["DRUID" .. L["Balance"]] = 102,
+  ["DRUID" .. L["Feral Combat"]] = 103,
+  ["DRUID" .. L["Guardian"]] = 104,
+  ["DRUID" .. L["Restoration"]] = 105,
+  ["HUNTER" .. L["Beast Mastery"]] = 253,
+  ["HUNTER" .. L["Marksmanship"]] = 254,
+  ["HUNTER" .. L["Survival"]] = 255,
+  ["MAGE" .. L["Arcane"]] = 62,
+  ["MAGE" .. L["Fire"]] = 63,
+  ["MAGE" .. L["Frost"]] = 64,
+  ["PALADIN" .. L["Holy"]] = 65,
+  ["PALADIN" .. L["Protection"]] = 66,
+  ["PALADIN" .. L["Retribution"]] = 70,
+  ["PRIEST" .. L["Discipline"]] = 256,
+  ["PRIEST" .. L["Holy"]] = 257,
+  ["PRIEST" .. L["Shadow"]] = 258,
+  ["ROGUE" .. L["Assassination"]] = 259,
+  ["ROGUE" .. L["Combat"]] = 260,
+  ["ROGUE" .. L["Subtlety"]] = 261,
+  ["SHAMAN" .. L["Elemental"]] = 262,
+  ["SHAMAN" .. L["Enhancement"]] = 263,
+  ["SHAMAN" .. L["Restoration"]] = 264,
+  ["WARLOCK" .. L["Affliction"]] = 265,
+  ["WARLOCK" .. L["Demonology"]] = 266,
+  ["WARLOCK" .. L["Destruction"]] = 267,
+  ["WARRIOR" .. L["Arms"]] = 71,
+  ["WARRIOR" .. L["Fury"]] = 72,
+  ["WARRIOR" .. L["Protection"]] = 73,
+}
+
+Private.specid_to_name = {
+  [250] = "DEATHKNIGHT" .. L["Blood"],
+  [251] = "DEATHKNIGHT" .. L["Frost"],
+  [252] = "DEATHKNIGHT" .. L["Unholy"],
+  [102] = "DRUID" .. L["Balance"],
+  [103] = "DRUID" .. L["Feral Combat"],
+  [104] = "DRUID" .. L["Guardian"],
+  [105] = "DRUID" .. L["Restoration"],
+  [253] = "HUNTER" .. L["Beast Mastery"],
+  [254] = "HUNTER" .. L["Marksmanship"],
+  [255] = "HUNTER" .. L["Survival"],
+  [62] = "MAGE" .. L["Arcane"],
+  [63] = "MAGE" .. L["Fire"],
+  [64] = "MAGE" .. L["Frost"],
+  [65] = "PALADIN" .. L["Holy"],
+  [66] = "PALADIN" .. L["Protection"],
+  [70] = "PALADIN" .. L["Retribution"],
+  [256] = "PRIEST" .. L["Discipline"],
+  [257] = "PRIEST" .. L["Holy"],
+  [258] = "PRIEST" .. L["Shadow"],
+  [259] = "ROGUE" .. L["Assassination"],
+  [260] = "ROGUE" .. L["Combat"],
+  [261] = "ROGUE" .. L["Subtlety"],
+  [262] = "SHAMAN" .. L["Elemental"],
+  [263] = "SHAMAN" .. L["Enhancement"],
+  [264] = "SHAMAN" .. L["Restoration"],
+  [265] = "WARLOCK" .. L["Affliction"],
+  [266] = "WARLOCK" .. L["Demonology"],
+  [267] = "WARLOCK" .. L["Destruction"],
+  [71] = "WARRIOR" .. L["Arms"],
+  [72] = "WARRIOR" .. L["Fury"],
+  [73] = "WARRIOR" .. L["Protection"],
+}
 
 --[=[[ Old unused Talent List
 Private.talents_ids = {

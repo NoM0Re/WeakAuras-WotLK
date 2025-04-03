@@ -2054,6 +2054,51 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  if data.internalVersion < 83.25 then
+  -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
+    local function replaceSpecData(data, field, bt2)
+      if data[field] then
+        if bt2 then
+          for specKey in pairs(data[field]) do
+            if type(specKey) == "string" then
+              data[field] = nil
+              data[bt2] = nil
+            end
+          end
+          return
+        end
+        if data[field].multi then
+          for specKey in pairs(data[field].multi) do
+            if type(specKey) == "string" then
+              data[field] = { multi = {} }
+              data["use_" .. field] = nil
+              return
+            end
+          end
+        end
+        if type(data[field].single) == "string" then
+          data[field] = { multi = {} }
+          data["use_" .. field] = nil
+        end
+      end
+    end
+
+    if data.load then
+      replaceSpecData(data.load, "class_and_spec")
+    end
+    if data.triggers then
+      for _, triggerData in ipairs(data.triggers) do
+        local trigger = triggerData.trigger
+        if trigger and (trigger.event == "Unit Characteristics" or trigger.event == "Power" or
+                        trigger.event == "Health" or trigger.event == "Class/Spec") then
+          replaceSpecData(trigger, "specId")
+        elseif trigger and trigger.type == "aura2" then
+          replaceSpecData(trigger, "actualSpec", "useActualSpec")
+        end
+      end
+    end
+  end
+
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
 end
 

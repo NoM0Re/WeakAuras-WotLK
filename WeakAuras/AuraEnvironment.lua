@@ -455,11 +455,13 @@ local FakeWeakAurasMixin = {
     me = UnitName("player"),
     myGUID = UnitGUID("player"),
     GetData = function(id)
-      local currentId = Private.UIDtoID(current_uid)
-      getDataCallCounts[currentId] = getDataCallCounts[currentId] + 1
-      if getDataCallCounts[currentId] > 99 then
-        Private.AuraWarnings.UpdateWarning(current_uid, "FakeWeakAurasGetData", "warning",
-                  L["This aura calls GetData a lot, which is a slow function."])
+      if current_uid then
+        local currentId = Private.UIDtoID(current_uid)
+        getDataCallCounts[currentId] = getDataCallCounts[currentId] + 1
+        if getDataCallCounts[currentId] > 99 then
+          Private.AuraWarnings.UpdateWarning(current_uid, "FakeWeakAurasGetData", "warning",
+                    L["This aura calls GetData a lot, which is a slow function."])
+        end
       end
       local data = WeakAuras.GetData(id)
       return data and CopyTable(data) or nil

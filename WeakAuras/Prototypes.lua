@@ -575,12 +575,12 @@ function WeakAuras.CheckTalentByIndex(index, extraOption)
   return result;
 end
 
-function WeakAuras.CheckClassSpec(class, test)
-  if type(class) == "string" or type(test) == "string" then
-    local spec = WeakAuras.LGT:GetUnitTalentSpec('player') or ""
-    return (class .. spec) == test
-  end
-  return false
+function WeakAuras.CheckClassSpec(specID)
+  specID = tonumber(specID)
+  if not specID then return end
+  local class = select(2, UnitClass("player")) or ""
+  local currentSpec = WeakAuras.LGT:GetUnitTalentSpec("player") or ""
+  return specID and Private.ExecEnv.GetSpecName(specID) == class .. currentSpec
 end
 
 function WeakAuras.CheckNumericIds(loadids, currentId)
@@ -668,8 +668,23 @@ Private.tinySecondFormat = function(value)
   end
 end
 
-function Private.ExecEnv.GetSpecIcon(classspec)
-  return Private.spec[classspec] or ""
+function Private.ExecEnv.GetSpecIcon(specID)
+  return specID and Private.specid_to_icon[specID] or ""
+end
+
+function Private.ExecEnv.GetSpecName(specID)
+  return specID and Private.specid_to_name[specID] or ""
+end
+
+function Private.ExecEnv.GetSpecID(specName)
+  return specName and Private.specname_to_id[specName] or 0
+end
+
+function WeakAuras.SpecForUnit(unit)
+  if not unit then return 0 end
+  local spec = WeakAuras.LGT:GetUnitTalentSpec(unit)
+  local class = select(2, UnitClass(unit))
+  return (spec and class) and Private.ExecEnv.GetSpecID(class .. spec) or 0
 end
 
 function Private.ExecEnv.ParseStringCheck(input)
@@ -798,12 +813,6 @@ function Private.ExecEnv.CheckCombatLogFlagsObjectType(flags, flagToCheck)
   local bitToCheck = objectTypeToBit[flagToCheck]
   if not bitToCheck then return end
   return bit.band(flags, bitToCheck) ~= 0;
-end
-
-function WeakAuras.SpecForUnit(unit)
-  local spec = WeakAuras.LGT:GetUnitTalentSpec(unit)
-  local class = select(2, UnitClass(unit))
-  return spec and class and (class .. spec)
 end
 
 function WeakAuras.IsSpellKnownForLoad(spell, exact)
@@ -1028,7 +1037,7 @@ Private.load_prototype = {
       display = L["Class and Specialization"],
       type = "multiselect",
       values = "spec_types_all",
-      test = "WeakAuras.CheckClassSpec(class, %s)",
+      test = "WeakAuras.CheckClassSpec(%s)",
       events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
     },
     {
@@ -4839,7 +4848,7 @@ Private.event_prototypes = {
       local class = select(2, UnitClass("player")) or "UNKNOWN"
       return ([[
         local specName = WeakAuras.LGT:GetUnitTalentSpec("player") or "Unknown"
-        local specId = "%s" .. specName
+        local specId = Private.ExecEnv.GetSpecID("%s" .. specName)
         local specIcon = Private.ExecEnv.GetSpecIcon(specId)
       ]]):format(class)
     end,
