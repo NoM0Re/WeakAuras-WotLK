@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: WeakAuras Options
 ## Author: The WeakAuras Team
-## Version: 5.19.5
+## Version: 5.19.6
 ## Notes: Options for WeakAuras
 ## Notes-esES: Opciones para WeakAuras
 ## Notes-esMX: Opciones para WeakAuras
