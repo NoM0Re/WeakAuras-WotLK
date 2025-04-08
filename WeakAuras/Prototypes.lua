@@ -1311,8 +1311,9 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "IsEquippedItem(GetItemInfo(%s) or '')",
-      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
+      test = "IsEquippedItem(%s or '')",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      only_exact = true,
     },
     {
       name = "not_itemequiped",
@@ -1321,8 +1322,9 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "not IsEquippedItem(GetItemInfo(%s) or '')",
-      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
+      test = "not IsEquippedItem(%s or '')",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      only_exact = true,
     },
   }
 };
@@ -5499,6 +5501,9 @@ Private.event_prototypes = {
         if Private.chat_message_leader_event[trigger.messageType] then
           table.insert(events, Private.chat_message_leader_event[trigger.messageType])
         end
+        if trigger.messageType == "CHAT_MSG_EMOTE" then
+          table.insert(events, "CHAT_MSG_TEXT_EMOTE")
+        end
         return { events = events }
       end
       return {
@@ -5543,7 +5548,7 @@ Private.event_prototypes = {
         if (event == 'CHAT_MSG_TEXT_EMOTE') then
           event = 'CHAT_MSG_EMOTE';
         end
-         local use_cloneId = %s;
+        local use_cloneId = %s;
       ]];
       return ret:format(trigger.use_cloneId and "true" or "false");
     end,
@@ -6001,17 +6006,10 @@ Private.event_prototypes = {
         local itemSlot = %s
       ]]
 
-      if trigger.use_exact_itemName then
-        ret = ret ..[[
-          local itemName = triggerItemName
-          local equipped = WeakAuras.CheckForItemEquipped(triggerItemName, itemSlot)
-        ]]
-      else
-        ret = ret ..[[
-          local itemName = GetItemInfo(triggerItemName)
-          local equipped = WeakAuras.CheckForItemEquipped(itemName, itemSlot)
-        ]]
-      end
+      ret = ret ..[[
+        local itemName = triggerItemName
+        local equipped = WeakAuras.CheckForItemEquipped(triggerItemName, itemSlot)
+      ]]
 
       return ret:format(trigger.use_inverse and "true" or "false", itemName, trigger.use_itemSlot and trigger.itemSlot or "nil");
     end,
@@ -6028,7 +6026,7 @@ Private.event_prototypes = {
         type = "item",
         required = true,
         test = "true",
-        showExactOption = true
+        only_exact = true
       },
       --[[
       {

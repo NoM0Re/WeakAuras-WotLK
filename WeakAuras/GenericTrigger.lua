@@ -4383,15 +4383,14 @@ do
   end
 end
 
-WeakAuras.CheckForItemEquipped = function(itemName, specificSlot)
+WeakAuras.CheckForItemEquipped = function(itemId, specificSlot)
   if not specificSlot then
-    return IsEquippedItem(itemName)
+    return IsEquippedItem(itemId)
   end
   local equippedItemID = GetInventoryItemID("player", specificSlot)
-  return itemName and equippedItemID and (
-    (type(itemName) == "number" and itemName == equippedItemID)
-    or itemName == GetItemInfo(equippedItemID)
-  )
+  if equippedItemID then
+    return itemId == equippedItemID
+  end
 end
 
 WeakAuras.GetCritChance = function()
