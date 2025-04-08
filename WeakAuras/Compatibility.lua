@@ -1,8 +1,7 @@
 local ipairs = ipairs
 local pairs = pairs
-local abs, ceil, floor = math.abs, math.ceil, math.floor
+local ceil, floor = math.ceil, math.floor
 
-local GetInstanceInfo = GetInstanceInfo
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 
