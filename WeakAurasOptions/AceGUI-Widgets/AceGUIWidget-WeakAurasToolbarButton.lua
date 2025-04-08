@@ -18,80 +18,88 @@ local PlaySound, CreateFrame, UIParent = PlaySound, CreateFrame, UIParent
 Scripts
 -------------------------------------------------------------------------------]]
 local function Button_OnClick(frame, ...)
-	AceGUI:ClearFocus()
-	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
-	frame.obj:Fire("OnClick", ...)
+  AceGUI:ClearFocus()
+  PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
+  frame.obj:Fire("OnClick", ...)
 end
 
 local function Control_OnEnter(frame)
-	if frame.tooltip then
-		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(frame, "ANCHOR_NONE");
-		GameTooltip:SetPoint("BOTTOM", frame, "TOP", 0, 5);
-		GameTooltip:AddLine(frame.tooltip)
-		GameTooltip:Show()
-	end
-	frame.obj:Fire("OnEnter")
+  if frame.tooltip then
+    GameTooltip:ClearLines()
+    GameTooltip:SetOwner(frame, "ANCHOR_NONE");
+    GameTooltip:SetPoint("BOTTOM", frame, "TOP", 0, 5);
+    GameTooltip:AddLine(frame.tooltip)
+    GameTooltip:Show()
+  end
+  frame.obj:Fire("OnEnter")
 end
 
 local function Control_OnLeave(frame)
-	GameTooltip:Hide()
-	frame.obj:Fire("OnLeave")
+  GameTooltip:Hide()
+  frame.obj:Fire("OnLeave")
 end
 
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
 local methods = {
-	["OnAcquire"] = function(self)
-		-- restore default values
-		self:SetHeight(16)
-		self:SetWidth(16)
-		self:SetDisabled(false)
-		self:SetText()
-		self.hTex:SetVertexColor(1, 1, 1, 0.1)
-	end,
+  ["OnAcquire"] = function(self)
+    -- restore default values
+    self:SetHeight(16)
+    self:SetWidth(16)
+    self:SetDisabled(false)
+    self:SetText()
+    self.hTex:SetVertexColor(1, 1, 1, 0.1)
+    self:SetSmallFont(false)
+  end,
 
-	-- ["OnRelease"] = nil,
+  -- ["OnRelease"] = nil,
 
-	["SetText"] = function(self, text)
-		self.text:SetText(text)
-		if text ~= "" then
-			self:SetWidth(self.text:GetStringWidth() + 28)
-		else
-			self:SetWidth(16)
-		end
-	end,
+  ["SetText"] = function(self, text)
+    self.text:SetText(text)
+    if text ~= "" then
+      self:SetWidth(self.text:GetStringWidth() + 28)
+    else
+      self:SetWidth(16)
+    end
+  end,
 
-	["SetTooltip"] = function(self, text)
-		self.frame.tooltip = text
-	end,
+  ["SetTooltip"] = function(self, text)
+    self.frame.tooltip = text
+  end,
 
-	["SetDisabled"] = function(self, disabled)
-		self.disabled = disabled
-		if disabled then
-			self.frame:Disable()
-		else
-			self.frame:Enable()
-		end
-	end,
+  ["SetDisabled"] = function(self, disabled)
+    self.disabled = disabled
+    if disabled then
+      self.frame:Disable()
+    else
+      self.frame:Enable()
+    end
+  end,
 
-	["SetTexture"] = function(self, path)
-		self.icon:SetTexture(path)
-	end,
-	["LockHighlight"] = function(self)
-		self.frame:LockHighlight()
-	end,
-	["UnlockHighlight"] = function(self)
-		self.frame:UnlockHighlight()
-	end,
-	["SetStrongHighlight"] = function(self, enable)
-		if enable then
-			self.hTex:SetVertexColor(1, 1, 1, 0.3)
-		else
-			self.hTex:SetVertexColor(1, 1, 1, 0.1)
-		end
-	end
+  ["SetTexture"] = function(self, path)
+    self.icon:SetTexture(path)
+  end,
+  ["LockHighlight"] = function(self)
+    self.frame:LockHighlight()
+  end,
+  ["UnlockHighlight"] = function(self)
+    self.frame:UnlockHighlight()
+  end,
+  ["SetStrongHighlight"] = function(self, enable)
+    if enable then
+      self.hTex:SetVertexColor(1, 1, 1, 0.3)
+    else
+      self.hTex:SetVertexColor(1, 1, 1, 0.1)
+    end
+  end,
+  ["SetSmallFont"] = function(self, small)
+    if small then
+      self.text:SetFontObject("GameFontNormalSmall")
+    else
+      self.text:SetFontObject("GameFontNormal")
+    end
+  end
 
 }
 
@@ -99,61 +107,61 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local name = "AceGUI30Button" .. AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Button", name, UIParent)
-	frame:Hide()
+  local name = "AceGUI30Button" .. AceGUI:GetNextWidgetNum(Type)
+  local frame = CreateFrame("Button", name, UIParent)
+  frame:Hide()
 
-	frame:EnableMouse(true)
-	frame:SetScript("OnClick", Button_OnClick)
-	frame:SetScript("OnEnter", Control_OnEnter)
-	frame:SetScript("OnLeave", Control_OnLeave)
-
-
-	local icon = frame:CreateTexture()
-	icon:SetTexture("aaa")
-	icon:SetPoint("TOPLEFT", frame, "TOPLEFT")
-	icon:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
-	icon:SetWidth(16)
-
-	local text = frame:CreateFontString()
-	text:SetFontObject("GameFontNormal")
-	text:ClearAllPoints()
-	text:SetPoint("TOPLEFT", 20, -1)
-	text:SetPoint("BOTTOMRIGHT", -4, 1)
-	text:SetJustifyV("MIDDLE")
-
-	--local nTex = frame:CreateTexture()
-	--nTex:SetTexture("Interface/Buttons/UI-Panel-Button-Up")
-	--nTex:SetTexCoord(0, 0.625, 0, 0.6875)
-	--nTex:SetAllPoints()
-	--frame:SetNormalTexture(nTex)
-
-	local hTex = frame:CreateTexture()
-	hTex:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite")
-	hTex:SetVertexColor(1, 1, 1, 0.1)
-
-	hTex:SetAllPoints()
-	frame:SetHighlightTexture(hTex)
-
-	local pTex = frame:CreateTexture()
-	pTex:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite")
-	pTex:SetVertexColor(1, 1, 1, 0.2)
-	pTex:SetAllPoints()
-	frame:SetPushedTexture(pTex)
+  frame:EnableMouse(true)
+  frame:SetScript("OnClick", Button_OnClick)
+  frame:SetScript("OnEnter", Control_OnEnter)
+  frame:SetScript("OnLeave", Control_OnLeave)
 
 
-	local widget = {
-		text  = text,
-		icon = icon,
-		frame = frame,
-		type  = Type,
-		hTex = hTex
-	}
-	for method, func in pairs(methods) do
-		widget[method] = func
-	end
+  local icon = frame:CreateTexture()
+  icon:SetTexture("aaa")
+  icon:SetPoint("TOPLEFT", frame, "TOPLEFT")
+  icon:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
+  icon:SetWidth(16)
 
-	return AceGUI:RegisterAsWidget(widget)
+  local text = frame:CreateFontString()
+  text:SetFontObject("GameFontNormal")
+  text:ClearAllPoints()
+  text:SetPoint("TOPLEFT", 20, -1)
+  text:SetPoint("BOTTOMRIGHT", -4, 1)
+  text:SetJustifyV("MIDDLE")
+
+  --local nTex = frame:CreateTexture()
+  --nTex:SetTexture("Interface/Buttons/UI-Panel-Button-Up")
+  --nTex:SetTexCoord(0, 0.625, 0, 0.6875)
+  --nTex:SetAllPoints()
+  --frame:SetNormalTexture(nTex)
+
+  local hTex = frame:CreateTexture()
+  hTex:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite")
+  hTex:SetVertexColor(1, 1, 1, 0.1)
+
+  hTex:SetAllPoints()
+  frame:SetHighlightTexture(hTex)
+
+  local pTex = frame:CreateTexture()
+  pTex:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite")
+  pTex:SetVertexColor(1, 1, 1, 0.2)
+  pTex:SetAllPoints()
+  frame:SetPushedTexture(pTex)
+
+
+  local widget = {
+    text  = text,
+    icon = icon,
+    frame = frame,
+    type  = Type,
+    hTex = hTex
+  }
+  for method, func in pairs(methods) do
+    widget[method] = func
+  end
+
+  return AceGUI:RegisterAsWidget(widget)
 end
 
 AceGUI:RegisterWidgetType(Type, Constructor, Version)
