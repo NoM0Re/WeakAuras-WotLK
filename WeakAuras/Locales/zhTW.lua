@@ -1522,4 +1522,3 @@ L["Zone Name"] = "區域名稱"
 L["Zoom"] = "縮放"
 L["Zoom Animation"] = "縮放動畫"
 L["Zul'Gurub"] = "祖爾格拉布"
-

@@ -2612,4 +2612,3 @@ L["Zoom"] = "Zoom"
 L["Zoom Animation"] = "Zoom Animation"
 --[[Translation missing --]]
 L["Zul'Gurub"] = "Zul'Gurub"
-

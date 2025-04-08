@@ -1492,4 +1492,3 @@ L["Zone Name"] = "Nombre de zona"
 L["Zoom"] = "Zoom"
 L["Zoom Animation"] = "Animación de zoom"
 L["Zul'Gurub"] = "Zul'Gurub"
-

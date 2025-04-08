@@ -1543,4 +1543,3 @@ L["Zone Name"] = "地图名称"
 L["Zoom"] = "缩放"
 L["Zoom Animation"] = "缩放动画"
 L["Zul'Gurub"] = "祖尔格拉布"
-

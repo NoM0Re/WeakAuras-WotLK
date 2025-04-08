@@ -1545,7 +1545,6 @@ L["Zoom"] = "Zoom"
 L["Zoom Animation"] = "Zoom Animation"
 L["Zul'Gurub"] = "Zul'Gurub"
 
-
 -- Make missing translations available
 setmetatable(WeakAuras.L, {__index = function(self, key)
   self[key] = (key or "")

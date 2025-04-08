@@ -1548,4 +1548,3 @@ L["Zone Name"] = "지역 이름"
 L["Zoom"] = "확대"
 L["Zoom Animation"] = "확대 애니메이션"
 L["Zul'Gurub"] = "줄구룹"
-
