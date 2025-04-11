@@ -12,5 +12,6 @@
 <Script file="Locales\ruRU.lua"/>
 <Script file="Locales\ptBR.lua"/>
 <Script file="Locales\itIT.lua"/>
+<Script file="Locales\zLocales.lua"/>
 
 </Ui>

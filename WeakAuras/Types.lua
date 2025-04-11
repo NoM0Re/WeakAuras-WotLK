@@ -1664,6 +1664,125 @@ Private.GetDiscoveredCurrenciesHeaders  = function()
   return Private.discovered_currencies_headers
 end
 
+Private.ExecEnv.GetFactionDataByIndex = function(index)
+  local name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(index)
+  return {
+    factionID = name and Private.faction_to_id[name],
+    name = name,
+    description = description,
+    reaction = standingID,
+    currentReactionThreshold = barMin,
+    nextReactionThreshold = barMax,
+    currentStanding = barValue,
+    atWarWith = atWarWith,
+    canToggleAtWar = canToggleAtWar,
+    isChild = isChild,
+    isHeader = isHeader,
+    isHeaderWithRep = hasRep,
+    isCollapsed = isCollapsed,
+    isWatched = isWatched,
+  }
+end
+
+Private.ExecEnv.GetFactionDataByID = function(ID)
+  local factionName = ID and Private.id_to_faction[ID]
+  if factionName then
+    for index = 1, GetNumFactions() do
+      local name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(index)
+      if name == factionName then
+        return {
+          factionID = ID,
+          name = name,
+          description = description,
+          reaction = standingID,
+          currentReactionThreshold = barMin,
+          nextReactionThreshold = barMax,
+          currentStanding = barValue,
+          atWarWith = atWarWith,
+          canToggleAtWar = canToggleAtWar,
+          isChild = isChild,
+          isHeader = isHeader,
+          isHeaderWithRep = hasRep,
+          isCollapsed = isCollapsed,
+          isWatched = isWatched,
+        }
+      end
+    end
+  end
+end
+
+Private.ExecEnv.GetWatchedFactionId = function()
+  local factionName = GetWatchedFactionInfo()
+  local factionID = factionName and Private.faction_to_id[factionName]
+  return factionID
+end
+
+local function InitializeReputations()
+  if Private.reputations then
+    return
+  end
+
+  Private.reputations = {}
+  Private.reputations_sorted = {}
+  Private.reputations_headers = {}
+
+  -- Dynamic expansion of all collapsed headers
+  local collapsed = {}
+  local index = 1
+  while index <= GetNumFactions() do
+    local factionData = Private.ExecEnv.GetFactionDataByIndex(index)
+    if factionData and factionData.isHeader and factionData.isCollapsed then
+      ExpandFactionHeader(index)
+      collapsed[factionData.name] = true
+    end
+    index = index + 1
+  end
+
+  -- Process all faction data
+  for i = 1, GetNumFactions() do
+    local factionData = Private.ExecEnv.GetFactionDataByIndex(i)
+    if factionData then
+      if factionData.currentStanding > 0 or not factionData.isHeader then
+        local factionID = Private.faction_to_id[factionData.name]
+        if factionID then
+          Private.reputations[factionID] = factionData.name
+          Private.reputations_sorted[factionID] = i
+        end
+      else
+        local name = factionData.name
+        if name then
+          Private.reputations[name] = name
+          Private.reputations_sorted[name] = i
+          Private.reputations_headers[name] = true
+        end
+      end
+    end
+  end
+
+  -- Collapse headers back to their original state
+  for i = GetNumFactions(), 1, -1 do
+    local factionData = Private.ExecEnv.GetFactionDataByIndex(i)
+    if factionData and collapsed[factionData.name] then
+      CollapseFactionHeader(i)
+    end
+  end
+end
+
+Private.GetReputations = function()
+  InitializeReputations()
+  return Private.reputations
+end
+
+Private.GetReputationsSorted  = function()
+  InitializeReputations()
+  return Private.reputations_sorted
+end
+
+Private.GetReputationsHeaders  = function()
+  InitializeReputations()
+  return Private.reputations_headers
+end
+
 Private.combatlog_raid_mark_check_type = {
   [0] = RAID_TARGET_NONE,
   "|TInterface\\TARGETINGFRAME\\UI-RaidTargetingIcon_1:14|t " .. RAID_TARGET_1, -- Star
@@ -3462,6 +3581,186 @@ WeakAuras.StopMotion.animation_types = {
   bounce = L["Forward, Reverse Loop"],
   once = L["Forward"],
   progress = L["Progress"]
+}
+
+Private.id_to_faction = {
+  [21] = "Booty Bay",
+  [47] = "Ironforge",
+  [54] = "Gnomeregan",
+  [59] = "Thorium Brotherhood",
+  [67] = "Horde",
+  [68] = "Undercity",
+  [69] = "Darnassus",
+  [70] = "Syndicate",
+  [72] = "Stormwind",
+  [76] = "Orgrimmar",
+  [81] = "Thunder Bluff",
+  [87] = "Bloodsail Buccaneers",
+  [92] = "Gelkis Clan Centaur",
+  [93] = "Magram Clan Centaur",
+  [270] = "Zandalar Tribe",
+  [349] = "Ravenholdt",
+  [369] = "Gadgetzan",
+  [469] = "Alliance",
+  [470] = "Ratchet",
+  [509] = "The League of Arathor",
+  [510] = "The Defilers",
+  [529] = "Argent Dawn",
+  [530] = "Darkspear Trolls",
+  [576] = "Timbermaw Hold",
+  [577] = "Everlook",
+  [589] = "Wintersaber Trainers",
+  [609] = "Cenarion Circle",
+  [729] = "Frostwolf Clan",
+  [730] = "Stormpike Guard",
+  [749] = "Hydraxian Waterlords",
+  [809] = "Shen'dralar",
+  [889] = "Warsong Outriders",
+  [890] = "Silverwing Sentinels",
+  [909] = "Darkmoon Faire",
+  [910] = "Brood of Nozdormu",
+  [911] = "Silvermoon City",
+  [922] = "Tranquillien",
+  [930] = "Exodar",
+  [932] = "The Aldor",
+  [933] = "The Consortium",
+  [934] = "The Scryers",
+  [935] = "The Sha'tar",
+  [941] = "The Mag'har",
+  [942] = "Cenarion Expedition",
+  [946] = "Honor Hold",
+  [947] = "Thrallmar",
+  [967] = "The Violet Eye",
+  [970] = "Sporeggar",
+  [978] = "Kurenai",
+  [989] = "Keepers of Time",
+  [990] = "The Scale of the Sands",
+  [1011] = "Lower City",
+  [1012] = "Ashtongue Deathsworn",
+  [1015] = "Netherwing",
+  [1031] = "Sha'tari Skyguard",
+  [1037] = "Alliance Vanguard",
+  [1038] = "Ogri'la",
+  [1050] = "Valiance Expedition",
+  [1052] = "Horde Expedition",
+  [1064] = "The Taunka",
+  [1067] = "The Hand of Vengeance",
+  [1068] = "Explorers' League",
+  [1073] = "The Kalu'ak",
+  [1077] = "Shattered Sun Offensive",
+  [1085] = "Warsong Offensive",
+  [1090] = "Kirin Tor",
+  [1091] = "The Wyrmrest Accord",
+  [1094] = "The Silver Covenant",
+  [1098] = "Knights of the Ebon Blade",
+  [1104] = "Frenzyheart Tribe",
+  [1105] = "The Oracles",
+  [1106] = "Argent Crusade",
+  [1119] = "The Sons of Hodir",
+  [1124] = "The Sunreavers",
+  [1126] = "The Frostborn",
+  [1133] = "Bilgewater Cartel",
+  [1134] = "Gilneas",
+  [1135] = "The Earthen Ring",
+  [1156] = "The Ashen Verdict",
+  [1158] = "Guardians of Hyjal",
+  [1171] = "Therazane",
+  [1172] = "Dragonmaw Clan",
+  [1173] = "Ramkahen",
+  [1174] = "Wildhammer Clan",
+  [1177] = "Baradin's Wardens",
+  [1178] = "Hellscream's Reach",
+  [10000] = "Winterfin Retreat",
+}
+
+Private.faction_to_id = {
+  ["Booty Bay"] = 21,
+  ["Ironforge"] = 47,
+  ["Gnomeregan"] = 54,
+  ["Thorium Brotherhood"] = 59,
+  ["Horde"] = 67,
+  ["Undercity"] = 68,
+  ["Darnassus"] = 69,
+  ["Syndicate"] = 70,
+  ["Stormwind"] = 72,
+  ["Orgrimmar"] = 76,
+  ["Thunder Bluff"] = 81,
+  ["Bloodsail Buccaneers"] = 87,
+  ["Gelkis Clan Centaur"] = 92,
+  ["Magram Clan Centaur"] = 93,
+  ["Zandalar Tribe"] = 270,
+  ["Ravenholdt"] = 349,
+  ["Gadgetzan"] = 369,
+  ["Alliance"] = 469,
+  ["Ratchet"] = 470,
+  ["The League of Arathor"] = 509,
+  ["The Defilers"] = 510,
+  ["Argent Dawn"] = 529,
+  ["Darkspear Trolls"] = 530,
+  ["Timbermaw Hold"] = 576,
+  ["Everlook"] = 577,
+  ["Wintersaber Trainers"] = 589,
+  ["Cenarion Circle"] = 609,
+  ["Frostwolf Clan"] = 729,
+  ["Stormpike Guard"] = 730,
+  ["Hydraxian Waterlords"] = 749,
+  ["Shen'dralar"] = 809,
+  ["Warsong Outriders"] = 889,
+  ["Silverwing Sentinels"] = 890,
+  ["Darkmoon Faire"] = 909,
+  ["Brood of Nozdormu"] = 910,
+  ["Silvermoon City"] = 911,
+  ["Tranquillien"] = 922,
+  ["Exodar"] = 930,
+  ["The Aldor"] = 932,
+  ["The Consortium"] = 933,
+  ["The Scryers"] = 934,
+  ["The Sha'tar"] = 935,
+  ["The Mag'har"] = 941,
+  ["Cenarion Expedition"] = 942,
+  ["Honor Hold"] = 946,
+  ["Thrallmar"] = 947,
+  ["The Violet Eye"] = 967,
+  ["Sporeggar"] = 970,
+  ["Kurenai"] = 978,
+  ["Keepers of Time"] = 989,
+  ["The Scale of the Sands"] = 990,
+  ["Lower City"] = 1011,
+  ["Ashtongue Deathsworn"] = 1012,
+  ["Netherwing"] = 1015,
+  ["Sha'tari Skyguard"] = 1031,
+  ["Alliance Vanguard"] = 1037,
+  ["Ogri'la"] = 1038,
+  ["Valiance Expedition"] = 1050,
+  ["Horde Expedition"] = 1052,
+  ["The Taunka"] = 1064,
+  ["The Hand of Vengeance"] = 1067,
+  ["Explorers' League"] = 1068,
+  ["The Kalu'ak"] = 1073,
+  ["Shattered Sun Offensive"] = 1077,
+  ["Warsong Offensive"] = 1085,
+  ["Kirin Tor"] = 1090,
+  ["The Wyrmrest Accord"] = 1091,
+  ["The Silver Covenant"] = 1094,
+  ["Knights of the Ebon Blade"] = 1098,
+  ["Frenzyheart Tribe"] = 1104,
+  ["The Oracles"] = 1105,
+  ["Argent Crusade"] = 1106,
+  ["The Sons of Hodir"] = 1119,
+  ["The Sunreavers"] = 1124,
+  ["The Frostborn"] = 1126,
+  ["Bilgewater Cartel"] = 1133,
+  ["Gilneas"] = 1134,
+  ["The Earthen Ring"] = 1135,
+  ["The Ashen Verdict"] = 1156,
+  ["Guardians of Hyjal"] = 1158,
+  ["Therazane"] = 1171,
+  ["Dragonmaw Clan"] = 1172,
+  ["Ramkahen"] = 1173,
+  ["Wildhammer Clan"] = 1174,
+  ["Baradin's Wardens"] = 1177,
+  ["Hellscream's Reach"] = 1178,
+  ["Winterfin Retreat"] = 10000,
 }
 
 do

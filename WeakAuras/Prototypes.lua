@@ -1311,8 +1311,9 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "IsEquippedItem(GetItemInfo(%s) or '')",
-      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
+      test = "IsEquippedItem(%s or '')",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      only_exact = true,
     },
     {
       name = "not_itemequiped",
@@ -1321,8 +1322,9 @@ Private.load_prototype = {
       multiEntry = {
         operator = "or"
       },
-      test = "not IsEquippedItem(GetItemInfo(%s) or '')",
-      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"}
+      test = "not IsEquippedItem(%s or '')",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      only_exact = true,
     },
   }
 };
@@ -1862,6 +1864,175 @@ Private.event_prototypes = {
     },
     automaticrequired = true,
     progressType = "none"
+  },
+  ["Faction Reputation"] = {
+    type = "unit",
+    progressType = "static",
+    events = {
+      ["events"] = {
+        "UPDATE_FACTION",
+      }
+    },
+    internal_events = {"WA_DELAYED_PLAYER_ENTERING_WORLD"},
+    force_events = "UPDATE_FACTION",
+    name = L["Faction Reputation"],
+    statesParameter = "one",
+    automaticrequired = true,
+    init = function(trigger)
+      local ret = [=[
+        local useWatched = %s
+        local factionID = useWatched and Private.ExecEnv.GetWatchedFactionId() or %d
+        local minValue, maxValue, currentValue
+        local factionData = Private.ExecEnv.GetFactionDataByID(factionID)
+        if not factionData then return end;
+
+        local name, description = factionData.name, factionData.description
+        local standingID = factionData.reaction
+        local hasRep = factionData.isHeaderWithRep
+        local barMin, barMax, barValue = factionData.currentReactionThreshold, factionData.nextReactionThreshold, factionData.currentStanding
+        local atWarWith, canToggleAtWar, isHeader, isCollapsed, isWatched, isChild = factionData.atWarWith, factionData. canToggleAtWar, factionData.isHeader, factionData.isCollapsed, factionData.isWatched, factionData.isChild
+        minValue, maxValue, currentValue = barMin, barMax, barValue
+        local standing
+        if tonumber(standingID) then
+           standing = GetText("FACTION_STANDING_LABEL"..standingID, UnitSex("player"))
+        end
+        local isCapped = standingID == 8 and currentValue >= 42999
+      ]=]
+      return ret:format(trigger.use_watched and "true" or "false", tonumber(trigger.factionID or 0) or 0)
+    end,
+    args = {
+      {
+        name = "progressType",
+        hidden = true,
+        init = "'static'",
+        store = true,
+        test = "true"
+      },
+      {
+        name = "watched",
+        display = L["Use Watched Faction"],
+        type = "toggle",
+        test = "true",
+        reloadOptions = true,
+      },
+      {
+        name = "factionID",
+        display = L["Faction"],
+        required = true,
+        type = "select",
+        itemControl = "Dropdown-Currency",
+        values = Private.GetReputations,
+        headers = Private.GetReputationsHeaders,
+        sorted = true,
+        sortOrder = function()
+          local sorted = Private.GetReputationsSorted()
+          local sortOrder = {}
+          for key, value in pairs(Private.GetReputations()) do
+            tinsert(sortOrder, key)
+          end
+          table.sort(sortOrder, function(aKey, bKey)
+            local aValue = sorted[aKey]
+            local bValue = sorted[bKey]
+            return aValue < bValue
+          end)
+          return sortOrder
+        end,
+        conditionType = "select",
+        enable = function(trigger)
+          return not trigger.use_watched
+        end,
+        reloadOptions = true,
+        test = "true",
+      },
+      {
+        name = "name",
+        display = L["Faction Name"],
+        type = "string",
+        store = true,
+        hidden = "true",
+        init = "name",
+        test = "true"
+      },
+      {
+        name = "value",
+        display = L["Reputation"],
+        type = "number",
+        store = true,
+        init = [[currentValue - minValue]],
+        conditionType = "number",
+        progressTotal = "total",
+        multiEntry = {
+          operator = "and",
+          limit = 2
+        },
+      },
+      {
+        name = "total",
+        display = L["Total Reputation"],
+        type = "number",
+        store = true,
+        init = [[maxValue - minValue]],
+        conditionType = "number",
+        noProgressSource = true,
+        multiEntry = {
+          operator = "and",
+          limit = 2
+        },
+      },
+      {
+        name = "percentRep",
+        display = L["Reputation (%)"],
+        type = "number",
+        init = "total ~= 0 and (value / total) * 100 or nil",
+        store = true,
+        conditionType = "number",
+        noProgressSource = true,
+        multiEntry = {
+          operator = "and",
+          limit = 2
+        },
+      },
+      {
+        name = "standing",
+        display = L["Standing"],
+        type = "string",
+        init = "standing",
+        store = true,
+        hidden = "true",
+        test = "true"
+      },
+      {
+        name = "standingId",
+        display = L["Standing"],
+        type = "select",
+        values = function()
+          local ret = {}
+          for i = 1, 8 do
+            ret[i] = GetText("FACTION_STANDING_LABEL"..i, UnitSex("player"))
+          end
+          return ret
+        end,
+        init = "standingID",
+        store = true,
+        conditionType = "select",
+      },
+      {
+        name = "capped",
+        display = L["Capped"],
+        type = "tristate",
+        init = "isCapped",
+        conditionType = "bool",
+        store = true,
+      },
+      {
+        name = "atWar",
+        display = L["At War"],
+        type = "tristate",
+        init = "atWarWith",
+        conditionType = "bool",
+        store = true,
+      },
+    }
   },
   ["Experience"] = {
     type = "unit",
@@ -5499,6 +5670,9 @@ Private.event_prototypes = {
         if Private.chat_message_leader_event[trigger.messageType] then
           table.insert(events, Private.chat_message_leader_event[trigger.messageType])
         end
+        if trigger.messageType == "CHAT_MSG_EMOTE" then
+          table.insert(events, "CHAT_MSG_TEXT_EMOTE")
+        end
         return { events = events }
       end
       return {
@@ -5543,7 +5717,7 @@ Private.event_prototypes = {
         if (event == 'CHAT_MSG_TEXT_EMOTE') then
           event = 'CHAT_MSG_EMOTE';
         end
-         local use_cloneId = %s;
+        local use_cloneId = %s;
       ]];
       return ret:format(trigger.use_cloneId and "true" or "false");
     end,
@@ -6001,17 +6175,10 @@ Private.event_prototypes = {
         local itemSlot = %s
       ]]
 
-      if trigger.use_exact_itemName then
-        ret = ret ..[[
-          local itemName = triggerItemName
-          local equipped = WeakAuras.CheckForItemEquipped(triggerItemName, itemSlot)
-        ]]
-      else
-        ret = ret ..[[
-          local itemName = GetItemInfo(triggerItemName)
-          local equipped = WeakAuras.CheckForItemEquipped(itemName, itemSlot)
-        ]]
-      end
+      ret = ret ..[[
+        local itemName = triggerItemName
+        local equipped = WeakAuras.CheckForItemEquipped(triggerItemName, itemSlot)
+      ]]
 
       return ret:format(trigger.use_inverse and "true" or "false", itemName, trigger.use_itemSlot and trigger.itemSlot or "nil");
     end,
@@ -6028,7 +6195,7 @@ Private.event_prototypes = {
         type = "item",
         required = true,
         test = "true",
-        showExactOption = true
+        only_exact = true
       },
       --[[
       {
