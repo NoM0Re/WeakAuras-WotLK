@@ -1881,7 +1881,7 @@ Private.event_prototypes = {
     init = function(trigger)
       local ret = [=[
         local useWatched = %s
-        local factionID = useWatched and Private.ExecEnv.GetWatchedFactionId() or %q
+        local factionID = useWatched and Private.ExecEnv.GetWatchedFactionId() or %d
         local minValue, maxValue, currentValue
         local factionData = Private.ExecEnv.GetFactionDataByID(factionID)
         if not factionData then return end;
@@ -1890,7 +1890,7 @@ Private.event_prototypes = {
         local standingID = factionData.reaction
         local hasRep = factionData.isHeaderWithRep
         local barMin, barMax, barValue = factionData.currentReactionThreshold, factionData.nextReactionThreshold, factionData.currentStanding
-        local atWarWith, canToggleAtWar, isHeader, isCollapsed, isWatched, isChild, hasBonusRepGain, canSetInactive = factionData.atWarWith, factionData. canToggleAtWar, factionData.isHeader, factionData.isCollapsed, factionData.isWatched, factionData.isChild, factionData.hasBonusRepGain, factionData.canSetInactive
+        local atWarWith, canToggleAtWar, isHeader, isCollapsed, isWatched, isChild = factionData.atWarWith, factionData. canToggleAtWar, factionData.isHeader, factionData.isCollapsed, factionData.isWatched, factionData.isChild
         minValue, maxValue, currentValue = barMin, barMax, barValue
         local standing
         if tonumber(standingID) then
@@ -1898,7 +1898,7 @@ Private.event_prototypes = {
         end
         local isCapped = standingID == 8 and currentValue >= 42999
       ]=]
-      return ret:format(trigger.use_watched and "true" or "false", trigger.factionID or 0)
+      return ret:format(trigger.use_watched and "true" or "false", tonumber(trigger.factionID or 0) or 0)
     end,
     args = {
       {

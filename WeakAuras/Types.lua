@@ -1667,6 +1667,7 @@ end
 Private.ExecEnv.GetFactionDataByIndex = function(index)
   local name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(index)
   return {
+    factionID = name and Private.faction_to_id[name],
     name = name,
     description = description,
     reaction = standingID,
@@ -1684,12 +1685,13 @@ Private.ExecEnv.GetFactionDataByIndex = function(index)
 end
 
 Private.ExecEnv.GetFactionDataByID = function(ID)
-  local factionName = Private.faction_to_id[ID]
+  local factionName = ID and Private.id_to_faction[ID]
   if factionName then
     for index = 1, GetNumFactions() do
       local name, description, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(index)
       if name == factionName then
         return {
+          factionID = ID,
           name = name,
           description = description,
           reaction = standingID,
@@ -1710,7 +1712,9 @@ Private.ExecEnv.GetFactionDataByID = function(ID)
 end
 
 Private.ExecEnv.GetWatchedFactionId = function()
-  return GetWatchedFactionInfo()
+  local factionName = GetWatchedFactionInfo()
+  local factionID = factionName and Private.faction_to_id[factionName]
+  return factionID
 end
 
 local function InitializeReputations()
@@ -1739,17 +1743,18 @@ local function InitializeReputations()
     local factionData = Private.ExecEnv.GetFactionDataByIndex(i)
     if factionData then
       if factionData.currentStanding > 0 or not factionData.isHeader then
-        local factionID = Private.id_to_faction[factionData.name]
-        print(factionID)
+        local factionID = Private.faction_to_id[factionData.name]
         if factionID then
           Private.reputations[factionID] = factionData.name
           Private.reputations_sorted[factionID] = i
         end
       else
         local name = factionData.name
-        Private.reputations[name] = name
-        Private.reputations_sorted[name] = i
-        Private.reputations_headers[name] = true
+        if name then
+          Private.reputations[name] = name
+          Private.reputations_sorted[name] = i
+          Private.reputations_headers[name] = true
+        end
       end
     end
   end
@@ -3578,7 +3583,7 @@ WeakAuras.StopMotion.animation_types = {
   progress = L["Progress"]
 }
 
-Private.faction_to_id = {
+Private.id_to_faction = {
   [21] = "Booty Bay",
   [47] = "Ironforge",
   [54] = "Gnomeregan",
@@ -3668,7 +3673,7 @@ Private.faction_to_id = {
   [10000] = "Winterfin Retreat",
 }
 
-Private.id_to_faction = {
+Private.faction_to_id = {
   ["Booty Bay"] = 21,
   ["Ironforge"] = 47,
   ["Gnomeregan"] = 54,
