@@ -176,7 +176,7 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 디스플레이 지속시간의 비율로 애니메이션 지속시간을 설정합니다, 분수 (1/2), 백분율 (50%), 또는 소수 (0.5)로 표현합니다.
 |cFFFF0000참고:|r 디스플레이가 진행 시간이 없으면 (비-지속적 이벤트 활성 조건, 지속시간이 없는 오라, 등등), 애니메이션은 재생되지 않습니다.
 
-|cFF4444FF예제:|r
+|cFF4444FF예시:|r
 애니메이션의 지속시간을 |cFF00CC0010%|r로 설정하고, 디스플레이의 활성 조건이 20초 지속 강화 효과일 때, 시작 애니메이션은 2초 동안 재생됩니다.
 애니메이션의 지속시간을 |cFF00CC0010%|r로 설정하고, 디스플레이의 활성 조건이 지속시간이 없는 강화 효과일 때, 시작 애니메이션은 재생되지 않습니다 (지속시간을 따로 설정했더라도)."
 ]=]
@@ -232,7 +232,7 @@ Off Screen]=] ] = "위크오라가 화면 밖에 있습니다"
 	L["Changelog"] = "업데이트 정보"
 	L["Chat with WeakAuras experts on our Discord server."] = "우리의 Discord 서버에서 WeakAuras 전문가들과 이야기를 나누어 보세요."
 	L["Check On..."] = "검사 기준..."
-	L["Check out our wiki for a large collection of examples and snippets."] = "방대한 예제와 스니펫 모음을 보려면 위키를 확인하세요."
+	L["Check out our wiki for a large collection of examples and snippets."] = "방대한 사례와 스니펫 모음을 보려면 위키를 확인하세요."
 	L["Children:"] = "자식 위크오라:"
 	L["Choose"] = "선택"
 	L["Circular Texture %s"] = "테두리 텍스처 %s"
@@ -279,25 +279,25 @@ Off Screen]=] ] = "위크오라가 화면 밖에 있습니다"
 	L["Custom Frames"] = "사용자 정의 프레임"
 	L["Custom Options"] = "사용자 정의 옵션"
 	L["Custom Trigger"] = "사용자 정의 활성 조건"
-	L["Custom trigger event tooltip"] = [=[사용자 정의 활성 조건을 확인할 이벤트를 선택하세요. 쉼표나 공백을 사용해 여러 이벤트를 지정할 수 있습니다.
+	L["Custom trigger event tooltip"] = [=[사용자 정의 활성 조건을 확인할 이벤트를 선택하세요. 쉼표나 공백으로 여러 이벤트를 지정할 수 있습니다.
 
-• "UNIT" 이벤트는 콜론을 사용해 등록할 유닛 ID를 정할 수 있습니다. 유닛ID 외에도 
- "nameplate", "group", "raid", "party", "arena", "boss"와 같은 유닛 유형을 사용할 수 있습니다.
-• "CLEU"를 COMBAT_LOG_EVENT_UNFILTERED 대신 사용할 수 있고 받고 싶은 "서브이벤트"를 콜론으로 구분해서 지정할 수 있습니다.
-• "TRIGGER" 키워드에 콜론으로 활성 조건 번호를 나누어 지정하면 해당 활성 조건이 업데이트될 때 본 사용자 정의 활성 조건도 같이 업데이트됩니다.
+• "UNIT" 이벤트는 콜론을 사용해 등록할 유닛 ID를 정할 수 있습니다.
+"nameplate", "group", "raid", "party", "arena", "boss"와 같은 유닛 유형을 유닛ID로 사용할 수 있습니다.
+• "CLEU"를 COMBAT_LOG_EVENT UNFILTERED 대신 사용할 수 있고 받고 싶은 "서브이벤트"를 콜론으로 구분해서 지정할 수 있습니다.
+• "TRIGGER" 키워드에 콜론으로 활성 조건 번호를 나누어 지정하면 해당 활성 조건이 업데이트될 때 사용자 정의 활성 조건도 같이 업데이트됩니다.
 
-|cFF4444FF예제:|r
+|cFF4444FF예시:|r
 UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:SPELL_CAST_SUCCESS TRIGGER:3:1]=]
-	L["Custom trigger status tooltip"] = [=[사용자 정의 활성 조건을 확인할 이벤트를 선택하세요. 쉼표나 공백을 사용해 여러 이벤트를 지정할 수 있습니다.
+	L["Custom trigger status tooltip"] = [=[사용자 정의 활성 조건을 확인할 이벤트를 선택하세요. 쉼표나 공백으로 여러 이벤트를 지정할 수 있습니다.
 
-• "UNIT" 이벤트는 콜론을 사용해 등록할 유닛 ID를 정할 수 있습니다. 유닛ID 외에도 
- "nameplate", "group", "raid", "party", "arena", "boss"와 같은 유닛 유형을 사용할 수 있습니다.
-• "CLEU"를 COMBAT_LOG_EVENT_UNFILTERED 대신 사용할 수 있고 받고 싶은 "서브이벤트"를 콜론으로 구분해서 지정할 수 있습니다.
-• "TRIGGER" 키워드에 콜론으로 활성 조건 번호를 나누어 지정하면 해당 활성 조건이 업데이트될 때 본 사용자 정의 활성 조건도 같이 업데이트됩니다.
+• "UNIT" 이벤트는 콜론을 사용해 등록할 유닛 ID를 정할 수 있습니다.
+"nameplate", "group", "raid", "party", "arena", "boss"와 같은 유닛 유형을 유닛ID로 사용할 수 있습니다.
+• "CLEU"를 COMBAT_LOG_EVENT UNFILTERED 대신 사용할 수 있고 받고 싶은 "서브이벤트"를 콜론으로 구분해서 지정할 수 있습니다.
+• "TRIGGER" 키워드에 콜론으로 활성 조건 번호를 나누어 지정하면 해당 활성 조건이 업데이트될 때 사용자 정의 활성 조건도 같이 업데이트됩니다.
 
 이 활성 조건은 스테이터스 유형이므로 지정한 이벤트에 인자가 없어도 WeakAuras에 의해 호출될 수 있습니다.
 
-|cFF4444FF예제:|r
+|cFF4444FF예시:|r
 UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:SPELL_CAST_SUCCESS TRIGGER:3:1]=]
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "사용자 정의 활성 조건: OPTIONS 이벤트에서 Lua 오류 무시"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "사용자 정의 활성 조건: STATUS 이벤트 대신 가짜 이벤트 보내기"
@@ -316,6 +316,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Determines how many entries can be in the table."] = "테이블에 얼마나 많은 내역이 들어갈 수 있는지 측정합니다."
 	L["Differences"] = "차이점"
 	L["Disallow Entry Reordering"] = "내역 재정렬 거부"
+	L["Discord"] = "Discord"
 	L["Display Name"] = "표시할 이름"
 	L["Display Text"] = "텍스트 표시"
 	L["Displays a text, works best in combination with other displays"] = "텍스트를 표시합니다. 다른 디스플레이와 조합할 때 가장 잘 작동합니다."
@@ -446,7 +447,7 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 입력한 숫자가 5같은 정수일 경우 오라에 걸린 유닛 수랑 입력한 수를 직접 비교합니다.
 입력한 숫자가 0.5같은 소수나 1/2로 분수 또는 50%% 형식으로 백분율이면 %s에서 해당 비율만큼 오라에 걸려야 합니다.
 
-|cFF4444FF예제:|r
+|cFF4444FF예시:|r
 |cFF00CC00> 0|r은 '%s' 종류의 유닛 아무나 오라에 걸리면 작동합니다
 |cFF00CC00= 100%%|r는 '%s' 종류의 유닛이 전부 오라에 걸리면 작동합니다
 |cFF00CC00!= 2|r는 '%s' 종류의 유닛 2개가 오라에 걸렸을 때만 빼고 작동합니다
@@ -526,7 +527,6 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 	L["Is Boss Debuff"] = "보스 디버프"
 	L["Is Stealable"] = "훔치기 가능"
 	L["Is Unit"] = "유닛"
-	L["Join Discord"] = "Discord 입장"
 	L["Justify"] = "정렬"
 	L["Keep Aspect Ratio"] = "종횡비 유지"
 	L["Keep your Wago imports up to date with the Companion App."] = "Companion 앱으로 Wago의 위크오라를 항상 최신으로 유지하세요."
@@ -697,8 +697,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Report bugs on our issue tracker."] = "이슈 트래커에 버그를 제보해 주세요."
 	L["Require unit from trigger"] = "활성 조건에서 유닛 필요"
 	L["Required for Activation"] = "활성화에 필요"
-	L["Requires LibGroupTalents, that is e.g. a up-to date WeakAuras version"] = "LibGroupTalents이 필요합니다. 예를 들면 최신 WeakAuras 버전으로 업데이트하면 됩니다"
-	L["Requires syncing the specialization via LibGroupTalents."] = "LibGroupTalents을 통해 전문화를 동기화해야 합니다."
+	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "LibSpecialization이 필요합니다. 예를 들면 최신 WeakAuras 버전으로 업데이트하면 됩니다"
 	L["Reset all options to their default values."] = "모든 옵션을 기본값으로 재설정하십시오."
 	L["Reset Entry"] = "항목 초기화"
 	L["Reset to Defaults"] = "기본값으로 재설정"

@@ -5,6 +5,7 @@ local locale = GAME_LOCALE or GetLocale()
 -- This File adds Custom Localization for
 -- Specializations and Time formats
 if (locale == "enUS" or locale == "enGB") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
   L["Arms"] = "Arms"
@@ -62,6 +63,8 @@ if (locale == "enUS" or locale == "enGB") then
 
 
 elseif (locale == "deDE") then
+   --[[Translation missing --]]
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Gebrechen"
   L["Arcane"] = "Arkan"
   L["Arms"] = "Waffen"
@@ -119,6 +122,7 @@ elseif (locale == "deDE") then
 
 
 elseif (locale == "esES") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
   L["Arcane"] = "Arcano"
   L["Arms"] = "Armas"
@@ -176,6 +180,7 @@ elseif (locale == "esES") then
 
 
 elseif (locale == "esMX") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
   L["Arcane"] = "Arcano"
   L["Arms"] = "Armas"
@@ -233,6 +238,8 @@ elseif (locale == "esMX") then
 
 
 elseif (locale == "frFR") then
+   --[[Translation missing --]]
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
   L["Arms"] = "Armes"
@@ -290,6 +297,8 @@ elseif (locale == "frFR") then
 
 
 elseif (locale == "itIT") then
+   --[[Translation missing --]]
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
   L["Arms"] = "Arms"
@@ -347,6 +356,7 @@ elseif (locale == "itIT") then
 
 
 elseif (locale == "koKR") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "LibGroupTalents을 통해 전문화를 동기화해야 합니다."
   L["Affliction"] = "고통"
   L["Arcane"] = "비전"
   L["Arms"] = "무기"
@@ -404,6 +414,8 @@ elseif (locale == "koKR") then
 
 
 elseif (locale == "ptBR") then
+   --[[Translation missing --]]
+  L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
   L["Arms"] = "Arms"
@@ -461,6 +473,7 @@ elseif (locale == "ptBR") then
 
 
 elseif (locale == "ruRU") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "Требуется синхронизация специализации через LibGroupTalents."
   L["Affliction"] = "Колдовство"
   L["Arcane"] = "Тайная магия"
   L["Arms"] = "Оружие"
@@ -518,6 +531,7 @@ elseif (locale == "ruRU") then
 
 
 elseif (locale == "zhCN") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "需要通过LibGroupTalents同步专精。"
   L["Affliction"] = "痛苦"
   L["Arcane"] = "奥术"
   L["Arms"] = "武器"
@@ -575,6 +589,7 @@ elseif (locale == "zhCN") then
 
 
 elseif (locale == "zhTW") then
+  L["Requires syncing the specialization via LibGroupTalents."] = "需要透由LibGroupTalents同步專精。"
   L["Affliction"] = "痛苦"
   L["Arcane"] = "秘法"
   L["Arms"] = "武器"
