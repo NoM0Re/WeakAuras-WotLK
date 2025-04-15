@@ -1881,7 +1881,7 @@ Private.event_prototypes = {
     init = function(trigger)
       local ret = [=[
         local useWatched = %s
-        local factionID = useWatched and Private.ExecEnv.GetWatchedFactionId() or %d
+        local factionID = useWatched and Private.ExecEnv.GetWatchedFactionId() or %q
         local minValue, maxValue, currentValue
         local factionData = Private.ExecEnv.GetFactionDataByID(factionID)
         if not factionData then return end;
@@ -1898,7 +1898,7 @@ Private.event_prototypes = {
         end
         local isCapped = standingID == 8 and currentValue >= 42999
       ]=]
-      return ret:format(trigger.use_watched and "true" or "false", tonumber(trigger.factionID or 0) or 0)
+      return ret:format(trigger.use_watched and "true" or "false", trigger.factionID or 0)
     end,
     args = {
       {

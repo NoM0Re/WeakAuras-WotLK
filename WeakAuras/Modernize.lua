@@ -975,6 +975,7 @@ function Private.Modernize(data, oldSnapshot)
       ["Conditions"] = "unit",
       ["Spell Known"] = "spell",
       ["Cooldown Ready (Item)"] = "item",
+      ["Faction Reputation"] = "unit",
       ["Pet Behavior"] = "unit",
       ["Range Check"] = "unit",
       ["Character Stats"] = "unit",
@@ -1838,6 +1839,11 @@ function Private.Modernize(data, oldSnapshot)
         "percenthealth",
         "deficit",
         "maxhealth",
+      },
+      ["Faction Reputation"] = {
+        "value",
+        "total",
+        "percentRep",
       },
       ["Location"] = {
         "zone",
