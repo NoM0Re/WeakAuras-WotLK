@@ -663,12 +663,12 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       else
         ok, returnValue = pcall(data.triggerFunc, allStates, event, arg1, arg2, ...);
       end
-      if (ok and (returnValue or (returnValue ~= false and allStates.__changed))) then
+      if (ok and (returnValue or (returnValue ~= false and allStates:IsChanged()))) then
         updateTriggerState = true;
       elseif not ok then
         errorHandler(returnValue)
       end
-      allStates.__changed = nil
+      allStates:SetChanged()
       for key, state in pairs(allStates) do
         if (type(state) ~= "table") then
           errorHandler(string.format(L["All States table contains a non table at key: '%s'."], key))
@@ -683,7 +683,7 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       else
         ok, returnValue = pcall(data.triggerFunc, allStates, event, arg1, arg2, ...);
       end
-      if (ok and returnValue) or optionsEvent then
+      if( (ok and returnValue) or optionsEvent) then
         for id, state in pairs(allStates) do
           if (state.changed) then
             if (Private.ActivateEvent(id, triggernum, data, state)) then
@@ -773,7 +773,7 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       if (data.statesParameter == "all") then
         if data.untriggerFunc then
           local ok, returnValue = pcall(data.untriggerFunc, allStates, event, arg1, arg2, ...);
-          if (ok and returnValue) or optionsEvent then
+          if ok and returnValue then
             for id, state in pairs(allStates) do
               if (state.changed) then
                 if (Private.EndEvent(state)) then
