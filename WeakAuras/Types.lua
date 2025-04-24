@@ -2657,7 +2657,7 @@ Private.creature_type_types = {
   [15] = L["Aberration"],
 }
 
-Private.creature_type_name_to_id = {
+Private.ExecEnv.creature_type_name_to_id = {
   [L["Beast"]] = 1,
   [L["Dragonkin"]] = 2,
   [L["Demon"]] = 3,
@@ -2719,7 +2719,7 @@ Private.creature_family_types = {
   [302] = L["Incubus"],
 }
 
-Private.creature_family_name_to_id = {
+Private.ExecEnv.creature_family_name_to_id = {
   [L["Wolf"]] = 1,
   [L["Cat"]] = 2,
   [L["Spider"]] = 3,
