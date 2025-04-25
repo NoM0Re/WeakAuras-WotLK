@@ -8144,6 +8144,8 @@ Private.event_prototypes = {
     force_events = "CURRENCY_DISPLAY_UPDATE",
     name = WeakAuras.newFeatureString..L["Currency"],
     init = function(trigger)
+      if type(trigger.value) ~= "string" then trigger.value = "" end
+      if type(trigger.value_operator) ~= "string" then trigger.value_operator = "" end
       local ret = [=[
           local currencyID = %d
           local discoveredTbl = Private.ExecEnv.GetDiscoveredCurrencies() or {}

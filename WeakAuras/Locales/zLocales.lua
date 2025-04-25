@@ -3,7 +3,7 @@ local L = WeakAuras.L
 local locale = GAME_LOCALE or GetLocale()
 
 -- This File adds Custom Localization for
--- Specializations Reputation and Time formats
+-- Specializations, Reputation, Creature Types, Creature Families, and Time Formats
 if (locale == "enUS" or locale == "enGB") then
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
   L["Affliction"] = "Affliction"
