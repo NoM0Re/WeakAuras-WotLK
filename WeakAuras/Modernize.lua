@@ -2062,7 +2062,7 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 83.25 then
-  -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
+    -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
     local function replaceSpecData(data, field, bt2)
       if data[field] then
         if bt2 then
@@ -2101,6 +2101,51 @@ function Private.Modernize(data, oldSnapshot)
           replaceSpecData(trigger, "specId")
         elseif trigger and trigger.type == "aura2" then
           replaceSpecData(trigger, "actualSpec", "useActualSpec")
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 84 then
+    if data.triggers then
+      for _, triggerData in ipairs(data.triggers) do
+        local trigger = triggerData.trigger
+        if trigger and trigger.type == "addons" then
+          if trigger.event == "Boss Mod Timer" or trigger.event == "BigWigs Timer" or trigger.event == "DBM Timer" then
+            -- if trigger don't filter bars, show only those active in the addon config for triggers made before this option was added
+            -- show disabled bars when looking for specific ids/name
+            if not (trigger.use_message or trigger.use_spellId) then
+              trigger.use_isBarEnabled = true
+            end
+          end
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 85 then
+    if data.triggers then
+      local eventTypes = {
+        ["Unit Characteristics"] = true,
+        ["Health"] = true,
+        ["Power"] = true,
+        ["Alternate Power"] = true,
+        ["Cast"] = true
+      }
+      for _, triggerData in ipairs(data.triggers) do
+        local trigger = triggerData.trigger
+        if trigger and trigger.type == "unit" then
+          if eventTypes[trigger.event] then
+            local rt = trigger.raidMarkIndex
+            if type(rt) == "number" then
+              trigger.raidMarkIndex = {
+                single = rt
+              }
+            end
+            if trigger.use_raidMarkIndex == false then
+              trigger.use_raidMarkIndex = nil
+            end
+          end
         end
       end
     end
