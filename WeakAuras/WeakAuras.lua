@@ -871,15 +871,15 @@ local function LoadCustomActionFunctions(data)
   if (data.actions) then
     if data.actions.init then
       if data.actions.init.do_custom and data.actions.init.custom then
-        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.custom).."\n end", data.id);
+        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.custom).."\n end");
         Private.customActionsFunctions[id]["init"] = func
       end
       if data.actions.init.do_custom_load and data.actions.init.customOnLoad then
-        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.customOnLoad).."\n end", data.id);
+        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.customOnLoad).."\n end");
         Private.customActionsFunctions[id]["load"] = func
       end
       if data.actions.init.do_custom_unload and data.actions.init.customOnUnload then
-        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.customOnUnload).."\n end", data.id);
+        local func = WeakAuras.LoadFunction("return function() "..(data.actions.init.customOnUnload).."\n end");
         Private.customActionsFunctions[id]["unload"] = func
       end
     end
