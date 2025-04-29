@@ -2205,7 +2205,6 @@ end
 --- Removes all data for an aura id
 --- @param id number
 function BuffTrigger.Delete(id)
-  BuffTrigger.UnloadDisplays({[id] = true})
   triggerInfos[id] = nil
 end
 
