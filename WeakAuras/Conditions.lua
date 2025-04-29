@@ -290,7 +290,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
       end
     elseif (cType == "customcheck") then
       if value then
-        local customCheck = WeakAuras.LoadFunction("return " .. value)
+        local customCheck = WeakAuras.LoadFunction("return " .. value, data.id)
         if customCheck then
           Private.ExecEnv.conditionHelpers[uid] = Private.ExecEnv.conditionHelpers[uid] or {}
           Private.ExecEnv.conditionHelpers[uid].customTestFunctions
@@ -376,7 +376,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
         fn = fn:format(input.op_range, input.range, op, value)
       end
       if fn then
-        local customCheck = WeakAuras.LoadFunction(fn)
+        local customCheck = WeakAuras.LoadFunction(fn, data.id)
         if customCheck then
           Private.ExecEnv.conditionHelpers[uid] = Private.ExecEnv.conditionHelpers[uid] or {}
           Private.ExecEnv.conditionHelpers[uid].customTestFunctions
@@ -652,7 +652,7 @@ function Private.LoadConditionPropertyFunctions(data)
             else
               prefix, suffix = "return function()", "\nend";
             end
-            local customFunc = WeakAuras.LoadFunction(prefix .. custom .. suffix);
+            local customFunc = WeakAuras.LoadFunction(prefix .. custom .. suffix, data.id);
             if (customFunc) then
               Private.ExecEnv.customConditionsFunctions[id][conditionNumber] = Private.ExecEnv.customConditionsFunctions[id][conditionNumber] or {};
               Private.ExecEnv.customConditionsFunctions[id][conditionNumber].changes = Private.ExecEnv.customConditionsFunctions[id][conditionNumber].changes or {};
@@ -833,7 +833,7 @@ function Private.LoadConditionFunction(data)
   CancelTimers(data.uid)
 
   local checkConditionsFuncStr = ConstructConditionFunction(data);
-  local checkConditionsFunc = checkConditionsFuncStr and Private.LoadFunction(checkConditionsFuncStr)
+  local checkConditionsFunc = checkConditionsFuncStr and Private.LoadFunction(checkConditionsFuncStr, data.id)
 
   checkConditions[data.uid] = checkConditionsFunc;
 end
