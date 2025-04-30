@@ -3143,6 +3143,8 @@ local function actionGlowStop(actions, frame, id)
     LCG.PixelGlow_Stop(frame.__WAGlowFrame, id)
   elseif actions.glow_type == "ACShine" then
     LCG.AutoCastGlow_Stop(frame.__WAGlowFrame, id)
+  elseif actions.glow_type == "Proc" then
+    LCG.ProcGlow_Stop(frame.__WAGlowFrame, id)
   end
 end
 
@@ -3184,6 +3186,15 @@ local function actionGlowStart(actions, frame, id)
       actions.glow_YOffset,
       id
     )
+  elseif actions.glow_type == "Proc" then
+    LCG.ProcGlow_Start(glow_frame, {
+      color = color,
+      startAnim = actions.glow_startAnim and true or false,
+      xOffset = actions.glow_XOffset,
+      yOffset = actions.glow_YOffset,
+      duration = actions.glow_duration or 1,
+      key = id
+  })
   end
 end
 

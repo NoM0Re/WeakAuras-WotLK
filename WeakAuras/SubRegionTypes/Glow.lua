@@ -15,6 +15,7 @@ local default = function(parentType)
     glowType = "buttonOverlay",
     glowLines = 8,
     glowFrequency = 0.25,
+    glowDuration = 1,
     glowLength = 10,
     glowThickness = 1,
     glowScale = 1,
@@ -70,6 +71,15 @@ local properties = {
     bigStep = 0.1,
     default = 0.25
   },
+  glowDuration = {
+    display = L["Duration"],
+    setter = "SetGlowDuration",
+    type = "number",
+    softMin = 0.01,
+    softMax = 3,
+    bigStep = 0.1,
+    default = 1
+  },
   glowLength = {
     display = L["Length"],
     setter = "SetGlowLength",
@@ -121,6 +131,11 @@ local properties = {
     bigStep = 1,
     default = 0
   },
+  glowStartAnim = {
+    display = L["Start Animation"],
+    setter = "SetGlowStartAnim",
+    type = "bool",
+  },
 }
 
 local function glowStart(self, frame, color)
@@ -158,6 +173,15 @@ local function glowStart(self, frame, color)
       nil,
       0
     )
+  elseif self.glowType == "Proc" then
+    self.glowStart(frame, {
+      color = color,
+      startAnim = self.glowStartAnim and true or false,
+      duration = self.glowDuration,
+      xOffset = self.glowXOffset,
+      yOffset = self.glowYOffset,
+      frameLevel = 0
+    })
   end
 end
 
@@ -216,6 +240,15 @@ local funcs = {
       if self.parentRegionType ~= "aurabar" then
         self.parent:AnchorSubRegion(self, "area")
       end
+    elseif newType == "Proc" then
+      self.glowStart = LCG.ProcGlow_Start
+      self.glowStop = LCG.ProcGlow_Stop
+      if self.parentRegionType ~= "aurabar" then
+        self.parent:AnchorSubRegion(self, "area", "region")
+      end
+    else -- noop function in case of unsupported glow
+      self.glowStart = function() end
+      self.glowStop = function() end
     end
     self.glowType = newType
     if isGlowing then
@@ -249,6 +282,12 @@ local funcs = {
       self:SetVisible(true)
     end
   end,
+  SetGlowDuration = function(self, duration)
+    self.glowDuration = duration
+    if self.glow then
+      self:SetVisible(true)
+    end
+  end,
   SetGlowLength = function(self, length)
     self.glowLength = length
     if self.glow then
@@ -269,6 +308,12 @@ local funcs = {
   end,
   SetGlowBorder = function(self, border)
     self.glowBorder = border
+    if self.glow then
+      self:SetVisible(true)
+    end
+  end,
+  SetGlowStartAnim = function(self, enable)
+    self.glowStartAnim = enable
     if self.glow then
       self:SetVisible(true)
     end
@@ -308,6 +353,9 @@ end
 
 local function onRelease(subRegion)
   subRegion.glowType = nil
+  if subRegion.glow then
+    subRegion:SetVisible(false)
+  end
   subRegion:Hide()
   subRegion:ClearAllPoints()
   subRegion:SetParent(UIParent)
@@ -329,6 +377,8 @@ local function modify(parent, region, parentData, data, first)
   region.glowBorder = data.glowBorder
   region.glowXOffset = data.glowXOffset
   region.glowYOffset = data.glowYOffset
+  region.glowStartAnim = data.glowStartAnim
+  region.glowDuration = data.glowDuration
 
   region:SetGlowType(data.glowType)
   region:SetVisible(data.glow)
@@ -355,6 +405,7 @@ function Private.getDefaultGlow(regionType)
       glowType = "Pixel",
       glowLines = 8,
       glowFrequency = 0.25,
+      glowDuration = 1,
       glowLength = 10,
       glowThickness = 1,
       glowScale = 1,
@@ -372,6 +423,7 @@ function Private.getDefaultGlow(regionType)
       glowType = "buttonOverlay",
       glowLines = 8,
       glowFrequency = 0.25,
+      glowDuration = 1,
       glowLength = 10,
       glowThickness = 1,
       glowScale = 1,
