@@ -815,52 +815,44 @@ lib.stopList["Action Button Glow"] = lib.ButtonGlow_Stop
 
 
 -- ProcGlow
-local function SetTile(texture, frame, rows, columns, frameScaleW, frameScaleH)
+
+local ProcGlowBaseTexCoords = {
+  ["Loop"] = {0.412598, 0.575195, 0.000976562, 0.391602},
+  ["Start"] = {0.000488281, 0.411621, 0.000976562, 0.987305},
+}
+
+local function SetTile(texture, frame, rows, columns, frameScaleW, frameScaleH, key)
   frame = frame - 1
   local row = math.floor(frame / columns)
   local column = frame % columns
 
-  local deltaX = frameScaleW / columns
-  local deltaY = frameScaleH / rows
+  local BaseTexCoord = ProcGlowBaseTexCoords[key]
 
-  local left = deltaX * column
+  local leftStart, rightEnd, topStart, bottomEnd = BaseTexCoord[1], BaseTexCoord[2], BaseTexCoord[3], BaseTexCoord[4]
+
+  local fullWidth = rightEnd - leftStart
+  local fullHeight = bottomEnd - topStart
+
+  local baseDeltaX = fullWidth / columns
+  local baseDeltaY = fullHeight / rows
+
+  local deltaX = baseDeltaX * frameScaleW
+  local deltaY = baseDeltaY * frameScaleH
+
+  local left = leftStart + baseDeltaX * column + (baseDeltaX - deltaX) / 2
   local right = left + deltaX
 
-  local top = deltaY * row
+  local top = topStart + baseDeltaY * row + (baseDeltaY - deltaY) / 2
   local bottom = top + deltaY
-  pcall(function() texture:SetTexCoord(left, right, top, bottom) end)
+
+  pcall(function()
+    texture:SetTexCoord(left, right, top, bottom)
+  end)
 end
 
-local StartFlipbook
-function FlipbookAnimation_OnUpdate(self, elapsed)
-  local data = self.flipbookData
-  if not data then return end
-
-  if data.animElapsed then
-    data.animElapsed = data.animElapsed + elapsed
-    if data.animElapsed >= 0.7 then
-      if self:IsShown() then
-        StartFlipbook(self, self.ProcLoop, 6, 5, 30, (data.animOptions and 30 / data.animOptions or 30))
-      end
-      data.animElapsed = nil
-      data.animOptions = nil
-    end
-  end
-  data.elapsedTime = data.elapsedTime + elapsed
-  local frameDuration = 1 / data.frameRate
-
-  if data.elapsedTime >= frameDuration then
-    data.elapsedTime = data.elapsedTime - frameDuration
-    data.currentFrame = data.currentFrame + 1
-    if data.currentFrame > data.totalFrames then
-      data.currentFrame = 1
-    end
-    SetTile(data.texture, data.currentFrame, data.rows, data.columns, 1, 1)
-  end
-end
-
-local function StartFlipbook(f, texture, rows, columns, totalFrames, frameRate, startAnim, startOptionsDur)
+local function StartFlipbook(f, texture, rows, columns, totalFrames, frameRate, startAnim, startOptionsDur, key)
   f.flipbookData = {
+    key = key,
     texture = texture,
     rows = rows,
     columns = columns,
@@ -883,6 +875,33 @@ local function StopFlipbook(f)
   f.flipbookData = nil
 end
 
+function FlipbookAnimation_OnUpdate(self, elapsed)
+  local data = self.flipbookData
+  if not data then return end
+
+  if data.animElapsed then
+    data.animElapsed = data.animElapsed + elapsed
+    if data.animElapsed >= 0.7 then
+      if self:IsShown() then
+        StartFlipbook(self, self.ProcLoop, 6, 5, 30, ((data.animOptions and (30 / data.animOptions)) or 30), nil, nil, "Loop")
+      end
+      data.animElapsed = nil
+      data.animOptions = nil
+    end
+  end
+  data.elapsedTime = data.elapsedTime + elapsed
+  local frameDuration = 1 / data.frameRate
+
+  if data.elapsedTime >= frameDuration then
+    data.elapsedTime = data.elapsedTime - frameDuration
+    data.currentFrame = data.currentFrame + 1
+    if data.currentFrame > data.totalFrames then
+      data.currentFrame = 1
+    end
+    SetTile(data.texture, data.currentFrame, data.rows, data.columns, 1, 1, data.key)
+  end
+end
+
 local function ProcGlowResetter(framePool, frame)
   frame:Hide()
   frame:ClearAllPoints()
@@ -902,7 +921,7 @@ local function InitProcGlow(f)
   -- Start-Flipbook
   f.ProcStart = f:CreateTexture(nil, "ARTWORK")
   f.ProcStart:SetBlendMode("ADD")
-  f.ProcStart:SetTexture("UI-HUD-ActionBar-Proc-Start-Flipbook")
+  f.ProcStart:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
   f.ProcStart:SetAlpha(1)
   f.ProcStart:SetSize(150, 150)
   f.ProcStart:SetPoint("CENTER")
@@ -910,7 +929,7 @@ local function InitProcGlow(f)
 
   -- Loop-Flipbook
   f.ProcLoop = f:CreateTexture(nil, "ARTWORK")
-  f.ProcLoop:SetTexture("UI-HUD-ActionBar-Proc-Loop-Flipbook")
+  f.ProcLoop:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
   f.ProcLoop:SetAlpha(1)
   f.ProcLoop:SetAllPoints()
   f.ProcLoop:Hide()
@@ -928,21 +947,17 @@ local function SetupProcGlow(f, options)
     if self.startAnim then
       local width, height = self:GetSize()
       self.ProcStart:SetSize((width / 42 * 150) / 1.4, (height / 42 * 150) / 1.4)
-      StartFlipbook(self, self.ProcStart, 6, 5, 30, 30, 0, options.duration)
+      StartFlipbook(self, self.ProcStart, 6, 5, 30, 30, 0, options.duration, "Start")
     else
-      StartFlipbook(self, self.ProcLoop, 6, 5, 30, 30 / options.duration)
+      StartFlipbook(self, self.ProcLoop, 6, 5, 30, 30 / options.duration, nil, nil, "Loop")
     end
   end)
 
   if not options.color then
-    f.ProcStart:SetDesaturated(nil)
     f.ProcStart:SetVertexColor(1, 1, 1, 1)
-    f.ProcLoop:SetDesaturated(nil)
     f.ProcLoop:SetVertexColor(1, 1, 1, 1)
   else
-    f.ProcStart:SetDesaturated(1)
     f.ProcStart:SetVertexColor(unpack(options.color))
-    f.ProcLoop:SetDesaturated(1)
     f.ProcLoop:SetVertexColor(unpack(options.color))
   end
 
@@ -950,13 +965,13 @@ local function SetupProcGlow(f, options)
 end
 
 local ProcGlowDefaults = {
-    frameLevel = 8,
-    color = nil,
-    startAnim = true,
-    xOffset = 0,
-    yOffset = 0,
-    duration = 1,
-    key = ""
+  frameLevel = 8,
+  color = nil,
+  startAnim = true,
+  xOffset = 0,
+  yOffset = 0,
+  duration = 1,
+  key = ""
 }
 
 function lib.ProcGlow_Start(r, options)
