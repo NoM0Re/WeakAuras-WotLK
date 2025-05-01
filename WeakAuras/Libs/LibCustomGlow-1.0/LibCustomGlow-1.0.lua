@@ -850,32 +850,10 @@ local function SetTile(texture, frame, rows, columns, frameScaleW, frameScaleH, 
   end)
 end
 
-local function StartFlipbook(f, texture, rows, columns, totalFrames, frameRate, startAnim, startOptionsDur, key)
-  f.flipbookData = {
-    key = key,
-    texture = texture,
-    rows = rows,
-    columns = columns,
-    totalFrames = totalFrames,
-    frameRate = frameRate,
-    currentFrame = 1,
-    elapsedTime = 0,
-    animElapsed = startAnim,
-    animOptions = startOptionsDur,
-  }
-  texture:Show()
-  f:SetScript("OnUpdate", FlipbookAnimation_OnUpdate)
-end
+local StartFlipbook
+local FlipbookAnimation_OnUpdate
 
-local function StopFlipbook(f)
-  f:SetScript("OnUpdate", nil)
-  if f.flipbookData and f.flipbookData.texture then
-    f.flipbookData.texture:Hide()
-  end
-  f.flipbookData = nil
-end
-
-function FlipbookAnimation_OnUpdate(self, elapsed)
+FlipbookAnimation_OnUpdate = function(self, elapsed)
   local data = self.flipbookData
   if not data then return end
 
@@ -902,6 +880,32 @@ function FlipbookAnimation_OnUpdate(self, elapsed)
   end
 end
 
+local function StopFlipbook(f)
+  f:SetScript("OnUpdate", nil)
+  if f.flipbookData and f.flipbookData.texture then
+    f.flipbookData.texture:Hide()
+  end
+  f.flipbookData = nil
+end
+
+StartFlipbook = function(f, texture, rows, columns, totalFrames, frameRate, startAnim, startOptionsDur, key)
+  StopFlipbook(f)
+  f.flipbookData = {
+    key = key,
+    texture = texture,
+    rows = rows,
+    columns = columns,
+    totalFrames = totalFrames,
+    frameRate = frameRate,
+    currentFrame = 1,
+    elapsedTime = 0,
+    animElapsed = startAnim,
+    animOptions = startOptionsDur,
+  }
+  texture:Show()
+  f:SetScript("OnUpdate", FlipbookAnimation_OnUpdate)
+end
+
 local function ProcGlowResetter(framePool, frame)
   frame:Hide()
   frame:ClearAllPoints()
@@ -909,8 +913,8 @@ local function ProcGlowResetter(framePool, frame)
   frame:SetScript("OnHide", nil)
   frame:SetScript("OnUpdate", nil)
   local parent = frame:GetParent()
-  if frame.key and parent[frame.key] then
-    parent[frame.key] = nil
+  if frame.name and parent[frame.name] then
+    parent[frame.name] = nil
   end
 end
 
@@ -922,6 +926,7 @@ local function InitProcGlow(f)
   f.ProcStart = f:CreateTexture(nil, "ARTWORK")
   f.ProcStart:SetBlendMode("ADD")
   f.ProcStart:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcStart:SetTexCoord(0.0827148248, 0.1649413686, 0.000976562, 0.165364635) -- First Frame
   f.ProcStart:SetAlpha(1)
   f.ProcStart:SetSize(150, 150)
   f.ProcStart:SetPoint("CENTER")
@@ -930,13 +935,14 @@ local function InitProcGlow(f)
   -- Loop-Flipbook
   f.ProcLoop = f:CreateTexture(nil, "ARTWORK")
   f.ProcLoop:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcLoop:SetTexCoord(0.412598, 0.4451174, 0.000976562, 0.066080801666667) -- First Frame
   f.ProcLoop:SetAlpha(1)
   f.ProcLoop:SetAllPoints()
   f.ProcLoop:Hide()
 end
 
 local function SetupProcGlow(f, options)
-  f.key = "_ProcGlow" .. options.key
+  f.name = "_ProcGlow" .. options.key
 
   f:SetScript("OnHide", function(self)
     StopFlipbook(self)
@@ -949,17 +955,13 @@ local function SetupProcGlow(f, options)
       self.ProcStart:SetSize((width / 42 * 150) / 1.4, (height / 42 * 150) / 1.4)
       StartFlipbook(self, self.ProcStart, 6, 5, 30, 30, 0, options.duration, "Start")
     else
-      StartFlipbook(self, self.ProcLoop, 6, 5, 30, 30 / options.duration, nil, nil, "Loop")
+      StartFlipbook(self, self.ProcLoop , 6, 5, 30, (30 / options.duration), nil, nil, "Loop")
     end
   end)
 
-  if not options.color then
-    f.ProcStart:SetVertexColor(1, 1, 1, 1)
-    f.ProcLoop:SetVertexColor(1, 1, 1, 1)
-  else
-    f.ProcStart:SetVertexColor(unpack(options.color))
-    f.ProcLoop:SetVertexColor(unpack(options.color))
-  end
+  local color = options.color or {1, 1, 1, 1}
+  f.ProcStart:SetVertexColor(unpack(color))
+  f.ProcLoop:SetVertexColor(unpack(color))
 
   f.startAnim = options.startAnim
 end
