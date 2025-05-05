@@ -816,7 +816,7 @@ lib.stopList["Action Button Glow"] = lib.ButtonGlow_Stop
 
 -- ProcGlow
 
-local ProcGlowBaseTexCoords = {
+local BaseTexCoord = {
   ["Loop"] = {0.412598, 0.575195, 0.000976562, 0.391602},
   ["Start"] = {0.000488281, 0.411621, 0.000976562, 0.987305},
 }
@@ -826,9 +826,7 @@ local function SetTile(texture, frame, rows, columns, frameScaleW, frameScaleH, 
   local row = math.floor(frame / columns)
   local column = frame % columns
 
-  local BaseTexCoord = ProcGlowBaseTexCoords[key]
-
-  local leftStart, rightEnd, topStart, bottomEnd = BaseTexCoord[1], BaseTexCoord[2], BaseTexCoord[3], BaseTexCoord[4]
+  local leftStart, rightEnd, topStart, bottomEnd = BaseTexCoord[key][1], BaseTexCoord[key][2], BaseTexCoord[key][3], BaseTexCoord[key][4]
 
   local fullWidth = rightEnd - leftStart
   local fullHeight = bottomEnd - topStart
