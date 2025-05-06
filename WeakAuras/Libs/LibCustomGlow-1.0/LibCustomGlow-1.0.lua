@@ -1,5 +1,12 @@
+--[[
+This library contains work of Hendrick "nevcairiel" Leppkes
+https://www.wowace.com/projects/libbuttonglow-1-0
+]]
+
+-- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
+
 local MAJOR_VERSION = "LibCustomGlow-1.0"
-local MINOR_VERSION = 16
+local MINOR_VERSION = 21
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -8,10 +15,18 @@ local pairs, ipairs = pairs, ipairs
 local ceil, floor, min, mod = math.ceil, math.floor, math.min, mod
 local tinsert, tremove = table.insert, table.remove
 
+-- ===============================================================================
+-- !!! IMPORTANT: CHANGE `texturePath` BELOW TO POINT TO YOUR ADDON'S FILE LOCATION !!!
+-- DON'T FORGET THE BACKSLASH AT THE END (\)!
+-- Example: local texturePath = [[Interface\AddOns\YourAddon\Libs\]]
+-- ===============================================================================
+-- This is the path to the texture files used by this library.
+local texturePath = [[Interface\AddOns\WeakAuras\Libs\]]
+
 local textureList = {
-	["empty"] = [[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\AM_29]],
+	["empty"] = texturePath .. [[LibCustomGlow-1.0\AM_29]],
 	["white"] = [[Interface\BUTTONS\WHITE8X8]],
-	["shine"] = [[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\Artifacts]]
+	["shine"] = texturePath .. [[LibCustomGlow-1.0\Artifacts]]
 }
 
 function lib.RegisterTextures(texture, id)
@@ -626,14 +641,14 @@ local function configureButtonGlow(f, alpha)
 	f.spark = f:CreateTexture(nil, "BACKGROUND")
 	f.spark:SetPoint("CENTER")
 	f.spark:SetAlpha(0)
-	f.spark:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlert]])
+	f.spark:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
 	f.spark:SetTexCoord(0.00781250, 0.61718750, 0.00390625, 0.26953125)
 
 	-- inner glow
 	f.innerGlow = f:CreateTexture()
 	f.innerGlow:SetPoint("CENTER")
 	f.innerGlow:SetAlpha(0)
-	f.innerGlow:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlert]])
+	f.innerGlow:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
 	f.innerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
 	f.innerGlow:Show()
 
@@ -642,14 +657,14 @@ local function configureButtonGlow(f, alpha)
 	f.innerGlowOver:SetPoint("TOPLEFT", f.innerGlow, "TOPLEFT")
 	f.innerGlowOver:SetPoint("BOTTOMRIGHT", f.innerGlow, "BOTTOMRIGHT")
 	f.innerGlowOver:SetAlpha(0)
-	f.innerGlowOver:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlert]])
+	f.innerGlowOver:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
 	f.innerGlowOver:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
 
 	-- outer glow
 	f.outerGlow = f:CreateTexture()
 	f.outerGlow:SetPoint("CENTER")
 	f.outerGlow:SetAlpha(0)
-	f.outerGlow:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlert]])
+	f.outerGlow:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
 	f.outerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
 
 	-- outer glow over
@@ -657,14 +672,14 @@ local function configureButtonGlow(f, alpha)
 	f.outerGlowOver:SetPoint("TOPLEFT", f.outerGlow, "TOPLEFT")
 	f.outerGlowOver:SetPoint("BOTTOMRIGHT", f.outerGlow, "BOTTOMRIGHT")
 	f.outerGlowOver:SetAlpha(0)
-	f.outerGlowOver:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlert]])
+	f.outerGlowOver:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
 	f.outerGlowOver:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
 
 	-- ants
 	f.ants = f:CreateTexture(nil, "OVERLAY")
 	f.ants:SetPoint("CENTER")
 	f.ants:SetAlpha(0)
-	f.ants:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\IconAlertAnts]])
+	f.ants:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlertAnts]])
 
 	f.animIn = f:CreateAnimationGroup()
 	f.animIn.appear = {}
@@ -925,7 +940,7 @@ local function InitProcGlow(f)
   -- Start-Flipbook
   f.ProcStart = f:CreateTexture(nil, "ARTWORK")
   f.ProcStart:SetBlendMode("ADD")
-  f.ProcStart:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcStart:SetTexture(texturePath .. [[LibCustomGlow-1.0\UIActionBarFX]])
   f.ProcStart:SetTexCoord(0.0827148248, 0.1649413686, 0.000976562, 0.165364635) -- First Frame
   f.ProcStart:SetAlpha(1)
   f.ProcStart:SetSize(150, 150)
@@ -934,7 +949,7 @@ local function InitProcGlow(f)
 
   -- Loop-Flipbook
   f.ProcLoop = f:CreateTexture(nil, "ARTWORK")
-  f.ProcLoop:SetTexture([[Interface\AddOns\WeakAuras\Libs\LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcLoop:SetTexture(texturePath .. [[LibCustomGlow-1.0\UIActionBarFX]])
   f.ProcLoop:SetTexCoord(0.412598, 0.4451174, 0.000976562, 0.066080801666667) -- First Frame
   f.ProcLoop:SetAlpha(1)
   f.ProcLoop:SetAllPoints()
