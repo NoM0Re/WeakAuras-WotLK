@@ -798,7 +798,9 @@ end
 
 function lib.ButtonGlow_Stop(r)
 	if r._ButtonGlow then
-		if r._ButtonGlow.animIn:IsPlaying() then
+		if r._ButtonGlow.animOut:IsPlaying() then
+			-- Do nothing the animOut finishing will release
+		elseif r._ButtonGlow.animIn:IsPlaying() then
 			r._ButtonGlow.animIn:Stop()
 			ButtonGlowPool:Release(r._ButtonGlow)
 		elseif r:IsVisible() then
