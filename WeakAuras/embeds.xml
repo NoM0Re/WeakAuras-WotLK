@@ -17,5 +17,4 @@
   <Include file="Libs\Archivist\Archivist.xml"/>
   <Include file="Libs\LibSerialize\lib.xml"/>
   <Include file="Libs\LibGroupTalents-1.0\lib.xml"/>
-  <Include file="Libs\LibBabble-TalentTree-3.0\lib.xml"/>
 </Ui>

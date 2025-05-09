@@ -27,7 +27,7 @@ Example Usage:
 	end
 ]]
 
-local MAJOR, MINOR = "LibTalentQuery-1.0", 90000 + tonumber(("$Rev: 84 $"):match("(%d+)"))
+local MAJOR, MINOR = "LibTalentQuery-1.0", 90000 + tonumber(("$Rev: 90 $"):match("(%d+)"))
 
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
@@ -347,11 +347,21 @@ function lib:PLAYER_LOGIN()
 			for class,tree1 in pairs(validateTrees) do
 				validateTrees[class] = LBT[tree1]
 			end
+		elseif WeakAuras and WeakAuras.L then
+			for class, tree in pairs(validateTrees) do
+				local translated = WeakAuras.L[tree]
+				if not translated then -- exit because older WeakAuras
+					validateTrees = nil
+					self.PLAYER_LOGIN = nil
+					return
+				end
+				validateTrees[class] = translated
+			end
 		else
 			validateTrees = nil
 		end
 	end
-	
+
 	self.PLAYER_LOGIN = nil
 end
 
