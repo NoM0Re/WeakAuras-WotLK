@@ -2736,7 +2736,7 @@ function WeakAuras.PreAdd(data, snapshot)
     end
   end
   validateUserConfig(data, data.authorOptions, data.config)
-  if not(WeakAuras.isAwesomeEnabled()) then
+  if not(WeakAuras.IsAwesomeEnabled()) then
     removeNameplateUnitsAndAnchors(data)
   end
   data.init_started = nil

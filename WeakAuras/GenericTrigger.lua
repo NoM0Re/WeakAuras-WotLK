@@ -1248,7 +1248,7 @@ frame.unitFrames = {};
 Private.frames["WeakAuras Generic Trigger Frame"] = frame;
 frame:RegisterEvent("PLAYER_ENTERING_WORLD");
 genericTriggerRegisteredEvents["PLAYER_ENTERING_WORLD"] = true;
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
   frame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
   genericTriggerRegisteredEvents["NAME_PLATE_UNIT_ADDED"] = true;
@@ -2968,7 +2968,7 @@ function WeakAuras.WatchUnitChange(unit)
     watchUnitChange:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT");
     watchUnitChange:RegisterEvent("PARTY_MEMBERS_CHANGED");
     watchUnitChange:RegisterEvent("RAID_ROSTER_UPDATE");
-    if WeakAuras.isAwesomeEnabled() then
+    if WeakAuras.IsAwesomeEnabled() then
       watchUnitChange:RegisterEvent("NAME_PLATE_UNIT_ADDED")
       watchUnitChange:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     end

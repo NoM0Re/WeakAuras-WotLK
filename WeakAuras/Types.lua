@@ -29,7 +29,7 @@ Private.glow_frame_types = {
   FRAMESELECTOR = L["Frame Selector"],
   PARENTFRAME = L["Parent Frame"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.glow_frame_types.NAMEPLATE = L["Nameplate"]
 end
 
@@ -1175,7 +1175,7 @@ Private.unit_types_bufftrigger_2 = {
   member = L["Specific Unit"],
   multi = L["Multi-target"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.unit_types_bufftrigger_2.nameplate = L["Nameplate"]
 end
 
@@ -1205,7 +1205,7 @@ Private.actual_unit_types_cast = {
   pet = L["Pet"],
   member = L["Specific Unit"],
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.actual_unit_types_cast.nameplate = L["Nameplate"]
 end
 
@@ -1218,7 +1218,7 @@ Private.threat_unit_types = {
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.threat_unit_types.nameplate = L["Nameplate"]
 end
 
@@ -1240,6 +1240,9 @@ Private.unit_threat_situation_types = {
 WeakAuras.class_types = {}
 for i, class in ipairs(CLASS_SORT_ORDER) do
   WeakAuras.class_types[class] = string.format("|c%s%s|r", WA_GetClassColor(class), LOCALIZED_CLASS_NAMES_MALE[class])
+end
+if WeakAuras.IsClassicPlusOrTBC() then
+  WeakAuras.class_types["DEATHKNIGHT"] = nil
 end
 
 WeakAuras.race_types = {
@@ -1352,7 +1355,7 @@ Private.anchor_frame_types = {
   UNITFRAME = L["Unit Frames"],
   CUSTOM = L["Custom"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.anchor_frame_types.NAMEPLATE = L["Nameplates"]
 end
 
@@ -2635,7 +2638,7 @@ Private.classification_types = {
   normal = L["Normal"],
   trivial = L["Trivial (Low Level)"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.classification_types.minus = L["Minus (Small Nameplate)"]
 end
 
@@ -3549,7 +3552,7 @@ Private.multiUnitId = {
   ["partypetsonly"] = true,
   ["raid"] = true,
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.multiUnitId["nameplate"] = true
 end
 
@@ -3560,7 +3563,7 @@ Private.multiUnitUnits = {
   ["party"] = {},
   ["raid"] = {}
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.multiUnitUnits["nameplate"] = {}
 end
 
@@ -3598,7 +3601,7 @@ for i = 1, 40 do
   Private.multiUnitUnits.raid["raidpet"..i] = true
 end
 
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   for i = 1, 100 do
     Private.baseUnitId["nameplate"..i] = true
     Private.multiUnitUnits.nameplate["nameplate"..i] = true
