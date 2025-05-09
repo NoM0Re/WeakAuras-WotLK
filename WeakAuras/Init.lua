@@ -13,17 +13,42 @@ local versionString = "5.19.9 Beta"
 local buildTime = "20250425191700"
 local isAwesomeEnabled = C_NamePlate and C_NamePlate.GetNamePlateForUnit and true or false
 
+local flavor
+if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1) then
+  flavor = "TBC"
+elseif GetRealmName() == "Kezan" then
+  flavor = "ClassicPlus"
+else
+  flavor = "Wrath"
+end
+
 WeakAuras.versionString = versionString
 WeakAuras.buildTime = buildTime
 WeakAuras.newFeatureString = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 WeakAuras.BuildInfo = select(4, GetBuildInfo())
 
-function WeakAuras.isAwesomeEnabled()
+function WeakAuras.IsAwesomeEnabled()
   return isAwesomeEnabled or false
 end
 
 function WeakAuras.IsCorrectVersion()
   return true
+end
+
+function WeakAuras.IsWrath()
+  return flavor == "Wrath"
+end
+
+function WeakAuras.IsTBC()
+  return flavor == "TBC"
+end
+
+function WeakAuras.IsClassicPlus()
+  return flavor == "ClassicPlus"
+end
+
+function WeakAuras.IsClassicPlusOrTBC()
+  return WeakAuras.IsClassicPlus() or WeakAuras.IsTBC()
 end
 
 WeakAuras.prettyPrint = function(...)
