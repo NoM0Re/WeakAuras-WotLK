@@ -4035,7 +4035,7 @@ Private.event_prototypes = {
         type = "item",
         test = "true"
       },
-      {
+      --[[{ maybe some day
         name = "itemId",
         display = WeakAuras.newFeatureString .. L["ItemId"],
         hidden = true,
@@ -4044,7 +4044,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "number",
         operator_types = "only_equal",
-      },
+      },]]
       {
         name = "remaining",
         display = L["Remaining Time"],

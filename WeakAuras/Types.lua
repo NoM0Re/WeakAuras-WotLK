@@ -9,6 +9,8 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local wipe, tinsert = wipe, tinsert
 local GetNumShapeshiftForms, GetShapeshiftFormInfo = GetNumShapeshiftForms, GetShapeshiftFormInfo
+local WrapTextInColorCode = WrapTextInColorCode
+local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 40
 
 local function WA_GetClassColor(classFilename)
   local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[classFilename]
@@ -735,7 +737,7 @@ Private.format_types = {
           if unit and UnitPlayerControlled(unit) then
             local classFilename = select(2, UnitClass(unit))
             if classFilename then
-              return string.format("|c%s%s|r", WA_GetClassColor(classFilename), text)
+              return WrapTextInColorCode(text, WA_GetClassColor(classFilename))
             end
           end
           return text
@@ -894,7 +896,7 @@ Private.format_types = {
       if color == "class" then
         colorFunc = function(class, text)
           if class then
-            return string.format("|c%s%s|r", WA_GetClassColor(class), text)
+            return WrapTextInColorCode(text, WA_GetClassColor(class))
           else
             return text
           end
@@ -1090,7 +1092,6 @@ Private.format_types = {
 Private.format_types_display = {}
 for k, v in pairs(Private.format_types) do Private.format_types_display[k] = v.display end
 
-
 Private.sound_channel_types = {
   Master = L["Master"],
   SFX = ENABLE_SOUNDFX,
@@ -1137,7 +1138,6 @@ Private.aura_types = {
   DEBUFF = L["Debuff"],
 }
 
-
 Private.debuff_class_types = {
   magic = L["Magic"],
   curse = L["Curse"],
@@ -1152,20 +1152,21 @@ Private.player_target_events = {
   PLAYER_FOCUS_CHANGED = "focus",
 }
 
-Private.unit_types = {
-  player = L["Player"],
+local target_unit_types = {
   target = L["Target"],
   focus = L["Focus"],
+}
+
+Private.unit_types = WeakAuras.Mixin({
+  player = L["Player"],
   group = L["Group"],
   member = L["Specific Unit"],
   pet = L["Pet"],
   multi = L["Multi-target"]
-}
+}, target_unit_types)
 
-Private.unit_types_bufftrigger_2 = {
+Private.unit_types_bufftrigger_2 = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   group = L["Smart Group"],
   raid = L["Raid"],
   party = L["Party"],
@@ -1174,29 +1175,24 @@ Private.unit_types_bufftrigger_2 = {
   pet = L["Pet"],
   member = L["Specific Unit"],
   multi = L["Multi-target"]
-}
+}, target_unit_types)
 if WeakAuras.IsAwesomeEnabled() then
   Private.unit_types_bufftrigger_2.nameplate = L["Nameplate"]
 end
 
-Private.actual_unit_types = {
+Private.actual_unit_types = WeakAuras.Mixin({
   player = L["Player"],
   pet = L["Pet"],
-  target = L["Target"],
-}
+}, target_unit_types)
 
-Private.actual_unit_types_with_specific = {
+Private.actual_unit_types_with_specific = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   pet = L["Pet"],
-  member = L["Specific Unit"],
-}
+  member = L["Specific Unit"]
+}, target_unit_types)
 
-Private.actual_unit_types_cast = {
+Private.actual_unit_types_cast = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   group = L["Smart Group"],
   party = L["Party"],
   raid = L["Raid"],
@@ -1204,30 +1200,26 @@ Private.actual_unit_types_cast = {
   arena = L["Arena"],
   pet = L["Pet"],
   member = L["Specific Unit"],
-}
+}, target_unit_types)
 if WeakAuras.IsAwesomeEnabled() then
   Private.actual_unit_types_cast.nameplate = L["Nameplate"]
 end
 
 Private.actual_unit_types_cast_tooltip = L["• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.\n• |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.\n|cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.\n• |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.\n• |cffffff00Smart Group|r adjusts to your current group type, matching just the \"player\" when solo, \"party\" units (including \"player\") in a party or \"raid\" units in a raid.\n\n|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura."]
 
-Private.threat_unit_types = {
-  target = L["Target"],
-  focus = L["Focus"],
+Private.threat_unit_types = WeakAuras.Mixin({
   boss = L["Boss"],
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
-}
+}, target_unit_types)
 if WeakAuras.IsAwesomeEnabled() then
   Private.threat_unit_types.nameplate = L["Nameplate"]
 end
 
-Private.unit_types_range_check = {
-  target = L["Target"],
-  focus = L["Focus"],
+Private.unit_types_range_check = WeakAuras.Mixin({
   pet = L["Pet"],
   member = L["Specific Unit"]
-}
+}, target_unit_types)
 
 Private.unit_threat_situation_types = {
   [-1] = L["Not On Threat Table"],
@@ -1239,12 +1231,13 @@ Private.unit_threat_situation_types = {
 
 WeakAuras.class_types = {}
 for i, class in ipairs(CLASS_SORT_ORDER) do
-  WeakAuras.class_types[class] = string.format("|c%s%s|r", WA_GetClassColor(class), LOCALIZED_CLASS_NAMES_MALE[class])
+  WeakAuras.class_types[class] = WrapTextInColorCode(LOCALIZED_CLASS_NAMES_MALE[class], WA_GetClassColor(class))
 end
 if WeakAuras.IsClassicPlusOrTBC() then
   WeakAuras.class_types["DEATHKNIGHT"] = nil
 end
 
+-- missing localisation
 WeakAuras.race_types = {
   Human = "Human",
   Orc = "Orc",
@@ -2410,11 +2403,6 @@ Private.eventend_types = {
   ["custom"] = L["Custom"]
 }
 
-Private.autoeventend_types = {
-  ["auto"] = L["Automatic"],
-  ["custom"] = L["Custom"]
-}
-
 Private.timedeventend_types = {
   ["timed"] = L["Timed"],
 }
@@ -2458,7 +2446,7 @@ Private.grid_types = {
   LV = L["Left, then Centered Vertical"],
   RV = L["Right, then Centered Vertical"],
   HV = L["Centered Horizontal, then Centered Vertical"],
-  VH = L["Centered Vertical, then Centered Horizontal"],
+  VH = L["Centered Vertical, then Centered Horizontal"]
 }
 
 Private.centered_types_h = {
@@ -3501,8 +3489,8 @@ Private.array_entry_name_types = {
   -- the rest is auto-populated with indices which are valid entry name sources
 }
 
+-- option types which can be used to generate entry names on arrays
 Private.name_source_option_types = {
-  -- option types which can be used to generate entry names on arrays
   input = true,
   number = true,
   range = true,
@@ -3586,7 +3574,6 @@ for i = 1, MAX_BOSS_FRAMES do
   Private.baseUnitId["boss"..i] = true
   Private.multiUnitUnits.boss["boss"..i] = true
 end
-
 for i = 1, 5 do
   Private.baseUnitId["arena"..i] = true
   Private.multiUnitUnits.arena["arena"..i] = true
@@ -3600,7 +3587,6 @@ for i = 1, 40 do
   Private.multiUnitUnits.group["raidpet"..i] = true
   Private.multiUnitUnits.raid["raidpet"..i] = true
 end
-
 if WeakAuras.IsAwesomeEnabled() then
   for i = 1, 100 do
     Private.baseUnitId["nameplate"..i] = true
