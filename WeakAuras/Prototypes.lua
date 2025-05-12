@@ -839,15 +839,14 @@ function WeakAuras.IsSpellKnownForLoad(spell, exact)
 end
 
 function WeakAuras.IsSpellKnown(spell, pet)
-  if not spell or spell == 0 or spell >= 2^31 then return false end
-  if tonumber(spell) then
-    if (pet) then
-      return IsSpellKnown(spell, pet);
+  local id = tonumber(spell)
+  if id then
+    if id > 0 and id < 2^31 then
+      return IsSpellKnown(id, pet)
     end
-    return IsSpellKnown(spell);
-  else
-    return (GetSpellInfo(spell)) and true or false
+    return false
   end
+  return GetSpellInfo(spell) and true or false
 end
 
 function WeakAuras.IsSpellKnownIncludingPet(spell)
@@ -1573,7 +1572,7 @@ Private.event_categories = {
 
 local GetNameAndIconForSpellName = function(trigger)
   if type(trigger.spellName) == "table" then return end
-  local name, _, icon = Private.ExecEnv.GetSpellInfo(trigger.spellName or 0)
+  local name, _, icon = GetSpellInfo(trigger.spellName or 0)
   return name, icon
 end
 
@@ -3776,7 +3775,8 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname or "") == (needle == 1))
+        return state and state.show and
+          ((IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
@@ -3790,7 +3790,8 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (select(2,IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname or "")) == (needle == 1))
+        return state and state.show and
+          ((select(2, IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname)) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
@@ -3839,25 +3840,16 @@ Private.event_prototypes = {
     events = {},
     loadInternalEventFunc = function(trigger, untrigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_READY:" .. spellName }
     end,
     name = L["Cooldown Ready Event"],
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       WeakAuras.WatchSpellCooldown(spellName);
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       local ret = [=[
         local spellname = %s
         local name, _, icon = GetSpellInfo(spellname)
@@ -3903,25 +3895,16 @@ Private.event_prototypes = {
     events = {},
     loadInternalEventFunc = function(trigger, untrigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       if spellName == nil then return {} end
       return { "SPELL_CHARGES_CHANGED:" .. spellName }
     end,
     name = L["Charges Changed Event"],
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       WeakAuras.WatchSpellCooldown(spellName);
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       local ret = [=[
         local spellname = %s
         local name, _, icon = GetSpellInfo(spellname)
@@ -4772,9 +4755,6 @@ Private.event_prototypes = {
     end,
     loadInternalEventFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_CHANGED:" .. spellName }
     end,
@@ -4783,16 +4763,10 @@ Private.event_prototypes = {
     statesParameter = "one",
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       WeakAuras.WatchSpellCooldown(spellName);
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if (not trigger.use_exact_spellName and trigger.spellName == "number") then
-          spellName = GetSpellInfo(trigger.spellName) or trigger.spellName
-      end
       local ret = [=[
         local spellName = %s
         local name, _, icon = GetSpellInfo(spellName)
@@ -4802,7 +4776,7 @@ Private.event_prototypes = {
           charges = (duration == 0 or gcdCooldown) and 1 or 0;
         end
         local ready = startTime == 0 or charges > 0
-        local active = IsUsableSpell(spellName or "") and ready
+        local active = IsUsableSpell(name or "") and ready
       ]=]
       if(trigger.use_targetRequired) then
         ret = ret.."active = active and WeakAuras.IsSpellInRange(spellName or '', 'target')\n";
@@ -7924,8 +7898,7 @@ Private.event_prototypes = {
     },
     name = L["Queued Action"],
     init = function(trigger)
-      trigger.spellName = trigger.spellName or 0
-      local spellName
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
       if trigger.use_exact_spellName then
         spellName = trigger.spellName
       else
