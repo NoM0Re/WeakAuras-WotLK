@@ -4030,13 +4030,13 @@ local commonConditions = {
     hidden = true,
     type = "bool",
     test = function(state, needle)
-      if not state or not state.itemId or not state.show or not UnitExists('target') then
+      if not state or not state.itemname or not state.show or not UnitExists('target') then
         return false
       end
       if InCombatLockdown() and not UnitCanAttack('player', 'target') then
         return false
       end
-      return C_Item.IsItemInRange(state.itemId, 'target') == (needle == 1)
+      return IsItemInRange(state.itemname, 'target') == 1 == (needle == 1)
     end,
     events = { "PLAYER_TARGET_CHANGED", "WA_SPELL_RANGECHECK", }
   },
