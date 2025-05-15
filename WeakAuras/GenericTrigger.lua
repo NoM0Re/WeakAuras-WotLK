@@ -3454,6 +3454,21 @@ do
   end
 end
 
+do
+  local watchFrame
+  function Private.WatchUNIT_COMBO_POINTS()
+    if not watchFrame then
+      watchFrame = CreateFrame("Frame")
+      watchFrame:RegisterEvent("UNIT_COMBO_POINTS")
+      watchFrame:SetScript("OnEvent", function()
+        Private.StartProfileSystem("generictrigger UNIT_COMBO_POINTS")
+        Private.ScanEvents("WA_UNIT_COMBO_POINTS", "player")
+        Private.StopProfileSystem("generictrigger UNIT_COMBO_POINTS")
+      end)
+    end
+  end
+end
+
 -- Cast Latency
 do
   local castLatencyFrame

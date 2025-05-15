@@ -1577,33 +1577,6 @@ local GetNameAndIconForSpellName = function(trigger)
 end
 
 Private.event_prototypes = {
-  ["Combo Points"] = {
-    type = "unit",
-    events = {
-      ["events"] = {
-        "UNIT_COMBO_POINTS",
-        "PLAYER_TARGET_CHANGED",
-        "PLAYER_FOCUS_CHANGED"
-       }
-    },
-    force_events = "UNIT_COMBO_POINTS",
-    name = L["Combo Points"],
-    args = {
-      {
-        name = "combopoints",
-        display = L["Combo Points"],
-        type = "number",
-        init = "GetComboPoints(UnitInVehicle('player') and 'vehicle' or 'player', 'target')"
-      }
-    },
-    durationFunc = function(trigger)
-      return GetComboPoints(UnitInVehicle("player") and "vehicle" or "player", "target"), 5, true;
-    end,
-    stacksFunc = function(trigger)
-      return GetComboPoints(UnitInVehicle("player") and "vehicle" or "player", "target");
-    end,
-    automaticrequired = true
-  },
   ["Unit Characteristics"] = {
     type = "unit",
     events = function(trigger)
@@ -2621,6 +2594,10 @@ Private.event_prototypes = {
       if trigger.use_showCost and trigger.unit == "player" then
         tinsert(result, "WA_UNIT_QUEUED_SPELL_CHANGED");
       end
+      if trigger.unit == "player" and trigger.use_powertype and trigger.powertype == 4 then
+        Private.WatchUNIT_COMBO_POINTS()
+        tinsert(result, "WA_UNIT_COMBO_POINTS");
+      end
       return result
     end,
     loadFunc = function(trigger)
@@ -2643,6 +2620,23 @@ Private.event_prototypes = {
         local unitPowerType = UnitPowerType(unit);
         local powerTypeToCheck = powerType or unitPowerType;
       ]=]):format(trigger.unit == "group" and "true" or "false", trigger.use_powertype and trigger.powertype or "nil"))
+
+      -- Combo Points
+      local powerType = trigger.use_powertype and trigger.powertype or nil
+      if powerType == 4 then
+        table.insert(ret, [[
+          if unit == 'player' then
+            unit = UnitInVehicle('player') and 'vehicle' or 'player'
+          end
+          local power = GetComboPoints(unit, 'target')
+          local total = MAX_COMBO_POINTS
+        ]])
+      else
+        table.insert(ret, [[
+          local power = UnitPower(unit, powerType)
+          local total = math.max(1, UnitPowerMax(unit, powerType))
+        ]])
+      end
 
       table.insert(ret, unitHelperFunctions.SpecificUnitCheck(trigger))
 
@@ -2714,7 +2708,7 @@ Private.event_prototypes = {
         name = "power",
         display = L["Power"],
         type = "number",
-        init = "UnitPower(unit, powerType)",
+        init = "power",
         store = true,
         conditionType = "number",
         multiEntry = {
@@ -2733,7 +2727,7 @@ Private.event_prototypes = {
       {
         name = "total",
         hidden = true,
-        init = "math.max(1, UnitPowerMax(unit, powerType))",
+        init = "total",
         store = true,
         test = "true"
       },

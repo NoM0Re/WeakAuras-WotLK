@@ -1465,7 +1465,7 @@ Private.power_types = {
   [1] = RAGE,
   [2] = FOCUS,
   [3] = ENERGY,
-  [4] = HAPPINESS,
+  [4] = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
   [6] = RUNIC_POWER,
 }
 
