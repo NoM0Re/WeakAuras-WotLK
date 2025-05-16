@@ -1460,12 +1460,13 @@ local powerEvents = {
   [1] = { "UNIT_RAGE", "UNIT_MAXRAGE" },
   [2] = { "UNIT_FOCUS", "UNIT_MAXFOCUS" },
   [3] = { "UNIT_ENERGY", "UNIT_MAXENERGY" },
-  [4] = { "UNIT_HAPPINESS", "UNIT_MAXHAPPINESS" },
+  [27] = { "UNIT_HAPPINESS", "UNIT_MAXHAPPINESS" },
   [6] = { "UNIT_RUNIC_POWER", "UNIT_MAXRUNIC_POWER" }
 }
 
 local function AddUnitEventForPowerEvents(result, unit, powerType)
   if powerType then
+    if powerType == 4 then return end
     for _, event in ipairs(powerEvents[powerType]) do
       AddUnitEventForEvents(result, unit, event)
     end
@@ -2563,20 +2564,19 @@ Private.event_prototypes = {
       local result = {}
       local powerType = trigger.use_powertype and trigger.powertype
       AddUnitEventForPowerEvents(result, unit, powerType)
+      if trigger.powertype == 4 then
+        AddUnitEventForEvents(result, unit, "UNIT_COMBO_POINTS")
+        AddUnitEventForEvents(result, unit, "UNIT_TARGET")
+      end
       AddUnitEventForEvents(result, unit, "UNIT_DISPLAYPOWER")
       AddUnitEventForEvents(result, unit, "UNIT_NAME_UPDATE")
 
       -- The api for spell power costs is not meant to be for other units
-      if trigger.use_showCost and trigger.unit == "player" then
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_START")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_STOP")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_FAILED")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_SUCCEEDED")
-      end
-      if trigger.powertype == 4 then
-        tinsert(result.events, "UNIT_COMBO_POINTS")
-        tinsert(result.events, "PLAYER_TARGET_CHANGED")
-        tinsert(result.events, "PLAYER_FOCUS_CHANGED")
+      if trigger.use_showCost and unit == "player" then
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_START")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_STOP")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_FAILED")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_SUCCEEDED")
       end
 
       if trigger.use_ignoreDead or trigger.use_ignoreDisconnected then
@@ -2683,7 +2683,7 @@ Private.event_prototypes = {
         display = L["Power Type"],
         type = "select",
         values = function(trigger)
-          if trigger.unit ~= "player" then
+          if trigger and trigger.unit ~= "player" then
             return Private.power_types
           else
             return Private.power_types_player
