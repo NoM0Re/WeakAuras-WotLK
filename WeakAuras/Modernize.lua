@@ -2124,6 +2124,7 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 85 then
+    -- Migrate raidMarkIndex and old Combo Points triggers and Happiness
     if data.triggers then
       local eventTypes = {
         ["Unit Characteristics"] = true,
@@ -2135,6 +2136,7 @@ function Private.Modernize(data, oldSnapshot)
       for _, triggerData in ipairs(data.triggers) do
         local trigger = triggerData.trigger
         if trigger and trigger.type == "unit" then
+          -- Migrate raidMarkIndex
           if eventTypes[trigger.event] then
             local rt = trigger.raidMarkIndex
             if type(rt) == "number" then
@@ -2145,6 +2147,27 @@ function Private.Modernize(data, oldSnapshot)
             if trigger.use_raidMarkIndex == false then
               trigger.use_raidMarkIndex = nil
             end
+          end
+          -- Modernize Happiness
+          if trigger.event == "Power" and trigger.powertype == 4 then
+            trigger.powertype = 27
+          end
+          -- Migrate old Combo Points triggers
+          if trigger.event == "Combo Points" then
+            local newTrigger = {
+              type = "unit",
+              use_unit = true,
+              unit = "player",
+              use_powertype = true,
+              powertype = 4,
+              event = "Power"
+            }
+            if trigger.combopoints and trigger.combopoints_operator then
+              newTrigger.use_power = true
+              newTrigger.power = { trigger.combopoints }
+              newTrigger.power_operator = { trigger.combopoints_operator }
+            end
+            triggerData.trigger = newTrigger
           end
         end
       end
