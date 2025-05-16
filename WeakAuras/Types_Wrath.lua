@@ -3,11 +3,8 @@ local AddonName = ...
 local Private = select(2, ...)
 
 -- Talent Data for normal Wrath Realms
-if GetRealmName() == "Onyxia" or
-   GetRealmName() == "Kezan" or
-   (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1)
-  then
-   return
+if not WeakAuras.IsWrath() then
+  return
 end
 
 Private.talentInfo = {
