@@ -2145,6 +2145,25 @@ function Private.Modernize(data, oldSnapshot)
             if trigger.use_raidMarkIndex == false then
               trigger.use_raidMarkIndex = nil
             end
+          -- Migrate old Combo Points triggers
+          elseif trigger.event == "Combo Points" then
+            trigger.unit = "player"
+            trigger.powertype = 4
+            trigger.event = "Power"
+
+            if trigger.combopoints and trigger.combopoints_operator then
+              local CP = trigger.combopoints
+              local CPoperator = trigger.combopoints_operator
+
+              trigger.combopoints = nil
+              trigger.combopoints_operator = nil
+
+              trigger.power = { CP }
+              trigger.power_operator = { CPoperator }
+            end
+          -- Modernize Happiness
+          elseif trigger.event == "Power" and trigger.powertype == 4 then
+            trigger.powertype = 27
           end
         end
       end

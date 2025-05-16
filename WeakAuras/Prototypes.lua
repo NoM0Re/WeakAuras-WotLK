@@ -2573,6 +2573,11 @@ Private.event_prototypes = {
         AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_FAILED")
         AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_SUCCEEDED")
       end
+      if trigger.powertype == 4 then
+        tinsert(result.events, "UNIT_COMBO_POINTS")
+        tinsert(result.events, "PLAYER_TARGET_CHANGED")
+        tinsert(result.events, "PLAYER_FOCUS_CHANGED")
+      end
 
       if trigger.use_ignoreDead or trigger.use_ignoreDisconnected then
         AddUnitEventForEvents(result, unit, "UNIT_FLAGS")
@@ -2593,10 +2598,6 @@ Private.event_prototypes = {
       AddUnitSpecChangeInternalEvents(unit, result)
       if trigger.use_showCost and trigger.unit == "player" then
         tinsert(result, "WA_UNIT_QUEUED_SPELL_CHANGED");
-      end
-      if trigger.unit == "player" and trigger.use_powertype and trigger.powertype == 4 then
-        Private.WatchUNIT_COMBO_POINTS()
-        tinsert(result, "WA_UNIT_COMBO_POINTS");
       end
       return result
     end,
@@ -2625,11 +2626,14 @@ Private.event_prototypes = {
       local powerType = trigger.use_powertype and trigger.powertype or nil
       if powerType == 4 then
         table.insert(ret, [[
-          if unit == 'player' then
-            unit = UnitInVehicle('player') and 'vehicle' or 'player'
-          end
-          local power = GetComboPoints(unit, 'target')
+          local power = GetComboPoints(UnitInVehicle('player') and 'vehicle' or 'player', 'target')
           local total = MAX_COMBO_POINTS
+        ]])
+      -- Happiness
+      elseif  trigger.powertype == 27 then
+        table.insert(ret, [[
+          local power = UnitPower(unit, 4)
+          local total = math.max(1, UnitPowerMax(unit, 4))
         ]])
       else
         table.insert(ret, [[
@@ -2678,7 +2682,13 @@ Private.event_prototypes = {
         name = "powertype",
         display = L["Power Type"],
         type = "select",
-        values = "power_types",
+        values = function(trigger)
+          if trigger.unit ~= "player" then
+            return Private.power_types
+          else
+            return Private.power_types_player
+          end
+        end,
         init = "powerTypeToCheck",
         test = "true",
         store = true,
@@ -2691,7 +2701,7 @@ Private.event_prototypes = {
         type = "toggle",
         test = "unitPowerType == powerType",
         enable = function(trigger)
-          return trigger.use_powertype
+          return trigger.use_powertype and trigger.powertype ~= 4
         end,
       },
       {
