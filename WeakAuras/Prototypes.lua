@@ -1460,12 +1460,13 @@ local powerEvents = {
   [1] = { "UNIT_RAGE", "UNIT_MAXRAGE" },
   [2] = { "UNIT_FOCUS", "UNIT_MAXFOCUS" },
   [3] = { "UNIT_ENERGY", "UNIT_MAXENERGY" },
-  [4] = { "UNIT_HAPPINESS", "UNIT_MAXHAPPINESS" },
+  [27] = { "UNIT_HAPPINESS", "UNIT_MAXHAPPINESS" },
   [6] = { "UNIT_RUNIC_POWER", "UNIT_MAXRUNIC_POWER" }
 }
 
 local function AddUnitEventForPowerEvents(result, unit, powerType)
   if powerType then
+    if powerType == 4 then return end
     for _, event in ipairs(powerEvents[powerType]) do
       AddUnitEventForEvents(result, unit, event)
     end
@@ -1577,33 +1578,6 @@ local GetNameAndIconForSpellName = function(trigger)
 end
 
 Private.event_prototypes = {
-  ["Combo Points"] = {
-    type = "unit",
-    events = {
-      ["events"] = {
-        "UNIT_COMBO_POINTS",
-        "PLAYER_TARGET_CHANGED",
-        "PLAYER_FOCUS_CHANGED"
-       }
-    },
-    force_events = "UNIT_COMBO_POINTS",
-    name = L["Combo Points"],
-    args = {
-      {
-        name = "combopoints",
-        display = L["Combo Points"],
-        type = "number",
-        init = "GetComboPoints(UnitInVehicle('player') and 'vehicle' or 'player', 'target')"
-      }
-    },
-    durationFunc = function(trigger)
-      return GetComboPoints(UnitInVehicle("player") and "vehicle" or "player", "target"), 5, true;
-    end,
-    stacksFunc = function(trigger)
-      return GetComboPoints(UnitInVehicle("player") and "vehicle" or "player", "target");
-    end,
-    automaticrequired = true
-  },
   ["Unit Characteristics"] = {
     type = "unit",
     events = function(trigger)
@@ -2590,15 +2564,19 @@ Private.event_prototypes = {
       local result = {}
       local powerType = trigger.use_powertype and trigger.powertype
       AddUnitEventForPowerEvents(result, unit, powerType)
+      if trigger.powertype == 4 then
+        AddUnitEventForEvents(result, unit, "UNIT_COMBO_POINTS")
+        AddUnitEventForEvents(result, unit, "UNIT_TARGET")
+      end
       AddUnitEventForEvents(result, unit, "UNIT_DISPLAYPOWER")
       AddUnitEventForEvents(result, unit, "UNIT_NAME_UPDATE")
 
       -- The api for spell power costs is not meant to be for other units
-      if trigger.use_showCost and trigger.unit == "player" then
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_START")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_STOP")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_FAILED")
-        AddUnitEventForEvents(result, "player", "UNIT_SPELLCAST_SUCCEEDED")
+      if trigger.use_showCost and unit == "player" then
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_START")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_STOP")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_FAILED")
+        AddUnitEventForEvents(result, unit, "UNIT_SPELLCAST_SUCCEEDED")
       end
 
       if trigger.use_ignoreDead or trigger.use_ignoreDisconnected then
@@ -2644,6 +2622,26 @@ Private.event_prototypes = {
         local powerTypeToCheck = powerType or unitPowerType;
       ]=]):format(trigger.unit == "group" and "true" or "false", trigger.use_powertype and trigger.powertype or "nil"))
 
+      -- Combo Points
+      local powerType = trigger.use_powertype and trigger.powertype or nil
+      if powerType == 4 then
+        table.insert(ret, [[
+          local power = GetComboPoints(UnitInVehicle('player') and 'vehicle' or 'player', 'target')
+          local total = MAX_COMBO_POINTS
+        ]])
+      -- Happiness
+      elseif  trigger.powertype == 27 then
+        table.insert(ret, [[
+          local power = UnitPower(unit, 4)
+          local total = math.max(1, UnitPowerMax(unit, 4))
+        ]])
+      else
+        table.insert(ret, [[
+          local power = UnitPower(unit, powerType)
+          local total = math.max(1, UnitPowerMax(unit, powerType))
+        ]])
+      end
+
       table.insert(ret, unitHelperFunctions.SpecificUnitCheck(trigger))
 
       local canEnableShowCost = (not trigger.use_powertype) and trigger.unit == "player";
@@ -2684,7 +2682,13 @@ Private.event_prototypes = {
         name = "powertype",
         display = L["Power Type"],
         type = "select",
-        values = "power_types",
+        values = function(trigger)
+          if trigger and trigger.unit ~= "player" then
+            return Private.power_types
+          else
+            return Private.power_types_player
+          end
+        end,
         init = "powerTypeToCheck",
         test = "true",
         store = true,
@@ -2697,7 +2701,7 @@ Private.event_prototypes = {
         type = "toggle",
         test = "unitPowerType == powerType",
         enable = function(trigger)
-          return trigger.use_powertype
+          return trigger.use_powertype and trigger.powertype ~= 4
         end,
       },
       {
@@ -2714,7 +2718,7 @@ Private.event_prototypes = {
         name = "power",
         display = L["Power"],
         type = "number",
-        init = "UnitPower(unit, powerType)",
+        init = "power",
         store = true,
         conditionType = "number",
         multiEntry = {
@@ -2733,7 +2737,7 @@ Private.event_prototypes = {
       {
         name = "total",
         hidden = true,
-        init = "math.max(1, UnitPowerMax(unit, powerType))",
+        init = "total",
         store = true,
         test = "true"
       },
