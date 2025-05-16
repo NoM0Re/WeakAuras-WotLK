@@ -2124,6 +2124,7 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 85 then
+    -- Migrate raidMarkIndex and old Combo Points triggers and Happiness
     if data.triggers then
       local eventTypes = {
         ["Unit Characteristics"] = true,
@@ -2135,6 +2136,7 @@ function Private.Modernize(data, oldSnapshot)
       for _, triggerData in ipairs(data.triggers) do
         local trigger = triggerData.trigger
         if trigger and trigger.type == "unit" then
+          -- Migrate raidMarkIndex
           if eventTypes[trigger.event] then
             local rt = trigger.raidMarkIndex
             if type(rt) == "number" then
@@ -2147,20 +2149,22 @@ function Private.Modernize(data, oldSnapshot)
             end
           -- Migrate old Combo Points triggers
           elseif trigger.event == "Combo Points" then
-            trigger.unit = "player"
-            trigger.powertype = 4
-            trigger.event = "Power"
-
+            local newTrigger = {
+              type = "unit",
+              subeventPrefix = "SPELL",
+              subeventSuffix = "_CAST_SUCCESS",
+              use_unit = true,
+              unit = "player",
+              use_powertype = true,
+              powertype = 4,
+              event = "Power"
+            }
             if trigger.combopoints and trigger.combopoints_operator then
-              local CP = trigger.combopoints
-              local CPoperator = trigger.combopoints_operator
-
-              trigger.combopoints = nil
-              trigger.combopoints_operator = nil
-
-              trigger.power = { CP }
-              trigger.power_operator = { CPoperator }
+              newTrigger.use_power = true
+              newTrigger.power = { trigger.combopoints }
+              newTrigger.power_operator = { trigger.combopoints_operator }
             end
+            triggerData.trigger = newTrigger
           -- Modernize Happiness
           elseif trigger.event == "Power" and trigger.powertype == 4 then
             trigger.powertype = 27
