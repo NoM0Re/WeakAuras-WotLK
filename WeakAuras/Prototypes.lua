@@ -2565,8 +2565,12 @@ Private.event_prototypes = {
       local powerType = trigger.use_powertype and trigger.powertype
       AddUnitEventForPowerEvents(result, unit, powerType)
       if trigger.powertype == 4 then
+        local _, class = UnitClass("player")
         AddUnitEventForEvents(result, unit, "UNIT_COMBO_POINTS")
         AddUnitEventForEvents(result, unit, "UNIT_TARGET")
+        if class == "DRUID" then
+          AddUnitEventForEvents(result, unit, "UNIT_MODEL_CHANGED")
+        end
       end
       AddUnitEventForEvents(result, unit, "UNIT_DISPLAYPOWER")
       AddUnitEventForEvents(result, unit, "UNIT_NAME_UPDATE")
@@ -2617,20 +2621,35 @@ Private.event_prototypes = {
         unit = string.lower(unit)
         local name, realm = WeakAuras.UnitNameWithRealm(unit)
         local smart = %s
-        local powerType = %s;
+        local powerType = %s
         local unitPowerType = UnitPowerType(unit);
         local powerTypeToCheck = powerType or unitPowerType;
       ]=]):format(trigger.unit == "group" and "true" or "false", trigger.use_powertype and trigger.powertype or "nil"))
-
-      -- Combo Points
       local powerType = trigger.use_powertype and trigger.powertype or nil
+      -- Combo Points
       if powerType == 4 then
+        local _, class = UnitClass("player")
         table.insert(ret, [[
-          local power = GetComboPoints(UnitInVehicle('player') and 'vehicle' or 'player', 'target')
+          local comboUnit = UnitInVehicle(unit) and 'vehicle' or unit
+          local power = GetComboPoints(comboUnit, 'target')
           local total = MAX_COMBO_POINTS
         ]])
+        if class == "ROGUE" then
+          table.insert(ret, [[
+            unitPowerType = 4
+          ]])
+        elseif class == "DRUID" then
+          local formName = GetSpellInfo(768) or ""
+          table.insert(ret, ([[
+            local index = GetShapeshiftForm() or 0
+            local form = index > 0 and select(2, GetShapeshiftFormInfo(index)) == %q
+            if form or comboUnit == 'vehicle' then
+              unitPowerType = 4
+            end
+          ]]):format(formName))
+        end
       -- Happiness
-      elseif  trigger.powertype == 27 then
+      elseif powerType == 27 then
         table.insert(ret, [[
           local power = UnitPower(unit, 4)
           local total = math.max(1, UnitPowerMax(unit, 4))
@@ -2701,7 +2720,7 @@ Private.event_prototypes = {
         type = "toggle",
         test = "unitPowerType == powerType",
         enable = function(trigger)
-          return trigger.use_powertype and trigger.powertype ~= 4
+          return trigger.use_powertype
         end,
       },
       {
@@ -2847,7 +2866,10 @@ Private.event_prototypes = {
           return preamble:Check(state.npcId)
         end,
         operator_types = "none",
-        desc = L["Supports multiple entries, separated by commas. Prefix with '-' for negation."]
+        desc = L["Supports multiple entries, separated by commas. Prefix with '-' for negation."],
+        enable = function(trigger)
+          return trigger.powertype ~= 4
+        end
       },
       {
         name = "class",
@@ -2980,6 +3002,9 @@ Private.event_prototypes = {
         values = "hostility_types",
         store = true,
         conditionType = "select",
+        enable = function(trigger)
+          return trigger.powertype ~= 4
+        end
       },
       {
         hidden = true,
