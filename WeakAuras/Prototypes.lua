@@ -856,6 +856,16 @@ function WeakAuras.IsSpellKnownIncludingPet(spell)
   return WeakAuras.IsSpellKnown(spell, false) or WeakAuras.IsSpellKnown(spell, true)
 end
 
+function WeakAuras.IsGlyphActive(glyphID)
+  for slot = 1, GetNumGlyphSockets() or 6 do
+    local enabled, _, glyphId = GetGlyphSocketInfo(slot)
+    if glyphID == glyphId then
+      return enabled == 1
+    end
+  end
+  return false
+end
+
 function WeakAuras.GetEffectiveAttackPower()
   local base, pos, neg = UnitAttackPower("player")
   return base + pos + neg
@@ -1092,6 +1102,19 @@ Private.load_prototype = {
           (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
         ))
       end
+    },
+    {
+      name = "glyph",
+      display = L["Glyph"],
+      type = "multiselect",
+      values = function(trigger)
+        Private.InitializeGlyphs(trigger and trigger.glyph)
+        return Private.glyph_types
+      end,
+      sorted = true,
+      sortOrder = Private.glyph_sorted,
+      test = "WeakAuras.IsGlyphActive(%s)",
+      events = {"GLYPH_ADDED", "GLYPH_REMOVED", "GLYPH_UPDATED", "USE_GLYPH"},
     },
     {
       name = "spellknown",
