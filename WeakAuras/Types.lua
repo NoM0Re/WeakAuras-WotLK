@@ -3706,6 +3706,55 @@ WeakAuras.StopMotion.animation_types = {
   progress = L["Progress"]
 }
 
+do
+  local function addGlyphFromSpellID(id, sorted)
+    local name, _, icon = GetSpellInfo(id or 0)
+    if name and icon and not Private.glyph_types[id] then
+      Private.glyph_types[id] = "|T" .. icon .. ":0|t" .. name
+      table.insert(sorted, { glyphID = id, name = name })
+    end
+  end
+
+  local function addEquippedGlyphs(sorted)
+    local numSockets = GetNumGlyphSockets() or 6
+    for i = 1, numSockets do
+      local link = GetGlyphLink(i)
+      local name = link and link:match("|Hglyph:%d+:%d+|h%[(.-)%]|h")
+      local _, _, glyphID, icon = GetGlyphSocketInfo(i)
+      if name and icon and glyphID and not Private.glyph_types[glyphID] then
+        Private.glyph_types[glyphID] = "|T" .. icon .. ":0|t" .. name
+        table.insert(sorted, { glyphID = glyphID, name = name })
+      end
+    end
+  end
+
+  Private.InitializeGlyphs = function(glyphId)
+    Private.glyph_types = {}
+    Private.glyph_sorted = {}
+    local sorted = {}
+
+    addEquippedGlyphs(sorted)
+    if glyphId then
+      if glyphId.single then
+        addGlyphFromSpellID(glyphId.single, sorted)
+      end
+      if glyphId.multi then
+        for _, id in ipairs(glyphId.multi) do
+          addGlyphFromSpellID(id, sorted)
+        end
+      end
+    end
+
+    table.sort(sorted, function(a, b)
+      return a.name < b.name
+    end)
+
+    for _, glyph in ipairs(sorted) do
+      table.insert(Private.glyph_sorted, glyph.glyphID)
+    end
+  end
+end
+
 Private.id_to_faction = {
   ["21"] = L["Booty Bay"],
   ["47"] = L["Ironforge"],
