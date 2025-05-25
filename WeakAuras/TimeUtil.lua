@@ -6,7 +6,7 @@ local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
 -- Lua APIs
-local time, format, floor, ceil = time, format, floor, ceil
+local time, format, floor = time, format, floor
 
 -- WoW APIs
 local GetLocale = GetLocale
@@ -274,7 +274,7 @@ function SecondsToClock(seconds, displayZeroHours)
 end
 
 -- Deprecated. See SecondsFormatter for intended replacement
-function SecondsToTime(seconds, noSeconds, notAbbreviated, maxCount, roundUp)
+--[[function SecondsToTime(seconds, noSeconds, notAbbreviated, maxCount, roundUp)
   local time = "";
   local count = 0;
   local tempTime;
@@ -344,7 +344,7 @@ function SecondsToTime(seconds, noSeconds, notAbbreviated, maxCount, roundUp)
       end
   end
   return time;
-end
+end]]
 
 -- Deprecated. See SecondsFormatter for intended replacement
 function MinutesToTime(mins, hideDays)
@@ -373,7 +373,7 @@ function MinutesToTime(mins, hideDays)
 end
 
 -- Deprecated. See SecondsFormatter for intended replacement
-function SecondsToTimeAbbrev(seconds, thresholdOverride)
+--[[function SecondsToTimeAbbrev(seconds, thresholdOverride)
   local tempTime;
   local threshold = 1.5;
   if thresholdOverride then
@@ -393,7 +393,7 @@ function SecondsToTimeAbbrev(seconds, thresholdOverride)
       return L["MINUTE_ONELETTER_ABBR"], tempTime;
   end
   return L["SECOND_ONELETTER_ABBR"], seconds;
-end
+end]]
 
 function FormatShortDate(day, month, year)
   local LOCALE_enGB = (GetLocale() == "enUS") or (GetLocale() == "enGB")
