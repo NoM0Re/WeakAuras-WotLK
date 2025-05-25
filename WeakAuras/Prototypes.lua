@@ -8146,26 +8146,27 @@ Private.event_prototypes = {
       if type(trigger.value) ~= "string" then trigger.value = "" end
       if type(trigger.value_operator) ~= "string" then trigger.value_operator = "" end
       local ret = [=[
-          local currencyID = %d
-          local discoveredTbl = Private.ExecEnv.GetDiscoveredCurrencies() or {}
-          local currencyInfo = {
-              name = GetItemInfo(currencyID),
-              quantity = GetItemCount(currencyID),
-              icon = GetItemIcon(currencyID),
-              totalEarned = Private.ExecEnv.GetTotalCountCurrencies(currencyID),
-              discovered = discoveredTbl[currencyID] and true or false,
-          }
-          if not currencyInfo.name then
-              currencyInfo = {
-                  name = "Unknown Currency",
-                  quantity = 0,
-                  icon = "Interface\\Icons\\INV_Misc_QuestionMark",
-                  totalEarned = 0,
-                  discovered = false
-              }
-          end
+        local currencyID = %d
+        local quantity, totalEarned, icon
+        if currencyID == 43308 then
+          quantity, totalEarned = GetHonorCurrency()
+          icon = UnitFactionGroup("player") == "Alliance" and
+            "Interface/Icons/inv_misc_tournaments_symbol_human" or
+            "Interface/Icons/Achievement_PVP_H_16"
+        elseif currencyID == 43307 then
+          quantity, totalEarned = GetArenaCurrency()
+          icon = "Interface/PVPFrame/PVP-ArenaPoints-Icon"
+        end
+        local name = GetItemInfo(currencyID)
+        local currencyInfo = {
+          name = name or "Unknown Currency",
+          quantity = quantity or GetItemCount(currencyID) or 0,
+          icon = icon or GetItemIcon(currencyID) or "Interface/Icons/INV_Misc_QuestionMark",
+          totalEarned = totalEarned or Private.ExecEnv.GetTotalCountCurrencies(currencyID) or 0,
+          discovered = ((Private.ExecEnv.GetDiscoveredCurrencies() or {})[currencyID]) and true or false
+        }
       ]=]
-      return ret:format(tonumber(trigger.currencyId) or 1)
+      return ret:format(tonumber(trigger.currencyId) or 0)
     end,
     statesParameter = "one",
     args = {
@@ -8250,8 +8251,16 @@ Private.event_prototypes = {
       },
     },
     GetNameAndIcon = function(trigger)
-      local name = GetItemInfo(trigger.currencyId or 0)
-      local icon = GetItemIcon(trigger.currencyId or 0)
+      local id = trigger.currencyId or 0
+      local name = GetItemInfo(id)
+      local icon = GetItemIcon(id)
+      if id == 43308 then
+        icon = UnitFactionGroup("player") == "Alliance" and
+          "Interface/Icons/inv_misc_tournaments_symbol_human" or
+          "Interface/Icons/Achievement_PVP_H_16"
+      elseif id == 43307 then
+        icon = "Interface/PVPFrame/PVP-ArenaPoints-Icon"
+      end
       return name, icon
     end,
     automaticrequired = true

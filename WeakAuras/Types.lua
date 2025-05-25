@@ -1622,7 +1622,7 @@ local function InitializeCurrencies()
 
   local expanded = {}
   for index = GetCurrencyListSize(), 1, -1 do
-  local name, isHeader, isExpanded, _, _, _, _, _, _ = GetCurrencyListInfo(index)
+  local name, isHeader, isExpanded = GetCurrencyListInfo(index)
     if isHeader and not isExpanded then
       ExpandCurrencyList(index, true)
       expanded[name] = true
@@ -1630,11 +1630,18 @@ local function InitializeCurrencies()
   end
 
   for index = 1, GetCurrencyListSize() do
-    local name, isHeader, _, _, _, _, _, iconFileID, itemID = GetCurrencyListInfo(index)
-    local currencyLink = tonumber(itemID) and GetItemInfo(itemID)
+    local name, isHeader, _, _, _, _, currencyType, iconFileID, itemID = GetCurrencyListInfo(index)
+    local icon
 
-    if currencyLink then
-      local icon = iconFileID or "Interface\\Icons\\INV_Misc_QuestionMark" --iconFileID not available on first login
+    if currencyType == 1 then	-- Arena points
+      icon = "Interface/PVPFrame/PVP-ArenaPoints-Icon"
+    elseif currencyType == 2 then -- Honor points
+      icon = UnitFactionGroup("player") == "Alliance" and
+        "Interface/Icons/inv_misc_tournaments_symbol_human" or
+        "Interface/Icons/Achievement_PVP_H_16"
+    end
+    if itemID and iconFileID then
+      icon = icon or iconFileID or "Interface\\Icons\\INV_Misc_QuestionMark" -- iconFileID not available on first login
       Private.discovered_currencies[itemID] = "|T" .. icon .. ":0|t" .. name
       Private.discovered_currencies_sorted[itemID] = index
     elseif isHeader then
