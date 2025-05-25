@@ -9,6 +9,8 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local wipe, tinsert = wipe, tinsert
 local GetNumShapeshiftForms, GetShapeshiftFormInfo = GetNumShapeshiftForms, GetShapeshiftFormInfo
+local WrapTextInColorCode = WrapTextInColorCode
+local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 40
 
 local function WA_GetClassColor(classFilename)
   local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[classFilename]
@@ -29,7 +31,7 @@ Private.glow_frame_types = {
   FRAMESELECTOR = L["Frame Selector"],
   PARENTFRAME = L["Parent Frame"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.glow_frame_types.NAMEPLATE = L["Nameplate"]
 end
 
@@ -735,7 +737,7 @@ Private.format_types = {
           if unit and UnitPlayerControlled(unit) then
             local classFilename = select(2, UnitClass(unit))
             if classFilename then
-              return string.format("|c%s%s|r", WA_GetClassColor(classFilename), text)
+              return WrapTextInColorCode(text, WA_GetClassColor(classFilename))
             end
           end
           return text
@@ -894,7 +896,7 @@ Private.format_types = {
       if color == "class" then
         colorFunc = function(class, text)
           if class then
-            return string.format("|c%s%s|r", WA_GetClassColor(class), text)
+            return WrapTextInColorCode(text, WA_GetClassColor(class))
           else
             return text
           end
@@ -1090,7 +1092,6 @@ Private.format_types = {
 Private.format_types_display = {}
 for k, v in pairs(Private.format_types) do Private.format_types_display[k] = v.display end
 
-
 Private.sound_channel_types = {
   Master = L["Master"],
   SFX = ENABLE_SOUNDFX,
@@ -1137,7 +1138,6 @@ Private.aura_types = {
   DEBUFF = L["Debuff"],
 }
 
-
 Private.debuff_class_types = {
   magic = L["Magic"],
   curse = L["Curse"],
@@ -1152,20 +1152,21 @@ Private.player_target_events = {
   PLAYER_FOCUS_CHANGED = "focus",
 }
 
-Private.unit_types = {
-  player = L["Player"],
+local target_unit_types = {
   target = L["Target"],
   focus = L["Focus"],
+}
+
+Private.unit_types = WeakAuras.Mixin({
+  player = L["Player"],
   group = L["Group"],
   member = L["Specific Unit"],
   pet = L["Pet"],
   multi = L["Multi-target"]
-}
+}, target_unit_types)
 
-Private.unit_types_bufftrigger_2 = {
+Private.unit_types_bufftrigger_2 = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   group = L["Smart Group"],
   raid = L["Raid"],
   party = L["Party"],
@@ -1174,29 +1175,24 @@ Private.unit_types_bufftrigger_2 = {
   pet = L["Pet"],
   member = L["Specific Unit"],
   multi = L["Multi-target"]
-}
-if WeakAuras.isAwesomeEnabled() then
+}, target_unit_types)
+if WeakAuras.IsAwesomeEnabled() then
   Private.unit_types_bufftrigger_2.nameplate = L["Nameplate"]
 end
 
-Private.actual_unit_types = {
+Private.actual_unit_types = WeakAuras.Mixin({
   player = L["Player"],
   pet = L["Pet"],
-  target = L["Target"],
-}
+}, target_unit_types)
 
-Private.actual_unit_types_with_specific = {
+Private.actual_unit_types_with_specific = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   pet = L["Pet"],
-  member = L["Specific Unit"],
-}
+  member = L["Specific Unit"]
+}, target_unit_types)
 
-Private.actual_unit_types_cast = {
+Private.actual_unit_types_cast = WeakAuras.Mixin({
   player = L["Player"],
-  target = L["Target"],
-  focus = L["Focus"],
   group = L["Smart Group"],
   party = L["Party"],
   raid = L["Raid"],
@@ -1204,30 +1200,26 @@ Private.actual_unit_types_cast = {
   arena = L["Arena"],
   pet = L["Pet"],
   member = L["Specific Unit"],
-}
-if WeakAuras.isAwesomeEnabled() then
+}, target_unit_types)
+if WeakAuras.IsAwesomeEnabled() then
   Private.actual_unit_types_cast.nameplate = L["Nameplate"]
 end
 
 Private.actual_unit_types_cast_tooltip = L["• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.\n• |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.\n|cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.\n• |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.\n• |cffffff00Smart Group|r adjusts to your current group type, matching just the \"player\" when solo, \"party\" units (including \"player\") in a party or \"raid\" units in a raid.\n\n|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura."]
 
-Private.threat_unit_types = {
-  target = L["Target"],
-  focus = L["Focus"],
+Private.threat_unit_types = WeakAuras.Mixin({
   boss = L["Boss"],
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
-}
-if WeakAuras.isAwesomeEnabled() then
+}, target_unit_types)
+if WeakAuras.IsAwesomeEnabled() then
   Private.threat_unit_types.nameplate = L["Nameplate"]
 end
 
-Private.unit_types_range_check = {
-  target = L["Target"],
-  focus = L["Focus"],
+Private.unit_types_range_check = WeakAuras.Mixin({
   pet = L["Pet"],
   member = L["Specific Unit"]
-}
+}, target_unit_types)
 
 Private.unit_threat_situation_types = {
   [-1] = L["Not On Threat Table"],
@@ -1239,9 +1231,13 @@ Private.unit_threat_situation_types = {
 
 WeakAuras.class_types = {}
 for i, class in ipairs(CLASS_SORT_ORDER) do
-  WeakAuras.class_types[class] = string.format("|c%s%s|r", WA_GetClassColor(class), LOCALIZED_CLASS_NAMES_MALE[class])
+  WeakAuras.class_types[class] = WrapTextInColorCode(LOCALIZED_CLASS_NAMES_MALE[class], WA_GetClassColor(class))
+end
+if WeakAuras.IsClassicPlusOrTBC() then
+  WeakAuras.class_types["DEATHKNIGHT"] = nil
 end
 
+-- missing localisation
 WeakAuras.race_types = {
   Human = "Human",
   Orc = "Orc",
@@ -1352,7 +1348,7 @@ Private.anchor_frame_types = {
   UNITFRAME = L["Unit Frames"],
   CUSTOM = L["Custom"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.anchor_frame_types.NAMEPLATE = L["Nameplates"]
 end
 
@@ -1469,8 +1465,18 @@ Private.power_types = {
   [1] = RAGE,
   [2] = FOCUS,
   [3] = ENERGY,
-  [4] = HAPPINESS,
   [6] = RUNIC_POWER,
+  [27] = HAPPINESS,
+}
+
+Private.power_types_player = {
+  [0] = MANA,
+  [1] = RAGE,
+  [2] = FOCUS,
+  [3] = ENERGY,
+  [4] = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
+  [6] = RUNIC_POWER,
+  [27] = HAPPINESS,
 }
 
 Private.miss_types = {
@@ -1616,7 +1622,7 @@ local function InitializeCurrencies()
 
   local expanded = {}
   for index = GetCurrencyListSize(), 1, -1 do
-  local name, isHeader, isExpanded, _, _, _, _, _, _ = GetCurrencyListInfo(index)
+  local name, isHeader, isExpanded = GetCurrencyListInfo(index)
     if isHeader and not isExpanded then
       ExpandCurrencyList(index, true)
       expanded[name] = true
@@ -1624,11 +1630,18 @@ local function InitializeCurrencies()
   end
 
   for index = 1, GetCurrencyListSize() do
-    local name, isHeader, _, _, _, _, _, iconFileID, itemID = GetCurrencyListInfo(index)
-    local currencyLink = tonumber(itemID) and GetItemInfo(itemID)
+    local name, isHeader, _, _, _, _, currencyType, iconFileID, itemID = GetCurrencyListInfo(index)
 
-    if currencyLink then
-      local icon = iconFileID or "Interface\\Icons\\INV_Misc_QuestionMark" --iconFileID not available on first login
+    local icon
+    if currencyType == 1 then	-- Arena points
+      icon = "Interface/PVPFrame/PVP-ArenaPoints-Icon"
+    elseif currencyType == 2 then -- Honor points
+      icon = UnitFactionGroup("player") == "Alliance" and
+        "Interface/Icons/inv_misc_tournaments_symbol_human" or
+        "Interface/Icons/Achievement_PVP_H_16"
+    end
+    if itemID and iconFileID then
+      icon = icon or iconFileID or "Interface\\Icons\\INV_Misc_QuestionMark" -- iconFileID not available on first login
       Private.discovered_currencies[itemID] = "|T" .. icon .. ":0|t" .. name
       Private.discovered_currencies_sorted[itemID] = index
     elseif isHeader then
@@ -2407,11 +2420,6 @@ Private.eventend_types = {
   ["custom"] = L["Custom"]
 }
 
-Private.autoeventend_types = {
-  ["auto"] = L["Automatic"],
-  ["custom"] = L["Custom"]
-}
-
 Private.timedeventend_types = {
   ["timed"] = L["Timed"],
 }
@@ -2455,7 +2463,7 @@ Private.grid_types = {
   LV = L["Left, then Centered Vertical"],
   RV = L["Right, then Centered Vertical"],
   HV = L["Centered Horizontal, then Centered Vertical"],
-  VH = L["Centered Vertical, then Centered Horizontal"],
+  VH = L["Centered Vertical, then Centered Horizontal"]
 }
 
 Private.centered_types_h = {
@@ -2635,7 +2643,7 @@ Private.classification_types = {
   normal = L["Normal"],
   trivial = L["Trivial (Low Level)"]
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.classification_types.minus = L["Minus (Small Nameplate)"]
 end
 
@@ -3498,8 +3506,8 @@ Private.array_entry_name_types = {
   -- the rest is auto-populated with indices which are valid entry name sources
 }
 
+-- option types which can be used to generate entry names on arrays
 Private.name_source_option_types = {
-  -- option types which can be used to generate entry names on arrays
   input = true,
   number = true,
   range = true,
@@ -3549,7 +3557,7 @@ Private.multiUnitId = {
   ["partypetsonly"] = true,
   ["raid"] = true,
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.multiUnitId["nameplate"] = true
 end
 
@@ -3560,7 +3568,7 @@ Private.multiUnitUnits = {
   ["party"] = {},
   ["raid"] = {}
 }
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Private.multiUnitUnits["nameplate"] = {}
 end
 
@@ -3583,7 +3591,6 @@ for i = 1, MAX_BOSS_FRAMES do
   Private.baseUnitId["boss"..i] = true
   Private.multiUnitUnits.boss["boss"..i] = true
 end
-
 for i = 1, 5 do
   Private.baseUnitId["arena"..i] = true
   Private.multiUnitUnits.arena["arena"..i] = true
@@ -3597,8 +3604,7 @@ for i = 1, 40 do
   Private.multiUnitUnits.group["raidpet"..i] = true
   Private.multiUnitUnits.raid["raidpet"..i] = true
 end
-
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   for i = 1, 100 do
     Private.baseUnitId["nameplate"..i] = true
     Private.multiUnitUnits.nameplate["nameplate"..i] = true
@@ -3706,6 +3712,55 @@ WeakAuras.StopMotion.animation_types = {
   once = L["Forward"],
   progress = L["Progress"]
 }
+
+do
+  local function addGlyphFromSpellID(id, sorted)
+    local name, _, icon = GetSpellInfo(id or 0)
+    if name and icon and not Private.glyph_types[id] then
+      Private.glyph_types[id] = "|T" .. icon .. ":0|t" .. name
+      table.insert(sorted, { glyphID = id, name = name })
+    end
+  end
+
+  local function addEquippedGlyphs(sorted)
+    for i = 1, GetNumGlyphSockets() or 6 do
+      local _, _, glyphID, icon = GetGlyphSocketInfo(i)
+      if glyphID and icon and not Private.glyph_types[glyphID] then
+        local name = GetSpellInfo(glyphID)
+        if name then
+          Private.glyph_types[glyphID] = "|T" .. icon .. ":0|t" .. name
+          table.insert(sorted, { glyphID = glyphID, name = name })
+        end
+      end
+    end
+  end
+
+  Private.InitializeGlyphs = function(glyphId)
+    Private.glyph_types = {}
+    Private.glyph_sorted = {}
+    local sorted = {}
+
+    addEquippedGlyphs(sorted)
+    if glyphId then
+      if glyphId.single then
+        addGlyphFromSpellID(glyphId.single, sorted)
+      end
+      if glyphId.multi then
+        for _, id in ipairs(glyphId.multi) do
+          addGlyphFromSpellID(id, sorted)
+        end
+      end
+    end
+
+    table.sort(sorted, function(a, b)
+      return a.name < b.name
+    end)
+
+    for _, glyph in ipairs(sorted) do
+      table.insert(Private.glyph_sorted, glyph.glyphID)
+    end
+  end
+end
 
 Private.id_to_faction = {
   ["21"] = L["Booty Bay"],

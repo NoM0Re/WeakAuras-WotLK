@@ -1410,7 +1410,13 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
     xOffset = {
       type = "range",
       control = "WeakAurasSpinBox",
-      name = L["X Offset"],
+      name = function()
+        if data.anchor_mode == "area" then
+          return L["Extra Width"]
+        else
+          return L["X Offset"]
+        end
+      end,
       order = 79,
       width = WeakAuras.normalWidth,
       softMin = (-1 * screenWidth),
@@ -1430,7 +1436,13 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
     yOffset = {
       type = "range",
       control = "WeakAurasSpinBox",
-      name = L["Y Offset"],
+      name = function()
+        if data.anchor_mode == "area" then
+          return L["Extra Height"]
+        else
+          return L["Y Offset"]
+        end
+      end,
       order = 80,
       width = WeakAuras.normalWidth,
       softMin = (-1 * screenHeight),
@@ -1945,7 +1957,7 @@ local function AddCodeOption(args, data, name, prefix, url, order, hiddenFunc, p
 
       code = "return " .. code;
 
-      local loadedFunction, errorString = OptionsPrivate.Private.LoadFunction(code, true);
+      local loadedFunction, errorString = OptionsPrivate.Private.LoadFunction(code, data.id, true);
 
       if not errorString then
         if options.validator then

@@ -1966,7 +1966,7 @@ Buff2Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 Buff2Frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
 Buff2Frame:RegisterEvent("RAID_ROSTER_UPDATE")
 Buff2Frame:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
-if WeakAuras.isAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() then
   Buff2Frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
   Buff2Frame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
 end
@@ -2205,7 +2205,6 @@ end
 --- Removes all data for an aura id
 --- @param id number
 function BuffTrigger.Delete(id)
-  BuffTrigger.UnloadDisplays({[id] = true})
   triggerInfos[id] = nil
 end
 
@@ -2501,7 +2500,7 @@ function BuffTrigger.Add(data)
       local remFunc
       if trigger.unit ~= "multi" and CanHaveMatchCheck(trigger) and trigger.useRem then
         local remFuncStr = Private.function_strings.count:format(trigger.remOperator or ">=", tonumber(trigger.rem) or 0)
-        remFunc = Private.LoadFunction(remFuncStr)
+        remFunc = Private.LoadFunction(remFuncStr, id)
       end
 
       local names
@@ -2531,14 +2530,14 @@ function BuffTrigger.Add(data)
         else
           group_countFuncStr = Private.function_strings.count:format(">", 0)
         end
-        groupCountFunc = Private.LoadFunction(group_countFuncStr)
+        groupCountFunc = Private.LoadFunction(group_countFuncStr, id)
       end
 
       local matchCountFunc
       if HasMatchCount(trigger) and trigger.match_countOperator and trigger.match_count and tonumber(trigger.match_count) then
         local count = tonumber(trigger.match_count)
         local match_countFuncStr = Private.function_strings.count:format(trigger.match_countOperator, count)
-        matchCountFunc = Private.LoadFunction(match_countFuncStr)
+        matchCountFunc = Private.LoadFunction(match_countFuncStr, id)
       elseif IsGroupTrigger(trigger) then
         if trigger.showClones and not trigger.combinePerUnit then
           matchCountFunc = GreaterEqualOne
@@ -2556,7 +2555,7 @@ function BuffTrigger.Add(data)
          and tonumber(trigger.matchPerUnit_count) and trigger.matchPerUnit_countOperator then
         local count = tonumber(trigger.matchPerUnit_count)
         local match_countFuncStr = Private.function_strings.count:format(trigger.matchPerUnit_countOperator, count)
-        matchPerUnitCountFunc = Private.LoadFunction(match_countFuncStr)
+        matchPerUnitCountFunc = Private.LoadFunction(match_countFuncStr, id)
       end
 
       local groupTrigger = trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
@@ -3579,7 +3578,7 @@ function BuffTrigger.InitMultiAura()
     multiAuraFrame:RegisterEvent("UNIT_AURA")
     multiAuraFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	  multiAuraFrame:RegisterEvent("PLAYER_FOCUS_CHANGED")
-    if WeakAuras.isAwesomeEnabled() then
+    if WeakAuras.IsAwesomeEnabled() then
       multiAuraFrame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
       multiAuraFrame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     end

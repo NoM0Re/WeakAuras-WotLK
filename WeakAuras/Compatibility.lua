@@ -114,6 +114,10 @@ RAID_CLASS_COLORS.SHAMAN.colorStr = "ff0070de"
 RAID_CLASS_COLORS.WARRIOR.colorStr = "ffc79c6e"
 RAID_CLASS_COLORS.DEATHKNIGHT.colorStr = "ffc41f3b"
 
+function WrapTextInColorCode(text, colorHexString)
+  return ("|c%s%s|r"):format(colorHexString, text);
+end
+
 function CreateTextureMarkup(file, fileWidth, fileHeight, width, height, left, right, top, bottom, xOffset, yOffset)
 	return ("|T%s:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d|t"):format(
 		  file
