@@ -1631,8 +1631,8 @@ local function InitializeCurrencies()
 
   for index = 1, GetCurrencyListSize() do
     local name, isHeader, _, _, _, _, currencyType, iconFileID, itemID = GetCurrencyListInfo(index)
-    local icon
 
+    local icon
     if currencyType == 1 then	-- Arena points
       icon = "Interface/PVPFrame/PVP-ArenaPoints-Icon"
     elseif currencyType == 2 then -- Honor points
@@ -3723,14 +3723,14 @@ do
   end
 
   local function addEquippedGlyphs(sorted)
-    local numSockets = GetNumGlyphSockets() or 6
-    for i = 1, numSockets do
-      local link = GetGlyphLink(i)
-      local name = link and link:match("|Hglyph:%d+:%d+|h%[(.-)%]|h")
+    for i = 1, GetNumGlyphSockets() or 6 do
       local _, _, glyphID, icon = GetGlyphSocketInfo(i)
-      if name and icon and glyphID and not Private.glyph_types[glyphID] then
-        Private.glyph_types[glyphID] = "|T" .. icon .. ":0|t" .. name
-        table.insert(sorted, { glyphID = glyphID, name = name })
+      if glyphID and icon and not Private.glyph_types[glyphID] then
+        local name = GetSpellInfo(glyphID)
+        if name then
+          Private.glyph_types[glyphID] = "|T" .. icon .. ":0|t" .. name
+          table.insert(sorted, { glyphID = glyphID, name = name })
+        end
       end
     end
   end
