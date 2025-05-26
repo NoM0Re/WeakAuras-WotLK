@@ -479,13 +479,17 @@ local function modify(parent, region, data)
     -- If cooldown.inverse == false then effectiveReverse = not inverse
     -- If cooldown.inverse == true then effectiveReverse = inverse
     local effectiveReverse = not region.inverseDirection == not cooldown.inverse
-    cooldown:SetReverse(effectiveReverse)
+    local hasChanged = cooldown:GetReverse() ~= effectiveReverse
+    if hasChanged then
+      cooldown:SetReverse(effectiveReverse)
+    end
     if (cooldown.expirationTime and cooldown.duration and cooldown:IsShown()) then
-      -- WORKAROUND SetReverse not applying until next frame
-      cooldown:SetCooldown(0, 0)
+      if hasChanged then
+        -- WORKAROUND SetReverse not applying until next frame
+        cooldown:SetCooldown(0, 0)
+      end
       cooldown:SetCooldown(cooldown.expirationTime - cooldown.duration,
-                           cooldown.duration,
-                           cooldown.useCooldownModRate and cooldown.modRate or nil)
+                           cooldown.duration)
     end
   end
 
