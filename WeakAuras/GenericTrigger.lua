@@ -2351,7 +2351,7 @@ do
     cdReadyFrame:RegisterEvent("SPELL_UPDATE_USABLE")
     cdReadyFrame:RegisterEvent("UNIT_SPELLCAST_SENT");
     cdReadyFrame:RegisterEvent("BAG_UPDATE_COOLDOWN");
-    cdReadyFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
+    cdReadyFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
     cdReadyFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
     cdReadyFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN");
     cdReadyFrame:RegisterEvent("SPELLS_CHANGED");
@@ -2415,7 +2415,7 @@ do
             end
           end
         end
-      elseif(event == "UNIT_INVENTORY_CHANGED" or event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_EQUIPMENT_CHANGED") then
+      elseif(event == "UNIT_INVENTORY_CHANGED" and ... == "player" or event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_EQUIPMENT_CHANGED") then
         Private.CheckItemSlotCooldowns();
       end
       Private.StopProfileSystem("generictrigger cd tracking");
@@ -3346,7 +3346,7 @@ do
     if not(tenchFrame) then
       tenchFrame = CreateFrame("Frame");
       tenchFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-      tenchFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
+      tenchFrame:RegisterEvent("UNIT_INVENTORY_CHANGED", "player")
       tenchFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 
       local function getTenchName(id)
@@ -3410,7 +3410,8 @@ do
         Private.StopProfileSystem("generictrigger temporary enchant");
       end
 
-      tenchFrame:SetScript("OnEvent", function()
+      tenchFrame:SetScript("OnEvent", function(_,_,unit, ...)
+        if unit and unit ~= "player" then return end
         Private.StartProfileSystem("generictrigger temporary enchant");
         timer:ScheduleTimer(tenchUpdate, 0.1)
         Private.StopProfileSystem("generictrigger temporary enchant");
@@ -3440,8 +3441,9 @@ do
   function WeakAuras.WatchForPetDeath()
     if not(petFrame) then
       petFrame = CreateFrame("Frame");
-      petFrame:RegisterUnitEvent("UNIT_PET", "player")
-      petFrame:SetScript("OnEvent", function(event, unit)
+     petFrame:RegisterEvent("UNIT_PET")
+      petFrame:SetScript("OnEvent", function(_, event, unit)
+        if unit ~= "player" then return end
         Private.StartProfileSystem("generictrigger pet update")
         Private.ScanEvents("PET_UPDATE", "pet")
         Private.StopProfileSystem("generictrigger pet update")
@@ -3458,14 +3460,15 @@ do
       castLatencyFrame = CreateFrame("Frame")
       Private.frames["Cast Latency Handler"] = castLatencyFrame
       castLatencyFrame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_START", "player")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", "player")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_STOP", "player")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
-      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_START")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_STOP")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 
-      castLatencyFrame:SetScript("OnEvent", function(self, event, ...)
+      castLatencyFrame:SetScript("OnEvent", function(self, event, unit, ...)
+        if unit and unit ~= "player" then return end
         if event == "CURRENT_SPELL_CAST_CHANGED" then
           castLatencyFrame.sendTime = GetTime()
           return

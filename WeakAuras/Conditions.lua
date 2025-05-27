@@ -1014,7 +1014,8 @@ function Private.RegisterForGlobalConditions(uid)
           dynamicConditionsFrame.units[unit] = CreateFrame("Frame");
           dynamicConditionsFrame.units[unit]:SetScript("OnEvent", handleDynamicConditionsPerUnit);
         end
-        pcall(dynamicConditionsFrame.units[unit].RegisterUnitEvent, dynamicConditionsFrame.units[unit], unitEvent, unit);
+        dynamicConditionsFrame.units[unit].unit = unit;
+        pcall(dynamicConditionsFrame.units[unit].RegisterEvent, dynamicConditionsFrame.units[unit], unitEvent, unit);
         UpdateDynamicConditionsPerUnitState(dynamicConditionsFrame, event, unit)
       else
         pcall(dynamicConditionsFrame.RegisterEvent, dynamicConditionsFrame, event);
