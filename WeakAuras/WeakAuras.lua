@@ -1137,6 +1137,8 @@ function Private.Login(takeNewSnapshots)
       db.history = nil
     end
 
+    coroutine.yield(3000, "login check uid corruption")
+
     local toAdd = {};
     loginFinished = false
     loginMessage = L["Options will open after the login process has completed."]
@@ -1562,7 +1564,7 @@ loadFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
 loadFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
 loadFrame:RegisterEvent("PLAYER_ROLES_ASSIGNED");
 loadFrame:RegisterEvent("SPELLS_CHANGED");
-loadFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+loadFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
 loadFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 loadFrame:RegisterEvent("PLAYER_DEAD")
 loadFrame:RegisterEvent("PLAYER_ALIVE")
@@ -1706,7 +1708,6 @@ function Private.UnloadDisplays(toUnload, ...)
   end
 
   for id in pairs(toUnload) do
-
     if triggerState[id] then
       for i = 1, triggerState[id].numTriggers do
         if (triggerState[id][i]) then
@@ -1768,6 +1769,7 @@ function WeakAuras.Delete(data)
   local uid = data.uid
   local parentId = data.parent
   local parentUid = data.parent and db.displays[data.parent].uid
+
 
   if loaded[id] then
     Private.UnloadDisplays({[id] = true})
@@ -2247,6 +2249,7 @@ local function loadOrder(tbl, idtable)
     load(id, {});
     coroutine.yield(100, "sort deps")
   end
+
   return order
 end
 
@@ -2293,7 +2296,7 @@ function Private.AddMany(tbl, takeSnapshots)
     else
       if next(WeakAuras.LoadFromArchive("Repository", "migration").stores) ~= nil then
         timer:ScheduleTimer(function()
-          prettyPrint(L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."])
+          prettyPrint(L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/UXSc7nt."])
         end, 1)
       end
     end
@@ -2824,7 +2827,7 @@ function pAdd(data, simpleChange)
         Private.ClearAuraEnvironment(parent.id);
       end
 
-      db.displays[id] = data;
+      db.displays[id] = data
 
       if (not data.triggers.activeTriggerMode or data.triggers.activeTriggerMode > #data.triggers) then
         data.triggers.activeTriggerMode = Private.trigger_modes.first_active;
@@ -3040,8 +3043,8 @@ local function EnsureRegion(id)
 
     -- So we go up the list of parents and collect auras that must be created
     -- If we find a parent already exists, we can stop
-
     local aurasToCreate = {}
+
     while(id) do
       local data = WeakAuras.GetData(id)
       tinsert(aurasToCreate, data.id)
@@ -3806,17 +3809,11 @@ do
   end
 end
 
-function WeakAuras.GetAuraTooltipInfo(unit, index, filter)
-  local tooltip = WeakAuras.GetHiddenTooltip();
-  tooltip:ClearLines();
-  tooltip:SetUnitAura(unit, index, filter);
-  local tooltipTextLine = select(3, tooltip:GetRegions())
-
-  local tooltipText = tooltipTextLine and tooltipTextLine:GetObjectType() == "FontString" and tooltipTextLine:GetText() or "";
+function Private.ParseTooltipText(tooltipText)
   local debuffType = "none";
   local tooltipSize = {};
   if(tooltipText) then
-    for t in tooltipText:gmatch("(%d[%d%.,]*)") do
+    for t in tooltipText:gmatch("(-?%d[%d%.,]*)") do
       if (LARGE_NUMBER_SEPERATOR == ",") then
         t = t:gsub(",", "");
       else
@@ -3832,6 +3829,17 @@ function WeakAuras.GetAuraTooltipInfo(unit, index, filter)
   else
     return tooltipText, debuffType, 0;
   end
+end
+
+function WeakAuras.GetAuraTooltipInfo(unit, index, filter)
+  local tooltipText = ""
+  local tooltip = WeakAuras.GetHiddenTooltip();
+  tooltip:ClearLines();
+  tooltip:SetUnitAura(unit, index, filter);
+  local tooltipTextLine = select(3, tooltip:GetRegions())
+  tooltipText = tooltipTextLine and tooltipTextLine:GetObjectType() == "FontString" and tooltipTextLine:GetText() or "";
+
+  return Private.ParseTooltipText(tooltipText)
 end
 
 local FrameTimes = {};

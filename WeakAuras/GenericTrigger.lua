@@ -555,15 +555,11 @@ function Private.ActivateEvent(id, triggernum, data, state, errorHandler)
     state.autoHide = autoHide;
   elseif (data.durationFunc) then
     local ok, arg1, arg2, arg3, inverse = pcall(data.durationFunc, data.trigger);
+    arg1 = ok and type(arg1) == "number" and arg1 or 0;
+    arg2 = ok and type(arg2) == "number" and arg2 or 0;
     if not ok then
-      (errorHandler or Private.GetErrorHandlerId(id, L["Duration Function"]))(arg1)
-      arg1 = 0;
-      arg2 = 0;
-    else
-      arg1 = type(arg1) == "number" and arg1 or 0;
-      arg2 = type(arg2) == "number" and arg2 or 0;
+      if errorHandler then errorHandler(arg1) else Private.GetErrorHandlerId(id, L["Duration Function"]) end
     end
-
 
     if (state.inverse ~= inverse) then
       state.inverse = inverse;
@@ -683,6 +679,9 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       else
         ok, returnValue = pcall(data.triggerFunc, allStates, event, arg1, arg2, ...);
       end
+      if not ok then
+        errorHandler(returnValue)
+      end
       if( (ok and returnValue) or optionsEvent) then
         for id, state in pairs(allStates) do
           if (state.changed) then
@@ -693,9 +692,6 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
         end
       else
         untriggerCheck = true;
-        if not ok then
-          errorHandler(returnValue)
-        end
       end
     elseif (data.statesParameter == "unit") then
       if arg1 then
@@ -718,15 +714,15 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
         else
           ok, returnValue = pcall(data.triggerFunc, state, event, unitForUnitTrigger, arg1, arg2, ...);
         end
+        if not ok then
+            errorHandler(returnValue)
+        end
         if (ok and returnValue) or optionsEvent then
           if(Private.ActivateEvent(id, triggernum, data, state)) then
             updateTriggerState = true;
           end
         else
           untriggerCheck = true;
-          if not ok then
-            errorHandler(returnValue)
-          end
         end
       end
     elseif (data.statesParameter == "one") then
@@ -738,15 +734,15 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
       else
         ok, returnValue = pcall(data.triggerFunc, state, event, arg1, arg2, ...);
       end
+      if not ok then
+        errorHandler(returnValue)
+      end
       if (ok and returnValue) or optionsEvent then
         if(Private.ActivateEvent(id, triggernum, data, state, (optionsEvent and data.ignoreOptionsEventErrors) and ignoreErrorHandler or nil)) then
           updateTriggerState = true;
         end
       else
         untriggerCheck = true;
-        if not ok then
-          errorHandler(returnValue)
-        end
       end
     else
       local ok, returnValue
@@ -754,6 +750,9 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
         ok, returnValue = pcall(data.triggerFunc, data.counter, event, arg1, arg2, ...);
       else
         ok, returnValue = pcall(data.triggerFunc, event, arg1, arg2, ...);
+      end
+      if not ok then
+        errorHandler(returnValue)
       end
       if (ok and returnValue) or optionsEvent then
         allStates[""] = allStates[""] or {};
@@ -763,9 +762,6 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
         end
       else
         untriggerCheck = true;
-        if not ok then
-          errorHandler(returnValue)
-        end
       end
     end
     if (untriggerCheck and not optionsEvent) then
@@ -897,10 +893,8 @@ function Private.ScanEvents(event, arg1, arg2, ...)
       Private.StopProfileSystem("generictrigger " .. system)
       return;
     end
-    Private.ScanEventsInternal(event_list, event, arg1, arg2, ...);
-  else
-    Private.ScanEventsInternal(event_list, event, arg1, arg2, ...);
   end
+  Private.ScanEventsInternal(event_list, event, arg1, arg2, ...);
   Private.StopProfileSystem("generictrigger " .. system)
 end
 
@@ -1247,13 +1241,13 @@ local frame = CreateFrame("Frame");
 frame.unitFrames = {};
 Private.frames["WeakAuras Generic Trigger Frame"] = frame;
 frame:RegisterEvent("PLAYER_ENTERING_WORLD");
-genericTriggerRegisteredEvents["PLAYER_ENTERING_WORLD"] = true;
 if WeakAuras.IsAwesomeEnabled() then
   frame:RegisterEvent("NAME_PLATE_UNIT_ADDED")
   frame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
   genericTriggerRegisteredEvents["NAME_PLATE_UNIT_ADDED"] = true;
   genericTriggerRegisteredEvents["NAME_PLATE_UNIT_REMOVED"] = true;
 end
+genericTriggerRegisteredEvents["PLAYER_ENTERING_WORLD"] = true;
 frame:SetScript("OnEvent", HandleEvent);
 
 function GenericTrigger.Delete(id)
@@ -1775,7 +1769,7 @@ function GenericTrigger.Add(data, region)
                   end
                 elseif Private.InternalEventByIDList[trueEvent] then
                   tinsert(trigger_events, trueEvent..":"..i)
-                elseif trueEvent:match("^UNIT_") then
+                elseif trueEvent:match("^UNIT_") or Private.UnitEventList[trueEvent] then
                   isUnitEvent = true
 
                   if string.lower(strsub(i, #i - 3)) == "pets" then
@@ -2131,9 +2125,9 @@ do
         lastSwingOff, swingDurationOff = nil, nil
         swingTriggerUpdate()
       end
-    elseif event == "PLAYER_REGEN_DISABLED" then
+    elseif event == "PLAYER_ENTER_COMBAT" then
       isAttacking = true
-    elseif event == "PLAYER_REGEN_ENABLED" then
+    elseif event == "PLAYER_LEAVE_COMBAT" then
       isAttacking = nil
     end
     Private.StopProfileSystem("generictrigger swing");
@@ -2143,8 +2137,8 @@ do
     if not(swingTimerFrame) then
       swingTimerFrame = CreateFrame("Frame");
       swingTimerFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
-      swingTimerFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
-      swingTimerFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
+      swingTimerFrame:RegisterEvent("PLAYER_ENTER_COMBAT");
+      swingTimerFrame:RegisterEvent("PLAYER_LEAVE_COMBAT");
       swingTimerFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
       swingTimerFrame:RegisterEvent("UNIT_ATTACK_SPEED");
       swingTimerFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
@@ -2354,14 +2348,15 @@ do
     cdReadyFrame:RegisterEvent("PLAYER_TALENT_UPDATE");
     cdReadyFrame:RegisterEvent("CHARACTER_POINTS_CHANGED");
     cdReadyFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN");
+    cdReadyFrame:RegisterEvent("SPELL_UPDATE_USABLE")
     cdReadyFrame:RegisterEvent("UNIT_SPELLCAST_SENT");
     cdReadyFrame:RegisterEvent("BAG_UPDATE_COOLDOWN");
-    cdReadyFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    cdReadyFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
     cdReadyFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
     cdReadyFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN");
     cdReadyFrame:RegisterEvent("SPELLS_CHANGED");
     cdReadyFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-    cdReadyFrame:RegisterEvent("PLAYER_LEAVING_WORLD");
+    cdReadyFrame:RegisterEvent("PLAYER_LEAVING_WORLD")
     cdReadyFrame.HandleEvent = function(self, event, ...)
       if (event == "PLAYER_ENTERING_WORLD") then
         cdReadyFrame.inWorld = GetTime()
@@ -2398,11 +2393,13 @@ do
         end
       elseif(event == "SPELL_UPDATE_COOLDOWN" or event == "RUNE_POWER_UPDATE"
         or event == "PLAYER_TALENT_UPDATE"
-        or event == "CHARACTER_POINTS_CHANGED" or event == "RUNE_TYPE_UPDATE") then
-          if event == "SPELL_UPDATE_COOLDOWN" then
-            mark_ACTIONBAR_UPDATE_COOLDOWN = nil
-          end
-          Private.CheckCooldownReady();
+        or event == "CHARACTER_POINTS_CHANGED" or event == "RUNE_TYPE_UPDATE")
+        or event == "SPELL_UPDATE_USABLE"
+      then
+        if event == "SPELL_UPDATE_COOLDOWN" then
+          mark_ACTIONBAR_UPDATE_COOLDOWN = nil
+        end
+        Private.CheckCooldownReady();
       elseif(event == "SPELLS_CHANGED") then
         Private.CheckSpellKnown()
         Private.CheckCooldownReady()
@@ -2418,7 +2415,7 @@ do
             end
           end
         end
-      elseif(event == "UNIT_INVENTORY_CHANGED" and ... == "player" or event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_EQUIPMENT_CHANGED") then
+      elseif(event == "UNIT_INVENTORY_CHANGED" or event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_EQUIPMENT_CHANGED") then
         Private.CheckItemSlotCooldowns();
       end
       Private.StopProfileSystem("generictrigger cd tracking");
@@ -2896,7 +2893,7 @@ do
         startTime, duration = 0, 0
       end
       itemCdEnabled[id] = enabled;
-      if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
+      if(duration and duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
         local time = GetTime();
         local endTime = startTime + duration;
         itemCdDurs[id] = duration;
@@ -2961,13 +2958,13 @@ function WeakAuras.WatchUnitChange(unit)
 
     Private.frames["Unit Change Frame"] = watchUnitChange;
     watchUnitChange:RegisterEvent("PLAYER_TARGET_CHANGED")
-    watchUnitChange:RegisterEvent("PLAYER_FOCUS_CHANGED");
+    watchUnitChange:RegisterEvent("PLAYER_FOCUS_CHANGED")
     watchUnitChange:RegisterEvent("ARENA_OPPONENT_UPDATE")
-    watchUnitChange:RegisterEvent("PLAYER_ROLES_ASSIGNED");
+    watchUnitChange:RegisterEvent("PLAYER_ROLES_ASSIGNED")
     watchUnitChange:RegisterEvent("UNIT_TARGET");
     watchUnitChange:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT");
-    watchUnitChange:RegisterEvent("PARTY_MEMBERS_CHANGED");
-    watchUnitChange:RegisterEvent("RAID_ROSTER_UPDATE");
+    watchUnitChange:RegisterEvent("PARTY_MEMBERS_CHANGED")
+    watchUnitChange:RegisterEvent("RAID_ROSTER_UPDATE")
     if WeakAuras.IsAwesomeEnabled() then
       watchUnitChange:RegisterEvent("NAME_PLATE_UNIT_ADDED")
       watchUnitChange:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
@@ -3178,6 +3175,7 @@ function WeakAuras.WatchUnitChange(unit)
   watchUnitChange.trackedUnits[unit] = true
   watchUnitChange.unitIdToGUID[unit] = WeakAuras.UnitExistsFixed(unit) and UnitGUID(unit)
   watchUnitChange.unitExists[unit] = UnitExists(unit)
+
   if guid then
     watchUnitChange.GUIDToUnitIds[guid] = watchUnitChange.GUIDToUnitIds[guid] or {}
     watchUnitChange.GUIDToUnitIds[guid][unit] = true
@@ -3207,9 +3205,9 @@ function WeakAuras.GetEquipmentSetInfo(itemSetName, partial)
         for slot, item in ipairs(equipmentSetItemIDs) do
           if item > 0 then
             numItems = numItems + 1
-			if equipmentItemIDs[slot] == item then
-			  numEquipped = numEquipped + 1
-			end
+            if equipmentItemIDs[slot] == item then
+              numEquipped = numEquipped + 1
+            end
           end
         end
         local match = (not partial and numItems == numEquipped)
@@ -3347,12 +3345,12 @@ do
   function WeakAuras.TenchInit()
     if not(tenchFrame) then
       tenchFrame = CreateFrame("Frame");
-      tenchFrame:RegisterEvent("UNIT_INVENTORY_CHANGED");
       tenchFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-
-      tenchTip = WeakAuras.GetHiddenTooltip();
+      tenchFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
+      tenchFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 
       local function getTenchName(id)
+        tenchTip = WeakAuras.GetHiddenTooltip();
         tenchTip:SetInventoryItem("player", id);
         local lines = { tenchTip:GetRegions() };
         for i,v in ipairs(lines) do
@@ -3360,7 +3358,7 @@ do
             local text = v:GetText();
             if(text) then
               local _, _, name, shortenedName = text:find("^((.-) ?+?[XVI%d]*) %(%d+ .+%)$");
-              if(name) then
+              if(name and name ~= "") then
                 return name, shortenedName;
               end
             end
@@ -3372,7 +3370,7 @@ do
 
       local function tenchUpdate()
         Private.StartProfileSystem("generictrigger temporary enchant");
-        local _, mh_rem, oh_rem, rw_rem, re_charges
+        local _, mh_rem, oh_rem, rw_rem
         _, mh_rem, mh_charges, _, oh_rem, oh_charges, _, rw_rem, rw_charges = GetWeaponEnchantInfo();
         local time = GetTime();
         local mh_exp_new = mh_rem and (time + (mh_rem / 1000));
@@ -3412,8 +3410,7 @@ do
         Private.StopProfileSystem("generictrigger temporary enchant");
       end
 
-      tenchFrame:SetScript("OnEvent", function(_,_,unit, ...)
-        if unit and unit ~= "player" then return end
+      tenchFrame:SetScript("OnEvent", function()
         Private.StartProfileSystem("generictrigger temporary enchant");
         timer:ScheduleTimer(tenchUpdate, 0.1)
         Private.StopProfileSystem("generictrigger temporary enchant");
@@ -3443,9 +3440,8 @@ do
   function WeakAuras.WatchForPetDeath()
     if not(petFrame) then
       petFrame = CreateFrame("Frame");
-      petFrame:RegisterEvent("UNIT_PET")
-      petFrame:SetScript("OnEvent", function(_, event, unit)
-        if unit ~= "player" then return end
+      petFrame:RegisterUnitEvent("UNIT_PET", "player")
+      petFrame:SetScript("OnEvent", function(event, unit)
         Private.StartProfileSystem("generictrigger pet update")
         Private.ScanEvents("PET_UPDATE", "pet")
         Private.StopProfileSystem("generictrigger pet update")
@@ -3462,16 +3458,14 @@ do
       castLatencyFrame = CreateFrame("Frame")
       Private.frames["Cast Latency Handler"] = castLatencyFrame
       castLatencyFrame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_START")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_STOP")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-      castLatencyFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_START", "player")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", "player")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_STOP", "player")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
+      castLatencyFrame:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
 
-      castLatencyFrame:SetScript("OnEvent", function(self, event, unit, ...)
-        if unit and unit ~= "player" then return end
-
+      castLatencyFrame:SetScript("OnEvent", function(self, event, ...)
         if event == "CURRENT_SPELL_CAST_CHANGED" then
           castLatencyFrame.sendTime = GetTime()
           return
@@ -3480,6 +3474,7 @@ do
           castLatencyFrame.sendTime = nil
           return
         end
+
         if castLatencyFrame.sendTime then
           castLatencyFrame.timeDiff = (GetTime() - castLatencyFrame.sendTime)
         else
@@ -3495,7 +3490,6 @@ do
 
 end
 
--- Nameplate Target
 do
   local nameplateTargetFrame = nil
   local nameplateTargets = {}
@@ -3579,23 +3573,29 @@ end
 do
   local playerMovingFrame = nil
 
-  local function PlayerMoveSpeedUpdate()
+  local function PlayerMoveUpdate()
     Private.StartProfileSystem("generictrigger player moving");
     local speed = GetUnitSpeed("player")
-    if speed ~= playerMovingFrame.speed then
+    if playerMovingFrame.speed ~= speed then
       playerMovingFrame.speed = speed
       Private.ScanEvents("PLAYER_MOVE_SPEED_UPDATE")
+    end
+
+    local moving = speed > 0
+    if playerMovingFrame.moving ~= moving then
+      playerMovingFrame.moving = moving
+      Private.ScanEvents("PLAYER_MOVING_UPDATE")
     end
     Private.StopProfileSystem("generictrigger player moving");
   end
 
-  function WeakAuras.WatchPlayerMoveSpeed()
-    if not (playerMovingFrame) then
+  function WeakAuras.WatchForPlayerMoving()
+    if not(playerMovingFrame) then
       playerMovingFrame = CreateFrame("Frame");
       Private.frames["Player Moving Frame"] =  playerMovingFrame;
+      playerMovingFrame.speed = GetUnitSpeed("player")
     end
-    playerMovingFrame.speed = GetUnitSpeed("player")
-    playerMovingFrame:SetScript("OnUpdate", PlayerMoveSpeedUpdate)
+    playerMovingFrame:SetScript("OnUpdate", PlayerMoveUpdate)
   end
 end
 
@@ -3683,18 +3683,31 @@ do
 end
 
 -- Item Count
-local itemCountWatchFrame;
+local itemCountWatchFrame
 function WeakAuras.RegisterItemCountWatch()
-  if not(itemCountWatchFrame) then
-    itemCountWatchFrame = CreateFrame("Frame");
-    itemCountWatchFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
-    itemCountWatchFrame:SetScript("OnEvent", function(_, _, unit)
-      if unit ~= "player" then return end
-      Private.StartProfileSystem("generictrigger item count");
-      timer:ScheduleTimer(Private.ScanEvents, 0.2, "ITEM_COUNT_UPDATE");
-      timer:ScheduleTimer(Private.ScanEvents, 0.5, "ITEM_COUNT_UPDATE");
-      Private.StopProfileSystem("generictrigger item count");
-    end);
+  if not itemCountWatchFrame then
+    itemCountWatchFrame = CreateFrame("Frame")
+    itemCountWatchFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+    itemCountWatchFrame:RegisterEvent("BAG_UPDATE")
+    local batchUpdateCount = function()
+      itemCountWatchFrame:SetScript("OnUpdate", nil)
+      Private.StartProfileSystem("generictrigger ITEM_COUNT_UPDATE")
+      Private.ScanEvents("ITEM_COUNT_UPDATE")
+      Private.StopProfileSystem("generictrigger ITEM_COUNT_UPDATE")
+    end
+    itemCountWatchFrame:SetScript("OnEvent", function(self, event)
+      Private.StartProfileSystem("generictrigger itemCountFrame")
+      if event == "ACTIONBAR_UPDATE_COOLDOWN" then
+        -- WORKAROUND: Blizzard bug: refreshing healthstones from soulwell don't trigger BAG_UPDATE_DELAYED
+        -- so, we fake it by listening to A_U_C and checking on next frame
+        itemCountWatchFrame:SetScript("OnUpdate", batchUpdateCount)
+      else
+        -- if we *do* get a B_U_D, then cancel our fake one
+        -- item count prototype already subscribes to this event so no need to also send an internal event
+        itemCountWatchFrame:SetScript("OnUpdate", nil)
+      end
+      Private.StopProfileSystem("generictrigger itemCountFrame")
+    end)
   end
 end
 
@@ -3702,10 +3715,10 @@ end
 -- We always register, because it's probably not that often called, and ScanEvents checks
 -- early if anyone wants the event
 Private.LibGroupTalentsWrapper.Register(function(unit)
-  WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
   if unit == "player" then
     Private.ScanForLoads(nil, "UNIT_SPEC_CHANGED_" .. unit)
   end
+  WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
 
 do
@@ -3731,7 +3744,6 @@ do
     scheduled_scans[unit][firetime] = nil;
     Private.ScanEvents("CAST_REMAINING_CHECK_" .. string.lower(unit), unit);
   end
-
   function Private.ExecEnv.ScheduleCastCheck(fireTime, unit)
     scheduled_scans[unit] = scheduled_scans[unit] or {}
     if not(scheduled_scans[unit][fireTime]) then
@@ -4038,7 +4050,9 @@ local commonConditions = {
       end
       return IsItemInRange(state.itemname, 'target') == 1 == (needle == 1)
     end,
-    events = { "PLAYER_TARGET_CHANGED", "WA_SPELL_RANGECHECK", }
+    events = Private.AddTargetConditionEvents({
+      "WA_SPELL_RANGECHECK",
+    })
   },
 }
 
@@ -4257,27 +4271,23 @@ function GenericTrigger.CreateFallbackState(data, triggernum, state)
 
   if (event.textureFunc ) then
     local ok, texture = pcall(event.textureFunc, trigger);
+    state.texture = ok and texture or nil;
     if not ok then
       Private.GetErrorHandlerUid(data.uid, L["Texture Function (fallback state)"])
-      state.texture = nil
-    else
-      state.texture = texture or nil
     end
   end
 
   if (event.stacksFunc) then
     local ok, stacks = pcall(event.stacksFunc, trigger);
+    state.stacks = ok and stacks or nil;
     if not ok then
       Private.GetErrorHandlerUid(data.uid, L["Stacks Function (fallback state)"])
-      state.stacks = nil
-    else
-      state.stacks = stacks or nil
     end
   end
 
   if (event.durationFunc) then
     local ok, arg1, arg2, arg3, inverse = pcall(event.durationFunc, trigger);
-    if not ok then
+    if (not ok) then
       Private.GetErrorHandlerUid(data.uid, L["Duration Function (fallback state)"])
       state.progressType = "timed";
       state.duration = 0;

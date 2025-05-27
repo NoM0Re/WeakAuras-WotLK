@@ -7137,7 +7137,7 @@ Private.event_prototypes = {
     end,
     loadFunc = function(trigger)
       if trigger.use_moveSpeed then
-        WeakAuras.WatchPlayerMoveSpeed()
+        WeakAuras.WatchForPlayerMoving()
       end
     end,
     force_events = "CONDITIONS_CHECK",
@@ -7656,7 +7656,7 @@ Private.event_prototypes = {
       local events = { "CONDITIONS_CHECK"};
 
       if trigger.use_ismoving ~= nil then
-        tinsert(events, "PLAYER_MOVE_SPEED_UPDATE");
+        tinsert(events, "PLAYER_MOVING_UPDATE");
       end
 
       if trigger.use_instance_difficulty ~= nil
@@ -7676,7 +7676,7 @@ Private.event_prototypes = {
     name = L["Conditions"],
     loadFunc = function(trigger)
       if (trigger.use_ismoving ~= nil) then
-        WeakAuras.WatchPlayerMoveSpeed();
+        WeakAuras.WatchForPlayerMoving();
       end
       if (trigger.use_HasPet ~= nil) then
         AddWatchedUnits("pet")
@@ -8522,6 +8522,23 @@ Private.dynamic_texts = {
     end
   }
 };
+
+-- Events in that list can be filtered by unitID
+Private.UnitEventList = {
+  PLAYER_GUILD_UPDATE = true,
+  MINIMAP_PING = true,
+  PARTY_MEMBER_DISABLE = true,
+  PARTY_MEMBER_ENABLE = true,
+  READY_CHECK_CONFIRM = true,
+  PLAYER_GAINS_VEHICLE_DATA = true,
+  PLAYER_LOSES_VEHICLE_DATA = true,
+  KNOWN_TITLES_UPDATE = true,
+  PLAYER_DAMAGE_DONE_MODS = true,
+  PLAYER_FLAGS_CHANGED = true,
+  PLAYER_PVP_KILLS_CHANGED = true,
+  PLAYER_PVP_RANK_CHANGED = true,
+  PLAYER_XP_UPDATE = true,
+}
 
 Private.InternalEventByIDList = {
   ITEM_COOLDOWN_STARTED = true,
