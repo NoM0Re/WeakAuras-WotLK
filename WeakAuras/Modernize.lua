@@ -4,6 +4,7 @@ local Private = select(2, ...)
 local L = WeakAuras.L
 
 -- Takes as input a table of display data and attempts to update it to be compatible with the current version
+--- Modernizes the aura data
 function Private.Modernize(data, oldSnapshot)
   if not data.internalVersion or data.internalVersion < 2 then
     WeakAuras.prettyPrint(string.format("Data for '%s' is too old, can't modernize.", data.id))
@@ -809,9 +810,6 @@ function Private.Modernize(data, oldSnapshot)
       end
     end
 
-    -- To convert:
-    -- * actions
-    -- * conditions
     data.progressPrecision = nil
     data.totalPrecision = nil
   end
@@ -993,6 +991,7 @@ function Private.Modernize(data, oldSnapshot)
       ["Totem"] = "spell",
       ["Ready Check"] = "event",
       ["BigWigs Message"] = "addons",
+      ["Class/Spec"] = "unit",
       ["Stance/Form/Aura"] = "unit",
       ["Weapon Enchant"] = "item",
       ["Global Cooldown"] = "spell",
@@ -1498,7 +1497,7 @@ function Private.Modernize(data, oldSnapshot)
     end
     do
       local loadFields = {
-        "level", "itemequiped", "itemequiped"
+        "level", "itemequiped"
       }
 
       for _, field in ipairs(loadFields) do
@@ -1736,6 +1735,24 @@ function Private.Modernize(data, oldSnapshot)
     migrateToTable(data.load, "itemequiped")
   end
 
+  if data.internalVersion < 70 then
+    local trigger_migration = {
+      Power = {
+        "power",
+        "power_operator"
+      }
+    }
+    for _, triggerData in ipairs(data.triggers) do
+      local t = triggerData.trigger
+      local fieldsToMigrate = trigger_migration[t.event]
+      if fieldsToMigrate then
+        for _, field in ipairs(fieldsToMigrate) do
+          migrateToTable(t, field)
+        end
+      end
+    end
+  end
+
   if data.internalVersion < 71 then
     if data.regionType == 'icon' or data.regionType == 'aurabar'
        or data.regionType == 'progresstexture'
@@ -1946,6 +1963,7 @@ function Private.Modernize(data, oldSnapshot)
         multi = true
       }
     }
+
     local function fixData(data, fields)
       for k, v in pairs(fields) do
         if v == true and type(data[k]) == "table" then
@@ -1969,6 +1987,7 @@ function Private.Modernize(data, oldSnapshot)
         end
       end
     end
+
     for _, triggerData in ipairs(data.triggers) do
       fixData(triggerData.trigger, triggerFix)
     end
@@ -1994,6 +2013,7 @@ function Private.Modernize(data, oldSnapshot)
       end
     end
   end
+
 
   if data.internalVersion < 80 then
     -- Use common names for anchor areas/points so
@@ -2169,6 +2189,23 @@ function Private.Modernize(data, oldSnapshot)
             end
             triggerData.trigger = newTrigger
           end
+        end
+      end
+    end
+    -- Migrates the "power" and "power_operator" fields for the Power trigger again,
+    -- from internalVersion < 70. Previously missed the migration.
+    local trigger_migration = {
+      Power = {
+        "power",
+        "power_operator"
+      }
+    }
+    for _, triggerData in ipairs(data.triggers) do
+      local t = triggerData.trigger
+      local fieldsToMigrate = trigger_migration[t.event]
+      if fieldsToMigrate then
+        for _, field in ipairs(fieldsToMigrate) do
+          migrateToTable(t, field)
         end
       end
     end
