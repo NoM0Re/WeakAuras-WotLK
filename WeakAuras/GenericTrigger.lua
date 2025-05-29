@@ -2490,7 +2490,7 @@ do
       end
     end,
 
-    WatchSpellCooldown = function(self, spellId, ignoreRunes, useExact, followoverride)
+    WatchSpellCooldown = function(self, spellId, ignoreRunes)
       if not(cdReadyFrame) then
         Private.InitCooldownReady();
       end
@@ -2498,9 +2498,6 @@ do
       if not spellId or spellId == 0 then
         return
       end
-
-      useExact = useExact and true or false
-      followoverride = followoverride and true or false
 
       if ignoreRunes then
         for i = 1, 6 do
@@ -2531,7 +2528,7 @@ do
       if not spellDetail.known and not ignoreSpellKnown then
         return
       end
-      return spellDetail.count, spellDetail.chargeGainTime, spellDetail.chargeLostTime
+      return spellDetail.count, spellDetail.count, spellDetail.count, spellDetail.chargeGainTime, spellDetail.chargeLostTime
     end,
 
     GetSpellCooldown = function(self, spellId, ignoreRuneCD, showgcd, ignoreSpellKnown, track)
@@ -3019,8 +3016,8 @@ do
     end
   end
 
-  function WeakAuras.WatchSpellCooldown(id, ignoreRunes, useExact, followoverride)
-    SpellDetails:WatchSpellCooldown(id, ignoreRunes, useExact, followoverride)
+  function WeakAuras.WatchSpellCooldown(id, ignoreRunes)
+    SpellDetails:WatchSpellCooldown(id, ignoreRunes)
   end
 
   function WeakAuras.WatchItemCooldown(id)

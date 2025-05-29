@@ -3676,11 +3676,13 @@ Private.event_prototypes = {
         local track = %q
         local effectiveSpellId = spellname
         local name, _, icon = GetSpellInfo(effectiveSpellId)
-        local startTime, duration, gcdCooldown, readyTime, modRate, paused = WeakAuras.GetSpellCooldown(effectiveSpellId, ignoreRuneCD, showgcd, ignoreSpellKnown, track)
-        local spellCount, chargeGainTime, chargeLostTime = WeakAuras.GetSpellCharges(effectiveSpellId, ignoreSpellKnown)
-        local stacks = (spellCount and spellCount > 0 and spellCount) or nil;
-        -- Use fake charges for spells that use GetSpellCooldown
-        local charges = (duration == 0 or gcdCooldown) and 1 or 0;
+        local startTime, duration, gcdCooldown, readyTime, paused = WeakAuras.GetSpellCooldown(effectiveSpellId, ignoreRuneCD, showgcd, ignoreSpellKnown, track)
+        local charges, maxCharges, spellCount, chargeGainTime, chargeLostTime = WeakAuras.GetSpellCharges(effectiveSpellId, ignoreSpellKnown)
+        local stacks = spellCount and spellCount > 0 and spellCount or nil;
+        if (charges == nil) then
+          -- Use fake charges for spells that use GetSpellCooldown
+          charges = (duration == 0 or gcdCooldown) and 1 or 0;
+        end
         local genericShowOn = %s
         local expirationTime = startTime and duration and startTime + duration
         state.spellname = spellname;
@@ -3814,7 +3816,7 @@ Private.event_prototypes = {
             end
 
             if trigger.genericShowOn ~= "showOnReady" and trigger.track ~= "cooldown" then
-              if trigger.use_trackcharge and trigger.trackcharge ~= "" then
+              if trigger.use_trackcharge and trigger.trackcharge and trigger.trackcharge ~= "" then
                 if text ~= "" then text = text .. "; " end
                 text = text .. L["Tracking Charge %i"]:format(trigger.trackcharge)
               end
@@ -4061,7 +4063,6 @@ Private.event_prototypes = {
         type = "spell",
         init = "arg",
         forceExactOption = true,
-        test = "spellname == spellName"
       },
       {
         name = "name",
@@ -4101,7 +4102,7 @@ Private.event_prototypes = {
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
       local ret = [=[
         local triggerSpellName = %s
-        local name, _, icon = Private.ExecEnv.GetSpellInfo(triggerSpellName)
+        local name, _, icon = GetSpellInfo(triggerSpellName)
       ]=]
       return ret:format(spellName)
     end,
@@ -4115,7 +4116,6 @@ Private.event_prototypes = {
         type = "spell",
         init = "arg",
         forceExactOption = true,
-        test = "triggerSpellName == spellName"
       },
       {
         name = "direction",
@@ -4947,7 +4947,10 @@ Private.event_prototypes = {
       }
     end,
     loadInternalEventFunc = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      if type(trigger.spellName) == "number" then
+        spellName = GetSpellInfo(spellName) or ""
+      end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_CHANGED:" .. spellName }
     end,
@@ -4955,11 +4958,17 @@ Private.event_prototypes = {
     name = L["Spell Usable"],
     statesParameter = "one",
     loadFunc = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      if type(trigger.spellName) == "number" then
+        spellName = GetSpellInfo(spellName) or ""
+      end
       WeakAuras.WatchSpellCooldown(spellName, false);
     end,
     init = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      if type(trigger.spellName) == "number" then
+        spellName = GetSpellInfo(spellName) or ""
+      end
       local ret = [=[
         local spellName = %s
         local effectiveSpellId = spellName
@@ -4971,9 +4980,11 @@ Private.event_prototypes = {
       else
         ret = ret .. [=[
         local startTime, duration, gcdCooldown, readyTime, paused = WeakAuras.GetSpellCooldown(effectiveSpellId)
-        local spellCount, chargeGainTime, chargeLostTime = WeakAuras.GetSpellCharges(effectiveSpellId)
+        local charges, maxCharges, spellCount, chargeGainTime, chargeLostTime = WeakAuras.GetSpellCharges(effectiveSpellId)
         local stacks = spellCount and spellCount > 0 and spellCount or nil
-        charges = (duration == 0 or gcdCooldown) and 1 or 0;
+        if (charges == nil) then
+          charges = (duration == 0 or gcdCooldown) and 1 or 0;
+        end
         local ready = (startTime == 0 and not paused) or charges > 0
         local active = IsUsableSpell(spellName or "") and ready
         ]=]
@@ -4983,6 +4994,10 @@ Private.event_prototypes = {
       end
       if(trigger.use_inverse) then
         ret = ret.."active = not active\n";
+      end
+
+      if (type(spellName) == "string") then
+        spellName = string.format("%q", spellName)
       end
 
       return ret:format(spellName)
@@ -4995,7 +5010,7 @@ Private.event_prototypes = {
         required = true,
         type = "spell",
         test = "true",
-        forceExactOption = true,
+        showExactOption = true,
         store = true
       },
       -- This parameter uses the IsSpellInRange API function, but it does not check spell range at all
