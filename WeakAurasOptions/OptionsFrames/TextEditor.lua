@@ -157,6 +157,7 @@ local function ConstructTextEditor(frame)
   group:SetLayout("flow")
 
   local editor = AceGUI:Create("MultiLineEditBox")
+  editor.editBox.group = group
   editor:SetFullWidth(true)
   editor:SetFullHeight(true)
   editor:DisableButton(true)
@@ -504,7 +505,7 @@ local function ConstructTextEditor(frame)
   editor.editBox.timeMachine = {}
   editor.editBox.timeMachinePos = 1
   local TimeMachineMaximumRollback = 10
-
+  --[[ Doesn't exist, we need a workaround for that
   editor.editBox:HookScript(
     "OnKeyDown",
     function(self, key)
@@ -539,10 +540,35 @@ local function ConstructTextEditor(frame)
       end
     end
   )
+  ]]
 
   editor.editBox:HookScript(
     "OnTextChanged",
     function(self, userInput)
+      local str = editor.editBox:GetText()
+      if not str or str:trim() == "" or editor.combinedText == true then
+        self.group.editorError:SetText("")
+      else
+        local func, errorString
+        if (self.group.enclose) then
+          func, errorString = OptionsPrivate.Private.LoadFunction("return function() " .. str .. "\n end", self.group.data.id, true)
+        else
+          func, errorString = OptionsPrivate.Private.LoadFunction("return " .. str, self.group.data.id, true)
+        end
+        if not errorString and self.group.validator then
+          errorString = self.group.validator(func)
+        end
+        if errorString then
+          if self.url then
+            helpButton:Show()
+          end
+          self.group.editorError:Show()
+          self.group.editorError:SetText(errorString)
+        else
+          self.group.editorError:SetText("")
+        end
+      end
+
       if not userInput then return end
       if self.skipOnTextChanged then
         self.skipOnTextChanged = false
@@ -596,6 +622,7 @@ local function ConstructTextEditor(frame)
   editorError:SetTextColor(1, 0, 0)
   editorError:SetPoint("LEFT", helpButton, "RIGHT", 0, 4)
   editorError:SetPoint("RIGHT", settings_frame, "LEFT")
+  group.editorError = editorError
 
   local editorLine = CreateFrame("EditBox", nil, group.frame, "WA_InputBoxTemplate")
   -- Set script on enter pressed..
@@ -658,6 +685,8 @@ local function ConstructTextEditor(frame)
     self.reloadOptions = reloadOptions
     self.setOnParent = setOnParent
     self.url = url
+    self.enclose = enclose
+    self.validator = validator
     if url then
       helpButton:Show()
     else
@@ -692,36 +721,6 @@ local function ConstructTextEditor(frame)
       "OnEscapePressed",
       function()
         -- catch it so that escape doesn't default to losing focus (after which another escape would close config)
-      end
-    )
-    self.oldOnTextChanged = editor.editBox:GetScript("OnTextChanged")
-    editor.editBox:SetScript(
-      "OnTextChanged",
-      function(...)
-        local str = editor.editBox:GetText()
-        if not str or str:trim() == "" or editor.combinedText == true then
-          editorError:SetText("")
-        else
-          local func, errorString
-          if (enclose) then
-            func, errorString = OptionsPrivate.Private.LoadFunction("return function() " .. str .. "\n end", data.id,  true)
-          else
-            func, errorString = OptionsPrivate.Private.LoadFunction("return " .. str, data.id, true)
-          end
-          if not errorString and validator then
-            errorString = validator(func)
-          end
-          if errorString then
-            if self.url then
-              helpButton:Show()
-            end
-            editorError:Show()
-            editorError:SetText(errorString)
-          else
-            editorError:SetText("")
-          end
-        end
-        self.oldOnTextChanged(...)
       end
     )
 
@@ -767,7 +766,6 @@ local function ConstructTextEditor(frame)
   end
 
   function group.CancelClose(self)
-    editor.editBox:SetScript("OnTextChanged", self.oldOnTextChanged)
     editor:ClearFocus()
     frame:HideTip()
     frame.window = "default"
@@ -827,7 +825,6 @@ local function ConstructTextEditor(frame)
 
     WeakAuras.ClearAndUpdateOptions(self.data.id)
 
-    editor.editBox:SetScript("OnTextChanged", self.oldOnTextChanged)
     editor:ClearFocus()
 
     frame.window = "default"
