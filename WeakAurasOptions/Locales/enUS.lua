@@ -37,6 +37,8 @@ local L = WeakAuras.L
 	L["%s - Finish Custom Text"] = "%s - Finish Custom Text"
 	L["%s - Init Action"] = "%s - Init Action"
 	L["%s - Main"] = "%s - Main"
+	L["%s - OnLoad"] = "%s - OnLoad"
+	L["%s - OnUnload"] = "%s - OnUnload"
 	L["%s - Option #%i has the key %s. Please choose a different option key."] = "%s - Option #%i has the key %s. Please choose a different option key."
 	L["%s - Rotate Animation"] = "%s - Rotate Animation"
 	L["%s - Scale Animation"] = "%s - Scale Animation"
@@ -166,7 +168,13 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Animates progress changes"] = "Animates progress changes"
 	L["Animation End"] = "Animation End"
 	L["Animation Mode"] = "Animation Mode"
-	L["Animation relative duration description"] = "Animation relative duration description"
+	L["Animation relative duration description"] = [=[The duration of the animation relative to the duration of the display, expressed as a fraction (1/2), percentage (50%), or decimal (0.5).
+|cFFFF0000Note:|r if a display does not have progress (it has a non-timed event trigger, is an aura with no duration, etc.), the animation will not play.
+
+|cFF4444FFFor Example:|r
+If the animation's duration is set to |cFF00CC0010%|r, and the display's trigger is a buff that lasts 20 seconds, the start animation will play for 2 seconds.
+If the animation's duration is set to |cFF00CC0010%|r, and the display's trigger is a buff that has no set duration, no start animation will play (although it would if you specified a duration in seconds)."
+]=]
 	L["Animation Sequence"] = "Animation Sequence"
 	L["Animation Start"] = "Animation Start"
 	L["Any of"] = "Any of"
@@ -265,12 +273,33 @@ Off Screen]=]
 	L["Custom Code"] = "Custom Code"
 	L["Custom Code Viewer"] = "Custom Code Viewer"
 	L["Custom Frames"] = "Custom Frames"
+	L["Custom Functions"] = "Custom Functions"
+	L["Custom Init"] = "Custom Init"
+	L["Custom Load"] = "Custom Load"
 	L["Custom Options"] = "Custom Options"
 	L["Custom Trigger"] = "Custom Trigger"
-	L["Custom trigger event tooltip"] = "Custom trigger event tooltip"
-	L["Custom trigger status tooltip"] = "Custom trigger status tooltip"
+	L["Custom trigger event tooltip"] = [=[Choose which events cause the custom trigger to be checked. Multiple events can be specified using commas or spaces.
+• "UNIT" events can use colons to define which unitIDs will be registered. In addition to UnitIDs Unit types can be used, they include "nameplate", "group", "raid", "party", "arena", "boss".
+• "CLEU" can be used instead of COMBAT_LOG_EVENT_UNFILTERED and colons can be used to separate specific "subEvents" you want to receive.
+• The keyword "TRIGGER" can be used, with colons separating trigger numbers, to have the custom trigger get updated when the specified trigger(s) update.
+
+|cFF4444FFFor example:|r
+UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:SPELL_CAST_SUCCESS TRIGGER:3:1
+]=]
+	L["Custom trigger status tooltip"] = [=[Choose which events cause the custom trigger to be checked. Multiple events can be specified using commas or spaces.
+
+• "UNIT" events can use colons to define which unitIDs will be registered. In addition to UnitIDs Unit types can be used, they include "nameplate", "group", "raid", "party", "arena", "boss".
+• "CLEU" can be used instead of COMBAT_LOG_EVENT_UNFILTERED and colons can be used to separate specific "subEvents" you want to receive.
+• The keyword "TRIGGER" can be used, with colons separating trigger numbers, to have the custom trigger get updated when the specified trigger(s) update.
+
+Since this is a status-type trigger, the specified events may be called by WeakAuras without the expected arguments.
+
+|cFF4444FFFor example:|r
+UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:SPELL_CAST_SUCCESS TRIGGER:3:1
+]=]
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Custom Trigger: Ignore Lua Errors on OPTIONS event"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "Custom Trigger: Send fake events instead of STATUS event"
+	L["Custom Unload"] = "Custom Unload"
 	L["Custom Untrigger"] = "Custom Untrigger"
 	L["Debug Log"] = "Debug Log"
 	L["Debug Log:"] = "Debug Log:"
@@ -404,7 +433,7 @@ Bleed classification via LibDispel]=]
 	L["Glow Type"] = "Glow Type"
 	L["Green Rune"] = "Green Rune"
 	L["Grid direction"] = "Grid direction"
-	L["Group (verb)"] = "Group (verb)"
+	L["Group (verb)"] = "Group"
 	L["Group Alpha"] = "Group Alpha"
 	L[ [=[Group and anchor each auras by frame.
 
@@ -415,7 +444,17 @@ Bleed classification via LibDispel]=]
 - Nameplates: attach to nameplates per unit.
 - Unit Frames: attach to unit frame buttons per unit.
 - Custom Frames: choose which frame each region should be anchored to.]=]
-	L["Group aura count description"] = "Group aura count description"
+	L["Group aura count description"] = [=[The amount of units of type '%s' which must be affected by one or more of the given auras for the display to trigger.
+If the entered number is a whole number (e.g. 5), the number of affected units will be compared with the entered number.
+If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentage (e.g. 50%%), then that fraction of the %s must be affected.
+
+|cFF4444FFFor example:|r
+|cFF00CC00> 0|r will trigger when any unit of type '%s' is affected
+|cFF00CC00= 100%%|r will trigger when every unit of type '%s' is affected
+|cFF00CC00!= 2|r will trigger when the number of units of type '%s' affected is not exactly 2
+|cFF00CC00<= 0.8|r will trigger when less than 80%% of the units of type '%s' is affected (4 of 5 party members, 8 of 10 or 20 of 25 raid members)
+|cFF00CC00> 1/2|r will trigger when more than half of the units of type '%s' is affected
+]=]
 	L["Group by Frame"] = "Group by Frame"
 	L["Group Description"] = "Group Description"
 	L["Group Icon"] = "Group Icon"
@@ -541,15 +580,18 @@ Bleed classification via LibDispel]=]
 	L["Move Up"] = "Move Up"
 	L["Moving auras: "] = "Moving auras: "
 	L["Multiple Displays"] = "Multiple Displays"
-	L["Multiselect ignored tooltip"] = "Multiselect ignored tooltip"
-	L["Multiselect multiple tooltip"] = "Multiselect multiple tooltip"
-	L["Multiselect single tooltip"] = "Multiselect single tooltip"
+	L["Multiselect ignored tooltip"] = [=[|cFFFF0000Ignored|r - |cFF777777Single|r - |cFF777777Multiple|r
+This option will not be used to determine when this display should load]=]
+	L["Multiselect multiple tooltip"] = [=[|cFF777777Ignored|r - |cFF777777Single|r - |cFF00FF00Multiple|r
+Any number of matching values can be picked]=]
+	L["Multiselect single tooltip"] = [=[|cFF777777Ignored|r - |cFF00FF00Single|r - |cFF777777Multiple|r
+Only a single matching value can be picked]=]
 	L["Must be a power of 2"] = "Must be a power of 2"
 	L["Name - The name of the display (usually an aura name), or the display's ID if there is no dynamic name"] = "Name - The name of the display (usually an aura name), or the display's ID if there is no dynamic name"
 	L["Name Info"] = "Name Info"
 	L["Name Pattern Match"] = "Name Pattern Match"
 	L["Name:"] = "Name:"
-	L["Negator"] = "Negator"
+	L["Negator"] = "Not"
 	L["New Aura"] = "New Aura"
 	L["New Template"] = "New Template"
 	L["New Value"] = "New Value"
@@ -587,7 +629,6 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Okay"] = "Okay"
 	L["ON"] = "ON"
 	L["On Hide"] = "On Hide"
-	L["On Init"] = "On Init"
 	L["On Show"] = "On Show"
 	L["Only Match auras cast by a player (not an npc)"] = "Only Match auras cast by a player (not an npc)"
 	L["Only match auras cast by people other than the player or their pet"] = "Only match auras cast by people other than the player or their pet"
@@ -690,7 +731,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Shadow Color"] = "Shadow Color"
 	L["Shadow X Offset"] = "Shadow X Offset"
 	L["Shadow Y Offset"] = "Shadow Y Offset"
-	L["Shift-click to create chat link"] = "Shift-click to create chat link"
+	L["Shift-click to create chat link"] = "Shift-click to create a |cFF8800FF[Chat Link]"
 	L["Show \"Edge\""] = "Show \"Edge\""
 	L["Show \"Swipe\""] = "Show \"Swipe\""
 	L["Show and Clone Settings"] = "Show and Clone Settings"
@@ -859,8 +900,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "Url: %s"
 	L["Use Display Info Id"] = "Use Display Info Id"
 	L["Use SetTransform"] = "Use SetTransform"
-	L["Used in Auras:"] = "Used in Auras:"
 	L["Used in auras:"] = "Used in auras:"
+	L["Used in Auras:"] = "Used in Auras:"
 	L["Uses Texture Coordinates to rotate the texture."] = "Uses Texture Coordinates to rotate the texture."
 	L["Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."] = "Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."
 	L["Value"] = "Value"

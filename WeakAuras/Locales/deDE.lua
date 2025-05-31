@@ -185,6 +185,8 @@ L["Assigned Role"] = "Zugewiesene Rolle"
 L["Assigned Role Icon"] = "Assigned Role Icon"
 --[[Translation missing --]]
 L["Assist"] = "Assist"
+--[[Translation missing --]]
+L["Assisted Combat Next Cast"] = "Assisted Combat Next Cast"
 L["At Least One Enemy"] = "Zumindest ein Feind"
 L["At missing Value"] = "Bei fehlendem Wert"
 L["At Percent"] = "Bei Prozent"
@@ -742,6 +744,8 @@ L["Error Frame"] = "Fehlerfenster"
 --[[Translation missing --]]
 L["ERROR in '%s' unknown or incompatible sub element type '%s'"] = "ERROR in '%s' unknown or incompatible sub element type '%s'"
 --[[Translation missing --]]
+L["Error in aura '%s'"] = "Error in aura '%s'"
+--[[Translation missing --]]
 L["Error not receiving display information from %s"] = "Error not receiving display information from %s"
 --[[Translation missing --]]
 L["Essence"] = "Essence"
@@ -987,9 +991,9 @@ L["Icon Function"] = "Icon Function"
 --[[Translation missing --]]
 L["Icon Function (fallback state)"] = "Icon Function (fallback state)"
 --[[Translation missing --]]
-L["Id"] = "Id"
---[[Translation missing --]]
 L["ID"] = "ID"
+--[[Translation missing --]]
+L["Id"] = "Id"
 --[[Translation missing --]]
 L["If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"] = "If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"
 --[[Translation missing --]]
@@ -1233,9 +1237,9 @@ E.g. 1;2;1;2;2.5;3]=] ] = [=[Matches stage number of encounter journal.
 Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=]
 --[[Translation missing --]]
-L["Max Char "] = "Max Char "
---[[Translation missing --]]
 L["Max Char"] = "Max Char"
+--[[Translation missing --]]
+L["Max Char "] = "Max Char "
 --[[Translation missing --]]
 L["Max Charges"] = "Max Charges"
 --[[Translation missing --]]
@@ -1328,8 +1332,6 @@ L["Name(s)"] = "Name(s)"
 L["Name/Realm of Caster's Target"] = "Name/Realm of Caster's Target"
 --[[Translation missing --]]
 L["Nameplate"] = "Nameplate"
---[[Translation missing --]]
-L["Nameplate Type"] = "Nameplate Type"
 --[[Translation missing --]]
 L["Nameplates"] = "Nameplates"
 --[[Translation missing --]]
@@ -1617,9 +1619,9 @@ L["Progress Total"] = "Totaler Fortschritt"
 L["Progress Value"] = "Fortschrittswert"
 L["Pulse"] = "Pulsieren"
 L["PvP Flagged"] = "PvP aktiv"
-L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["PvP Talent Selected"] = "PvP Talent Selected"
+L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -2055,8 +2057,8 @@ L["Talent |cFFFF0000Not|r Known"] = "Talent |cFFFF0000Not|r Known"
 L["Talent |cFFFF0000Not|r Selected"] = "Talent |cFFFF0000Not|r Selected"
 --[[Translation missing --]]
 L["Talent Known"] = "Talent Known"
-L["Talent Selected"] = "Talent gewählt"
 L["Talent selected"] = "Gewähltes Talent"
+L["Talent Selected"] = "Talent gewählt"
 L["Talent Specialization"] = "Talentspezialisierung"
 L["Tanking And Highest"] = "Höchster und Aggro"
 L["Tanking But Not Highest"] = "Aggro aber nicht höchste"

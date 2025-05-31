@@ -10,14 +10,14 @@ local L = WeakAuras.L
 	L[" and |cFFFF0000mirrored|r"] = "et  |cFFFF0000mirrored|r"
 	L["-- Do not remove this comment, it is part of this aura: "] = "-- Ne supprimez pas ce commentaire, il fait partie de cette aura :"
 	L[" rotated |cFFFF0000%s|r degrees"] = "degrés de |cFFFF0000%s|r  rotation"
-	L["% - To show a percent sign"] = "% - Pour afficher un symbole de pourcentage"
+	L["% - To show a percent sign"] = "% - Pour afficher un signe de pourcentage"
 	L["% of Progress"] = "% de progression"
 	L["%d |4aura:auras; added"] = "%d |4aura:auras; ajoutée(s)"
 	L["%d |4aura:auras; deleted"] = "%d |4aura:auras; supprimée(s)"
 	L["%d |4aura:auras; modified"] = "%d |4aura:auras; modifiée(s)"
 	L["%d |4aura:auras; with meta data modified"] = "%d |4aura:auras; avec métadonnées modifiées"
 	L["%d displays loaded"] = "%d affichages chargés"
-	L["%d displays not loaded"] = "%d affichages non chargés"
+	L["%d displays not loaded"] = "%d affichages non chargé"
 	L["%d displays on standby"] = "%d affichages en attente"
 	L["%i auras selected"] = "%i auras sélectionnées"
 	L["%i."] = "%i."
@@ -37,6 +37,10 @@ local L = WeakAuras.L
 	L["%s - Finish Custom Text"] = "%s - Terminer le texte personnalisé"
 	L["%s - Init Action"] = "%s - Initialiser l'action"
 	L["%s - Main"] = "%s - Principal"
+	--[[Translation missing --]]
+	L["%s - OnLoad"] = "%s - OnLoad"
+	--[[Translation missing --]]
+	L["%s - OnUnload"] = "%s - OnUnload"
 	L["%s - Option #%i has the key %s. Please choose a different option key."] = "%s - L'option #%i est actuellement attribuée à la touche %s. Veuillez choisir une touche différente."
 	L["%s - Rotate Animation"] = "%s - Rotation de l'animation"
 	L["%s - Scale Animation"] = "%s - Animation de l'échelle"
@@ -107,9 +111,7 @@ local L = WeakAuras.L
 	L["|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s"] = "|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s"
 	--[[Translation missing --]]
 	L["|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s%s"] = "|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s%s"
-	--[[Translation missing --]]
-	L["|cffffcc00Format Options|r"] = "|cffffcc00Format Options|r"
-	--[[Translation missing --]]
+	L["|cffffcc00Format Options|r"] = "|cffffcc00Options de formatage|r"
 	L[ [=[• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.
 • |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.
 |cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.
@@ -118,15 +120,7 @@ local L = WeakAuras.L
 • |cffffff00Multi-target|r attempts to use the Combat Log events, rather than unitID, to track affected units.
 |cffff0000Note|r: Without a direct relationship to actual unitIDs, results may vary.
 
-|cffffff00*|r Yellow Unit settings can match multiple units and will default to being active even while no affected units are found without a Unit Count or Match Count setting.]=] ] = [=[• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.
-• |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.
-|cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.
-• |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.
-• |cffffff00Smart Group|r adjusts to your current group type, matching just the "player" when solo, "party" units (including "player") in a party or "raid" units in a raid.
-• |cffffff00Multi-target|r attempts to use the Combat Log events, rather than unitID, to track affected units.
-|cffff0000Note|r: Without a direct relationship to actual unitIDs, results may vary.
-
-|cffffff00*|r Yellow Unit settings can match multiple units and will default to being active even while no affected units are found without a Unit Count or Match Count setting.]=]
+|cffffff00*|r Yellow Unit settings can match multiple units and will default to being active even while no affected units are found without a Unit Count or Match Count setting.]=] ] = "• |cff00ff00Joueur|r, |cff00ff00Cible|r, |cff00ff00Focalisation|r et |cff00ff00Familier|r correspondent directement à ces identifiants d’unité (unitIDs) individuels. • |cff00ff00Unité spécifique|r permet d’indiquer un identifiant d’unité valide à surveiller. |cffff0000Remarque|r : Le jeu ne déclenche pas d’événements pour tous les identifiants d’unité valides, ce qui rend certains non détectables par ce déclencheur. • |cffffff00Groupe|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arène|r et |cffffff00Plaque de nom|r peuvent correspondre à plusieurs identifiants d’unité associés. • |cffffff00Groupe intelligent|r s’adapte à votre type de groupe actuel : il correspond uniquement au \"joueur\" en solo, aux unités \"groupe\" (y compris \"joueur\") en groupe, ou aux unités \"raid\" en raid. • |cffffff00Cibles multiples|r tente d’utiliser les événements du journal de combat (Combat Log), plutôt que les unitIDs, pour suivre les unités affectées. |cffff0000Remarque|r : En l’absence de lien direct avec des unitIDs réels, les résultats peuvent varier. |cffffff00\\*|r Les paramètres d’unité en jaune peuvent correspondre à plusieurs unités et seront actifs par défaut même si aucune unité affectée n’est détectée, sauf si un paramètre de nombre d’unités ou de correspondance est défini."
 	L["A 20x20 pixels icon"] = "Une icône de 20x20 pixels"
 	L["A 32x32 pixels icon"] = "Une icône de 32x32 pixels"
 	L["A 40x40 pixels icon"] = "Une icône de 40x40 pixels"
@@ -174,8 +168,7 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchored To"] = "Ancré à"
 	L["And "] = "Et"
 	L["and"] = "et"
-	--[[Translation missing --]]
-	L["and %s"] = "and %s"
+	L["and %s"] = "et %s"
 	L["and aligned left"] = "et aligné à gauche"
 	L["and aligned right"] = "et aligné à droite"
 	--[[Translation missing --]]
@@ -209,7 +202,7 @@ Si la durée de l'animation est définie à |cFF00CC0010%|r, et le déclencheur 
 	L["Area"] = "Area"
 	L["At a position a bit left of Left HUD position."] = "Une position à gauche de la Position ATH Gauche."
 	L["At a position a bit left of Right HUD position"] = "Une position à droite de la Position ATH Droite."
-	L["At the same position as Blizzard's spell alert"] = "À la même position que l'alerte de sort de Blizzard."
+	L["At the same position as Blizzard's spell alert"] = "À la même position que l'alerte de sort de Blizzard"
 	--[[Translation missing --]]
 	L["Attach to Foreground"] = "Attach to Foreground"
 	--[[Translation missing --]]
@@ -329,6 +322,12 @@ Off Screen]=]
 	--[[Translation missing --]]
 	L["Custom Code Viewer"] = "Custom Code Viewer"
 	L["Custom Frames"] = "Cadres personnalisés"
+	--[[Translation missing --]]
+	L["Custom Functions"] = "Custom Functions"
+	--[[Translation missing --]]
+	L["Custom Init"] = "Custom Init"
+	--[[Translation missing --]]
+	L["Custom Load"] = "Custom Load"
 	L["Custom Options"] = "Options personnalisées"
 	L["Custom Trigger"] = "Déclencheur personnalisé"
 	L["Custom trigger event tooltip"] = [=[
@@ -350,6 +349,8 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Custom Trigger: Ignore Lua Errors on OPTIONS event"
 	--[[Translation missing --]]
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "Custom Trigger: Send fake events instead of STATUS event"
+	--[[Translation missing --]]
+	L["Custom Unload"] = "Custom Unload"
 	L["Custom Untrigger"] = "Désactivation personnalisée"
 	--[[Translation missing --]]
 	L["Debug Log"] = "Debug Log"
@@ -374,7 +375,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED
 	--[[Translation missing --]]
 	L["Discord"] = "Discord"
 	L["Display Name"] = "Nom de l'affichage"
-	L["Display Text"] = "Texte d'affichage"
+	L["Display Text"] = "Afficher le texte"
 	L["Displays a text, works best in combination with other displays"] = "Affiche du texte, fonctionne mieux en combinaison avec d'autres affichages."
 	L["Distribute Horizontally"] = "Distribuer horizontalement"
 	L["Distribute Vertically"] = "Distribuer verticalement"
@@ -667,7 +668,7 @@ Si cette case est cochée, ce séparateur inclura du texte. Sinon, ce sera juste
 	--[[Translation missing --]]
 	L["Invalid type for '%s'. Expected 'bool', 'number', 'select', 'string', 'timer' or 'elapsedTimer'."] = "Invalid type for '%s'. Expected 'bool', 'number', 'select', 'string', 'timer' or 'elapsedTimer'."
 	L["Invalid type for property '%s' in '%s'. Expected '%s'"] = "Type non valide pour la propriété '%s' dans '%s'. Attendu '%s'."
-	L["Inverse Slant"] = "Inverser l'Inclinaison"
+	L["Inverse Slant"] = "Inclinaison inversée"
 	--[[Translation missing --]]
 	L["Invert the direction of progress"] = "Invert the direction of progress"
 	--[[Translation missing --]]
@@ -809,7 +810,6 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["ON"] = "ON"
 	L["On Hide"] = "Au masquage"
-	L["On Init"] = "À l'initialisation"
 	L["On Show"] = "A l'affichage"
 	--[[Translation missing --]]
 	L["Only Match auras cast by a player (not an npc)"] = "Only Match auras cast by a player (not an npc)"
@@ -949,9 +949,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Shadow X Offset"] = "Décalage X de l'ombre"
 	L["Shadow Y Offset"] = "Décalage Y de l'ombre"
 	L["Shift-click to create chat link"] = "Maj-Clic pour créer un lien de discussion"
-	--[[Translation missing --]]
-	L["Show \"Edge\""] = "Show \"Edge\""
-	L["Show \"Swipe\""] = "Afficher le \"balayage\""
+	L["Show \"Edge\""] = "Afficher le \"Bord\""
+	L["Show \"Swipe\""] = "Afficher le \"Balayage\""
 	--[[Translation missing --]]
 	L["Show and Clone Settings"] = "Show and Clone Settings"
 	L["Show Border"] = "Afficher l'encadrement"
@@ -1159,7 +1158,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Toggle the visibility of all non-loaded displays"] = "Change la visibilité de tous les affichages non-chargés"
 	L["Toggle the visibility of this display"] = "Activer/Désactiver la visibilité de cet affichage"
 	L["Tooltip Content"] = "Contenu de l'info-bulle"
-	L["Tooltip on Mouseover"] = "Infobulle à la souris"
+	L["Tooltip on Mouseover"] = "Info-bulle à la souris"
 	L["Tooltip Pattern Match"] = "Correspondance de modèle de l'info-bulle"
 	L["Tooltip Text"] = "Texte de l'Info-bulle."
 	L["Tooltip Value"] = "Valeur de l'info-bulle"

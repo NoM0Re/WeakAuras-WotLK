@@ -38,6 +38,10 @@ local L = WeakAuras.L
 	L["%s - Finish Custom Text"] = "%s - Benutzerdefinierter Endtext"
 	L["%s - Init Action"] = "%s - Initialisierung"
 	L["%s - Main"] = "%s - Haupt"
+	--[[Translation missing --]]
+	L["%s - OnLoad"] = "%s - OnLoad"
+	--[[Translation missing --]]
+	L["%s - OnUnload"] = "%s - OnUnload"
 	L["%s - Option #%i has the key %s. Please choose a different option key."] = "Die %s - Option #%i hat bereits den Schlüssel %s. Bitte wähle einen anderen Optionsschlüssel."
 	L["%s - Rotate Animation"] = "%s - Rotierungsanimation"
 	L["%s - Scale Animation"] = "%s - Skalierungsanimation"
@@ -356,6 +360,12 @@ Off Screen]=]
 	--[[Translation missing --]]
 	L["Custom Frames"] = "Custom Frames"
 	--[[Translation missing --]]
+	L["Custom Functions"] = "Custom Functions"
+	--[[Translation missing --]]
+	L["Custom Init"] = "Custom Init"
+	--[[Translation missing --]]
+	L["Custom Load"] = "Custom Load"
+	--[[Translation missing --]]
 	L["Custom Options"] = "Custom Options"
 	L["Custom Trigger"] = "Benutzerdefinierter Auslöser"
 	L["Custom trigger event tooltip"] = [=[Wähle die Ereignisse, die den benutzerdefinierten Auslöser aufrufen sollen.
@@ -373,6 +383,8 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Custom Trigger: Ignore Lua Errors on OPTIONS event"
 	--[[Translation missing --]]
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "Custom Trigger: Send fake events instead of STATUS event"
+	--[[Translation missing --]]
+	L["Custom Unload"] = "Custom Unload"
 	L["Custom Untrigger"] = "Benutzerdefinierter Umkehrauslöser"
 	--[[Translation missing --]]
 	L["Debug Log"] = "Debug Log"
@@ -877,7 +889,6 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["ON"] = "ON"
 	L["On Hide"] = "Beim Ausblenden"
-	L["On Init"] = "Beim Initialisieren"
 	L["On Show"] = "Beim Einblenden"
 	--[[Translation missing --]]
 	L["Only Match auras cast by a player (not an npc)"] = "Only Match auras cast by a player (not an npc)"
