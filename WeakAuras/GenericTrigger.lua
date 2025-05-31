@@ -2376,10 +2376,6 @@ do
 
     -- Helper functions
     AddSpellId = function(self, spellId)
-      if not spellId or spellId == 0 or self.data[spellId] then
-        return
-      end
-
       local name, _, icon = GetSpellInfo(spellId)
       self.data[spellId] = {
         name = name,
@@ -2620,10 +2616,9 @@ do
           Private.CheckCooldownReady()
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil
         end
-      elseif(event == "SPELL_UPDATE_COOLDOWN" or event == "RUNE_POWER_UPDATE"
-        or event == "PLAYER_TALENT_UPDATE"
-        or event == "CHARACTER_POINTS_CHANGED" or event == "RUNE_TYPE_UPDATE")
-        or event == "SPELL_UPDATE_USABLE"
+      elseif(event == "SPELL_UPDATE_COOLDOWN" or event == "SPELL_UPDATE_USABLE"
+        or event == "RUNE_POWER_UPDATE" or event == "RUNE_TYPE_UPDATE"
+        or event == "PLAYER_TALENT_UPDATE" or event == "CHARACTER_POINTS_CHANGED")
       then
         if event == "SPELL_UPDATE_COOLDOWN" then
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil

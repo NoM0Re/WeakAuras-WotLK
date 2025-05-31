@@ -3627,6 +3627,9 @@ Private.event_prototypes = {
     events = {},
     loadInternalEventFunc = function(trigger, untrigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0;
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       if spellName == nil then return {} end
       local events = {
         "SPELL_COOLDOWN_CHANGED:" .. spellName,
@@ -3644,6 +3647,9 @@ Private.event_prototypes = {
     name = L["Cooldown/Charges/Count"],
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0;
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       WeakAuras.WatchSpellCooldown(spellName, trigger.use_matchedRune)
       if (trigger.use_showgcd) then
         WeakAuras.WatchGCD();
@@ -3651,6 +3657,12 @@ Private.event_prototypes = {
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
+      if (type(spellName) == "string") then
+        spellName = "[[" .. spellName .. "]]";
+      end
       local ret = {}
 
       local showOnCheck = "false";
@@ -3668,7 +3680,7 @@ Private.event_prototypes = {
         track = "charges"
       end
 
-     table.insert(ret, ([=[
+      table.insert(ret, ([=[
         local spellname = %s
         local ignoreRuneCD = %s
         local showgcd = %s;
@@ -3787,7 +3799,7 @@ Private.event_prototypes = {
         display = L["Spell"],
         type = "spell",
         test = "true",
-        forceExactOption = true,
+        showExactOption = true,
       },
       {
         name = "extra Cooldown Progress (Spell)",
@@ -4037,16 +4049,29 @@ Private.event_prototypes = {
     events = {},
     loadInternalEventFunc = function(trigger, untrigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_READY:" .. spellName }
     end,
     name = L["Cooldown Ready Event"],
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       WeakAuras.WatchSpellCooldown(spellName, false)
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
+      if (type(spellName) == "string") then
+        spellName = "[[" .. spellName .. "]]";
+      end
+
       local ret = [=[
         local triggerSpellName = %s
         local name, _, icon = GetSpellInfo(triggerSpellName)
@@ -4062,7 +4087,8 @@ Private.event_prototypes = {
         display = L["Spell"],
         type = "spell",
         init = "arg",
-        forceExactOption = true,
+        showExactOption = true,
+        test = "true"
       },
       {
         name = "name",
@@ -4090,16 +4116,28 @@ Private.event_prototypes = {
     events = {},
     loadInternalEventFunc = function(trigger, untrigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       if spellName == nil then return {} end
       return { "SPELL_CHARGES_CHANGED:" .. spellName }
     end,
     name = L["Charges Changed Event"],
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
       WeakAuras.WatchSpellCooldown(spellName);
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
+      if not trigger.use_exact_spellName then
+        spellName = type(spellName) == "number" and GetSpellInfo(spellName) or spellName;
+      end
+      if (type(spellName) == "string") then
+        spellName = "[[" .. spellName .. "]]";
+      end
       local ret = [=[
         local triggerSpellName = %s
         local name, _, icon = GetSpellInfo(triggerSpellName)
@@ -4115,7 +4153,8 @@ Private.event_prototypes = {
         display = L["Spell"],
         type = "spell",
         init = "arg",
-        forceExactOption = true,
+        showExactOption = true,
+        test = "true"
       },
       {
         name = "direction",
@@ -4947,9 +4986,9 @@ Private.event_prototypes = {
       }
     end,
     loadInternalEventFunc = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
       if type(trigger.spellName) == "number" then
-        spellName = GetSpellInfo(spellName) or ""
+        spellName = GetSpellInfo(spellName)
       end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_CHANGED:" .. spellName }
@@ -4958,14 +4997,14 @@ Private.event_prototypes = {
     name = L["Spell Usable"],
     statesParameter = "one",
     loadFunc = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
       if type(trigger.spellName) == "number" then
-        spellName = GetSpellInfo(spellName) or ""
+        spellName = GetSpellInfo(spellName)
       end
       WeakAuras.WatchSpellCooldown(spellName, false);
     end,
     init = function(trigger)
-      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or ""
+      local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
       if type(trigger.spellName) == "number" then
         spellName = GetSpellInfo(spellName) or ""
       end
