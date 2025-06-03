@@ -10,8 +10,8 @@
 -- make into AceSerializer.
 -- @class file
 -- @name AceSerializer-3.0
--- @release $Id$
-local MAJOR,MINOR = "AceSerializer-3.0", 3
+-- @release $Id: AceSerializer-3.0.lua 1284 2022-09-25 09:15:30Z nevcairiel $
+local MAJOR,MINOR = "AceSerializer-3.0", 5
 local AceSerializer, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceSerializer then return end
@@ -24,9 +24,11 @@ local pairs, select, frexp = pairs, select, math.frexp
 local tconcat = table.concat
 
 -- quick copies of string representations of wonky numbers
-local serNaN = tostring(0/0)
-local serInf = tostring(1/0)
-local serNegInf = tostring(-1/0)
+local inf = math.huge
+
+local serNaN =  "-1.#IND"
+local serInf, serInfMac = "1.#INF", "inf"
+local serNegInf, serNegInfMac = "-1.#INF", "-inf"
 
 
 -- Serialization functions
@@ -60,10 +62,14 @@ local function SerializeValue(v, res, nres)
 
 	elseif t=="number" then	-- ^N = number (just tostring()ed) or ^F (float components)
 		local str = tostring(v)
-		if tonumber(str)==v  or str==serNaN or str==serInf or str==serNegInf then
+		if tonumber(str)==v or str==serNaN then
 			-- translates just fine, transmit as-is
 			res[nres+1] = "^N"
 			res[nres+2] = str
+			nres=nres+2
+		elseif v == inf or v == -inf then
+			res[nres+1] = "^N"
+			res[nres+2] = v == inf and serInf or serNegInf
 			nres=nres+2
 		else
 			local m,e = frexp(v)
@@ -77,9 +83,9 @@ local function SerializeValue(v, res, nres)
 	elseif t=="table" then	-- ^T...^t = table (list of key,value pairs)
 		nres=nres+1
 		res[nres] = "^T"
-		for k,v in pairs(v) do
-			nres = SerializeValue(k, res, nres)
-			nres = SerializeValue(v, res, nres)
+		for key,value in pairs(v) do
+			nres = SerializeValue(key, res, nres)
+			nres = SerializeValue(value, res, nres)
 		end
 		nres=nres+1
 		res[nres] = "^t"
@@ -145,10 +151,10 @@ end
 local function DeserializeNumberHelper(number)
 	if number == serNaN then
 		return 0/0
-	elseif number == serNegInf then
-		return -1/0
-	elseif number == serInf then
-		return 1/0
+	elseif number == serNegInf or number == serNegInfMac then
+		return -inf
+	elseif number == serInf or number == serInfMac then
+		return inf
 	else
 		return tonumber(number)
 	end

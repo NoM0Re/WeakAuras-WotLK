@@ -61,9 +61,9 @@ Credits:
 --[[
 	Curseforge auto-packaging replacements:
 
-	Project Date: 2020-06-09T17:59:15Z
-	Project Hash: 5e673bb068bdc39d810e133f2d6e19115f95e532
-	Project Version: 5e673bb
+	Project Date: 2021-04-30T05:30:18Z
+	Project Hash: b2924165b0be53fc68407fa5e4a293b0ff855f4d
+	Project Version: v1.0.8
 --]]
 
 local LibDeflate
@@ -3049,7 +3049,7 @@ end
 local _addon_channel_codec
 
 local function GenerateWoWAddonChannelCodec()
-	return LibDeflate:CreateCodec("\000\124", "\001", "")
+	return LibDeflate:CreateCodec("\000", "\001", "")
 end
 
 --- Encode the string to make it ready to be transmitted in World of
