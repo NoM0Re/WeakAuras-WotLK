@@ -505,23 +505,24 @@ local function ConstructTextEditor(frame)
   editor.editBox.timeMachine = {}
   editor.editBox.timeMachinePos = 1
   local TimeMachineMaximumRollback = 10
-  --[[ Doesn't exist, we need a workaround for that
-  editor.editBox:HookScript(
+
+  -- We do not have those events in the editbox, so we created buttons for undo/redo below...
+  --[[editor.editBox:HookScript(
     "OnKeyDown",
     function(self, key)
       -- CTRL + S saves and closes
       if IsControlKeyDown() and key == "S" then
         group:Close()
-      elseif IsControlKeyDown() and key == "Z" then
-        self.ignoreNextKeyPress = true
+      elseif key == "Z" and IsControlKeyDown() then
+        self:SetPropagateKeyboardInput(false)
         if self.timeMachine[self.timeMachinePos + 1] then
           self.timeMachinePos = self.timeMachinePos + 1
           self.skipOnTextChanged = true
           originalSetText(self, self.timeMachine[self.timeMachinePos][1])
           self:SetCursorPosition(self.timeMachine[self.timeMachinePos][2])
         end
-      elseif IsControlKeyDown() and key == "Y" then
-        self.ignoreNextKeyPress = true
+      elseif key == "Y" and IsControlKeyDown() then
+        self:SetPropagateKeyboardInput(false)
         if self.timeMachine[self.timeMachinePos - 1] then
           self.timeMachinePos = self.timeMachinePos - 1
           self.skipOnTextChanged = true
@@ -530,17 +531,7 @@ local function ConstructTextEditor(frame)
         end
       end
     end
-  )
-
-  editor.editBox:HookScript(
-    "OnKeyUp",
-    function(self, key)
-      if self.ignoreNextKeyPress then
-        self.ignoreNextKeyPress = false -- Reset
-      end
-    end
-  )
-  ]]
+  )]]
 
   editor.editBox:HookScript(
     "OnTextChanged",
@@ -640,6 +631,38 @@ local function ConstructTextEditor(frame)
   editorLineText:SetTextColor(1, 1, 1)
   editorLineText:SetText(L["Line"])
   editorLineText:SetPoint("RIGHT", editorLine, "LEFT", -8, 0)
+
+  local redoButton = CreateFrame("Button", nil, editorLine, "UIPanelButtonTemplate")
+  redoButton:SetPoint("RIGHT", editorLineText, "LEFT", -10, 0)
+  redoButton:SetFrameLevel(editorLine:GetFrameLevel() + 1)
+  redoButton:SetHeight(20)
+  redoButton:SetWidth(50)
+  redoButton:SetText(">")
+  redoButton:SetScript("OnClick", function()
+    local self = editor.editBox
+    if self.timeMachine[self.timeMachinePos - 1] then
+      self.timeMachinePos = self.timeMachinePos - 1
+      self.skipOnTextChanged = true
+      originalSetText(self, self.timeMachine[self.timeMachinePos][1])
+      self:SetCursorPosition(self.timeMachine[self.timeMachinePos][2])
+    end
+  end)
+
+  local undoButton = CreateFrame("Button", nil, redoButton, "UIPanelButtonTemplate")
+  undoButton:SetPoint("RIGHT", redoButton, "LEFT", -10, 0)
+  undoButton:SetFrameLevel(redoButton:GetFrameLevel() + 1)
+  undoButton:SetHeight(20)
+  undoButton:SetWidth(50)
+  undoButton:SetText("<")
+  undoButton:SetScript("OnClick", function()
+    local self = editor.editBox
+    if self.timeMachine[self.timeMachinePos + 1] then
+      self.timeMachinePos = self.timeMachinePos + 1
+      self.skipOnTextChanged = true
+      originalSetText(self, self.timeMachine[self.timeMachinePos][1])
+      self:SetCursorPosition(self.timeMachine[self.timeMachinePos][2])
+    end
+  end)
 
   helpButton:SetScript("OnClick", function()
     OptionsPrivate.ToggleTip(helpButton, group.url, L["Help"], "")
