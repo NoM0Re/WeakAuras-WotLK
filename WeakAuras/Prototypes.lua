@@ -1112,7 +1112,7 @@ Private.load_prototype = {
         return Private.glyph_types
       end,
       sorted = true,
-      sortOrder = Private.glyph_sorted,
+      sortOrder = Private.glyph_sorted or {},
       test = "WeakAuras.IsGlyphActive(%s)",
       events = {"GLYPH_ADDED", "GLYPH_REMOVED", "GLYPH_UPDATED", "USE_GLYPH"},
     },
