@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: WeakAuras Model Paths
 ## Author: The WeakAuras Team
-## Version: 5.19.10
+## Version: 5.19.10-10-g7ac7dc8
 ## Notes: Model paths for WeakAuras
 ## Notes-esES: Las rutas de modelos para WeakAuras
 ## Notes-esMX: Las rutas de modelos para WeakAuras

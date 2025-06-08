@@ -172,7 +172,7 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Animate"] = "애니메이션"
 	L["Animated Expand and Collapse"] = "확장 / 접기 애니메이션"
 	L["Animates progress changes"] = "진행 상태의 변화를 부드럽게 표현합니다"
-	L["Animation End"] = "애니메이션 종료"
+	L["Animation End"] = "애니메이션 종료 시점"
 	L["Animation Mode"] = "애니메이션 모드"
 	L["Animation relative duration description"] = [=[
 디스플레이 지속시간의 비율로 애니메이션 지속시간을 설정합니다, 분수 (1/2), 백분율 (50%), 또는 소수 (0.5)로 표현합니다.
@@ -183,7 +183,7 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 애니메이션의 지속시간을 |cFF00CC0010%|r로 설정하고, 디스플레이의 활성 조건이 지속시간이 없는 강화 효과일 때, 시작 애니메이션은 재생되지 않습니다 (지속시간을 따로 설정했더라도)."
 ]=]
 	L["Animation Sequence"] = "애니메이션 순서"
-	L["Animation Start"] = "애니메이션 시작"
+	L["Animation Start"] = "애니메이션 시작 시점"
 	L["Any of"] = "아무거나 만족"
 	L["Apply Template"] = "템플릿 적용"
 	L["Arcane Orb"] = "비전 구슬"
@@ -300,7 +300,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 • "CLEU"를 COMBAT_LOG_EVENT UNFILTERED 대신 사용할 수 있고 받고 싶은 "서브이벤트"를 콜론으로 구분해서 지정할 수 있습니다.
 • "TRIGGER" 키워드에 콜론으로 활성 조건 번호를 나누어 지정하면 해당 활성 조건이 업데이트될 때 사용자 정의 활성 조건도 같이 업데이트됩니다.
 
-이 활성 조건은 스테이터스 유형이므로 지정한 이벤트에 인자가 없어도 WeakAuras에 의해 호출될 수 있습니다.
+이 활성 조건은 상태(Status) 유형이므로 지정된 이벤트가 인자가 없어도 WeakAuras에 의해 호출될 수 있습니다.
 
 |cFF4444FF예시:|r
 UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:SPELL_CAST_SUCCESS TRIGGER:3:1]=]
@@ -388,7 +388,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["Extra Height"] = "추가 높이"
 	L["Extra Width"] = "추가 너비"
 	L["Fade"] = "사라짐"
-	L["Fadeout Sound"] = "페이드아웃 소리 효과"
+	L["Fadeout Sound"] = "페이드아웃 음향 효과"
 	L["Fadeout Time (seconds)"] = "페이드아웃 시간 (초)"
 	L["Fetch Affected/Unaffected Names and Units"] = "오라에 걸린/안걸린 플레이어의 이름과 유닛 정보 가져오기"
 	L["Fetch Raid Mark Information"] = "공격대 징표 정보 가져오기"
@@ -701,7 +701,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Repeat every"] = "반복 주기"
 	L["Report bugs on our issue tracker."] = "이슈 트래커에 버그를 제보해 주세요."
 	L["Require unit from trigger"] = "활성 조건에서 유닛 필요"
-	L["Required for Activation"] = "활성화에 필요"
+	L["Required for Activation"] = "활성화 필수 조건"
 	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "LibSpecialization이 필요합니다. 예를 들면 최신 WeakAuras 버전으로 업데이트하면 됩니다"
 	L["Reset all options to their default values."] = "모든 옵션을 기본값으로 초기화합니다."
 	L["Reset Entry"] = "항목 초기화"

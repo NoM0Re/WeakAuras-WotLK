@@ -589,8 +589,6 @@ L["Ease Out"] = "Ease Out"
 --[[Translation missing --]]
 L["Ebonroc"] = "Ebonroc"
 --[[Translation missing --]]
-L["Eclipse"] = "Eclipse"
---[[Translation missing --]]
 L["Eclipse Direction"] = "Eclipse Direction"
 --[[Translation missing --]]
 L["Edge"] = "Edge"
@@ -884,6 +882,8 @@ L["Glow External Element"] = "Glow External Element"
 --[[Translation missing --]]
 L["Gluth"] = "Gluth"
 --[[Translation missing --]]
+L["Glyph"] = "Glyph"
+--[[Translation missing --]]
 L["Gold"] = "Gold"
 --[[Translation missing --]]
 L["Golemagg the Incinerator"] = "Golemagg the Incinerator"
@@ -1004,9 +1004,9 @@ L["Icon Function"] = "Icon Function"
 --[[Translation missing --]]
 L["Icon Function (fallback state)"] = "Icon Function (fallback state)"
 --[[Translation missing --]]
-L["ID"] = "ID"
---[[Translation missing --]]
 L["Id"] = "Id"
+--[[Translation missing --]]
+L["ID"] = "ID"
 --[[Translation missing --]]
 L["If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"] = "If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"
 --[[Translation missing --]]
@@ -1302,9 +1302,9 @@ E.g. 1;2;1;2;2.5;3]=] ] = [=[Matches stage number of encounter journal.
 Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=]
 --[[Translation missing --]]
-L["Max Char"] = "Max Char"
---[[Translation missing --]]
 L["Max Char "] = "Max Char "
+--[[Translation missing --]]
+L["Max Char"] = "Max Char"
 --[[Translation missing --]]
 L["Max Charges"] = "Max Charges"
 --[[Translation missing --]]
@@ -1762,9 +1762,9 @@ L["Pulse"] = "Pulse"
 --[[Translation missing --]]
 L["PvP Flagged"] = "PvP Flagged"
 --[[Translation missing --]]
-L["PvP Talent Selected"] = "PvP Talent Selected"
---[[Translation missing --]]
 L["PvP Talent selected"] = "PvP Talent selected"
+--[[Translation missing --]]
+L["PvP Talent Selected"] = "PvP Talent Selected"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -1994,11 +1994,13 @@ L["Selection Mode"] = "Selection Mode"
 --[[Translation missing --]]
 L["Separator"] = "Separator"
 --[[Translation missing --]]
-L["Set IDs can be found on websites such as classic.wowhead.com/item-sets"] = "Set IDs can be found on websites such as classic.wowhead.com/item-sets"
---[[Translation missing --]]
 L["Set IDs can be found on websites such as wowhead.com/cata/item-sets"] = "Set IDs can be found on websites such as wowhead.com/cata/item-sets"
 --[[Translation missing --]]
+L["Set IDs can be found on websites such as wowhead.com/classic/item-sets"] = "Set IDs can be found on websites such as wowhead.com/classic/item-sets"
+--[[Translation missing --]]
 L["Set IDs can be found on websites such as wowhead.com/item-sets"] = "Set IDs can be found on websites such as wowhead.com/item-sets"
+--[[Translation missing --]]
+L["Set IDs can be found on websites such as wowhead.com/mop-classic/item-sets"] = "Set IDs can be found on websites such as wowhead.com/mop-classic/item-sets"
 --[[Translation missing --]]
 L["Shadow Resistance"] = "Shadow Resistance"
 --[[Translation missing --]]
@@ -2294,9 +2296,9 @@ L["Talent |cFFFF0000Not|r Selected"] = "Talent |cFFFF0000Not|r Selected"
 --[[Translation missing --]]
 L["Talent Known"] = "Talent Known"
 --[[Translation missing --]]
-L["Talent selected"] = "Talent selected"
---[[Translation missing --]]
 L["Talent Selected"] = "Talent Selected"
+--[[Translation missing --]]
+L["Talent selected"] = "Talent selected"
 --[[Translation missing --]]
 L["Talent Specialization"] = "Talent Specialization"
 --[[Translation missing --]]
