@@ -78,7 +78,7 @@ local L = WeakAuras.L
 	L["%s|cFFFF0000custom|r texture with |cFFFF0000%s|r blend mode%s%s"] = "%s|cFFFF0000사용자 정의|r 텍스처에 |cFFFF0000%s|r 혼합 모드%s%s"
 	L["(Right click to rename)"] = "(우클릭으로 이름 변경)"
 	L["|c%02x%02x%02x%02xCustom Color|r"] = "|c%02x%02x%02x%02x사용자 정의 색깔|r"
-	L["|cff999999Triggers tracking multiple units will default to being active even while no affected units are found without a Unit Count or Match Count setting applied.|r"] = "|cff999999여러 유닛을 추적하는 활성 조건은 유닛 수 또는 일치 횟수 설정이 안된 상태에서 오라에 걸린 유닛이 없을때도 기본으로 활성화됩니다.|r"
+	L["|cff999999Triggers tracking multiple units will default to being active even while no affected units are found without a Unit Count or Match Count setting applied.|r"] = "|cff999999여러 유닛을 추적하는 활성 조건은 유닛 수 또는 조건 일치 유닛 수 설정이 적용되지 않은 경우, 오라에 걸린 유닛이 없어도 기본적으로 활성화 상태를 유지합니다.|r"
 	L["|cFFE0E000Note:|r This sets the description only on '%s'"] = "|cFFE0E000참고:|r '%s'에만 설명이 설정됩니다"
 	L["|cFFE0E000Note:|r This sets the URL on all selected auras"] = "|cFFE0E000참고:|r 선택한 모든 위크오라에 URL을 설정합니다"
 	L["|cFFE0E000Note:|r This sets the URL on this group and all its members."] = "|cFFE0E000참고:|r 이 그룹 및 속해있는 모든 위크오라에 URL을 설정합니다."
@@ -119,7 +119,7 @@ local L = WeakAuras.L
 |cffff0000참고|r: 실제 유닛ID와 직접적인 관계가 없기 때문에 다른 결과가 나올 수 있습니다.
 
 
-|cffffff00*|r 노란색 유닛 설정은 한 개 이상의 유닛과 일치할 수 있으며 유닛 수나 조건 일치 개수 설정이 안되있고 오라에 걸린 유닛이 없을 때도 기본으로 활성화됩니다.]=]
+|cffffff00*|r 노란색 유닛 설정은 여러개의 유닛과 일치할 수 있으며 유닛 수 또는 조건 일치 유닛 수 설정이 적용되지 않은 경우, 오라에 걸린 유닛이 없어도 기본적으로 활성화 상태를 유지합니다.]=]
 	L["A 20x20 pixels icon"] = "20x20 픽셀 아이콘"
 	L["A 32x32 pixels icon"] = "32x32 픽셀 아이콘"
 	L["A 40x40 pixels icon"] = "40x40 픽셀 아이콘"
@@ -158,8 +158,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "고정 모드"
 	L["Anchor Point"] = "고정 지점"
 	L["Anchored To"] = "고정 위치:"
-	L["And "] = "And"
 	L["and"] = "그리고"
+	L["And "] = "And"
 	L["and %s"] = "and %s"
 	L["and aligned left"] = ", 왼쪽 정렬"
 	L["and aligned right"] = ", 오른쪽 정렬"
@@ -255,7 +255,7 @@ Off Screen]=] ] = "위크오라가 화면 밖에 있습니다"
 	L["Columns"] = "열"
 	L["COMBAT_LOG_EVENT_UNFILTERED with no filter can trigger frame drops in raid environment."] = "필터 없는 COMBAT_LOG_EVENT_UNFILTERED 이벤트는 레이드 환경에서 프레임 드랍을 유발할 수 있습니다."
 	L["Combinations"] = "조합"
-	L["Combine Matches Per Unit"] = "유닛별 맞는 조건 조합"
+	L["Combine Matches Per Unit"] = "유닛당 일치하는 조건 결합"
 	L["Common Text"] = "공동 사용 텍스트"
 	L["Compare against the number of units affected."] = "오라에 걸린 유닛 수와 비교합니다."
 	L["Compatibility Options"] = "호환성 옵션"
@@ -270,8 +270,8 @@ Off Screen]=] ] = "위크오라가 화면 밖에 있습니다"
 	L["Copy settings..."] = "설정 복사..."
 	L["Copy to all auras"] = "모든 위크오라에 복사"
 	L["Could not parse '%s'. Expected a table."] = "'%s'를 분석할 수 없습니다. 테이블이어야 합니다."
-	L["Counts the number of matches over all units."] = "모든 유닛에 대해 일치 횟수를 계산합니다."
-	L["Counts the number of matches per unit."] = "유닛당 일치 횟수를 계산합니다."
+	L["Counts the number of matches over all units."] = "모든 유닛중 일치하는 유닛을 셉니다."
+	L["Counts the number of matches per unit."] = "유닛당 일치하는 개수를 셉니다."
 	L["Create a Copy"] = "사본 생성"
 	L["Creating buttons: "] = "버튼 생성 중:"
 	L["Creating options: "] = "옵션 생성:"
@@ -409,7 +409,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 
 Supports multiple entries, separated by commas
 Can use \ to escape -.]=] ] = [=[필터 형식: '이름', '이름-서버', '-서버'. 여러 항목을 지원하며, 각 항목은 쉼표로 구분합니다.
--는 앞에 \를 붙여 이스케이프를 사용해 입력합니다.]=]
+-는 앞에 \를 사용해 이스케이프 처리하면 입력할 수 있습니다.]=]
 	L[ [=[Filter to only dispellable de/buffs of the given type(s)
 Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 버프/디버프만 걸러냅니다
 출혈은 LibDispel을 통해서 분류됩니다]=]
@@ -669,7 +669,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Play Sound"] = "소리 재생"
 	L["Portrait Zoom"] = "초상화 확대"
 	L["Position and Size Settings"] = "위치 및 크기 설정"
-	L["Preferred Match"] = "조건 일치시 우선순위"
+	L["Preferred Match"] = "우선 표시 대상"
 	L["Premade Auras"] = "미리 준비된 위크오라"
 	L["Premade Snippets"] = "미리 준비된 스니펫 위크오라"
 	L["Preparing auras: "] = "위크오라 준비중:"
@@ -749,8 +749,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Show Icon"] = "아이콘 표시"
 	L["Show If Unit Does Not Exist"] = "유닛이 없으면 표시"
 	L["Show Linear Texture"] = "직진 텍스처 표시"
-	L["Show Matches for"] = "일치 항목 표시"
-	L["Show Matches for Units"] = "유닛에 대한 일치 항목 표시"
+	L["Show Matches for"] = "표시할 대상"
+	L["Show Matches for Units"] = "유닛별로 일치하는 조건 표시"
 	L["Show Model"] = "모델 표시"
 	L["Show model of unit "] = "유닛의 모델 표시"
 	L["Show Sound Setting"] = "소리 설정 보기"
