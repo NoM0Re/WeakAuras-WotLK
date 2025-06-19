@@ -7010,7 +7010,10 @@ Private.event_prototypes = {
         hidden = true,
         init = "true",
         test = "true",
-        store = true
+        store = true,
+        enable = function(trigger)
+          return not trigger.use_inverse
+        end
       },
       {
         type = "header",
