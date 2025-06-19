@@ -1,4 +1,4 @@
-## Interface: 33000
+## Interface: 30300
 ## Title: WeakAuras Templates
 ## Author: The WeakAuras Team
 ## Version: 5.19.12
