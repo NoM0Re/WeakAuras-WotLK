@@ -1155,6 +1155,7 @@ function Private.Login(takeNewSnapshots)
     Private.AddMany(toAdd, takeNewSnapshots);
     coroutine.yield(1000);
 
+    coroutine.yield(1000);
     Private.RegisterLoadEvents();
     coroutine.yield(10000);
     Private.Resume();

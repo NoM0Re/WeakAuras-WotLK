@@ -339,10 +339,10 @@ local sorters = {
       Private.ActivateAuraEnvironment(data.id)
       local ok, result = pcall(sortFunc, a, b)
       Private.ActivateAuraEnvironment()
-      if not ok then
-        Private.GetErrorHandlerId(data.id, L["Custom Sort"])
-      else
+      if ok then
         return result
+      else
+        Private.GetErrorHandlerId(data.id, L["Custom Sort"])
       end
     end, sortOn
   end
@@ -428,7 +428,7 @@ local anchorers = {
 
     return function(frames, activeRegions)
       Private.ActivateAuraEnvironment(data.id)
-      local ok, ret = pcall(anchorFunc, frames, activeRegions)
+      local ok = pcall(anchorFunc, frames, activeRegions)
       if not ok then
         Private.GetErrorHandlerUid(data.uid, L["Custom Anchor"])
       end
@@ -982,7 +982,7 @@ local growers = {
     end
     return function(newPositions, activeRegions)
       Private.ActivateAuraEnvironment(data.id)
-      local ok, ret = pcall(growFunc, newPositions, activeRegions)
+      local ok = pcall(growFunc, newPositions, activeRegions)
       Private.ActivateAuraEnvironment()
       if not ok then
         Private.GetErrorHandlerId(data.id, L["Custom Grow"])
