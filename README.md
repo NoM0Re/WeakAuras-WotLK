@@ -31,7 +31,7 @@ To open the options window, type `/wa` or `/weakauras` into your chat and hit en
 
 ## Extensions
 
-* [WeakAuras Companion](https://weakauras.wtf): This application adds the missing link between Wago.io and the World of Warcraft addon, enabling you to update your auras in a convenient fashion. Read about how to use it [here](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/WeakAuras-Companion)
+* [WeakAuras Companion](https://weakauras.wtf): This application adds the missing link between Wago.io and the World of Warcraft addon, enabling you to update your auras in a convenient fashion. Read about how to use it [here](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/WeakAuras-Companion).
 * [WeakAuras_StopMotion](https://www.curseforge.com/wow/addons/weakauras-stop-motion): This addon adds a new region type to WeakAuras that allows for stop motion animations. Stop Motion textures contain each frame of the animation as a separate image. The addon ships with a number of animations and it supports custom textures.
 - [bKader Shared Media](https://github.com/bkader/SharedMedia): For more bar, textures, fonts, sounds, with alot custom stuff added (popular version).
 - [SharedMedia](https://github.com/NoM0Re/SharedMedia): For more bar textures, fonts (retail version).
