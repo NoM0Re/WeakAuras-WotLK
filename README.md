@@ -25,15 +25,19 @@ WeakAuras is a powerful and flexible framework that allows the display of highly
 
 To open the options window, type `/wa` or `/weakauras` into your chat and hit enter or use the minimap icon.
 
+## Client Extensions
+* [Large Address Aware](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/Large-Address-Aware): Enables the WoW client to use up to 4GB of RAM instead of the default 2GB, improving stability and performance on modern systems. This patch is highly recommended for WotLK 3.3.5a users.
+* [Awesome WotLK](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/awesome_wotlk): Adds modern retail-style nameplate search functions, unit tracking, and events to WotLK 3.3.5a, enabling better API access and event handling for nameplates. This adds a lot of additional functionality to WeakAuras.
+
 ## Extensions
 
 * [WeakAuras Companion](https://weakauras.wtf): This application adds the missing link between Wago.io and the World of Warcraft addon, enabling you to update your auras in a convenient fashion. (Folder Structure: `World of Warcraft/_retail_/Wow.exe` and backup WTF)
 * [WeakAuras_StopMotion](https://www.curseforge.com/wow/addons/weakauras-stop-motion): This addon adds a new region type to WeakAuras that allows for stop motion animations. Stop Motion textures contain each frame of the animation as a separate image. The addon ships with a number of animations and it supports custom textures.
-- [bKader Shared Media](https://github.com/bkader/SharedMedia) for more bar, textures, fonts, sounds(popular version), with alot custom stuff added.
-- [SharedMedia](https://github.com/NoM0Re/SharedMedia) for more bar textures, fonts (retail version).
-- [SharedMediaAdditionalFonts](https://github.com/NoM0Re/SharedMediaAdditionalFonts) for more fonts.
-- [MerfinPlus](https://drive.google.com/file/d/1xDCpDpStRbXdSBKYOeZHpYBt_dRDqb3g/view?usp=sharing) Adds predefined tts, sounds, statusbar, fonts and more.
-* [ColorPickerPlus](https://drive.google.com/file/d/1ymNYizWp2TxIS1a6hLg7bT9YoJ3E-8Na/view?usp=sharing) for a better version of the WoW color picker that includes class color templates and a copy and paste function.
+- [bKader Shared Media](https://github.com/bkader/SharedMedia): For more bar, textures, fonts, sounds, with alot custom stuff added (popular version).
+- [SharedMedia](https://github.com/NoM0Re/SharedMedia): For more bar textures, fonts (retail version).
+- [SharedMediaAdditionalFonts](https://github.com/NoM0Re/SharedMediaAdditionalFonts): For more fonts.
+- [MerfinPlus](https://drive.google.com/file/d/1xDCpDpStRbXdSBKYOeZHpYBt_dRDqb3g/view?usp=sharing): Adds predefined tts, sounds, statusbar, fonts and more.
+* [ColorPickerAdvanced](https://drive.google.com/file/d/1ymNYizWp2TxIS1a6hLg7bT9YoJ3E-8Na/view?usp=sharing): For a better version of the WoW color picker that includes class color templates and a copy and paste function.
 
 ## Documentation
 
