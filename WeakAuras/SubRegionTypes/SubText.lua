@@ -246,6 +246,7 @@ local function modify(parent, region, parentData, data, first)
     end
     return data[fullKey]
   end
+
   region.subTextFormatters, region.everyFrameFormatters = Private.CreateFormatters(texts, getter, false, parentData)
 
   function region:ConfigureTextUpdate()
