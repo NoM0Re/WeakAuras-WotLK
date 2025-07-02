@@ -8249,7 +8249,9 @@ Private.event_prototypes = {
         type = "number",
         init = "min",
         store = true,
-        test = "true"
+        test = "true",
+        conditionType = "number",
+        operator_types = "without_equal",
       },
       {
         hidden = true,
@@ -8258,7 +8260,9 @@ Private.event_prototypes = {
         type = "number",
         init = "max",
         store = true,
-        test = "true"
+        test = "true",
+        conditionType = "number",
+        operator_types = "without_equal",
       },
       {
         name = "range",
@@ -8270,6 +8274,7 @@ Private.event_prototypes = {
         conditionTest = function(state, needle, needle2)
           return state and state.show and WeakAuras.CheckRange(state.unit, needle, needle2);
         end,
+        noProgressSource = true
       },
       {
         hidden = true,
