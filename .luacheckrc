@@ -19570,5 +19570,7 @@ globals = {
 	"SecondsFormatterConstants", "ConvertSecondsToUnits", "SecondsToClock",
 	"MinutesToTime", "FormatShortDate", "NUMBER_ABBREVIATION_DATA", "WeakAurasProfilingReportTitleText",
 	"WeakAurasRealTimeProfiling", "WeakAurasRealTimeProfilingTitleText", "seconds", "NUM_CHAT_WINDOWS",
-	"GetNumGlyphSockets", "GetGlyphLink", "GetGlyphSocketInfo"
+	"GetNumGlyphSockets", "GetGlyphLink", "GetGlyphSocketInfo", "APIDocumentationMixin", "BaseAPIMixin",
+    "EventsAPIMixin", "FieldsAPIMixin", "FunctionsAPIMixin", "SystemsAPIMixin", "TablesAPIMixin",
+	"CopyToClipboard", "ChatFrame_OpenChat", "ChatTypeInfo"
 }

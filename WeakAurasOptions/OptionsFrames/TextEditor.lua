@@ -417,25 +417,15 @@ local function ConstructTextEditor(frame)
     end
   end
 
+  local apiSearchFrame
+
   -- Make sidebar for snippets
   local snippetsFrame = CreateFrame("Frame", "WeakAurasSnippets", group.frame, "WA_PortraitFrameTemplate")
   snippetsFrame:HidePortrait()
   snippetsFrame:SetPoint("TOPLEFT", group.frame, "TOPRIGHT", 20, 0)
   snippetsFrame:SetPoint("BOTTOMLEFT", group.frame, "BOTTOMRIGHT", 20, 0)
   snippetsFrame:SetWidth(250)
-  --[[
-  snippetsFrame:SetBackdrop(
-    {
-      bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-      edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-      tile = true,
-      tileSize = 32,
-      edgeSize = 32,
-      insets = {left = 8, right = 8, top = 8, bottom = 8}
-    }
-  )
-  snippetsFrame:SetBackdropColor(0, 0, 0, 1)
-  ]]
+
   -- Add button to save new snippet
   local AddSnippetButton = CreateFrame("Button", nil, snippetsFrame, "UIPanelButtonTemplate")
   AddSnippetButton:SetPoint("TOPLEFT", snippetsFrame, "TOPLEFT", 13, -25)
@@ -472,6 +462,9 @@ local function ConstructTextEditor(frame)
     function(self, button, down)
       if not snippetsFrame:IsShown() then
         snippetsFrame:Show()
+        if apiSearchFrame and apiSearchFrame:IsShown() then
+          apiSearchFrame:Hide()
+        end
         UpdateSnippets(snippetsScroll)
       else
         snippetsFrame:Hide()
@@ -500,6 +493,288 @@ local function ConstructTextEditor(frame)
         UpdateSnippets(snippetsScroll)
         end
       end
+  )
+
+  -- Make ApiSearch button
+  local apiSearchButton = CreateFrame("Button", "WAAPISearchButton", group.frame, "UIPanelButtonTemplate")
+  apiSearchButton:SetPoint("BOTTOMRIGHT", editor.frame, "TOPRIGHT", -20, 15)
+  apiSearchButton:SetFrameLevel(group.frame:GetFrameLevel() + 2)
+  apiSearchButton:SetHeight(20)
+  apiSearchButton:SetWidth(100)
+  apiSearchButton:SetText(L["Search API"])
+  apiSearchButton:RegisterForClicks("LeftButtonUp")
+
+  -- Make sidebar for apiSearch
+  apiSearchFrame = CreateFrame("Frame", "WeakAurasAPISearchFrame", group.frame, "WA_PortraitFrameTemplate")
+  apiSearchFrame:HidePortrait()
+  apiSearchFrame:SetWidth(350)
+
+  local makeAPISearch
+  local APISearchTextChangeDelay = 0.3
+  local APISearchCTimer
+
+  -- filter line
+  local filterInput = CreateFrame("EditBox", "WeakAurasAPISearchFilterInput", apiSearchFrame, "WA_InputBoxTemplate")
+  filterInput:SetAutoFocus(false)
+  filterInput:SetTextInsets(16, 20, 0, 0)
+
+  filterInput.Instructions = filterInput:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
+  filterInput.Instructions:SetText(SEARCH)
+  filterInput.Instructions:SetPoint("TOPLEFT", filterInput, "TOPLEFT", 16, 0)
+  filterInput.Instructions:SetPoint("BOTTOMRIGHT", filterInput, "BOTTOMRIGHT", -20, 0)
+  filterInput.Instructions:SetTextColor(0.35, 0.35, 0.35)
+  filterInput.Instructions:SetJustifyH("LEFT")
+  filterInput.Instructions:SetJustifyV("MIDDLE")
+
+  filterInput.searchIcon = filterInput:CreateTexture(nil, "OVERLAY")
+  filterInput.searchIcon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+  filterInput.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
+  filterInput.searchIcon:SetSize(14, 14)
+  filterInput.searchIcon:SetPoint("LEFT", 0, -2)
+
+  filterInput.clearButton = CreateFrame("Button", nil, filterInput)
+  filterInput.clearButton:SetSize(14, 14)
+  filterInput.clearButton:SetPoint("RIGHT", -3, 0)
+
+  filterInput.clearButton.texture = filterInput.clearButton:CreateTexture()
+  filterInput.clearButton.texture:SetTexture("Interface\\FriendsFrame\\ClearBroadcastIcon")
+  filterInput.clearButton.texture:SetAlpha(0.5)
+  filterInput.clearButton.texture:SetSize(17, 17)
+  filterInput.clearButton.texture:SetPoint("CENTER", 0, 0)
+
+  filterInput.clearButton:SetScript("OnEnter", function(self) self.texture:SetAlpha(1.0) end)
+  filterInput.clearButton:SetScript("OnLeave", function(self) self.texture:SetAlpha(0.5) end)
+  filterInput.clearButton:SetScript("OnMouseDown", function(self) if self:IsEnabled() then self.texture:SetPoint("CENTER", 1, -1) end end)
+  filterInput.clearButton:SetScript("OnMouseUp", function(self) self.texture:SetPoint("CENTER") end)
+  filterInput.clearButton:SetScript("OnClick", function(self)
+    local editBox = self:GetParent()
+    editBox:SetText("")
+    editBox:ClearFocus()
+  end)
+  filterInput:SetScript("OnEditFocusLost", function(self)
+    if self:GetText() == "" then
+      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
+      self.clearButton:Hide()
+    end
+  end)
+  filterInput:SetScript("OnEditFocusGained", function(self)
+    self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
+    self.clearButton:Show()
+  end)
+  filterInput:SetScript("OnTextChanged", function(self)
+    if APISearchCTimer and WeakAuras.timer:TimeLeft(APISearchCTimer) then
+      WeakAuras.timer:CancelTimer(APISearchCTimer)
+    end
+    APISearchCTimer = WeakAuras.timer:ScheduleTimer(
+      function()
+        makeAPISearch(filterInput:GetText())
+      end,
+      APISearchTextChangeDelay
+    )
+  end)
+  filterInput:HookScript("OnTextChanged", function(self)
+    if not self:HasFocus() and self:GetText() == "" then
+      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
+      self.clearButton:Hide()
+    else
+      self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
+      self.clearButton:Show()
+    end
+    if self:GetText() == "" then
+      self.Instructions:Show()
+    else
+      self.Instructions:Hide()
+    end
+  end)
+  filterInput:SetHeight(15)
+  filterInput:SetPoint("TOPLEFT", apiSearchFrame, "TOPLEFT", 17, -30)
+  filterInput:SetPoint("TOPRIGHT", apiSearchFrame, "TOPRIGHT", -10, -30)
+  filterInput:SetFont(STANDARD_TEXT_FONT, 10)
+
+  local apiSearchScrollContainer = AceGUI:Create("SimpleGroup")
+  apiSearchScrollContainer:SetFullWidth(true)
+  apiSearchScrollContainer:SetFullHeight(true)
+  apiSearchScrollContainer:SetLayout("Fill")
+  apiSearchScrollContainer.frame:SetParent(apiSearchFrame)
+  apiSearchScrollContainer.frame:SetPoint("TOPLEFT", apiSearchFrame, "TOPLEFT", 17, -50)
+  apiSearchScrollContainer.frame:SetPoint("BOTTOMRIGHT", apiSearchFrame, "BOTTOMRIGHT", -10, 10)
+
+  local apiSearchScroll = AceGUI:Create("ScrollFrame")
+  apiSearchScroll:SetLayout("List")
+  apiSearchScrollContainer:AddChild(apiSearchScroll)
+  apiSearchScroll:FixScroll(true)
+  apiSearchScroll.scrollframe:SetScript(
+    "OnScrollRangeChanged",
+    function(frame)
+      frame.obj:DoLayout()
+    end
+  )
+
+  local snippetOnClickCallback = function(self)
+    if self.isSystem then
+      filterInput:SetText(self.name)
+    else
+      self.editor.editBox:Insert(self.name)
+      self.editor:SetFocus()
+    end
+  end
+
+  local function loadBlizzardAPIDocumentation()
+    local apiAddonName = "APIDocumentation"
+    local _, loaded = IsAddOnLoaded(apiAddonName)
+    if not loaded then
+      local ok, ret = LoadAddOn(apiAddonName)
+      if not ok then
+        local messages = { L["AddOn: APIDocumentation is %s."]:format(ret) }
+        if ret == "DISABLED" then
+          table.insert(messages, L["Please enable it in your AddOn list."])
+        elseif ret == "MISSING" then
+          table.insert(messages, L["Please install it."])
+        end
+        WeakAuras.prettyPrint(table.concat(messages, " "))
+        return
+      end
+    end
+    if type(APIDocumentation) ~= "table" or type(APIDocumentation.systems) ~= "table" then
+      WeakAuras.prettyPrint(L["AddOn: APIDocumentation is not loaded correctly."])
+      return
+    end
+    if #APIDocumentation.systems == 0 then
+      APIDocumentation:OnLoad()
+    end
+    return true
+  end
+
+  local function addLine(results, apiInfo)
+    local name
+    if apiInfo.Type == "System" then
+      name = apiInfo.Namespace
+    elseif apiInfo.Type == "Function" then
+      name = apiInfo:GetFullName()
+    elseif apiInfo.Type == "Event" then
+      name = apiInfo.LiteralName
+    end
+    table.insert(results, { name = name, apiInfo = apiInfo })
+  end
+
+  local function APIListSystems()
+    local results = {}
+    for i, systemInfo in ipairs(APIDocumentation.systems) do
+      if systemInfo.Namespace and #systemInfo.Functions > 0 then
+        addLine(results, systemInfo)
+      end
+    end
+    table.sort(results, function(a, b)
+      return a.name < b.name
+    end)
+    return results
+  end
+
+  local function APISearch(word)
+    local lowerWord = word:lower()
+    local results = {}
+
+    -- if search match name of namespace, show all functions & events for the namespace, and also show all other functions & events matching the search
+    -- if search is composed with name of a namespace and a word separated by a dot, show matching function for matching namespace
+
+    local nsName, rest = lowerWord:match("^([%w%_]+)(.*)")
+    local funcName = rest and rest:match("^%.([%w%_]+)")
+
+    for _, systemInfo in ipairs(APIDocumentation.systems) do
+      -- search for namespaceName or namespaceName.functionName
+      local systemMatch = nsName and #nsName >= 4
+        and systemInfo.Namespace and systemInfo.Namespace:lower():match(nsName)
+
+      for _, apiInfo in ipairs(systemInfo.Functions) do
+        if systemMatch then
+          if funcName then
+            if apiInfo:MatchesSearchString(funcName) then
+              addLine(results, apiInfo)
+            end
+          else
+            addLine(results, apiInfo)
+          end
+        else
+          if apiInfo:MatchesSearchString(lowerWord) then
+            addLine(results, apiInfo)
+          end
+        end
+      end
+
+      if systemMatch and rest == "" then
+        for _, apiInfo in ipairs(systemInfo.Events) do
+          addLine(results, apiInfo)
+        end
+      else
+        for _, apiInfo in ipairs(systemInfo.Events) do
+          if apiInfo:MatchesSearchString(lowerWord) then
+            addLine(results, apiInfo)
+          end
+        end
+      end
+    end
+
+    return results
+  end
+
+  local lastSearch = nil
+  makeAPISearch = function(apiToSearchFor)
+    if not loadBlizzardAPIDocumentation() then
+      return
+    end
+    local results
+    if not apiToSearchFor or #apiToSearchFor < 4 then
+      if lastSearch == "" then return end
+      results = APIListSystems()
+      lastSearch = ""
+    else
+      if lastSearch == apiToSearchFor then return end
+      results = APISearch(apiToSearchFor)
+      lastSearch = apiToSearchFor
+    end
+    apiSearchScroll:ReleaseChildren()
+    for _, element in ipairs(results) do
+      local apiInfo = element.apiInfo
+      if apiInfo then
+        local button = AceGUI:Create("WeakAurasSnippetButton")
+        button:SetTitle(element.name)
+        button:SetEditable(false)
+        button:SetHeight(20)
+        button:SetRelativeWidth(1)
+        if apiInfo.Type ~= "System" and apiInfo.GetDetailedOutputLines then
+          local desc = table.concat(apiInfo:GetDetailedOutputLines(), "\n")
+          button:SetDescription(desc)
+        else
+          button:SetDescription()
+        end
+        button.name = element.name
+        button.editor = editor
+        button.isSystem = apiInfo.Type == "System"
+        button:SetCallback("OnClick", snippetOnClickCallback)
+        apiSearchScroll:AddChild(button)
+      end
+    end
+  end
+
+  apiSearchFrame:Hide()
+
+  -- Toggle the side bar on click
+  apiSearchButton:SetScript(
+    "OnClick",
+    function()
+      if apiSearchFrame:IsShown() then
+        apiSearchFrame:Hide()
+      else
+        apiSearchFrame:Show()
+        apiSearchFrame:ClearAllPoints()
+        apiSearchFrame:SetPoint("TOPLEFT", group.frame, "TOPRIGHT", 20, 0)
+        apiSearchFrame:SetPoint("BOTTOMLEFT", group.frame, "BOTTOMRIGHT", 20, 0)
+        filterInput:SetFocus()
+        if snippetsFrame and snippetsFrame:IsShown() then
+          snippetsFrame:Hide()
+        end
+      end
+    end
   )
 
   editor.editBox.timeMachine = {}
