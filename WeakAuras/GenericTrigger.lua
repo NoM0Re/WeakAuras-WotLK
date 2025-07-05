@@ -4115,14 +4115,16 @@ function GenericTrigger.GetAdditionalProperties(data, triggernum)
       end
       if (enable and v.store and v.name and v.display and v.conditionType ~= "bool") then
         local formatter = v.formatter
+        local formatterArgs = v.formatterArgs or {}
         if not formatter then
-          if type == "unit" then
+          if v.type == "unit" then
             formatter = "Unit"
-          elseif type == "string" then
+            formatterArgs = { color = "class" }
+          elseif v.type == "string" then
             formatter = "string"
           end
         end
-        props[v.name] = { display = v.display, formatter = formatter }
+        props[v.name] = { display = v.display, formatter = formatter, formatterArgs = formatterArgs }
       end
     end
     if prototype.countEvents then
@@ -4134,7 +4136,7 @@ function GenericTrigger.GetAdditionalProperties(data, triggernum)
       if (type(variables) == "table") then
         for var, varData in pairs(variables) do
           if (type(varData) == "table") then
-            props[var] = { display = varData.display or var, formatter = varData.formatter }
+            props[var] = { display = varData.display or var, formatter = varData.formatter, formatterArgs = varData.formatterArgs }
           end
         end
       end
