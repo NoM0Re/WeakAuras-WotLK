@@ -3094,7 +3094,8 @@ Private.event_prototypes = {
         test = "true",
         store = true,
         display = L["Source GUID"],
-        formatter = "guid"
+        formatter = "guid",
+        formatterArgs = { color = "class" }
       },
       {
         name = "sourceUnit",
@@ -3202,7 +3203,8 @@ Private.event_prototypes = {
         test = "true",
         store = true,
         display = L["Destination GUID"],
-        formatter = "guid"
+        formatter = "guid",
+        formatterArgs = { color = "class" }
       },
       {
         name = "destUnit",
@@ -6055,7 +6057,8 @@ Private.event_prototypes = {
         store = true,
         hidden = true,
         test = "true",
-        formatter = "guid"
+        formatter = "guid",
+        formatterArgs = { color = "class" }
       },
       {
         name = "cloneId",
