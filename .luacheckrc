@@ -19572,4 +19572,5 @@ globals = {
 	"WeakAurasRealTimeProfiling", "WeakAurasRealTimeProfilingTitleText", "seconds", "NUM_CHAT_WINDOWS",
 	"GetNumGlyphSockets", "GetGlyphLink", "GetGlyphSocketInfo", "APIDocumentationMixin", "BaseAPIMixin",
     "EventsAPIMixin", "FieldsAPIMixin", "FunctionsAPIMixin", "SystemsAPIMixin", "TablesAPIMixin",
+	"CopyToClipboard", "ChatFrame_OpenChat", "ChatTypeInfo"
 }

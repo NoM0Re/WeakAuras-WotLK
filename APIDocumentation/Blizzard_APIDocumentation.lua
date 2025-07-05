@@ -61,7 +61,9 @@ end
 
 function APIDocumentationMixin:HandleCopyAPI(apiInfo)
 	local clipboardString = apiInfo:GetClipboardString();
-	CopyToClipboard(clipboardString); -- secure?
+	if CopyToClipboard then
+		CopyToClipboard(clipboardString);
+	end
 	self:WriteLineF("Copied to clipboard: %s", clipboardString);
 end
 
