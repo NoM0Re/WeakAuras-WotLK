@@ -288,8 +288,6 @@ end
 
 local j = 1
 function APIDocumentationMixin:AddDocumentationTable(documentationInfo)
-	print(j, documentationInfo and documentationInfo.Name)
-	print(j, documentationInfo and documentationInfo.Type)
 	j = j + 1
 	if documentationInfo.Name then
 		self:AddSystem(documentationInfo);

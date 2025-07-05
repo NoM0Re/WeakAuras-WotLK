@@ -1,5 +1,3 @@
-print(" Loading AccountConstantsDocumentation...");
-
 local AccountConstants =
 {
 	Tables =

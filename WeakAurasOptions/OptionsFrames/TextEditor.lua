@@ -561,8 +561,7 @@ local function ConstructTextEditor(frame)
     self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
     self.clearButton:Show()
   end)
-    filterInput:SetScript("OnTextChanged", function(self)
-    --SearchBoxTemplate_OnTextChanged(self) ?
+  filterInput:SetScript("OnTextChanged", function(self)
     if APISearchCTimer and WeakAuras.timer:TimeLeft(APISearchCTimer) then
       WeakAuras.timer:CancelTimer(APISearchCTimer)
     end
@@ -624,11 +623,26 @@ local function ConstructTextEditor(frame)
     local apiAddonName = "APIDocumentation"
     local _, loaded = IsAddOnLoaded(apiAddonName)
     if not loaded then
-      LoadAddOn("APIDocumentation")
+      local ok, ret = LoadAddOn(apiAddonName)
+      if not ok then
+        local messages = { L["AddOn: APIDocumentation is %s."]:format(ret) }
+        if ret == "DISABLED" then
+          table.insert(messages, L["Please enable it in your AddOn list."])
+        elseif ret == "MISSING" then
+          table.insert(messages, L["Please install it."])
+        end
+        WeakAuras.prettyPrint(table.concat(messages, " "))
+        return
+      end
+    end
+    if type(APIDocumentation) ~= "table" or type(APIDocumentation.systems) ~= "table" then
+      WeakAuras.prettyPrint(L["AddOn: APIDocumentation is not loaded correctly."])
+      return
     end
     if #APIDocumentation.systems == 0 then
       APIDocumentation:OnLoad()
     end
+    return true
   end
 
   local function addLine(results, apiInfo)
@@ -705,7 +719,9 @@ local function ConstructTextEditor(frame)
 
   local lastSearch = nil
   makeAPISearch = function(apiToSearchFor)
-    loadBlizzardAPIDocumentation()
+    if not loadBlizzardAPIDocumentation() then
+      return
+    end
     local results
     if not apiToSearchFor or #apiToSearchFor < 4 then
       if lastSearch == "" then return end

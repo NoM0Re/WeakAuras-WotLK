@@ -1,6 +1,8 @@
 ## Interface: 30300
 ## Title: APIDocumentation
 ## Author: Blizzard Entertainment
+## LoadOnDemand: 1
+## DefaultState: Enabled
 ## Version: 1.0.0
 ## Notes: A comprehensive documentation of the Blizzard API, including constants, functions, and events.
 ## Notes-deDE: Eine umfassende Dokumentation der Blizzard-API, einschließlich Konstanten, Funktionen und Ereignissen.
