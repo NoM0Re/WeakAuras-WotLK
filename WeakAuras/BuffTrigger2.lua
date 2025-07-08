@@ -69,6 +69,7 @@ local L = WeakAuras.L
 local timer = WeakAuras.timer
 local BuffTrigger = {}
 local triggerInfos = {}
+local isInitialLogin = true
 
 local watched_trigger_events = Private.watched_trigger_events
 
@@ -115,7 +116,6 @@ local matchDataByTrigger = {}
 local matchDataChanged = {}
 
 local nameplateExists = {}
-local unitVisible = {}
 
 -- Returns whether a unit id exists. If it exists, the GUID is returned
 -- Otherwise false
@@ -125,15 +125,18 @@ local function UnitExistsFixed(unit)
   if #unit > 9 and unit:sub(1, 9) == "nameplate" then
     return nameplateExists[unit] or false
   end
-  return (UnitExists(unit) and UnitGUID(unit)) or false
+  return UnitExists(unit) and UnitGUID(unit) or false
 end
 
 local function UnitIsVisibleFixed(unit)
-  if unitVisible[unit] == nil then
-    unitVisible[unit] = UnitIsVisible(unit)
-  end
-  return unitVisible[unit]
+  return UnitIsVisible(unit)
 end
+
+local function UnitInRangeFixed(unit)
+  return UnitInRange(unit)
+end
+
+Private.ExecEnv.UnitInRangeFixed = UnitInRangeFixed
 
 local function UnitInSubgroupOrPlayer(unit, includePets)
   if includePets == nil then
@@ -143,6 +146,14 @@ local function UnitInSubgroupOrPlayer(unit, includePets)
   elseif includePets == "PetsOnly" then
     return UnitIsUnit("pet", unit)
   end
+end
+
+local function IsCasterPlayer(unit)
+  return unit and UnitIsPlayer(unit) or false
+end
+
+local function IsBossDebuff(unit)
+  return unit and unit:match("^boss%d+$") or false
 end
 
 local function GetOrCreateSubTable(base, next, ...)
@@ -288,7 +299,7 @@ local function UpdateToolTipDataInMatchData(matchData, time)
   return changed
 end
 
-local function UpdateMatchData(time, matchDataChanged, unit, key, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, _, spellId)
+local function UpdateMatchData(time, matchDataChanged, unit, key, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, isBossDebuff, isCastByPlayer, spellId)
   if not matchData[unit] then
     matchData[unit] = {}
   end
@@ -309,6 +320,8 @@ local function UpdateMatchData(time, matchDataChanged, unit, key, filter, name, 
       unit = unit,
       unitName = GetUnitName(unit, false) or "",
       isStealable = isStealable,
+      isBossDebuff = isBossDebuff,
+      isCastByPlayer = isCastByPlayer,
       time = time,
       lastChanged = time,
       filter = filter,
@@ -371,6 +384,16 @@ local function UpdateMatchData(time, matchDataChanged, unit, key, filter, name, 
 
   if data.isStealable ~= isStealable then
     data.isStealable = isStealable
+    changed = true
+  end
+
+  if data.isBossDebuff ~= isBossDebuff then
+    data.isBossDebuff = isBossDebuff
+    changed = true
+  end
+
+  if data.isCastByPlayer ~= isCastByPlayer then
+    data.isCastByPlayer = isCastByPlayer
     changed = true
   end
 
@@ -1149,14 +1172,14 @@ local function TriggerInfoApplies(triggerInfo, unit)
     return false
   end
 
-  if triggerInfo.specId then
-    local spec = Private.ExecEnv.GetUnitTalentSpec(controllingUnit)
-    local _, class = UnitClass(controllingUnit)
-    local specID = (spec and class) and Private.ExecEnv.GetSpecID(class .. spec) or 0
-    if not triggerInfo.specId[specID] then
-      return false
-    end
+if triggerInfo.specId then
+  if not triggerInfo.specId[Private.ExecEnv.GetSpecID(
+          (select(2, UnitClass(controllingUnit)) or "") ..
+          (Private.ExecEnv.GetUnitTalentSpec(controllingUnit) or ""))] then
+    return false
   end
+end
+
 
   if triggerInfo.hostility and WeakAuras.GetPlayerReaction(unit) ~= triggerInfo.hostility then
     return false
@@ -1521,10 +1544,9 @@ local function PrepareMatchData(unit, filter)
       end
 
       debuffClass = FixDebuffClass(debuffClass)
-      local updatedMatchData = UpdateMatchData(time, matchDataChanged, unit, index, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, _, spellId)
+      UpdateMatchData(time, matchDataChanged, unit, index, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, IsBossDebuff(unitCaster), IsCasterPlayer(unitCaster), spellId)
       index = index + 1
     end
-
     matchDataUpToDate[unit] = matchDataUpToDate[unit] or {}
     matchDataUpToDate[unit][filter] = true
   end
@@ -1606,9 +1628,10 @@ local function ScanUnitWithFilter(matchDataChanged, time, unit, filter,
       if not name then
         break
       end
+
       debuffClass = FixDebuffClass(debuffClass)
 
-      local updatedMatchData = UpdateMatchData(time, matchDataChanged, unit, index, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, _, spellId)
+      local updatedMatchData = UpdateMatchData(time, matchDataChanged, unit, index, filter, name, icon, stacks, debuffClass, duration, expirationTime, unitCaster, isStealable, IsBossDebuff(unitCaster), IsCasterPlayer(unitCaster), spellId)
 
       if updatedMatchData then -- Aura data changed, check against triggerInfos
         CheckScanFuncs(scanFuncName and scanFuncName[name], unit, filter, index)
@@ -1915,14 +1938,15 @@ local function EventHandler(frame, event, arg1, arg2, ...)
       end
     end
 
-    if arg1 then
+    if isInitialLogin then
       -- Initial login has a bug where the tooltip information is not available,
       -- so update tooltips 2s after login
+      isInitialLogin = false
       timer:ScheduleTimer(function()
-        for unit, matchtDataPerUnit in pairs(matchData) do
+        for unit in pairs(matchData) do
           EventHandler(frame, "UNIT_AURA", unit)
         end
-      end, 2)
+      end, 3)
     end
 
   elseif event == "RAID_TARGET_UPDATE" then
@@ -1942,12 +1966,14 @@ end
 
 Private.LibGroupTalentsWrapper.Register(function(unit)
   Private.StartProfileSystem("bufftrigger2")
+
   local deactivatedTriggerInfos = {}
   RecheckActiveForUnitType("group", unit, deactivatedTriggerInfos)
   if WeakAuras.unitToPetUnit[unit] then
     RecheckActiveForUnitType("group", WeakAuras.unitToPetUnit[unit], deactivatedTriggerInfos)
   end
   DeactivateScanFuncs(deactivatedTriggerInfos)
+
   Private.StopProfileSystem("bufftrigger2")
 end)
 
@@ -2249,7 +2275,13 @@ local function createScanFunc(trigger)
   local canHaveMatchCheck = CanHaveMatchCheck(trigger)
   local isMulti = trigger.unit == "multi"
   local useStacks = canHaveMatchCheck and not isMulti and trigger.useStacks
-  local use_stealable = canHaveMatchCheck and not isMulti and trigger.use_stealable
+
+  local use_stealable, use_isBossDebuff, use_castByPlayer
+  if canHaveMatchCheck and not isMulti then
+    use_stealable = trigger.use_stealable
+    use_isBossDebuff = trigger.use_isBossDebuff
+    use_castByPlayer = trigger.use_castByPlayer
+  end
   local use_debuffClass = canHaveMatchCheck and not isMulti and trigger.use_debuffClass
   local use_tooltip = canHaveMatchCheck and not isMulti and trigger.fetchTooltip and trigger.use_tooltip
   local use_tooltipValue = canHaveMatchCheck and not isMulti and trigger.fetchTooltip and trigger.use_tooltipValue
@@ -2257,7 +2289,8 @@ local function createScanFunc(trigger)
   local use_ignore_name = canHaveMatchCheck and not isMulti and trigger.useIgnoreName and trigger.ignoreAuraNames
   local use_ignore_spellId = canHaveMatchCheck and not isMulti and trigger.useIgnoreExactSpellId and trigger.ignoreAuraSpellids
 
-  if not useStacks and use_stealable == nil and not use_debuffClass and trigger.ownOnly == nil
+  if not useStacks and use_stealable == nil and use_isBossDebuff == nil and use_castByPlayer == nil
+       and not use_debuffClass and trigger.ownOnly == nil
        and not use_tooltip and not use_tooltipValue and not trigger.useNamePattern and not use_total
        and not use_ignore_name and not use_ignore_spellId then
     return nil
@@ -2300,6 +2333,35 @@ local function createScanFunc(trigger)
       end
     ]=])
   end
+
+  if use_isBossDebuff then
+    table.insert(ret, [=[
+      if not matchData.isBossDebuff then
+        return false
+      end
+    ]=])
+  elseif use_isBossDebuff == false then
+    table.insert(ret, [=[
+      if matchData.isBossDebuff then
+        return false
+      end
+    ]=])
+  end
+
+    if use_castByPlayer then
+    table.insert(ret, [=[
+      if not matchData.isCastByPlayer then
+        return false
+      end
+    ]=])
+  elseif use_castByPlayer == false then
+    table.insert(ret, [=[
+      if matchData.isCastByPlayer then
+        return false
+      end
+    ]=])
+  end
+
   if use_debuffClass then
     local ret2 = [=[
       local tDebuffClass = %s;

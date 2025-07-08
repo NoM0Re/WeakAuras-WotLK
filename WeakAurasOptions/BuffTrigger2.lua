@@ -22,7 +22,7 @@ local function getAuraMatchesList(name)
   if ids then
     local descText = ""
     for id, _ in pairs(ids) do
-      local _, _, icon = GetSpellInfo(id)
+      local icon = select(3, GetSpellInfo(id))
       if icon then
         if descText == "" then
           descText = "|T"..icon..":0|t: "..id
@@ -114,14 +114,14 @@ local function CreateNameOptions(aura_options, data, trigger, size, isExactSpell
 
     if isExactSpellId then
       aura_options[iconOption].name = function()
-        return GetSpellInfo(WeakAuras.SafeToNumber(trigger[optionKey] and trigger[optionKey][i] or 0))
+        return GetSpellInfo(WeakAuras.SafeToNumber(trigger[optionKey] and trigger[optionKey][i]) or "")
       end
       aura_options[iconOption].image = function()
         local icon = select(3, GetSpellInfo(trigger[optionKey] and trigger[optionKey][i] or ""))
         return icon and tostring(icon) or "", 18, 18
       end
       aura_options[iconOption].disabled = function()
-        return not trigger[optionKey] or not trigger[optionKey][i] or not select(3, GetSpellInfo(trigger[optionKey] and trigger[optionKey][i] or 0))
+        return not trigger[optionKey] or not trigger[optionKey][i] or not select(3, GetSpellInfo(trigger[optionKey] and trigger[optionKey][i]))
       end
     else
       aura_options[iconOption].name = function()
@@ -537,6 +537,63 @@ local function GetBuffTriggerOptions(data, triggernum)
           local value = trigger.use_stealable
           if value == false then trigger.use_stealable = nil
           else trigger.use_stealable = false end
+        end
+        WeakAuras.Add(data)
+      end
+    },
+    use_isBossDebuff = {
+      type = "toggle",
+      name = function(input)
+        local value = trigger.use_isBossDebuff
+        if value == nil then return L["Is Boss Debuff"]
+        elseif value == false then return "|cFFFF0000 " .. L["Negator"] .. " " .. L["Is Boss Debuff"] .. "|r"
+        else return "|cFF00FF00" .. L["Is Boss Debuff"] .. "|r" end
+      end,
+      width = WeakAuras.doubleWidth,
+      order = 64.1,
+      hidden = function() return not (trigger.type == "aura2" and trigger.unit ~= "multi" and CanHaveMatchCheck(trigger)) end,
+      get = function()
+        local value = trigger.use_isBossDebuff
+        if value == nil then return false
+        elseif value == false then return "false"
+        else return "true" end
+      end,
+      set = function(info, v)
+        if v then
+          trigger.use_isBossDebuff = true
+        else
+          local value = trigger.use_isBossDebuff
+          if value == false then trigger.use_isBossDebuff = nil
+          else trigger.use_isBossDebuff = false end
+        end
+        WeakAuras.Add(data)
+      end
+    },
+    use_castByPlayer = {
+      type = "toggle",
+      name = function()
+        local value = trigger.use_castByPlayer
+        if value == nil then return L["Cast by a Player Character"]
+        elseif value == false then return "|cFFFF0000 "..L["Negator"].." "..L["Cast by a Player Character"]
+        else return "|cFF00FF00"..L["Cast by a Player Character"] end
+      end,
+      desc = L["Only Match auras cast by a player (not an npc)"],
+      width = WeakAuras.doubleWidth,
+      order = 64.2,
+      hidden = function() return not (trigger.type == "aura2" and trigger.unit ~= "multi" and CanHaveMatchCheck(trigger)) end,
+      get = function()
+        local value = trigger.use_castByPlayer
+        if value == nil then return false
+        elseif value == false then return "false"
+        else return "true" end
+      end,
+      set = function(info, v)
+        if v then
+          trigger.use_castByPlayer = true
+        else
+          local value = trigger.use_castByPlayer
+          if value == false then trigger.use_castByPlayer = nil
+          else trigger.use_castByPlayer = false end
         end
         WeakAuras.Add(data)
       end
