@@ -153,7 +153,7 @@ local function IsCasterPlayer(unit)
 end
 
 local function IsBossDebuff(unit)
-  return unit and unit:match("^boss%d+$") or false
+  return unit and unit:match("^boss%d*$") or false
 end
 
 local function GetOrCreateSubTable(base, next, ...)
