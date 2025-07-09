@@ -262,7 +262,7 @@ FrameToUnit:Init(true)
 local profiling = false
 local profileData
 
-local function doNothing()
+local function doNothing(_)
 end
 
 local StartProfiling = doNothing
@@ -686,40 +686,59 @@ function lib.GetUnitNameplate(unit)
   if nameplate then
     -- credit to Exality for https://wago.io/explosiveorbs
     if nameplate.UnitFrame and nameplate.UnitFrame.Health then
-      -- elvui bunny
+      -- ElvUI Bunny
       return nameplate.UnitFrame.Health:IsShown() and nameplate.UnitFrame.Health
-      or nameplate.UnitFrame.Name:IsShown() and nameplate.UnitFrame.Name
-      or nameplate.UnitFrame
+          or nameplate.UnitFrame.Name:IsShown() and nameplate.UnitFrame.Name
+          or nameplate
+
     elseif nameplate.unitFrame and nameplate.unitFrame.Health then
-      -- elvui someday
+      -- ElvUI Crum
       return nameplate.unitFrame.Health:IsShown() and nameplate.unitFrame.Health
-      or nameplate.unitFrame.Name:IsShown() and nameplate.unitFrame.Name
-      or nameplate.unitFrame
+          or nameplate.unitFrame.Name and nameplate.unitFrame.Name:IsShown() and nameplate.unitFrame.Name
+          or nameplate
+
     elseif nameplate.unitFramePlater and nameplate.unitFramePlater.healthBar then
-      -- plater
+      -- Plater
       -- fallback to default nameplate in case plater is not on screen and uses blizzard default (module disabled, force-blizzard functionality)
-      return nameplate.unitFramePlater.PlaterOnScreen and nameplate.unitFramePlater.healthBar or (nameplate.UnitFrame and nameplate.UnitFrame.healthBar) or nameplate
+      return nameplate.unitFramePlater.PlaterOnScreen
+          and nameplate.unitFramePlater.healthBar
+          and nameplate.unitFramePlater.healthBar:IsShown() and nameplate.unitFramePlater.healthBar
+          or (nameplate.UnitFrame and nameplate.UnitFrame.healthBar and nameplate.UnitFrame.healthBar:IsShown() and nameplate.UnitFrame.healthBar)
+          or nameplate
+
     elseif nameplate.kui and nameplate.kui.HealthBar then
-      -- kui
-      return nameplate.kui.HealthBar
+      -- KuiNameplates
+      return nameplate.kui.HealthBar:IsShown() and nameplate.kui.HealthBar
+          or nameplate
+
     elseif nameplate.extended and nameplate.extended.visual and nameplate.extended.visual.healthbar then
-      -- tidyplates
-      return nameplate.extended.visual.healthbar
+      -- TidyPlates
+      return nameplate.extended.visual.healthbar:IsShown() and nameplate.extended.visual.healthbar
+          or nameplate
+
     elseif nameplate.TPFrame and nameplate.TPFrame.visual and nameplate.TPFrame.visual.healthbar then
-      -- tidyplates: threat plates
-      return nameplate.TPFrame.visual.healthbar
-    elseif nameplate.unitFrame and nameplate.unitFrame.Health then
-      -- bdui nameplates
-      return nameplate.unitFrame.Health
+      -- Threat Plates
+      return nameplate.TPFrame.visual.healthbar:IsShown() and nameplate.TPFrame.visual.healthbar
+          or nameplate
+
     elseif nameplate.ouf and nameplate.ouf.Health then
       -- bdNameplates
-      return nameplate.ouf.Health
-    elseif nameplate.slab and nameplate.slab.components and nameplate.slab.components.healthBar and nameplate.slab.components.healthBar.frame then
+      return nameplate.ouf.Health:IsShown() and nameplate.ouf.Health
+          or nameplate
+
+    elseif nameplate.slab
+        and nameplate.slab.components
+        and nameplate.slab.components.healthBar
+        and nameplate.slab.components.healthBar.frame then
       -- Slab
-      return nameplate.slab.components.healthBar.frame
+      return nameplate.slab.components.healthBar.frame:IsShown() and nameplate.slab.components.healthBar.frame
+          or nameplate
+
     elseif nameplate.UnitFrame and nameplate.UnitFrame.healthBar then
       -- default
-      return nameplate.UnitFrame.healthBar
+      return nameplate.UnitFrame.healthBar:IsShown() and nameplate.UnitFrame.healthBar
+          or nameplate
+
     else
       return nameplate
     end
