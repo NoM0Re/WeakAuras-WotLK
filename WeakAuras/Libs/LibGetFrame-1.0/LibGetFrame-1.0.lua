@@ -262,7 +262,7 @@ FrameToUnit:Init(true)
 local profiling = false
 local profileData
 
-local function doNothing(_)
+local function doNothing()
 end
 
 local StartProfiling = doNothing
