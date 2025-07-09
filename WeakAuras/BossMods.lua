@@ -362,8 +362,8 @@ Private.ExecEnv.BossMods.DBM = {
       self:RegisterCallback("DBM_TimerStart")
       self:RegisterCallback("DBM_TimerStop")
       self:RegisterCallback("DBM_TimerUpdate")
-      self:RegisterCallback("wipe")
-      self:RegisterCallback("kill")
+      self:RegisterCallback("DBM_Wipe")
+      self:RegisterCallback("DBM_Kill")
     end
   end,
 
