@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: WeakAuras
 ## Author: The WeakAuras Team
-## Version: 5.19.12
+## Version: 5.20.0
 ## IconTexture: Interface\AddOns\WeakAuras\Media\Textures\icon.blp
 ## X-Flavor: 3.3.5
 ## Notes: A powerful, comprehensive utility for displaying graphics and information based on buffs, debuffs, and other triggers.
@@ -35,6 +35,9 @@ ArchiveTypes\Repository.lua
 DefaultOptions.lua
 
 # Core files
+SubscribableObject.lua
+Features.lua
+TimeMachine.lua
 Types_ClassicPlus.lua
 Types_TBC.lua
 Types_Wrath.lua
@@ -60,7 +63,6 @@ TSUHelpers.lua
 AuraWarnings.lua
 AuraEnvironment.lua
 DebugLog.lua
-SubscribableObject.lua
 
 # Region support
 RegionTypes\SmoothStatusBarMixin.lua

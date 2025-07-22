@@ -201,11 +201,51 @@ function SlashCmdList.WEAKAURAS(input)
   elseif msg == "pshow" or msg == "profiling" then
     WeakAuras.RealTimeProfilingWindow:Toggle()
   elseif msg == "minimap" then
-    Private.ToggleMinimap();
+    WeakAuras.ToggleMinimap();
   elseif msg == "help" then
     Private.PrintHelp();
   elseif msg == "repair" then
     StaticPopup_Show("WEAKAURAS_CONFIRM_REPAIR", nil, nil, {reason = "user"})
+  elseif msg == "ff" or msg == "feat" or msg == "feature" then
+    if #args < 2 then
+      local features = Private.Features:ListFeatures()
+      local summary = {}
+      for _, feature in ipairs(features) do
+        table.insert(summary, ("|c%s%s|r"):format(feature.enabled and "ff00ff00" or "ffff0000", feature.id))
+      end
+      prettyPrint(L["Syntax /wa feature <toggle|on|enable|disable|off> <feature>"])
+      prettyPrint(L["Available features: %s"]:format(table.concat(summary, ", ")))
+    else
+      local action = ({
+        toggle = "toggle",
+        on = "enable",
+        enable = "enable",
+        disable = "disable",
+        off = "disable"
+      })[args[1]]
+      if not action then
+        prettyPrint(L["Unknown action %q"]:format(args[1]))
+      else
+        local feature = args[2]
+        if not Private.Features:Exists(feature) then
+          prettyPrint(L["Unknown feature %q"]:format(feature))
+        elseif not Private.Features:Enabled(feature) then
+          if action ~= "disable" then
+            Private.Features:Enable(feature)
+            prettyPrint(L["Enabled feature %q"]:format(feature))
+          else
+            prettyPrint(L["Feature %q is already disabled"]:format(feature))
+          end
+        elseif Private.Features:Enabled(feature) then
+          if action ~= "enable" then
+            Private.Features:Disable(feature)
+            prettyPrint(L["Disabled feature %q"]:format(feature))
+          else
+            prettyPrint(L["Feature %q is already enabled"]:format(feature))
+          end
+        end
+      end
+    end
   else
     WeakAuras.OpenOptions(msg);
   end
@@ -213,7 +253,7 @@ end
 
 if not WeakAuras.IsLibsOK() then return end
 
-function Private.ToggleMinimap()
+function WeakAuras.ToggleMinimap()
   WeakAurasSaved.minimap.hide = not WeakAurasSaved.minimap.hide
   if WeakAurasSaved.minimap.hide then
     LDBIcon:Hide("WeakAuras");
@@ -1137,6 +1177,8 @@ function Private.Login(takeNewSnapshots)
       db.history = nil
     end
 
+
+    Private.Features:Hydrate()
     coroutine.yield(3000, "login check uid corruption")
 
     local toAdd = {};
@@ -1216,6 +1258,7 @@ loadedFrame:SetScript("OnEvent", function(self, event, ...)
 
       db.displays = db.displays or {};
       db.registered = db.registered or {};
+      db.features = db.features or {}
       db.migrationCutoff = db.migrationCutoff or 730
       db.historyCutoff = db.historyCutoff or 730
 
@@ -1772,6 +1815,7 @@ function Private.UIDtoID(uid)
 end
 
 function WeakAuras.Delete(data)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
   local id = data.id;
   local uid = data.uid
   local parentId = data.parent
@@ -1871,6 +1915,7 @@ function WeakAuras.Delete(data)
 end
 
 function WeakAuras.Rename(data, newid)
+  -- since we Add() later in this function, we need to destroy the universe first
   local oldid = data.id
   if(data.parent) then
     local parentData = db.displays[data.parent];
@@ -1973,6 +2018,7 @@ function WeakAuras.Rename(data, newid)
 end
 
 function Private.Convert(data, newType)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
   local id = data.id;
   Private.FakeStatesFor(id, false)
 
@@ -2361,7 +2407,7 @@ function Private.AddMany(tbl, takeSnapshots)
           Private.regions[data.id].region:ReloadControlledChildren()
         end
       else
-        WeakAuras.Add(data)
+        Private.Add(data)
       end
     end
     coroutine.yield(1000, "addmany reload dynamic group");
@@ -2911,7 +2957,7 @@ function pAdd(data, simpleChange)
   end
 end
 
-function WeakAuras.Add(data, simpleChange)
+function Private.Add(data, simpleChange)
   local oldSnapshot
   if Private.ModernizeNeedsOldSnapshot(data) then
     oldSnapshot = Private.GetMigrationSnapshot(data.uid)
@@ -2925,6 +2971,11 @@ function WeakAuras.Add(data, simpleChange)
   else
     Private.GetErrorHandlerUid(data.uid, "PreAdd")
   end
+end
+
+function WeakAuras.Add(data, simpleChange)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
+  Private.Add(data, simpleChange)
 end
 
 function Private.AddParents(data)
@@ -4449,6 +4500,9 @@ Private.callbacks:RegisterCallback("Rename", function(_, uid, oldId, newId)
 end)
 
 function Private.SendDelayedWatchedTriggers()
+  if WeakAuras.IsOptionsOpen() then
+    return
+  end
   for id in pairs(delayed_watched_trigger) do
     local watched = delayed_watched_trigger[id]
     -- Since the observers are themselves observable, we set the list of observers to
@@ -4931,6 +4985,59 @@ function Private.ParseTextStr(textStr, symbolCallback)
     local symbol = string.sub(textStr, start, currentPos - 1)
     symbolCallback(symbol)
   end
+end
+
+function Private.SetDefaultFormatters(data, input, keyPrefix, metaData)
+  local seenSymbols = {}
+  local setDefaultFormatters = function(symbol)
+    if not data[keyPrefix .. symbol .. "_format"] and not seenSymbols[symbol] then
+      local trigger, sym = string.match(symbol, "(.+)%.(.+)")
+      sym = sym or symbol
+
+      local formatter, args = Private.DefaultFormatterFor(metaData, trigger, sym)
+      data[keyPrefix .. symbol .. "_format"] = formatter
+      for arg, value in pairs(args or {}) do
+        data[keyPrefix .. symbol .. "_" .. arg] = value
+      end
+    end
+    seenSymbols[symbol] = true
+  end
+  Private.ParseTextStr(input, setDefaultFormatters)
+end
+
+function Private.DefaultFormatterFor(stateMetaData, trigger, sym)
+  local formatter
+  local args = {}
+  if sym == "p" or sym == "t" then
+    return "timed", { time_dynamic_threshold = 3 }
+  end
+
+  trigger = tonumber(trigger)
+  if trigger then
+    local metaData = stateMetaData[trigger] and stateMetaData[trigger][sym]
+    if metaData then
+      formatter = metaData.formatter
+      if metaData.formatterArgs then
+        for arg, value in pairs(metaData.formatterArgs) do
+          args[arg] = value
+        end
+      end
+    end
+  else
+    for index, perTriggerData in pairs(stateMetaData) do
+      if perTriggerData[sym] then
+        if not formatter then
+          formatter = perTriggerData[sym].formatter
+        else
+          if formatter ~= perTriggerData[sym].formatter then
+            return "none"
+          end
+        end
+      end
+    end
+  end
+
+  return formatter or "none", args
 end
 
 function Private.CreateFormatters(input, getter, withoutColor, data)

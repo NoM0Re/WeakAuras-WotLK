@@ -4114,7 +4114,17 @@ function GenericTrigger.GetAdditionalProperties(data, triggernum)
         enable = v.enable
       end
       if (enable and v.store and v.name and v.display and v.conditionType ~= "bool") then
-        props[v.name] = v.display
+        local formatter = v.formatter
+        local formatterArgs = v.formatterArgs or {}
+        if not formatter then
+          if v.type == "unit" then
+            formatter = "Unit"
+            formatterArgs = { color = "class" }
+          elseif v.type == "string" then
+            formatter = "string"
+          end
+        end
+        props[v.name] = { display = v.display, formatter = formatter, formatterArgs = formatterArgs }
       end
     end
     if prototype.countEvents then
@@ -4126,7 +4136,7 @@ function GenericTrigger.GetAdditionalProperties(data, triggernum)
       if (type(variables) == "table") then
         for var, varData in pairs(variables) do
           if (type(varData) == "table") then
-            props[var] = varData.display or var
+            props[var] = { display = varData.display or var, formatter = varData.formatter, formatterArgs = varData.formatterArgs }
           end
         end
       end
@@ -4172,6 +4182,7 @@ local commonConditions = {
   duration = {
     display = L["Total Duration"],
     type = "number",
+    formatter = "Number",
   },
   paused = {
     display =L["Is Paused"],
@@ -4191,7 +4202,8 @@ local commonConditions = {
   },
   stacks = {
     display = L["Stacks"],
-    type = "number"
+    type = "number",
+    formatter = "Number",
   },
   name = {
     display = L["Name"],
@@ -4308,7 +4320,7 @@ function GenericTrigger.GetTriggerConditions(data, triggernum)
         if (enable) then
           result[v.name] = {
             display = v.display,
-            type = v.conditionType
+            type = v.conditionType,
           }
           if (result[v.name].type == "select" or result[v.name].type == "unit") then
             if (v.conditionValues) then

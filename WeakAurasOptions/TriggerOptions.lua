@@ -222,6 +222,23 @@ local function DeleteConditionsForTrigger(data, triggernum)
   end
 end
 
+local function FixUpProgressSourceAfterDelete(data, triggernum)
+  local function FixUpProgressSource(data)
+    if data.progressSource then
+      local trigger, property = unpack(data.progressSource)
+      if trigger > triggernum then
+        data.progressSource = {trigger - 1, property}
+      end
+    end
+  end
+
+  FixUpProgressSource(data)
+
+  for _, subRegionData in ipairs(data.subRegions) do
+    FixUpProgressSource(subRegionData)
+  end
+end
+
 local function moveTriggerDownConditionCheck(check, i)
   if (check.trigger == i) then
     check.trigger = i + 1;
@@ -242,6 +259,23 @@ local function moveTriggerDownImpl(data, i)
   data.triggers[i], data.triggers[i + 1] = data.triggers[i + 1], data.triggers[i]
   for _, condition in ipairs(data.conditions) do
     moveTriggerDownConditionCheck(condition.check, i);
+  end
+
+ local function fixUpProgressSource(data)
+    if data.progressSource then
+      local trigger, property = unpack(data.progressSource)
+      if trigger == i then
+        data.progressSource = {i + 1, property}
+      elseif trigger == i + 1 then
+        data.progressSource = {i, property}
+      end
+    end
+  end
+
+  fixUpProgressSource(data)
+
+  for _, subRegionData in ipairs(data.subRegions) do
+    fixUpProgressSource(subRegionData)
   end
 
   return true;
@@ -352,6 +386,7 @@ function OptionsPrivate.AddTriggerMetaFunctions(options, data, triggernum)
               if #child.triggers > 1 and #child.triggers >= triggernum then
                 tremove(child.triggers, triggernum)
                 DeleteConditionsForTrigger(child, triggernum)
+                FixUpProgressSourceAfterDelete(child, triggernum)
                 WeakAuras.Add(child)
                 OptionsPrivate.RemoveCollapsed(collapsedId, "trigger", {triggernum})
                 OptionsPrivate.ClearOptions(child.id)
