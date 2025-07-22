@@ -140,11 +140,11 @@ Private.ExecEnv.UnitInRangeFixed = UnitInRangeFixed
 
 local function UnitInSubgroupOrPlayer(unit, includePets)
   if includePets == nil then
-    return UnitIsUnit("player", unit)
+    return UnitInParty(unit) or UnitIsUnit("player", unit)
   elseif includePets == "PlayersAndPets" then
-    return UnitIsUnit("player", unit) or UnitIsUnit("pet", unit)
+    return UnitInParty(WeakAuras.petUnitToUnit[unit] or unit) or UnitIsUnit("player", unit) or UnitIsUnit("pet", unit)
   elseif includePets == "PetsOnly" then
-    return UnitIsUnit("pet", unit)
+    return UnitInParty(WeakAuras.petUnitToUnit[unit]) or UnitIsUnit("pet", unit)
   end
 end
 

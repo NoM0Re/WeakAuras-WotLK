@@ -1083,7 +1083,7 @@ Broker_WeakAuras = LDB:NewDataObject("WeakAuras", {
         WeakAuras.OpenOptions();
       end
     elseif(button == 'MiddleButton') then
-      Private.ToggleMinimap();
+      WeakAuras.ToggleMinimap();
     else
       WeakAuras.RealTimeProfilingWindow:Toggle()
     end
@@ -1648,7 +1648,7 @@ local function UnloadAll()
       Private.CancelAnimation(Private.regions[id].region, true, true, true, true, true, true)
     end
     if clones[id] then
-      for _, region in pairs(clones[id]) do
+      for cloneId, region in pairs(clones[id]) do
         Private.CancelAnimation(region, true, true, true, true, true, true)
       end
     end
