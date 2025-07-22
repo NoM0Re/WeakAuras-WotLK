@@ -8,8 +8,8 @@ local pairs, type, error = pairs, type, error
 local _G = _G
 
 -- WoW APIs
-local GetScreenWidth, GetScreenHeight, CreateFrame, GetAddOnInfo, UnitName
-  = GetScreenWidth, GetScreenHeight, CreateFrame, GetAddOnInfo, UnitName
+local GetScreenWidth, GetScreenHeight, CreateFrame, GetAddOnInfo
+  = GetScreenWidth, GetScreenHeight, CreateFrame, GetAddOnInfo
 
 local AceGUI = LibStub("AceGUI-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
@@ -87,6 +87,8 @@ local defaultWidth = 830
 local defaultHeight = 665
 local minWidth = 750
 local minHeight = 240
+
+
 
 function OptionsPrivate.CreateFrame()
   CreateFrame("Frame", "WeakAuras_DropDownMenu", nil, "UIDropDownMenuTemplate")
@@ -339,7 +341,7 @@ function OptionsPrivate.CreateFrame()
   tipFrame:Hide()
   frame.tipFrame = tipFrame
 
-  local tipPopup = CreateFrame("Frame", "WeakAuras_TipPopup", frame)
+  local tipPopup = CreateFrame("Frame", nil, frame)
   tipPopup:SetFrameStrata("FULLSCREEN")
   tipPopup:SetBackdrop({
     bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
@@ -452,13 +454,13 @@ function OptionsPrivate.CreateFrame()
     local lineLength = 0
     local currentLine = {}
     for _, patreon in ipairs(list) do
-      if lineLength + #patreon + 2 * #currentLine > 130 then
+      if lineLength + #patreon + 2 > 130 then
         tinsert(patreonLines, table.concat(currentLine, ", ") .. ", ")
         currentLine = {}
         tinsert(currentLine, patreon)
-        lineLength = #patreon
+        lineLength = #patreon + 2
       else
-        lineLength = lineLength + #patreon
+        lineLength = lineLength + #patreon + 2
         tinsert(currentLine, patreon)
       end
     end
@@ -484,7 +486,6 @@ function OptionsPrivate.CreateFrame()
   local footerSpacing = 4
   local thanksListCJ = lineWrapDiscordList(OptionsPrivate.Private.DiscordListCJ)
   local thanksListK = lineWrapDiscordList(OptionsPrivate.Private.DiscordListK)
-
 
   local discordButton = addFooter(L["Discord"], [[Interface\AddOns\WeakAuras\Media\Textures\discord.tga]], "https://discord.gg/UXSc7nt",
                                   L["Chat with WeakAuras experts on our Discord server."])
@@ -664,9 +665,12 @@ function OptionsPrivate.CreateFrame()
     frame:FillOptions()
   end)
   undo.frame:SetParent(toolbarContainer)
-  undo.frame:SetShown(OptionsPrivate.Private.Features:Enabled("undo"))
+  if OptionsPrivate.Private.Features:Enabled("undo") then
+    undo.frame:Show()
+  else
+    undo.frame:Hide()
+  end
   undo:SetPoint("LEFT")
-  undo.frame:SetCollapsesLayout(true)
 
   local redo = AceGUI:Create("WeakAurasToolbarButton")
   redo:SetText(L["Redo"])
@@ -676,10 +680,17 @@ function OptionsPrivate.CreateFrame()
     frame:FillOptions()
   end)
   redo.frame:SetParent(toolbarContainer)
-  redo.frame:SetShown(OptionsPrivate.Private.Features:Enabled("undo"))
+  if OptionsPrivate.Private.Features:Enabled("undo") then
+    redo.frame:Show()
+  else
+    redo.frame:Hide()
+  end
   redo:SetPoint("LEFT", undo.frame, "RIGHT", 10, 0)
-  redo.frame:SetEnabled(OptionsPrivate.Private.TimeMachine:DescribeNext() ~= nil)
-  redo.frame:SetCollapsesLayout(true)
+  if OptionsPrivate.Private.TimeMachine:DescribeNext() ~= nil then
+    redo.frame:Enable()
+  else
+    redo.frame:Disable()
+  end
   OptionsPrivate.Private.Features:Subscribe("undo",
     function()
       undo.frame:Show()
@@ -715,7 +726,7 @@ function OptionsPrivate.CreateFrame()
   newButton:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\newaura")
   newButton.frame:SetParent(toolbarContainer)
   newButton.frame:Show()
-  newButton:SetPoint("RIGHT", importButton.frame, "LEFT", -10, 0)
+  newButton:SetPoint("LEFT", redo.frame, "RIGHT", 10, 0)
   frame.toolbarContainer = toolbarContainer
 
   newButton:SetCallback("OnClick", function()
@@ -772,6 +783,7 @@ function OptionsPrivate.CreateFrame()
   magnetButton.frame:SetParent(toolbarContainer)
   magnetButton.frame:Show()
   magnetButton:SetPoint("LEFT", lockButton.frame, "RIGHT", 10, 0)
+
 
   local loadProgress = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
   loadProgress:SetPoint("TOP", buttonsContainer.frame, "TOP", 0, -4)

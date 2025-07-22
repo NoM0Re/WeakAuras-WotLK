@@ -201,7 +201,7 @@ function SlashCmdList.WEAKAURAS(input)
   elseif msg == "pshow" or msg == "profiling" then
     WeakAuras.RealTimeProfilingWindow:Toggle()
   elseif msg == "minimap" then
-    Private.ToggleMinimap();
+    WeakAuras.ToggleMinimap();
   elseif msg == "help" then
     Private.PrintHelp();
   elseif msg == "repair" then
@@ -253,7 +253,7 @@ end
 
 if not WeakAuras.IsLibsOK() then return end
 
-function Private.ToggleMinimap()
+function WeakAuras.ToggleMinimap()
   WeakAurasSaved.minimap.hide = not WeakAurasSaved.minimap.hide
   if WeakAurasSaved.minimap.hide then
     LDBIcon:Hide("WeakAuras");

@@ -78,8 +78,7 @@ function OptionsPrivate.GetInformationOptions(data)
           payload = v
         })
       end
-
-      WeakAuras.ClearAndUpdateOptions(data.id)
+      OptionsPrivate.Private.TimeMachine:Commit()
     end,
     desc = sameURL and "" or desc,
     order = order
