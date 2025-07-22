@@ -35,6 +35,9 @@ ArchiveTypes\Repository.lua
 DefaultOptions.lua
 
 # Core files
+SubscribableObject.lua
+Features.lua
+TimeMachine.lua
 Types_ClassicPlus.lua
 Types_TBC.lua
 Types_Wrath.lua
@@ -60,7 +63,6 @@ TSUHelpers.lua
 AuraWarnings.lua
 AuraEnvironment.lua
 DebugLog.lua
-SubscribableObject.lua
 
 # Region support
 RegionTypes\SmoothStatusBarMixin.lua

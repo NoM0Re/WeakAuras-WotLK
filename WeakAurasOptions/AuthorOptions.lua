@@ -2500,8 +2500,6 @@ local function mergeOptions(mergedOptions, data, options, config, prepath, paren
           break
         end
       end
-    else
-      nextInsert = #mergedOptions + 1
     end
     -- now we know at what point to add nextToMerge
     if shouldMerge then
@@ -2557,6 +2555,7 @@ local function mergeOptions(mergedOptions, data, options, config, prepath, paren
         end
       end
     else
+      nextInsert = #mergedOptions + 1
       -- can't merge, should insert instead
       local newOption = CopyTable(nextToMerge)
       initReferences(newOption, data, options, i, config, path, parent)

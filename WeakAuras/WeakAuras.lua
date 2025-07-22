@@ -206,6 +206,46 @@ function SlashCmdList.WEAKAURAS(input)
     Private.PrintHelp();
   elseif msg == "repair" then
     StaticPopup_Show("WEAKAURAS_CONFIRM_REPAIR", nil, nil, {reason = "user"})
+  elseif msg == "ff" or msg == "feat" or msg == "feature" then
+    if #args < 2 then
+      local features = Private.Features:ListFeatures()
+      local summary = {}
+      for _, feature in ipairs(features) do
+        table.insert(summary, ("|c%s%s|r"):format(feature.enabled and "ff00ff00" or "ffff0000", feature.id))
+      end
+      prettyPrint(L["Syntax /wa feature <toggle|on|enable|disable|off> <feature>"])
+      prettyPrint(L["Available features: %s"]:format(table.concat(summary, ", ")))
+    else
+      local action = ({
+        toggle = "toggle",
+        on = "enable",
+        enable = "enable",
+        disable = "disable",
+        off = "disable"
+      })[args[1]]
+      if not action then
+        prettyPrint(L["Unknown action %q"]:format(args[1]))
+      else
+        local feature = args[2]
+        if not Private.Features:Exists(feature) then
+          prettyPrint(L["Unknown feature %q"]:format(feature))
+        elseif not Private.Features:Enabled(feature) then
+          if action ~= "disable" then
+            Private.Features:Enable(feature)
+            prettyPrint(L["Enabled feature %q"]:format(feature))
+          else
+            prettyPrint(L["Feature %q is already disabled"]:format(feature))
+          end
+        elseif Private.Features:Enabled(feature) then
+          if action ~= "enable" then
+            Private.Features:Disable(feature)
+            prettyPrint(L["Disabled feature %q"]:format(feature))
+          else
+            prettyPrint(L["Feature %q is already enabled"]:format(feature))
+          end
+        end
+      end
+    end
   else
     WeakAuras.OpenOptions(msg);
   end
@@ -1137,6 +1177,8 @@ function Private.Login(takeNewSnapshots)
       db.history = nil
     end
 
+
+    Private.Features:Hydrate()
     coroutine.yield(3000, "login check uid corruption")
 
     local toAdd = {};
@@ -1216,6 +1258,7 @@ loadedFrame:SetScript("OnEvent", function(self, event, ...)
 
       db.displays = db.displays or {};
       db.registered = db.registered or {};
+      db.features = db.features or {}
       db.migrationCutoff = db.migrationCutoff or 730
       db.historyCutoff = db.historyCutoff or 730
 
@@ -1772,6 +1815,7 @@ function Private.UIDtoID(uid)
 end
 
 function WeakAuras.Delete(data)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
   local id = data.id;
   local uid = data.uid
   local parentId = data.parent
@@ -1871,6 +1915,7 @@ function WeakAuras.Delete(data)
 end
 
 function WeakAuras.Rename(data, newid)
+  -- since we Add() later in this function, we need to destroy the universe first
   local oldid = data.id
   if(data.parent) then
     local parentData = db.displays[data.parent];
@@ -1973,6 +2018,7 @@ function WeakAuras.Rename(data, newid)
 end
 
 function Private.Convert(data, newType)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
   local id = data.id;
   Private.FakeStatesFor(id, false)
 
@@ -2361,7 +2407,7 @@ function Private.AddMany(tbl, takeSnapshots)
           Private.regions[data.id].region:ReloadControlledChildren()
         end
       else
-        WeakAuras.Add(data)
+        Private.Add(data)
       end
     end
     coroutine.yield(1000, "addmany reload dynamic group");
@@ -2911,7 +2957,7 @@ function pAdd(data, simpleChange)
   end
 end
 
-function WeakAuras.Add(data, simpleChange)
+function Private.Add(data, simpleChange)
   local oldSnapshot
   if Private.ModernizeNeedsOldSnapshot(data) then
     oldSnapshot = Private.GetMigrationSnapshot(data.uid)
@@ -2925,6 +2971,11 @@ function WeakAuras.Add(data, simpleChange)
   else
     Private.GetErrorHandlerUid(data.uid, "PreAdd")
   end
+end
+
+function WeakAuras.Add(data, simpleChange)
+  Private.TimeMachine:DestroyTheUniverse(data.id)
+  Private.Add(data, simpleChange)
 end
 
 function Private.AddParents(data)
