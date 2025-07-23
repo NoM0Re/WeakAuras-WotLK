@@ -3828,7 +3828,7 @@ do
     SHAMAN = {
       icon = "Interface\\Icons\\Spell_Nature_BloodLust",
       specs = {
-        [262] = { name = L["Elemental"], icon = "Interface\\Icons\\Spell_Nature_Lightning" },
+        [262] = { name = L["ElementalShaman"], icon = "Interface\\Icons\\Spell_Nature_Lightning" },
         [263] = { name = L["Enhancement"], icon = "Interface\\Icons\\Spell_Nature_LightningShield" },
         [264] = { name = L["Restoration"], icon = "Interface\\Icons\\Spell_Nature_MagicImmunity" },
       }
@@ -3927,7 +3927,7 @@ Private.specname_to_id = {
   ["ROGUE" .. L["Assassination"]] = 259,
   ["ROGUE" .. L["Combat"]] = 260,
   ["ROGUE" .. L["Subtlety"]] = 261,
-  ["SHAMAN" .. L["Elemental"]] = 262,
+  ["SHAMAN" .. L["ElementalShaman"]] = 262,
   ["SHAMAN" .. L["Enhancement"]] = 263,
   ["SHAMAN" .. L["Restoration"]] = 264,
   ["WARLOCK" .. L["Affliction"]] = 265,
@@ -3961,7 +3961,7 @@ Private.specid_to_name = {
   [259] = "ROGUE" .. L["Assassination"],
   [260] = "ROGUE" .. L["Combat"],
   [261] = "ROGUE" .. L["Subtlety"],
-  [262] = "SHAMAN" .. L["Elemental"],
+  [262] = "SHAMAN" .. L["ElementalShaman"],
   [263] = "SHAMAN" .. L["Enhancement"],
   [264] = "SHAMAN" .. L["Restoration"],
   [265] = "WARLOCK" .. L["Affliction"],
