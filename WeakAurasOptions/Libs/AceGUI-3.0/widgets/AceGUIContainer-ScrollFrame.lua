@@ -132,7 +132,7 @@ local methods = {
 	end,
 
 	["LayoutFinished"] = function(self, width, height)
-		self.content:SetHeight(height or 0 + 20)
+		self.content:SetHeight(height or (0 + 20))
 
 		-- update the scrollframe
 		self:FixScroll()
@@ -164,8 +164,8 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
 	local num = AceGUI:GetNextWidgetNum(Type)
+  	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
 
 	local scrollframe = CreateFrame("ScrollFrame", nil, frame)
 	scrollframe:SetPoint("TOPLEFT")

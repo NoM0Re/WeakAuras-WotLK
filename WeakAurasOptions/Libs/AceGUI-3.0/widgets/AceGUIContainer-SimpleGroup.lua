@@ -46,7 +46,8 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
+	local num = AceGUI:GetNextWidgetNum(Type)
+  	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")
 
 	--Container Support

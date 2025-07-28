@@ -625,7 +625,7 @@ local DraggerBackdrop  = {
 
 local function Constructor()
 	local num = AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Frame", nil, UIParent)
+	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
 
 	local treeframe = CreateFrame("Frame", nil, frame)
 	treeframe:SetPoint("TOPLEFT")

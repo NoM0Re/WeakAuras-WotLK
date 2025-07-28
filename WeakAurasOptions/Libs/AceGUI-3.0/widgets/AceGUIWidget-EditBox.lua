@@ -210,7 +210,7 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local num  = AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Frame", nil, UIParent)
+  	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
 	frame:Hide()
 
 	local editbox = CreateFrame("EditBox", "AceGUI-3.0EditBox"..num, frame, "InputBoxTemplate")
