@@ -1356,7 +1356,7 @@ function OptionsPrivate.CreateFrame()
     containerScroll:SetLayout("flow")
     border:AddChild(containerScroll)
 
-    local _, _, _, enabled = GetAddOnInfo("WeakAurasTemplates")
+    local enabled = select(4, GetAddOnInfo("WeakAurasTemplates"))
     if enabled then
       local simpleLabel = AceGUI:Create("Label")
       simpleLabel:SetFont(STANDARD_TEXT_FONT, 24, "OUTLINE")

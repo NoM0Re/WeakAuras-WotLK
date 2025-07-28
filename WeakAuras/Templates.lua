@@ -227,11 +227,10 @@ WeakAuras.XMLTemplates = {
   -- This is an empty frame with space for a portrait/icon in the top left corner.
   ["PortraitFrameTemplate"] = function(frame)
     frame:SetSize(338, 424)
-    --frame:SetFrameLevel(1)
     -- NineSlice Borders
     local nineSlice = CreateFrame("Frame", nil, frame)
-    nineSlice:SetAllPoints(true)
-    --nineSlice:SetFrameLevel(3)
+    nineSlice:SetAllPoints(frame)
+    nineSlice:SetFrameLevel(125)
     frame.NineSlice = nineSlice
     -- Top Left Corner
     local topLeftCorner = nineSlice:CreateTexture(nil, "OVERLAY")
@@ -309,7 +308,7 @@ WeakAuras.XMLTemplates = {
     local portraitContainer = CreateFrame("Frame", nil, frame)
     portraitContainer:SetSize(1, 1)
     portraitContainer:SetPoint("TOPLEFT")
-    --portraitContainer:SetFrameLevel(400)
+    portraitContainer:SetFrameLevel(120)
     frame.PortraitContainer = portraitContainer
     -- Portrait
     local portrait = portraitContainer:CreateTexture(nil, "ARTWORK")
@@ -321,7 +320,7 @@ WeakAuras.XMLTemplates = {
     titleContainer:SetSize(0, 20)
     titleContainer:SetPoint("TOPLEFT", frame, "TOPLEFT", 58, -1)
     titleContainer:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -24, -1)
-    titleContainer:SetFrameLevel(510)
+    titleContainer:SetFrameLevel(126)
     frame.TitleContainer = titleContainer
     -- Title Text
     local titleText = titleContainer:CreateFontString(GetParentName(frame) .. "TitleText", "OVERLAY", "GameFontNormal")
@@ -335,7 +334,7 @@ WeakAuras.XMLTemplates = {
     local closeButton = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
     closeButton:SetSize(24, 24)
     closeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
-    closeButton:SetFrameLevel(4)
+    closeButton:SetFrameLevel(128)
     frame.CloseButton = closeButton
     closeButton:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\redbutton2x")
     closeButton:GetNormalTexture():SetTexCoord(0.152344, 0.292969, 0.0078125, 0.304688)
@@ -389,18 +388,13 @@ WeakAuras.XMLTemplates = {
   -- MaximizeMinimizeButtonFrameTemplate (Retail 11.1.7 (61967))
   ["MaximizeMinimizeButtonFrameTemplate"] = function(frame)
     frame:SetSize(24, 24)
-    frame:SetFrameLevel(4)
+    frame:SetFrameLevel(127)
 
     -- Maximize Button
     local maximizeButton = CreateFrame("Button", "MaximizeButton", frame)
-    maximizeButton:SetAllPoints(true)
+    maximizeButton:SetAllPoints(frame)
     maximizeButton:Hide()
     frame.MaximizeButton = maximizeButton
-
-    maximizeButton:SetScript("OnClick", function(self)
-      self:GetParent():Maximize();
-      PlaySound("igMainMenuOptionCheckBoxOn");
-    end)
 
     maximizeButton:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\redbutton2x")
     maximizeButton:GetNormalTexture():SetTexCoord(0.300781, 0.441406, 0.0078125, 0.304688)
@@ -416,7 +410,7 @@ WeakAuras.XMLTemplates = {
 
     -- Minimize Button
     local minimizeButton = CreateFrame("Button", "MinimizeButton", frame)
-    minimizeButton:SetAllPoints(true)
+    minimizeButton:SetAllPoints(frame)
     frame.MinimizeButton = minimizeButton
 
     minimizeButton:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\redbutton2x")
@@ -473,6 +467,10 @@ WeakAuras.XMLTemplates = {
     end
     frame:SetScript("OnShow", function(self)
       self:OnShow();
+    end)
+    maximizeButton:SetScript("OnClick", function(self)
+      self:GetParent():Maximize();
+      PlaySound("igMainMenuOptionCheckBoxOn");
     end)
     minimizeButton:SetScript("OnClick", function(self)
       self:GetParent():Minimize();
