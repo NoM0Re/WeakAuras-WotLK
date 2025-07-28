@@ -420,7 +420,8 @@ local function ConstructTextEditor(frame)
   local apiSearchFrame
 
   -- Make sidebar for snippets
-  local snippetsFrame = CreateFrame("Frame", "WeakAurasSnippets", group.frame, "WA_PortraitFrameTemplate")
+  local snippetsFrame = CreateFrame("Frame", "WeakAurasSnippets", group.frame)
+  WeakAuras.XMLTemplates["PortraitFrameTemplate"](snippetsFrame)
   snippetsFrame:HidePortrait()
   snippetsFrame:SetPoint("TOPLEFT", group.frame, "TOPRIGHT", 20, 0)
   snippetsFrame:SetPoint("BOTTOMLEFT", group.frame, "BOTTOMRIGHT", 20, 0)
@@ -505,7 +506,8 @@ local function ConstructTextEditor(frame)
   apiSearchButton:RegisterForClicks("LeftButtonUp")
 
   -- Make sidebar for apiSearch
-  apiSearchFrame = CreateFrame("Frame", "WeakAurasAPISearchFrame", group.frame, "WA_PortraitFrameTemplate")
+  apiSearchFrame = CreateFrame("Frame", "WeakAurasAPISearchFrame", group.frame)
+  WeakAuras.XMLTemplates["PortraitFrameTemplate"](apiSearchFrame)
   apiSearchFrame:HidePortrait()
   apiSearchFrame:SetWidth(350)
 
@@ -514,54 +516,11 @@ local function ConstructTextEditor(frame)
   local APISearchCTimer
 
   -- filter line
-  local filterInput = CreateFrame("EditBox", "WeakAurasAPISearchFilterInput", apiSearchFrame, "WA_InputBoxTemplate")
-  filterInput:SetAutoFocus(false)
-  filterInput:SetTextInsets(16, 20, 0, 0)
-
-  filterInput.Instructions = filterInput:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
-  filterInput.Instructions:SetText(SEARCH)
-  filterInput.Instructions:SetPoint("TOPLEFT", filterInput, "TOPLEFT", 16, 0)
-  filterInput.Instructions:SetPoint("BOTTOMRIGHT", filterInput, "BOTTOMRIGHT", -20, 0)
-  filterInput.Instructions:SetTextColor(0.35, 0.35, 0.35)
-  filterInput.Instructions:SetJustifyH("LEFT")
-  filterInput.Instructions:SetJustifyV("MIDDLE")
-
-  filterInput.searchIcon = filterInput:CreateTexture(nil, "OVERLAY")
-  filterInput.searchIcon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
-  filterInput.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-  filterInput.searchIcon:SetSize(14, 14)
-  filterInput.searchIcon:SetPoint("LEFT", 0, -2)
-
-  filterInput.clearButton = CreateFrame("Button", nil, filterInput)
-  filterInput.clearButton:SetSize(14, 14)
-  filterInput.clearButton:SetPoint("RIGHT", -3, 0)
-
-  filterInput.clearButton.texture = filterInput.clearButton:CreateTexture()
-  filterInput.clearButton.texture:SetTexture("Interface\\FriendsFrame\\ClearBroadcastIcon")
-  filterInput.clearButton.texture:SetAlpha(0.5)
-  filterInput.clearButton.texture:SetSize(17, 17)
-  filterInput.clearButton.texture:SetPoint("CENTER", 0, 0)
-
-  filterInput.clearButton:SetScript("OnEnter", function(self) self.texture:SetAlpha(1.0) end)
-  filterInput.clearButton:SetScript("OnLeave", function(self) self.texture:SetAlpha(0.5) end)
-  filterInput.clearButton:SetScript("OnMouseDown", function(self) if self:IsEnabled() then self.texture:SetPoint("CENTER", 1, -1) end end)
-  filterInput.clearButton:SetScript("OnMouseUp", function(self) self.texture:SetPoint("CENTER") end)
-  filterInput.clearButton:SetScript("OnClick", function(self)
-    local editBox = self:GetParent()
-    editBox:SetText("")
-    editBox:ClearFocus()
-  end)
-  filterInput:SetScript("OnEditFocusLost", function(self)
-    if self:GetText() == "" then
-      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-      self.clearButton:Hide()
-    end
-  end)
-  filterInput:SetScript("OnEditFocusGained", function(self)
-    self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
-    self.clearButton:Show()
-  end)
+  local filterInput = CreateFrame("EditBox", "WeakAurasAPISearchFilterInput", apiSearchFrame)
+  WeakAuras.XMLTemplates["SearchBoxTemplate"](filterInput)
+  filterInput:SetFrameLevel(5)
   filterInput:SetScript("OnTextChanged", function(self)
+    WA_SearchBoxTemplate_OnTextChanged(self)
     if APISearchCTimer and WeakAuras.timer:TimeLeft(APISearchCTimer) then
       WeakAuras.timer:CancelTimer(APISearchCTimer)
     end
@@ -571,20 +530,6 @@ local function ConstructTextEditor(frame)
       end,
       APISearchTextChangeDelay
     )
-  end)
-  filterInput:HookScript("OnTextChanged", function(self)
-    if not self:HasFocus() and self:GetText() == "" then
-      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-      self.clearButton:Hide()
-    else
-      self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
-      self.clearButton:Show()
-    end
-    if self:GetText() == "" then
-      self.Instructions:Show()
-    else
-      self.Instructions:Hide()
-    end
   end)
   filterInput:SetHeight(15)
   filterInput:SetPoint("TOPLEFT", apiSearchFrame, "TOPLEFT", 17, -30)
@@ -890,7 +835,8 @@ local function ConstructTextEditor(frame)
   editorError:SetPoint("RIGHT", settings_frame, "LEFT")
   group.editorError = editorError
 
-  local editorLine = CreateFrame("EditBox", nil, group.frame, "WA_InputBoxTemplate")
+  local editorLine = CreateFrame("EditBox", nil, group.frame)
+  WeakAuras.XMLTemplates["InputBoxTemplate"](editorLine)
   -- Set script on enter pressed..
   editorLine:SetPoint("RIGHT", snippetsButton, "LEFT", -10, 0)
   editorLine:SetFont(STANDARD_TEXT_FONT, 10)

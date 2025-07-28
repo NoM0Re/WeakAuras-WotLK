@@ -13,7 +13,8 @@ profileData.auras = {}
 
 local currentProfileState, ProfilingTimer
 
-local RealTimeProfilingWindow = CreateFrame("Frame", "WeakAurasRealTimeProfiling", UIParent, "WA_PortraitFrameTemplate")
+local RealTimeProfilingWindow = CreateFrame("Frame", "WeakAurasRealTimeProfiling", UIParent)
+WeakAuras.XMLTemplates["PortraitFrameTemplate"](RealTimeProfilingWindow)
 RealTimeProfilingWindow:HidePortrait(RealTimeProfilingWindow)
 Private.frames["RealTime Profiling Window"] = RealTimeProfilingWindow
 RealTimeProfilingWindow.width = 500
@@ -57,7 +58,8 @@ end
 
 local profilePopup
 local function CreateProfilePopup()
-  local frame = CreateFrame("Frame", "WeakAurasProfilingReport", UIParent, "WA_PortraitFrameTemplate")
+  local frame = CreateFrame("Frame", "WeakAurasProfilingReport", UIParent)
+  WeakAuras.XMLTemplates["PortraitFrameTemplate"](frame)
   frame:HidePortrait(frame)
   WeakAurasProfilingReportTitleText:SetText(L["WeakAuras Profiling Report"])
   frame:SetMovable(true)
@@ -598,7 +600,8 @@ function RealTimeProfilingWindow:Init()
   self.statsFrameText = statsFrameText
   statsFrameText:SetPoint("BOTTOMLEFT", 15, 25)
 
-  local minimizeButton = CreateFrame("Button", nil, self, "WA_MaximizeMinimizeButtonFrameTemplate")
+  local minimizeButton = CreateFrame("Button", nil, self)
+  WeakAuras.XMLTemplates["MaximizeMinimizeButtonFrameTemplate"](minimizeButton)
   minimizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT")
   minimizeButton:SetOnMaximizedCallback(function()
     self.minimized = false
