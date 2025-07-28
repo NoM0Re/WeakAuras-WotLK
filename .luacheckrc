@@ -123,7 +123,7 @@ globals = {
 	"SecondsFormatterMixin",
 	"SecureButton_GetModifiedUnit",
 	"SlashCmdList",
-	"SearchBoxTemplate_OnTextChanged",
+	"WA_SearchBoxTemplate_OnTextChanged",
 	"SmoothStatusBarMixin",
 	"STATICPOPUP_NUMDIALOGS",
 	"StaticPopup_Show",
@@ -19551,7 +19551,6 @@ globals = {
 	"ZOOM_OUT",
 	"ZOOM_OUT_BUTTON_TEXT",
 	"_RECORDING_WARNING_CORRUPTED",
-
 	"GetNumPartyMembers", "GetNumRaidMembers", "noop", "tInvert", "DeltaLerp",
 	"GetNumEquipmentSets", "GetEquipmentSetInfo", "CR_HASTE_MELEE", "CR_HASTE_RANGED",
 	"CR_CRIT_TAKEN_MELEE", "CR_CRIT_TAKEN_RANGED", "CR_CRIT_TAKEN_SPELL",
@@ -19572,5 +19571,5 @@ globals = {
 	"WeakAurasRealTimeProfiling", "WeakAurasRealTimeProfilingTitleText", "seconds", "NUM_CHAT_WINDOWS",
 	"GetNumGlyphSockets", "GetGlyphLink", "GetGlyphSocketInfo", "APIDocumentationMixin", "BaseAPIMixin",
     "EventsAPIMixin", "FieldsAPIMixin", "FunctionsAPIMixin", "SystemsAPIMixin", "TablesAPIMixin",
-	"CopyToClipboard", "ChatFrame_OpenChat", "ChatTypeInfo"
+	"CopyToClipboard", "ChatFrame_OpenChat", "ChatTypeInfo", "EditBox_ClearFocus"
 }

@@ -164,12 +164,12 @@ WeakAuras.XMLTemplates = {
     instructions:SetTextColor(0.35, 0.35, 0.35)
     frame.Instructions = instructions
 
-    -- Skripte
+    -- Skripts
     frame:SetScript("OnTextChanged", InputBoxInstructions_OnTextChanged)
     frame:SetScript("OnDisable", InputBoxInstructions_OnDisable)
     frame:SetScript("OnEnable", InputBoxInstructions_OnEnable)
 
-    -- FontObject setzen
+    -- FontObject
     frame:SetFontObject("GameFontHighlightSmall")
   end,
 
@@ -214,13 +214,13 @@ WeakAuras.XMLTemplates = {
       self.texture:SetPoint("TOPLEFT", self, "TOPLEFT", 3, -3)
     end)
     clearButton:SetScript("OnClick", SearchBoxTemplateClearButton_OnClick)
-    -- EditBox Scripts 
+    -- EditBox Scripts
     frame:SetScript("OnLoad", SearchBoxTemplate_OnLoad)
     frame:SetScript("OnEscapePressed", EditBox_ClearFocus)
     frame:SetScript("OnEnterPressed", EditBox_ClearFocus)
     frame:SetScript("OnEditFocusLost", SearchBoxTemplate_OnEditFocusLost)
     frame:SetScript("OnEditFocusGained", SearchBoxTemplate_OnEditFocusGained)
-    frame:SetScript("OnTextChanged", SearchBoxTemplate_OnTextChanged)
+    frame:SetScript("OnTextChanged", WA_SearchBoxTemplate_OnTextChanged)
   end,
 
   -- PortraitFrameTemplate (Retail 11.1.7 (61967))
