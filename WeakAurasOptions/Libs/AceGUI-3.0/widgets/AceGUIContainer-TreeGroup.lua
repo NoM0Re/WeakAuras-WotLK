@@ -2,21 +2,17 @@
 TreeGroup Container
 Container that uses a tree control to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TreeGroup", 43
+local Type, Version = "TreeGroup", 48
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
 local next, pairs, ipairs, assert, type = next, pairs, ipairs, assert, type
-local math_min, math_max, floor = math.min, math.max, floor
+local math_min, math_max, floor, format = math.min, math.max, math.floor, string.format
 local select, tremove, unpack, tconcat = select, table.remove, unpack, table.concat
 
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: GameTooltip, FONT_COLOR_CODE_CLOSE
 
 -- Recycling functions
 local new, del
@@ -159,7 +155,7 @@ end
 local function FirstFrameUpdate(frame)
 	local self = frame.obj
 	frame:SetScript("OnUpdate", nil)
-	self:RefreshTree()
+	self:RefreshTree(nil, true)
 end
 
 local function BuildUniqueValue(...)
@@ -206,11 +202,13 @@ local function Button_OnEnter(frame)
 	self:Fire("OnButtonEnter", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
-		GameTooltip:SetPoint("LEFT",frame,"RIGHT")
-		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
+		local tooltip = AceGUI.tooltip
+		tooltip:SetOwner(frame, "ANCHOR_NONE")
+		tooltip:ClearAllPoints()
+		tooltip:SetPoint("LEFT",frame,"RIGHT")
+		tooltip:SetText(frame.text:GetText() or "", 1, .82, 0, true)
 
-		GameTooltip:Show()
+		tooltip:Show()
 	end
 end
 
@@ -219,7 +217,7 @@ local function Button_OnLeave(frame)
 	self:Fire("OnButtonLeave", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		GameTooltip:Hide()
+		AceGUI.tooltip:Hide()
 	end
 end
 
@@ -227,7 +225,7 @@ local function OnScrollValueChanged(frame, value)
 	if frame.obj.noupdate then return end
 	local self = frame.obj
 	local status = self.status or self.localstatus
-	status.scrollvalue = value
+	status.scrollvalue = floor(value + 0.5)
 	self:RefreshTree()
 	AceGUI:ClearFocus()
 end
@@ -292,10 +290,13 @@ local methods = {
 	["OnAcquire"] = function(self)
 		self:SetTreeWidth(DEFAULT_TREE_WIDTH, DEFAULT_TREE_SIZABLE)
 		self:EnableButtonTooltips(true)
+		self.frame:SetScript("OnUpdate", FirstFrameUpdate)
 	end,
 
 	["OnRelease"] = function(self)
 		self.status = nil
+		self.tree = nil
+		self.frame:SetScript("OnUpdate", nil)
 		for k, v in pairs(self.localstatus) do
 			if k == "groups" then
 				for k2 in pairs(v) do
@@ -316,8 +317,10 @@ local methods = {
 
 	["CreateButton"] = function(self)
 		local num = AceGUI:GetNextWidgetNum("TreeGroupButton")
-		local button = CreateFrame("Button", ("AceGUI30TreeButton%d"):format(num), self.treeframe, "OptionsListButtonTemplate")
+		local name = format("AceGUI30TreeButton%d", num)
+		local button = CreateFrame("Button", name, self.treeframe, "OptionsListButtonTemplate")
 		button.obj = self
+		button.text = _G[name.."Text"] -- tell nev for this
 
 		local icon = button:CreateTexture(nil, "OVERLAY")
 		icon:SetWidth(14)
@@ -383,7 +386,7 @@ local methods = {
 		end
 	end,
 
-	["RefreshTree"] = function(self,scrollToSelection)
+	["RefreshTree"] = function(self,scrollToSelection,fromOnUpdate)
 		local buttons = self.buttons
 		local lines = self.lines
 
@@ -414,6 +417,11 @@ local methods = {
 
 		local maxlines = (floor(((self.treeframe:GetHeight()or 0) - 20 ) / 18))
 		if maxlines <= 0 then return end
+
+		if self.frame:GetParent() == UIParent and not fromOnUpdate then
+			self.frame:SetScript("OnUpdate", FirstFrameUpdate)
+			return
+		end
 
 		local first, last
 
@@ -557,7 +565,11 @@ local methods = {
 		if maxtreewidth > 100 and status.treewidth > maxtreewidth then
 			self:SetTreeWidth(maxtreewidth, status.treesizable)
 		end
-		treeframe:SetMaxResize(maxtreewidth, 1600)
+		if treeframe.SetResizeBounds then
+			treeframe:SetResizeBounds(100, 1, maxtreewidth, 1600)
+		else
+			treeframe:SetMaxResize(maxtreewidth, 1600)
+		end
 	end,
 
 	["OnHeightSet"] = function(self, height)
@@ -619,7 +631,7 @@ local PaneBackdrop  = {
 local DraggerBackdrop  = {
 	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 	edgeFile = nil,
-	tile = true, tileSize = 16, edgeSize = 0,
+	tile = true, tileSize = 16, edgeSize = 1,
 	insets = { left = 3, right = 3, top = 7, bottom = 7 }
 }
 
@@ -636,8 +648,12 @@ local function Constructor()
 	treeframe:SetBackdropColor(0.1, 0.1, 0.1, 0.5)
 	treeframe:SetBackdropBorderColor(0.4, 0.4, 0.4)
 	treeframe:SetResizable(true)
-	treeframe:SetMinResize(100, 1)
-	treeframe:SetMaxResize(400, 1600)
+	if treeframe.SetResizeBounds then -- WoW 10.0
+		treeframe:SetResizeBounds(100, 1, 400, 1600)
+	else
+		treeframe:SetMinResize(100, 1)
+		treeframe:SetMaxResize(400, 1600)
+	end
 	treeframe:SetScript("OnUpdate", FirstFrameUpdate)
 	treeframe:SetScript("OnSizeChanged", Tree_OnSizeChanged)
 	treeframe:SetScript("OnMouseWheel", Tree_OnMouseWheel)
@@ -667,7 +683,7 @@ local function Constructor()
 	scrollbg:SetAllPoints(scrollbar)
 	scrollbg:SetTexture(0,0,0,0.4)
 
-	local border = CreateFrame("Frame",nil,frame)
+	local border = CreateFrame("Frame", nil, frame)
 	border:SetPoint("TOPLEFT", treeframe, "TOPRIGHT")
 	border:SetPoint("BOTTOMRIGHT")
 	border:SetBackdrop(PaneBackdrop)

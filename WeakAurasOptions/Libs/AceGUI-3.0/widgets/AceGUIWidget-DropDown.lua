@@ -1,19 +1,15 @@
---[[ $Id: AceGUIWidget-DropDown.lua 1209 2019-06-24 21:01:01Z nevcairiel $ ]]--
+--[[ $Id$ ]]--
 local AceGUI = LibStub("AceGUI-3.0")
 
 -- Lua APIs
 local min, max, floor = math.min, math.max, math.floor
 local select, pairs, ipairs, type, tostring = select, pairs, ipairs, type, tostring
-local tsort = table.sort
+local tonumber, tsort, error = tonumber, table.sort, error
 
 -- WoW APIs
 local PlaySound = PlaySound
 local UIParent, CreateFrame = UIParent, CreateFrame
 local _G = _G
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: CLOSE
 
 local function fixlevels(parent,...)
 	local i = 1
@@ -39,7 +35,7 @@ end
 
 do
 	local widgetType = "Dropdown-Pullout"
-	local widgetVersion = 3
+	local widgetVersion = 5
 
 	--[[ Static data ]]--
 
@@ -193,12 +189,7 @@ do
 
 		local height = 8
 		for i, item in pairs(items) do
-			if i == 1 then
-				item:SetPoint("TOP", itemFrame, "TOP", 0, -2)
-			else
-				item:SetPoint("TOP", items[i-1].frame, "BOTTOM", 0, 1)
-			end
-
+			item:SetPoint("TOP", itemFrame, "TOP", 0, -2 + (i - 1) * -16)
 			item:Show()
 
 			height = height + 16
@@ -356,7 +347,7 @@ end
 
 do
 	local widgetType = "Dropdown"
-	local widgetVersion = 34
+	local widgetVersion = 37
 
 	--[[ Static data ]]--
 
@@ -381,7 +372,6 @@ do
 
 	local function Dropdown_TogglePullout(this)
 		local self = this.obj
-		PlaySound("igMainMenuOptionCheckBoxOn") -- missleading name, but the Blizzard code uses this sound
 		if self.open then
 			self.open = nil
 			self.pullout:Close()
@@ -465,6 +455,7 @@ do
 		self:SetWidth(200)
 		self:SetLabel()
 		self:SetPulloutWidth(nil)
+		self.list = {}
 	end
 
 	-- exported, AceGUI callback
@@ -600,21 +591,41 @@ do
 			return tostring(x) < tostring(y)
 		end
 	end
-	local function SetList(self, list, order, itemType)
-		self.list = list
+
+	-- added by ElvUI
+	local sortValue = function(a,b)
+		if a and b and a[2] and b[2] then
+			return a[2] < b[2]
+		end
+	end
+
+	local function SetList(self, list, order, itemType, sortByValue)
+		self.list = list or {}
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
 
 		if type(order) ~= "table" then
-			for v in pairs(list) do
-				sortlist[#sortlist + 1] = v
-			end
-			tsort(sortlist, sortTbl)
+			if sortByValue then -- added by ElvUI
+				for k, v in pairs(list) do
+					sortlist[#sortlist + 1] = {k,v}
+				end
+				tsort(sortlist, sortValue)
 
-			for i, key in ipairs(sortlist) do
-				AddListItem(self, key, list[key], itemType)
-				sortlist[i] = nil
+				for i, sortedList in ipairs(sortlist) do
+					AddListItem(self, sortedList[1], sortedList[2], itemType)
+					sortlist[i] = nil
+				end
+			else -- this is the default way (unchanged by ElvUI)
+				for v in pairs(list) do
+					sortlist[#sortlist + 1] = v
+				end
+				tsort(sortlist, sortTbl)
+
+				for i, key in ipairs(sortlist) do
+					AddListItem(self, key, list[key], itemType)
+					sortlist[i] = nil
+				end
 			end
 		else
 			for i, key in ipairs(order) do
@@ -657,7 +668,7 @@ do
 
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
-		local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, count), UIParent)
+		local frame = CreateFrame("Frame", ("%s%Frame"):format(widgetType, count), UIParent)
 		local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate")
 
 		local self = {}
