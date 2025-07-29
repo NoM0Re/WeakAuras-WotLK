@@ -490,7 +490,7 @@ local PaneBackdrop  = {
 
 local function Constructor()
 	local num = AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, num), UIParent)
 	frame:SetHeight(100)
 	frame:SetWidth(100)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")

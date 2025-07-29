@@ -94,7 +94,7 @@ local methods = {
 		local status = self.status or self.localstatus
 		local height, viewheight = self.scrollframe:GetHeight(), self.content:GetHeight()
 		local offset = status.offset or 0
-		-- Give us a margin of error of 2 pixels to stop some conditions that i would blame on floating point inaccuracies
+		-- Give us a margin of error of 2 pixels to stop some conditions that i would blame on floating point inaccuracys
 		-- No-one is going to miss 2 pixels at the bottom of the frame, anyhow!
 		if viewheight < height + 2 then
 			if self.scrollBarShown then
@@ -132,7 +132,7 @@ local methods = {
 	end,
 
 	["LayoutFinished"] = function(self, width, height)
-		self.content:SetHeight(height or (0 + 20))
+		self.content:SetHeight(height or 0 + 20)
 
 		-- update the scrollframe
 		self:FixScroll()
@@ -165,7 +165,7 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local num = AceGUI:GetNextWidgetNum(Type)
-  	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, num), UIParent)
 
 	local scrollframe = CreateFrame("ScrollFrame", nil, frame)
 	scrollframe:SetPoint("TOPLEFT")

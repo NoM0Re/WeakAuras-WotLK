@@ -274,7 +274,8 @@ local backdrop = {
 
 local function Constructor()
 	local widgetNum = AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, widgetNum), UIParent)
+
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, widgetNum), UIParent)
 	frame:Hide()
 
 	local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")

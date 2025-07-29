@@ -1,10 +1,10 @@
---[[ $Id$ ]]--
+--[[ $Id: AceGUIWidget-DropDown.lua 1284 2022-09-25 09:15:30Z nevcairiel $ ]]--
 local AceGUI = LibStub("AceGUI-3.0")
 
 -- Lua APIs
 local min, max, floor = math.min, math.max, math.floor
 local select, pairs, ipairs, type, tostring = select, pairs, ipairs, type, tostring
-local tonumber, tsort, error = tonumber, table.sort, error
+local tsort = table.sort
 
 -- WoW APIs
 local PlaySound = PlaySound
@@ -35,7 +35,7 @@ end
 
 do
 	local widgetType = "Dropdown-Pullout"
-	local widgetVersion = 5
+	local widgetVersion = 6
 
 	--[[ Static data ]]--
 
@@ -526,9 +526,7 @@ do
 
 	-- exported
 	local function SetValue(self, value)
-		if self.list then
-			self:SetText(self.list[value] or "")
-		end
+		self:SetText(self.list[value] or "")
 		self.value = value
 	end
 
@@ -591,41 +589,21 @@ do
 			return tostring(x) < tostring(y)
 		end
 	end
-
-	-- added by ElvUI
-	local sortValue = function(a,b)
-		if a and b and a[2] and b[2] then
-			return a[2] < b[2]
-		end
-	end
-
-	local function SetList(self, list, order, itemType, sortByValue)
+	local function SetList(self, list, order, itemType)
 		self.list = list or {}
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
 
 		if type(order) ~= "table" then
-			if sortByValue then -- added by ElvUI
-				for k, v in pairs(list) do
-					sortlist[#sortlist + 1] = {k,v}
-				end
-				tsort(sortlist, sortValue)
+			for v in pairs(list) do
+				sortlist[#sortlist + 1] = v
+			end
+			tsort(sortlist, sortTbl)
 
-				for i, sortedList in ipairs(sortlist) do
-					AddListItem(self, sortedList[1], sortedList[2], itemType)
-					sortlist[i] = nil
-				end
-			else -- this is the default way (unchanged by ElvUI)
-				for v in pairs(list) do
-					sortlist[#sortlist + 1] = v
-				end
-				tsort(sortlist, sortTbl)
-
-				for i, key in ipairs(sortlist) do
-					AddListItem(self, key, list[key], itemType)
-					sortlist[i] = nil
-				end
+			for i, key in ipairs(sortlist) do
+				AddListItem(self, key, list[key], itemType)
+				sortlist[i] = nil
 			end
 		else
 			for i, key in ipairs(order) do
@@ -640,10 +618,8 @@ do
 
 	-- exported
 	local function AddItem(self, value, text, itemType)
-		if self.list then
-			self.list[value] = text
-			AddListItem(self, value, text, itemType)
-		end
+		self.list[value] = text
+		AddListItem(self, value, text, itemType)
 	end
 
 	-- exported
@@ -668,7 +644,7 @@ do
 
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
-		local frame = CreateFrame("Frame", ("%s%Frame"):format(widgetType, count), UIParent)
+		local frame = CreateFrame("Frame", widgetType .. count, UIParent)
 		local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate")
 
 		local self = {}

@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Icon Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "Icon", 21
+local Type, Version = "Icon", 22
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -96,7 +96,7 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local frame = CreateFrame("Button", nil, UIParent)
+	local frame = CreateFrame("Button", string.format("%s%d", Type, AceGUI:GetNextWidgetNum(Type)), UIParent)
 	frame:Hide()
 
 	frame:EnableMouse(true)
@@ -132,7 +132,7 @@ local function Constructor()
 		widget[method] = func
 	end
 
-	widget.SetText = widget.SetLabel
+	widget.SetText = widget.SetLabel -- deprecated soon!
 
 	return AceGUI:RegisterAsWidget(widget)
 end

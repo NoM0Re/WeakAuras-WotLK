@@ -2,7 +2,7 @@
 Label Widget
 Displays text and optionally an icon.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Label", 26
+local Type, Version = "Label", 29
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -11,10 +11,6 @@ local max, select, pairs = math.max, select, pairs
 
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: GameFontHighlightSmall
 
 --[[-----------------------------------------------------------------------------
 Support functions
@@ -129,11 +125,16 @@ local methods = {
 	end,
 
 	["SetFont"] = function(self, font, height, flags)
-		self.label:SetFont(font, height, flags)
+		if not self.fontObject then
+			self.fontObject = CreateFont("AceGUI30LabelFont" .. AceGUI:GetNextWidgetNum(Type))
+		end
+		self.fontObject:SetFont(font, height, flags)
+		self:SetFontObject(self.fontObject)
 	end,
 
 	["SetFontObject"] = function(self, font)
-		self:SetFont((font or GameFontHighlightSmall):GetFont())
+		self.label:SetFontObject(font or GameFontHighlightSmall)
+		UpdateImageAnchor(self)
 	end,
 
 	["SetImageSize"] = function(self, width, height)
@@ -155,7 +156,7 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, AceGUI:GetNextWidgetNum(Type)), UIParent)
 	frame:Hide()
 
 	local label = frame:CreateFontString(nil, "BACKGROUND", "GameFontHighlightSmall")

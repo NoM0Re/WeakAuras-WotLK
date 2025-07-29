@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 EditBox Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "EditBox", 29
+local Type, Version = "EditBox", 30
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -14,8 +14,6 @@ local GetMacroInfo = GetMacroInfo
 local GetCursorInfo, ClearCursor, GetSpellInfo = GetCursorInfo, ClearCursor, GetSpellInfo
 local CreateFrame, UIParent = CreateFrame, UIParent
 local _G = _G
-
-local OKAY = OKAY
 
 --[[-----------------------------------------------------------------------------
 Support functions
@@ -99,26 +97,16 @@ end
 
 local function EditBox_OnTextChanged(frame)
 	local self = frame.obj
-
 	local value = frame:GetText()
 	if tostring(value) ~= tostring(self.lasttext) then
 		self:Fire("OnTextChanged", value)
 		self.lasttext = value
-
 		ShowButton(self)
-
-		if self.textChanged then
-			self.textChanged(value)
-		end
 	end
 end
 
 local function EditBox_OnFocusGained(frame)
 	AceGUI:SetFocus(frame.obj)
-
-	if frame.obj.focusSelect then
-		frame.obj:HighlightText()
-	end
 end
 
 local function Button_OnClick(frame)
@@ -219,7 +207,7 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local num  = AceGUI:GetNextWidgetNum(Type)
-  	local frame = CreateFrame("Frame", ("%s%Frame"):format(Type, num), UIParent)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, num), UIParent)
 	frame:Hide()
 
 	local editbox = CreateFrame("EditBox", "AceGUI-3.0EditBox"..num, frame, "InputBoxTemplate")
