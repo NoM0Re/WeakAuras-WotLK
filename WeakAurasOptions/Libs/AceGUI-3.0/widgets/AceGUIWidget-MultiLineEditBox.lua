@@ -1,4 +1,4 @@
-local Type, Version = "MultiLineEditBox", 33
+local Type, Version = "MultiLineEditBox", 34
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -273,10 +273,10 @@ local backdrop = {
 }
 
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:Hide()
-
 	local widgetNum = AceGUI:GetNextWidgetNum(Type)
+
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, widgetNum), UIParent)
+	frame:Hide()
 
 	local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	label:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -4)

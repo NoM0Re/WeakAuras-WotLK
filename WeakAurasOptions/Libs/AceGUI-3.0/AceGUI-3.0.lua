@@ -24,33 +24,28 @@
 -- f:AddChild(btn)
 -- @class file
 -- @name AceGUI-3.0
--- @release $Id$
+-- @release $Id: AceGUI-3.0.lua 1288 2022-09-25 14:19:00Z funkehdude $
 local ACEGUI_MAJOR, ACEGUI_MINOR = "AceGUI-3.0", 41
 local AceGUI, oldminor = LibStub:NewLibrary(ACEGUI_MAJOR, ACEGUI_MINOR)
 
 if not AceGUI then return end -- No upgrade needed
 
 -- Lua APIs
-local tconcat, tinsert = table.concat, table.insert
+local tinsert, wipe = table.insert, table.wipe
 local select, pairs, next, type = select, pairs, next, type
-local error, assert, loadstring = error, assert, loadstring
-local setmetatable, rawget, rawset = setmetatable, rawget, rawset
-local math_max = math.max
+local error, assert = error, assert
+local setmetatable, rawget = setmetatable, rawget
+local math_max, math_min, math_ceil = math.max, math.min, math.ceil
 
 -- WoW APIs
 local UIParent = UIParent
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: geterrorhandler, LibStub
-
---local con = LibStub("AceConsole-3.0",true)
 
 AceGUI.WidgetRegistry = AceGUI.WidgetRegistry or {}
 AceGUI.LayoutRegistry = AceGUI.LayoutRegistry or {}
 AceGUI.WidgetBase = AceGUI.WidgetBase or {}
 AceGUI.WidgetContainerBase = AceGUI.WidgetContainerBase or {}
 AceGUI.WidgetVersions = AceGUI.WidgetVersions or {}
+AceGUI.tooltip = AceGUI.tooltip or CreateFrame("GameTooltip", "AceGUITooltip", UIParent, "GameTooltipTemplate")
 
 -- local upvalues
 local WidgetRegistry = AceGUI.WidgetRegistry
@@ -58,47 +53,22 @@ local LayoutRegistry = AceGUI.LayoutRegistry
 local WidgetVersions = AceGUI.WidgetVersions
 
 --[[
-	 xpcall safecall implementation
+	 pcall safecall implementation
 ]]
-local xpcall = xpcall
+local pcall = pcall
 
 local function errorhandler(err)
 	return geterrorhandler()(err)
 end
 
-local function CreateDispatcher(argCount)
-	local code = [[
-		local xpcall, eh = ...
-		local method, ARGS
-		local function call() return method(ARGS) end
-
-		local function dispatch(func, ...)
-			method = func
-			if not method then return end
-			ARGS = ...
-			return xpcall(call, eh)
-		end
-
-		return dispatch
-	]]
-
-	local ARGS = {}
-	for i = 1, argCount do ARGS[i] = "arg"..i end
-	code = code:gsub("ARGS", tconcat(ARGS, ", "))
-	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(xpcall, errorhandler)
-end
-
-local Dispatchers = setmetatable({}, {__index=function(self, argCount)
-	local dispatcher = CreateDispatcher(argCount)
-	rawset(self, argCount, dispatcher)
-	return dispatcher
-end})
-Dispatchers[0] = function(func)
-	return xpcall(func, errorhandler)
-end
-
 local function safecall(func, ...)
-	return Dispatchers[select("#", ...)](func, ...)
+	if func then
+		local ret = {pcall(func, ...)}
+		if not ret[1] then
+			errorhandler(ret[2])
+		end
+		return unpack(ret)
+	end
 end
 
 -- Recycling functions
@@ -122,38 +92,38 @@ do
 	AceGUI.objPools = AceGUI.objPools or {}
 	local objPools = AceGUI.objPools
 	--Returns a new instance, if none are available either returns a new table or calls the given contructor
-	function newWidget(type)
-		if not WidgetRegistry[type] then
+	function newWidget(widgetType)
+		if not WidgetRegistry[widgetType] then
 			error("Attempt to instantiate unknown widget type", 2)
 		end
 
-		if not objPools[type] then
-			objPools[type] = {}
+		if not objPools[widgetType] then
+			objPools[widgetType] = {}
 		end
 
-		local newObj = next(objPools[type])
+		local newObj = next(objPools[widgetType])
 		if not newObj then
-			newObj = WidgetRegistry[type]()
-			newObj.AceGUIWidgetVersion = WidgetVersions[type]
+			newObj = WidgetRegistry[widgetType]()
+			newObj.AceGUIWidgetVersion = WidgetVersions[widgetType]
 		else
-			objPools[type][newObj] = nil
+			objPools[widgetType][newObj] = nil
 			-- if the widget is older then the latest, don't even try to reuse it
 			-- just forget about it, and grab a new one.
-			if not newObj.AceGUIWidgetVersion or newObj.AceGUIWidgetVersion < WidgetVersions[type] then
-				return newWidget(type)
+			if not newObj.AceGUIWidgetVersion or newObj.AceGUIWidgetVersion < WidgetVersions[widgetType] then
+				return newWidget(widgetType)
 			end
 		end
 		return newObj
 	end
 	-- Releases an instance to the Pool
-	function delWidget(obj,type)
-		if not objPools[type] then
-			objPools[type] = {}
+	function delWidget(obj,widgetType)
+		if not objPools[widgetType] then
+			objPools[widgetType] = {}
 		end
-		if objPools[type][obj] then
+		if objPools[widgetType][obj] then
 			error("Attempt to Release Widget that is already released", 2)
 		end
-		objPools[type][obj] = true
+		objPools[widgetType][obj] = true
 	end
 end
 
@@ -169,9 +139,9 @@ end
 -- OnAcquire function on it, before returning.
 -- @param type The type of the widget.
 -- @return The newly created widget.
-function AceGUI:Create(type)
-	if WidgetRegistry[type] then
-		local widget = newWidget(type)
+function AceGUI:Create(widgetType)
+	if WidgetRegistry[widgetType] then
+		local widget = newWidget(widgetType)
 
 		if rawget(widget, "Acquire") then
 			widget.OnAcquire = widget.Acquire
@@ -189,7 +159,7 @@ function AceGUI:Create(type)
 		if widget.OnAcquire then
 			widget:OnAcquire()
 		else
-			error(("Widget type %s doesn't supply an OnAcquire Function"):format(type))
+			error(("Widget type %s doesn't supply an OnAcquire Function"):format(widgetType))
 		end
 		-- Set the default Layout ("List")
 		safecall(widget.SetLayout, widget, "List")
@@ -238,6 +208,22 @@ function AceGUI:Release(widget)
 	end
 	widget.isQueuedForRelease = nil
 	delWidget(widget, widget.type)
+end
+
+--- Check if a widget is currently in the process of being released
+-- This function check if this widget, or any of its parents (in which case it'll be released shortly as well)
+-- are currently being released. This allows addon to handle any callbacks accordingly.
+-- @param widget The widget to check
+function AceGUI:IsReleasing(widget)
+	if widget.isQueuedForRelease then
+		return true
+	end
+
+	if widget.parent and widget.parent.AceGUIWidgetVersion then
+		return AceGUI:IsReleasing(widget.parent)
+	end
+
+	return false
 end
 
 -----------
@@ -364,6 +350,10 @@ do
 
 	WidgetBase.Release = function(self)
 		AceGUI:Release(self)
+	end
+
+	WidgetBase.IsReleasing = function(self)
+		return AceGUI:IsReleasing(self)
 	end
 
 	WidgetBase.SetPoint = function(self, ...)
@@ -597,25 +587,25 @@ AceGUI.counts = AceGUI.counts or {}
 -- This is used by widgets that require a named frame, e.g. when a Blizzard
 -- Template requires it.
 -- @param type The widget type
-function AceGUI:GetNextWidgetNum(type)
-	if not self.counts[type] then
-		self.counts[type] = 0
+function AceGUI:GetNextWidgetNum(widgetType)
+	if not self.counts[widgetType] then
+		self.counts[widgetType] = 0
 	end
-	self.counts[type] = self.counts[type] + 1
-	return self.counts[type]
+	self.counts[widgetType] = self.counts[widgetType] + 1
+	return self.counts[widgetType]
 end
 
 --- Return the number of created widgets for this type.
 -- In contrast to GetNextWidgetNum, the number is not incremented.
--- @param type The widget type
-function AceGUI:GetWidgetCount(type)
-	return self.counts[type] or 0
+-- @param widgetType The widget type
+function AceGUI:GetWidgetCount(widgetType)
+	return self.counts[widgetType] or 0
 end
 
 --- Return the version of the currently registered widget type.
--- @param type The widget type
-function AceGUI:GetWidgetVersion(type)
-	return WidgetVersions[type]
+-- @param widgetType The widget type
+function AceGUI:GetWidgetVersion(widgetType)
+	return WidgetVersions[widgetType]
 end
 
 -------------
@@ -778,7 +768,6 @@ AceGUI:RegisterLayout("Flow",
 
 				usedwidth = 0
 				rowstart = frame
-				rowstartoffset = frameoffset
 
 				if child.DoLayout then
 					child:DoLayout()
@@ -821,7 +810,8 @@ local GetCellAlign = function (dir, tableObj, colObj, cellObj, cell, child)
 			or colObj and (colObj["align" .. dir] or colObj.align)
 			or tableObj["align" .. dir] or tableObj.align
 			or "CENTERLEFT"
-	local child, cell, val = child or 0, cell or 0, nil
+	local val
+	child, cell = child or 0, cell or 0
 
 	if type(fn) == "string" then
 		fn = fn:lower()
@@ -835,7 +825,7 @@ local GetCellAlign = function (dir, tableObj, colObj, cellObj, cell, child)
 		val = fn
 	end
 
-	return fn, max(0, min(val, cell))
+	return fn, math_max(0, math_min(val, cell))
 end
 
 -- Get width or height for multiple cells combined
@@ -844,7 +834,7 @@ local GetCellDimension = function (dir, laneDim, from, to, space)
 	for cell=from,to do
 		dim = dim + (laneDim[cell] or 0)
 	end
-	return dim + max(0, to - from) * (space or 0)
+	return dim + math_max(0, to - from) * (space or 0)
 end
 
 --[[ Options
@@ -890,7 +880,7 @@ AceGUI:RegisterLayout("Table",
 				repeat
 					n = n + 1
 					local col = (n - 1) % #cols + 1
-					local row = ceil(n / #cols)
+					local row = math_ceil(n / #cols)
 					local rowspan = rowspans[col]
 					local cell = rowspan and rowspan.child or child
 					local cellObj = cell:GetUserData("cell")
@@ -906,7 +896,7 @@ AceGUI:RegisterLayout("Table",
 					end
 
 					-- Colspan
-					local colspan = max(0, min((cellObj and cellObj.colspan or 1) - 1, #cols - col))
+					local colspan = math_max(0, math_min((cellObj and cellObj.colspan or 1) - 1, #cols - col))
 					n = n + colspan
 
 					-- Place the cell
@@ -923,7 +913,7 @@ AceGUI:RegisterLayout("Table",
 			end
 		end
 
-		local rows = ceil(n / #cols)
+		local rows = math_ceil(n / #cols)
 
 		-- Determine fixed size cols and collect weights
 		local extantH, totalWeight = totalH, 0
@@ -948,16 +938,16 @@ AceGUI:RegisterLayout("Table",
 							f:ClearAllPoints()
 							local childH = f:GetWidth() or 0
 
-							laneH[col] = max(laneH[col], childH - GetCellDimension("H", laneH, colStart[child], col - 1, spaceH))
+							laneH[col] = math_max(laneH[col], childH - GetCellDimension("H", laneH, colStart[child], col - 1, spaceH))
 						end
 					end
 
-					laneH[col] = max(colObj.min or colObj[1] or 0, min(laneH[col], colObj.max or colObj[2] or laneH[col]))
+					laneH[col] = math_max(colObj.min or colObj[1] or 0, math_min(laneH[col], colObj.max or colObj[2] or laneH[col]))
 				else
 					-- Rel./Abs. width
 					laneH[col] = colObj.width < 1 and colObj.width * totalH or colObj.width
 				end
-				extantH = max(0, extantH - laneH[col])
+				extantH = math_max(0, extantH - laneH[col])
 			end
 		end
 
@@ -996,7 +986,7 @@ AceGUI:RegisterLayout("Table",
 						child:DoLayout()
 					end
 
-					rowV = max(rowV, (f:GetHeight() or 0) - GetCellDimension("V", laneV, rowStart[child], row - 1, spaceV))
+					rowV = math_max(rowV, (f:GetHeight() or 0) - GetCellDimension("V", laneV, rowStart[child], row - 1, spaceV))
 				end
 			end
 

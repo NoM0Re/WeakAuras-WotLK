@@ -194,7 +194,8 @@ local function Constructor()
   deleteButton:SetPushedTexture(delPushed)
   button.deleteHighlight = delHighlight
 
-  local renameEditBox = CreateFrame("EditBox", nil, button, "WA_InputBoxTemplate")
+  local renameEditBox = CreateFrame("EditBox", nil, button)
+  WeakAuras.XMLTemplates["InputBoxTemplate"](renameEditBox)
   renameEditBox:SetHeight(14)
   renameEditBox:SetPoint("TOPLEFT", title, "TOPLEFT")
   renameEditBox:SetPoint("BOTTOMRIGHT", title, "BOTTOMRIGHT")

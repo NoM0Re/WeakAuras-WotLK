@@ -1828,7 +1828,8 @@ local function Constructor()
 
   view.visibility = 0;
 
-  local renamebox = CreateFrame("EditBox", nil, button, "WA_InputBoxTemplate");
+  local renamebox = CreateFrame("EditBox", nil, button);
+  WeakAuras.XMLTemplates["InputBoxTemplate"](renamebox)
   renamebox:SetHeight(14);
   renamebox:SetPoint("TOP", button, "TOP");
   renamebox:SetPoint("LEFT", icon, "RIGHT", 6, 0);

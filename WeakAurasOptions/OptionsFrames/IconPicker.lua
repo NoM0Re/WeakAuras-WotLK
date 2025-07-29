@@ -27,7 +27,6 @@ local function ConstructIconPicker(frame)
 
   local scroll = AceGUI:Create("ScrollFrame");
   scroll:SetLayout("flow");
-  --scroll.frame:SetClipsChildren(true);
   group:AddChild(scroll);
 
   local function iconPickerFill(subname, doSort)
@@ -100,8 +99,12 @@ local function ConstructIconPicker(frame)
     end
   end
 
-  local input = CreateFrame("Editbox", "WeakAurasIconFilterInput", group.frame, "WA_InputBoxTemplate");
-  input:SetScript("OnTextChanged", function(...) iconPickerFill(input:GetText(), false); end);
+  local input = CreateFrame("EditBox", "WeakAurasFilterInput", group.frame)
+  WeakAuras.XMLTemplates["SearchBoxTemplate"](input)
+  input:SetScript("OnTextChanged", function(self)
+    WA_SearchBoxTemplate_OnTextChanged(self)
+    iconPickerFill(input:GetText(), false)
+  end);
   input:SetScript("OnEnterPressed", function(...) iconPickerFill(input:GetText(), true); end);
   input:SetScript("OnEscapePressed", function(...) input:SetText(""); iconPickerFill(input:GetText(), true); end);
   input:SetWidth(200);

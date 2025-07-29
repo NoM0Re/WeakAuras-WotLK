@@ -2,7 +2,7 @@
 Keybinding Widget
 Set Keybindings in the Config UI.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Keybinding", 25
+local Type, Version = "Keybinding", 27
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -12,10 +12,6 @@ local pairs = pairs
 -- WoW APIs
 local IsShiftKeyDown, IsControlKeyDown, IsAltKeyDown = IsShiftKeyDown, IsControlKeyDown, IsAltKeyDown
 local CreateFrame, UIParent = CreateFrame, UIParent
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: NOT_BOUND
 
 --[[-----------------------------------------------------------------------------
 Scripts
@@ -185,10 +181,9 @@ local function keybindingMsgFixWidth(frame)
 end
 
 local function Constructor()
-	local name = "AceGUI30KeybindingButton" .. AceGUI:GetNextWidgetNum(Type)
-
-	local frame = CreateFrame("Frame", nil, UIParent)
-	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate2")
+	local num = AceGUI:GetNextWidgetNum(Type)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, num), UIParent)
+	local button = CreateFrame("Button", "AceGUI30KeybindingButton" .. num, frame, "UIPanelButtonTemplate")
 
 	button:EnableMouse(true)
 	button:EnableMouseWheel(false)

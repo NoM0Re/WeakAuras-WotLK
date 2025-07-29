@@ -2,7 +2,7 @@
 ScrollFrame Container
 Plain container that scrolls its content and doesn't grow in height.
 -------------------------------------------------------------------------------]]
-local Type, Version = "ScrollFrame", 26
+local Type, Version = "ScrollFrame", 27
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -94,7 +94,7 @@ local methods = {
 		local status = self.status or self.localstatus
 		local height, viewheight = self.scrollframe:GetHeight(), self.content:GetHeight()
 		local offset = status.offset or 0
-		-- Give us a margin of error of 2 pixels to stop some conditions that i would blame on floating point inaccuracies
+		-- Give us a margin of error of 2 pixels to stop some conditions that i would blame on floating point inaccuracys
 		-- No-one is going to miss 2 pixels at the bottom of the frame, anyhow!
 		if viewheight < height + 2 then
 			if self.scrollBarShown then
@@ -164,8 +164,8 @@ local methods = {
 Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
 	local num = AceGUI:GetNextWidgetNum(Type)
+	local frame = CreateFrame("Frame", string.format("%s%d", Type, num), UIParent)
 
 	local scrollframe = CreateFrame("ScrollFrame", nil, frame)
 	scrollframe:SetPoint("TOPLEFT")

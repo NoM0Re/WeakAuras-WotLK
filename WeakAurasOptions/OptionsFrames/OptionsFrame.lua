@@ -96,7 +96,8 @@ function OptionsPrivate.CreateFrame()
   local db = OptionsPrivate.savedVars.db
   local odb = OptionsPrivate.savedVars.odb
 
-  frame = CreateFrame("Frame", "WeakAurasOptions", UIParent, "WA_PortraitFrameTemplate")
+  frame = CreateFrame("Frame", "WeakAurasOptions", UIParent)
+  WeakAuras.XMLTemplates["PortraitFrameTemplate"](frame)
 
   function OptionsPrivate.SetTitle(title)
     local text = "WeakAuras " .. WeakAuras.versionString
@@ -312,7 +313,8 @@ function OptionsPrivate.CreateFrame()
     end
   end
 
-  local minimizebutton = CreateFrame("Button", nil, frame, "WA_MaximizeMinimizeButtonFrameTemplate")
+  local minimizebutton = CreateFrame("Button", nil, frame)
+  WeakAuras.XMLTemplates["MaximizeMinimizeButtonFrameTemplate"](minimizebutton)
   minimizebutton:SetPoint("RIGHT", frame.CloseButton, "LEFT", 0, 0)
   minimizebutton:SetOnMaximizedCallback(function()
     frame.minimized = false
@@ -386,7 +388,8 @@ function OptionsPrivate.CreateFrame()
   tipPopupLabelK:SetJustifyH("LEFT")
   tipPopupLabelK:SetJustifyV("TOP")
 
-  local urlWidget = CreateFrame("EditBox", nil, tipPopup, "WA_InputBoxTemplate")
+  local urlWidget = CreateFrame("EditBox", nil, tipPopup)
+  WeakAuras.XMLTemplates["InputBoxTemplate"](urlWidget)
   urlWidget:SetFont(STANDARD_TEXT_FONT, 12)
   urlWidget:SetPoint("TOPLEFT", tipPopupLabelK, "BOTTOMLEFT", 6, 0)
   urlWidget:SetPoint("TOPRIGHT", tipPopupLabelK, "BOTTOMRIGHT", 0, 0)
@@ -570,66 +573,10 @@ function OptionsPrivate.CreateFrame()
   frame.moversizer, frame.mover = OptionsPrivate.MoverSizer(frame)
 
   -- filter line
-  local filterInput = CreateFrame("EditBox", "WeakAurasFilterInput", frame, "WA_InputBoxTemplate")
-  filterInput:SetAutoFocus(false)
-  filterInput:SetTextInsets(16, 20, 0, 0)
-
-  filterInput.Instructions = filterInput:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
-  filterInput.Instructions:SetText(SEARCH)
-  filterInput.Instructions:SetPoint("TOPLEFT", filterInput, "TOPLEFT", 16, 0)
-  filterInput.Instructions:SetPoint("BOTTOMRIGHT", filterInput, "BOTTOMRIGHT", -20, 0)
-  filterInput.Instructions:SetTextColor(0.35, 0.35, 0.35)
-  filterInput.Instructions:SetJustifyH("LEFT")
-  filterInput.Instructions:SetJustifyV("MIDDLE")
-
-  filterInput.searchIcon = filterInput:CreateTexture(nil, "OVERLAY")
-  filterInput.searchIcon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
-  filterInput.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-  filterInput.searchIcon:SetSize(14, 14)
-  filterInput.searchIcon:SetPoint("LEFT", 0, -2)
-
-  filterInput.clearButton = CreateFrame("Button", nil, filterInput)
-  filterInput.clearButton:SetSize(14, 14)
-  filterInput.clearButton:SetPoint("RIGHT", -3, 0)
-
-  filterInput.clearButton.texture = filterInput.clearButton:CreateTexture()
-  filterInput.clearButton.texture:SetTexture("Interface\\FriendsFrame\\ClearBroadcastIcon")
-  filterInput.clearButton.texture:SetAlpha(0.5)
-  filterInput.clearButton.texture:SetSize(17, 17)
-  filterInput.clearButton.texture:SetPoint("CENTER", 0, 0)
-
-  filterInput.clearButton:SetScript("OnEnter", function(self) self.texture:SetAlpha(1.0) end)
-  filterInput.clearButton:SetScript("OnLeave", function(self) self.texture:SetAlpha(0.5) end)
-  filterInput.clearButton:SetScript("OnMouseDown", function(self) if self:IsEnabled() then self.texture:SetPoint("CENTER", 1, -1) end end)
-  filterInput.clearButton:SetScript("OnMouseUp", function(self) self.texture:SetPoint("CENTER") end)
-  filterInput.clearButton:SetScript("OnClick", function(self)
-    local editBox = self:GetParent()
-    editBox:SetText("")
-    editBox:ClearFocus()
-  end)
-  filterInput:SetScript("OnEditFocusLost", function(self)
-    if self:GetText() == "" then
-      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-      self.clearButton:Hide()
-    end
-  end)
-  filterInput:SetScript("OnEditFocusGained", function(self)
-    self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
-    self.clearButton:Show()
-  end)
-  filterInput:HookScript("OnTextChanged", function(self)
-    if not self:HasFocus() and self:GetText() == "" then
-      self.searchIcon:SetVertexColor(0.6, 0.6, 0.6)
-      self.clearButton:Hide()
-    else
-      self.searchIcon:SetVertexColor(1.0, 1.0, 1.0)
-      self.clearButton:Show()
-    end
-    if self:GetText() == "" then
-      self.Instructions:Show()
-    else
-      self.Instructions:Hide()
-    end
+  local filterInput = CreateFrame("EditBox", "WeakAurasFilterInput", frame)
+  WeakAuras.XMLTemplates["SearchBoxTemplate"](filterInput)
+  filterInput:SetScript("OnTextChanged", function(self)
+    WA_SearchBoxTemplate_OnTextChanged(self)
     OptionsPrivate.SortDisplayButtons(filterInput:GetText())
   end)
   filterInput:SetHeight(15)
@@ -1032,7 +979,8 @@ function OptionsPrivate.CreateFrame()
   sidegroup.frame:Show()
   sidegroup:SetLayout("flow")
 
-  local dynamicTextCodesFrame = CreateFrame("Frame", "WeakAurasTextReplacements", sidegroup.frame, "WA_PortraitFrameTemplate")
+  local dynamicTextCodesFrame = CreateFrame("Frame", "WeakAurasTextReplacements", sidegroup.frame)
+  WeakAuras.XMLTemplates["PortraitFrameTemplate"](dynamicTextCodesFrame)
   dynamicTextCodesFrame:HidePortrait()
   dynamicTextCodesFrame:SetPoint("TOPLEFT", sidegroup.frame, "TOPRIGHT", 20, 0)
   dynamicTextCodesFrame:SetPoint("BOTTOMLEFT", sidegroup.frame, "BOTTOMRIGHT", 20, 0)
@@ -1408,7 +1356,7 @@ function OptionsPrivate.CreateFrame()
     containerScroll:SetLayout("flow")
     border:AddChild(containerScroll)
 
-    local _, _, _, enabled = GetAddOnInfo("WeakAurasTemplates")
+    local enabled = select(4, GetAddOnInfo("WeakAurasTemplates"))
     if enabled then
       local simpleLabel = AceGUI:Create("Label")
       simpleLabel:SetFont(STANDARD_TEXT_FONT, 24, "OUTLINE")
