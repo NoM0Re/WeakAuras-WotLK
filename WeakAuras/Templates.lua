@@ -4,16 +4,16 @@ local AddonName = ...
 local Private = select(2, ...)
 
 local function setCorner(corner, point, relativeTo, x, y, width, height)
-    corner:ClearAllPoints()
-    corner:SetPoint(point, relativeTo, x, y)
-    corner:SetSize(width, height)
+  corner:ClearAllPoints()
+  corner:SetPoint(point, relativeTo, x, y)
+  corner:SetSize(width, height)
 end
 
 local function setEdge(edge, point1, relativeTo1, point2, relativeTo2, width, height)
-    edge:ClearAllPoints()
-    edge:SetSize(width, height)
-    edge:SetPoint(point1, relativeTo1, point2, 0, 0)
-    edge:SetPoint(point2, relativeTo2, point1, 0, 0)
+  edge:ClearAllPoints()
+  edge:SetSize(width, height)
+  edge:SetPoint(point1, relativeTo1, point2, 0, 0)
+  edge:SetPoint(point2, relativeTo2, point1, 0, 0)
 end
 
 local function UpdateNineSliceBorders(frame)
@@ -60,15 +60,6 @@ end
 
 local function InputBoxInstructions_OnEnable(self)
   InputBoxInstructions_UpdateColorForEnabledState(self, self.enabledColor);
-end
-
-local function SearchBoxTemplate_OnLoad(self)
-	self.searchIcon:SetVertexColor(0.6, 0.6, 0.6);
-	self:SetTextInsets(16, 20, 0, 0);
-	self.Instructions:SetText(self.instructionText);
-	self.Instructions:ClearAllPoints();
-	self.Instructions:SetPoint("TOPLEFT", self, "TOPLEFT", 16, 0);
-	self.Instructions:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -20, 0);
 end
 
 local function SearchBoxTemplate_OnEditFocusLost(self)
@@ -139,13 +130,13 @@ WeakAuras.XMLTemplates = {
     frame.FontString = fontString
     -- Scripts
     frame:SetScript("OnEscapePressed", function(self)
-        EditBox_ClearFocus(self)
+      EditBox_ClearFocus(self)
     end)
     frame:SetScript("OnEditFocusLost", function(self)
-        EditBox_ClearHighlight(self)
+      EditBox_ClearHighlight(self)
     end)
     frame:SetScript("OnEditFocusGained", function(self)
-        EditBox_HighlightText(self)
+      EditBox_HighlightText(self)
     end)
   end,
 
@@ -177,13 +168,19 @@ WeakAuras.XMLTemplates = {
   ["SearchBoxTemplate"] = function(frame)
     WeakAuras.XMLTemplates["InputBoxInstructionsTemplate"](frame) -- Inherits from InputBoxInstructionsTemplate
     frame:SetAutoFocus(false)
+    frame:SetTextInsets(16, 20, 0, 0);
     frame.instructionText = SEARCH
+    frame.Instructions:SetText(frame.instructionText);
+    frame.Instructions:ClearAllPoints();
+    frame.Instructions:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, 0);
+    frame.Instructions:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -20, 0);
     -- Search-Icon
     local searchIcon = frame:CreateTexture(GetParentName(frame) .. "SearchIcon", "OVERLAY")
     searchIcon:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\CommonSearch")
     searchIcon:SetSize(10, 10)
     searchIcon:SetPoint("LEFT", 1, -1)
     searchIcon:SetTexCoord(0.0742188, 0.167969, 0.664062, 0.851562)
+    searchIcon:SetVertexColor(0.6, 0.6, 0.6);
     frame.searchIcon = searchIcon
     -- Clear-Button
     local clearButton = CreateFrame("Button", GetParentName(frame) .. "ClearButton", frame)
@@ -215,7 +212,6 @@ WeakAuras.XMLTemplates = {
     end)
     clearButton:SetScript("OnClick", SearchBoxTemplateClearButton_OnClick)
     -- EditBox Scripts
-    frame:SetScript("OnLoad", SearchBoxTemplate_OnLoad)
     frame:SetScript("OnEscapePressed", EditBox_ClearFocus)
     frame:SetScript("OnEnterPressed", EditBox_ClearFocus)
     frame:SetScript("OnEditFocusLost", SearchBoxTemplate_OnEditFocusLost)
