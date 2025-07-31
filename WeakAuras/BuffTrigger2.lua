@@ -2968,7 +2968,7 @@ function BuffTrigger.GetTriggerConditions(data, triggernum)
 
   result["unitCaster"] = {
     display = L["Caster Unit"],
-    type = "unit",
+    type = "string",
     formatter = "Unit",
     formatterArgs = { color = "class" }
   }
