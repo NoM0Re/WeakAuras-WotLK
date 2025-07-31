@@ -1537,13 +1537,9 @@ local methods = {
       return;
     end
     if self.view.visibility >= 1 then
-
       if not OptionsPrivate.Private.IsGroupType(self.data) then
         OptionsPrivate.Private.FakeStatesFor(self.data.id, true)
       end
-      --if (OptionsPrivate.Private.personalRessourceDisplayFrame) then
-        --OptionsPrivate.Private.personalRessourceDisplayFrame:expand(self.data.id);
-      --end
       if (OptionsPrivate.Private.mouseFrame) then
         OptionsPrivate.Private.mouseFrame:expand(self.data.id);
       end
@@ -1770,7 +1766,6 @@ Constructor
 
 local function Constructor()
   local name = "WeakAurasDisplayButton"..AceGUI:GetNextWidgetNum(Type);
-  ---@class Button
   local button = CreateFrame("Button", name, UIParent, "OptionsListButtonTemplate");
   button:SetHeight(32);
   button:SetWidth(1000);
@@ -1810,7 +1805,6 @@ local function Constructor()
 
   button.description = {};
 
-  ---@class Button
   local view = CreateFrame("Button", nil, button);
   button.view = view;
   view:SetWidth(16);
