@@ -1365,7 +1365,7 @@ local methods = {
       self:Collapse();
     end
   end,
-  ["UpdateStatusIcon"] = function(self, key, prio, icon, title, tooltip, onClick, color)
+  ["UpdateStatusIcon"] = function(self, key, prio, icon, title, tooltip, onClick)
     local iconButton
     for _, button in ipairs(self.statusIcons.buttons) do
       if button.key == key then
@@ -1394,11 +1394,6 @@ local methods = {
       iconButton:SetScript("OnLeave", Hide_Tooltip)
     else
       iconButton:SetScript("OnEnter", nil)
-    end
-    if color then
-      iconButton:GetNormalTexture():SetVertexColor(unpack(color))
-    else
-      iconButton:GetNormalTexture():SetVertexColor(1, 1, 1, 1)
     end
     iconButton:SetScript("OnClick", onClick)
     iconButton:Show()
@@ -1507,8 +1502,8 @@ local methods = {
     self:ClearStatusIcon("load")
     self:SortStatusIcons()
   end,
-  ["SetLoaded"] = function(self, prio, color, title, description)
-    self:UpdateStatusIcon("load", prio, "Interface\\AddOns\\WeakAuras\\Media\\Textures\\loaded", title, description, nil, color)
+  ["SetLoaded"] = function(self, prio, file, title, description)
+    self:UpdateStatusIcon("load", prio, "Interface\\AddOns\\WeakAuras\\Media\\Textures\\" .. file, title, description, nil)
     self:SortStatusIcons()
   end,
   ["IsLoaded"] = function(self)
