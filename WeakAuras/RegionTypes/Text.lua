@@ -224,6 +224,7 @@ local function modify(parent, region, data)
   local customTextFunc = nil
   if containsCustomText and data.customText and data.customText ~= "" then
     customTextFunc = WeakAuras.LoadFunction("return "..data.customText, data.id)
+    region.values.customTextUpdateThrottle = data.customTextUpdateThrottle or 0
   end
 
   function region:ConfigureTextUpdate()
@@ -242,7 +243,11 @@ local function modify(parent, region, data)
     local Update
     if customTextFunc and self.displayText and Private.ContainsCustomPlaceHolder(self.displayText) then
       Update = function(self)
-        self.values.custom = Private.RunCustomTextFunc(self, customTextFunc)
+        if not self.values.customTextUpdated then
+          self.values.custom = Private.RunCustomTextFunc(self, customTextFunc)
+          self.values.lastCustomTextUpdate = GetTime()
+          self.values.customTextUpdated = true
+        end
         UpdateText()
         self:UpdateProgress()
       end
@@ -267,7 +272,13 @@ local function modify(parent, region, data)
     if customTextFunc and data.customTextUpdate == "update" then
       if Private.ContainsCustomPlaceHolder(self.displayText) then
         FrameTick = function()
-          self.values.custom = Private.RunCustomTextFunc(self, customTextFunc)
+          if not self.values.lastCustomTextUpdate
+          or self.values.lastCustomTextUpdate + self.values.customTextUpdateThrottle < GetTime()
+          then
+            self.values.custom = Private.RunCustomTextFunc(self, customTextFunc)
+            self.values.lastCustomTextUpdate = GetTime()
+            self.values.customTextUpdated = true
+          end
           UpdateText()
         end
       end
