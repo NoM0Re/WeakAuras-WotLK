@@ -138,7 +138,7 @@ elseif (locale == "deDE") then
   L["Destruction"] = "Zerstörung"
   L["Discipline"] = "Disziplin"
   L["ElementalShaman"] = "Elementar"
-  L["Enhancement"] = "Verstärkung"
+  L["Enhancement"] = "Verstärk."
   L["Feral Combat"] = "Wilder Kampf"
   L["Fire"] = "Feuer"
   L["Frost"] = "Frost"
