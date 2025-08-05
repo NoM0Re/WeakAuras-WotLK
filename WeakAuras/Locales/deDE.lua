@@ -1032,8 +1032,6 @@ L["Include Death Runes"] = "Include Death Runes"
 --[[Translation missing --]]
 L["Include Pets"] = "Include Pets"
 --[[Translation missing --]]
-L["Include Reagent Bank"] = "Include Reagent Bank"
---[[Translation missing --]]
 L["Include War Band Bank"] = "Include War Band Bank"
 L["Incoming Heal"] = "Eingehende Heilung"
 --[[Translation missing --]]
@@ -2095,6 +2093,8 @@ L["Texture Rotation"] = "Texture Rotation"
 L["Thaddius"] = "Thaddius"
 --[[Translation missing --]]
 L["The aura has overwritten the global '%s', this might affect other auras."] = "The aura has overwritten the global '%s', this might affect other auras."
+--[[Translation missing --]]
+L["The aura tried to overwrite the aura_env global, which is not allowed."] = "The aura tried to overwrite the aura_env global, which is not allowed."
 --[[Translation missing --]]
 L["The effective level differs from the level in e.g. Time Walking dungeons."] = "The effective level differs from the level in e.g. Time Walking dungeons."
 --[[Translation missing --]]

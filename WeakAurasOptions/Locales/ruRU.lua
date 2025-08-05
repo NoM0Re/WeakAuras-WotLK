@@ -278,6 +278,8 @@ Off Screen]=] ] = [=[Индикация за
 	--[[Translation missing --]]
 	L["Custom Load"] = "Custom Load"
 	L["Custom Options"] = "Свои параметры"
+	--[[Translation missing --]]
+	L["Custom Text Update Throttle"] = "Custom Text Update Throttle"
 	L["Custom Trigger"] = "Свой триггер"
 	L["Custom trigger event tooltip"] = [=[Напишите события, которые будут вызывать проверку вашего триггера. Несколько событий должны быть разделены запятыми или пробелами.
 
@@ -288,6 +290,8 @@ UNIT_POWER  UNIT_AURA, PLAYER_TARGET_CHANGED]=]
 
 |cFF4444FFПример:|r
 UNIT_POWER  UNIT_AURA, PLAYER_TARGET_CHANGED]=]
+	--[[Translation missing --]]
+	L["Custom trigger Update Throttle"] = "Custom trigger Update Throttle"
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Свой триггер: игнорировать ошибки Lua при событии OPTIONS"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "Свой триггер: отправлять фиктивные события вместо события STATUS"
 	--[[Translation missing --]]
