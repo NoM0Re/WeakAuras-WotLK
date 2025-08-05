@@ -1863,7 +1863,7 @@ Private.frames["WeakAuras Buff2 Frame"] = Buff2Frame
 
 
 local function EventHandler(frame, event, arg1, arg2, ...)
-  Private.StartProfileSystem("bufftrigger2")
+  Private.StartProfileSystem("bufftrigger2 - ".. event)
 
   local deactivatedTriggerInfos = {}
   local unitsToRemove = {}
@@ -1961,11 +1961,11 @@ local function EventHandler(frame, event, arg1, arg2, ...)
     matchDataUpToDate[unit] = nil
   end
 
-  Private.StopProfileSystem("bufftrigger2")
+  Private.StopProfileSystem("bufftrigger2 - ".. event)
 end
 
 Private.LibGroupTalentsWrapper.Register(function(unit)
-  Private.StartProfileSystem("bufftrigger2")
+  Private.StartProfileSystem("bufftrigger2 - LibGroupTalentsWrapper")
 
   local deactivatedTriggerInfos = {}
   RecheckActiveForUnitType("group", unit, deactivatedTriggerInfos)
@@ -1974,7 +1974,7 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   end
   DeactivateScanFuncs(deactivatedTriggerInfos)
 
-  Private.StopProfileSystem("bufftrigger2")
+  Private.StopProfileSystem("bufftrigger2 - LibGroupTalentsWrapper")
 end)
 
 Buff2Frame:RegisterEvent("UNIT_AURA")
@@ -2003,13 +2003,13 @@ Buff2Frame:SetScript("OnUpdate", function()
   if WeakAuras.IsPaused() then
     return
   end
-  Private.StartProfileSystem("bufftrigger2")
+  Private.StartProfileSystem("bufftrigger2 - OnUpdate")
   if next(matchDataChanged) then
     local time = GetTime()
     UpdateStates(matchDataChanged, time)
     wipe(matchDataChanged)
   end
-  Private.StopProfileSystem("bufftrigger2")
+  Private.StopProfileSystem("bufftrigger2 - OnUpdate")
 end)
 
 local function UnloadAura(scanFuncName, id)
@@ -2968,7 +2968,7 @@ function BuffTrigger.GetTriggerConditions(data, triggernum)
 
   result["unitCaster"] = {
     display = L["Caster Unit"],
-    type = "unit",
+    type = "string",
     formatter = "Unit",
     formatterArgs = { color = "class" }
   }

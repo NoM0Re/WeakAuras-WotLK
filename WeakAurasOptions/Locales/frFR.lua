@@ -297,6 +297,8 @@ Off Screen]=] ] = "L’aura est hors écran"
 	--[[Translation missing --]]
 	L["Custom Load"] = "Custom Load"
 	L["Custom Options"] = "Options personnalisées"
+	--[[Translation missing --]]
+	L["Custom Text Update Throttle"] = "Custom Text Update Throttle"
 	L["Custom Trigger"] = "Déclencheur personnalisé"
 	L["Custom trigger event tooltip"] = [=[
 Choisissez quels évènements peuvent activer le déclencheur.
@@ -313,6 +315,8 @@ Plusieurs évènements peuvent être spécifiés avec des virgules ou des espace
 |cFF4444FFPar exemple:|r
 UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED
 ]=]
+	--[[Translation missing --]]
+	L["Custom trigger Update Throttle"] = "Custom trigger Update Throttle"
 	--[[Translation missing --]]
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Custom Trigger: Ignore Lua Errors on OPTIONS event"
 	--[[Translation missing --]]

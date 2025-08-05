@@ -267,6 +267,7 @@ Off Screen]=] ] = [=[提醒效果
 	L["Custom Init"] = "自訂初始化"
 	L["Custom Load"] = "自訂載入"
 	L["Custom Options"] = "自訂選項"
+	L["Custom Text Update Throttle"] = "自定義文字更新限制"
 	L["Custom Trigger"] = "自訂觸發"
 	L["Custom trigger event tooltip"] = [=[選擇自訂觸發要檢查的事件。
 可用逗號分隔多個事件。
@@ -279,6 +280,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 
 |cFF4444FF例如:|r
 UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
+	L["Custom trigger Update Throttle"] = "自定義觸發器更新限制"
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "自訂觸發: 忽略 OPTIONS 事件的 Lua 錯誤"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "自訂觸發: 發送假的事件而不是 STATUS 事件"
 	L["Custom Unload"] = "自訂取消載入"

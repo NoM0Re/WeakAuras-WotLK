@@ -273,6 +273,8 @@ Off Screen]=] ] = "光环在屏幕外"
 	L["Custom Init"] = "自定义初始化"
 	L["Custom Load"] = "自定义载入"
 	L["Custom Options"] = "自定义选项"
+	--[[Translation missing --]]
+	L["Custom Text Update Throttle"] = "Custom Text Update Throttle"
 	L["Custom Trigger"] = "自定义触发器"
 	L["Custom trigger event tooltip"] = [=[选择用于检查自定义触发器的事件。如果有多个事件，可以用英文逗号或空格分隔。
 • "UNIT" 事件后可用英文冒号指定要注册的 unitID，也可以指定单位的类型，包括 "nameplate", "group", "raid", "part", "arena" 和 "boss"。
@@ -289,6 +291,8 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 
 |cFF4444FF例：|r
 UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
+	--[[Translation missing --]]
+	L["Custom trigger Update Throttle"] = "Custom trigger Update Throttle"
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "自定义触发器：忽略 OPTIONS 事件中的Lua错误"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "自定义触发器：发送虚假事件而不是 STATUS 事件"
 	L["Custom Unload"] = "自定义卸载"

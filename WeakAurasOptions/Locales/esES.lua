@@ -267,9 +267,13 @@ Off Screen]=] ] = "El aura está fuera de la pantalla"
 	L["Custom Init"] = "Inicialización personalizada"
 	L["Custom Load"] = "Carga personalizada"
 	L["Custom Options"] = "Opciones personalizadas"
+	--[[Translation missing --]]
+	L["Custom Text Update Throttle"] = "Custom Text Update Throttle"
 	L["Custom Trigger"] = "Activador personalizado"
 	L["Custom trigger event tooltip"] = "Información sobre eventos de activador personalizado"
 	L["Custom trigger status tooltip"] = "Información sobre el estado del activador personalizado"
+	--[[Translation missing --]]
+	L["Custom trigger Update Throttle"] = "Custom trigger Update Throttle"
 	L["Custom Trigger: Ignore Lua Errors on OPTIONS event"] = "Activador personalizado: ignorar errores de Lua en el evento OPCIONES"
 	L["Custom Trigger: Send fake events instead of STATUS event"] = "Activador personalizado: enviar eventos falsos en lugar del evento STATUS"
 	L["Custom Unload"] = "Descarga personalizada"

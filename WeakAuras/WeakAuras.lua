@@ -4377,7 +4377,7 @@ end
 
 local function ApplyStateToRegion(id, cloneId, region, parent)
   -- Force custom text function to be run again
-  region.values.lastCustomTextUpdate = nil
+  region.values.customTextUpdated = false
   region:Update();
 
   region.subRegionEvents:Notify("Update", region.state, region.states)
