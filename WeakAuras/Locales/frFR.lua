@@ -539,6 +539,8 @@ L["Drain"] = "Drain"
 L["Dropdown Menu"] = "Menu Déroulant"
 --[[Translation missing --]]
 L["Dumping table"] = "Dumping table"
+--[[Translation missing --]]
+L["Dungeon (Celestial)"] = "Dungeon (Celestial)"
 L["Dungeon (Heroic)"] = "Donjon (Héroïque)"
 L["Dungeon (Mythic)"] = "Donjon (Mythique)"
 --[[Translation missing --]]
@@ -1051,6 +1053,8 @@ L["Loot Specialization"] = "Loot Specialization"
 L["Loot Specialization Id"] = "Loot Specialization Id"
 --[[Translation missing --]]
 L["Loot Specialization Name"] = "Loot Specialization Name"
+--[[Translation missing --]]
+L["Lorewalking"] = "Lorewalking"
 L["Lost"] = "Perdu"
 L["Low Damage"] = "Dégâts faibles"
 L["Lower Than Tank"] = "Plus bas que le tank"
