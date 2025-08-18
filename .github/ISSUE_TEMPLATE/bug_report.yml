@@ -56,6 +56,14 @@ body:
   validations:
     required: true
 
+- type: input
+  id: server
+  attributes:
+    label: Server
+    description: On which server/realm are you playing?
+    placeholder: Warmane-Icecrown
+  validations:
+    required: true
 
 - type: checkboxes
   id: testing
