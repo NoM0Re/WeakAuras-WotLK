@@ -1251,6 +1251,10 @@ do
               or key
     WeakAuras.race_types[key] = (name == "" and key) or name
   end
+  if WeakAuras.IsClassicPlus() then
+    WeakAuras.race_types["Draenei"] = nil
+    WeakAuras.race_types["BloodElf"] = nil
+  end
 end
 
 Private.faction_group = {
