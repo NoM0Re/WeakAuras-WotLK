@@ -17,7 +17,7 @@ local isAwesomeEnabled = C_NamePlate and C_NamePlate.GetNamePlateForUnit and tru
 local flavor
 if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1) then
   flavor = "TBC"
-elseif GetRealmName() == "Kezan" or GetRealmName() == "Gurubashi" then
+elseif GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
 else
   flavor = "Wrath"
