@@ -2,7 +2,7 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local Private = select(2, ...)
 
--- Talent Data for the Project Epoch Realm "Kezan"
+-- Talent Data for the Project Epoch
 if not WeakAuras.IsClassicPlus() then
   return
 end
@@ -351,7 +351,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Druid_Replenish", -- [1]
       3, -- [2]
       4, -- [3]
-      93839, -- [4]
+      84740, -- [4]
     }, -- [89]
     {
       "Interface\\Icons\\Spell_Holy_ElunesGrace", -- [1]
@@ -950,7 +950,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Arcane_Blast", -- [1]
       3, -- [2]
       4, -- [3]
-      93889, -- [4]
+      84648, -- [4]
     }, -- [9]
     {
       "Interface\\Icons\\Spell_Shadow_DetectLesserInvisibility", -- [1]
@@ -971,7 +971,7 @@ Private.talentInfo = {
       18462, -- [4]
     }, -- [12]
     {
-      "Interface\\Icons\\Spell_Arcane_Blink", -- [1]
+      "Interface\\Icons\\Spell_Holy_MagicalSentry", -- [1]
       5, -- [2]
       1, -- [3]
       31569, -- [4]
@@ -1016,7 +1016,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_Lightning", -- [1]
       7, -- [2]
       2, -- [3]
-      94291, -- [4]
+      84664, -- [4]
     }, -- [20]
     {
       "Interface\\Icons\\Spell_Arcane_ArcaneTorrent", -- [1]
@@ -1147,7 +1147,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Fire_Volcano", -- [1]
       5, -- [2]
       4, -- [3]
-      93911, -- [4]
+      84676, -- [4]
     }, -- [56]
     {
       "Interface\\Icons\\Spell_Fire_BurningSpeed", -- [1]
@@ -1429,7 +1429,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_DivineProvidence", -- [1]
       4, -- [2]
       4, -- [3]
-      93730, -- [4]
+      84533, -- [4]
     }, -- [11]
     {
       "Interface\\Icons\\Spell_Holy_PureOfHeart", -- [1]
@@ -1947,7 +1947,7 @@ Private.talentInfo = {
       "Interface\\Icons\\spell_holy_powerwordbarrier", -- [1]
       9, -- [2]
       2, -- [3]
-      93853, -- [4]
+      84602, -- [4]
     }, -- [22]
     nil, -- [23]
     nil, -- [24]
@@ -2176,7 +2176,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_BlackPlague", -- [1]
       4, -- [2]
       4, -- [3]
-      81417, -- [4]
+      84580, -- [4]
     }, -- [91]
     {
       "Interface\\Icons\\Spell_Shadow_ImpPhaseShift", -- [1]
@@ -2310,7 +2310,7 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_ThrowingKnife_04", -- [1]
       3, -- [2]
       2, -- [3]
-      92707, -- [4]
+      84576, -- [4]
     }, -- [8]
     {
       "Interface\\Icons\\Ability_CriticalStrike", -- [1]
@@ -2490,7 +2490,7 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_Axe_06", -- [1]
       4, -- [2]
       4, -- [3]
-      81498, -- [4]
+      84557, -- [4]
     }, -- [53]
     {
       "Interface\\Icons\\INV_Mace_01", -- [1]
@@ -2794,7 +2794,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shaman_ThunderStorm", -- [1]
       4, -- [2]
       2, -- [3]
-      94032, -- [4]
+      84642, -- [4]
     }, -- [10]
     {
       "Interface\\Icons\\Spell_Fire_ElementalDevastation", -- [1]
@@ -3262,7 +3262,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_SummonFelHunter", -- [1]
       5, -- [2]
       4, -- [3]
-      94049, -- [4]
+      84722, -- [4]
     }, -- [16]
     {
       "Interface\\Icons\\Spell_Shadow_ShadeTrueSight", -- [1]
@@ -3400,7 +3400,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Warlock_DemonicEmpowerment", -- [1]
       5, -- [2]
       2, -- [3]
-      91927, -- [4]
+      84701, -- [4]
     }, -- [54]
     {
       "Interface\\Icons\\INV_Ammo_FireTar", -- [1]
@@ -3490,7 +3490,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Fire_Fire", -- [1]
       2, -- [2]
       3, -- [3]
-      81439, -- [4]
+      84685, -- [4]
     }, -- [84]
     {
       "Interface\\Icons\\Spell_Fire_FireBolt", -- [1]
@@ -3538,7 +3538,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Fire_Volcano", -- [1]
       5, -- [2]
       1, -- [3]
-      81457, -- [4]
+      84691, -- [4]
     }, -- [92]
     {
       "Interface\\Icons\\Spell_Fire_Immolation", -- [1]
@@ -3761,13 +3761,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Warrior_EndlessRage", -- [1]
       8, -- [2]
       2, -- [3]
-      92369, -- [4]
+      84503, -- [4]
     }, -- [23]
     {
       "Interface\\Icons\\Ability_Warrior_BloodBath", -- [1]
       8, -- [2]
       3, -- [3]
-      94382, -- [4]
+      84506, -- [4]
     }, -- [24]
     {
       "Interface\\Icons\\Ability_Warrior_Bladestorm", -- [1]
