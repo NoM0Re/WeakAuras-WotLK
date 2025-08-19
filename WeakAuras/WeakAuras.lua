@@ -29,7 +29,7 @@ local GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS
   = GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS or 40
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
   = CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
-local debugstack, GetSpellInfo = debugstack, GetSpellInfo
+local debugstack, wipe, GetSpellInfo = debugstack, wipe, GetSpellInfo
 
 local ADDON_NAME = "WeakAuras"
 local WeakAuras = WeakAuras
@@ -1588,6 +1588,36 @@ function Private.ScanForLoads(toCheck, event, arg1, ...)
     return
   end
   scanForLoadsImpl(toCheck, event, arg1, ...)
+end
+
+do
+  -- Workaround zones doesn't load the aura when event fires while map was open.
+  -- we fix it after it gets closed.
+  local EventWatcher = CreateFrame("Frame")
+  local eventsFired  = {}
+  local events       = { "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA" }
+
+  EventWatcher:SetScript("OnEvent", function(_, event)
+    if WorldMapFrame:IsShown() then
+      eventsFired[event] = true
+    end
+  end)
+
+  WorldMapFrame:HookScript("OnShow", function()
+    for _, event in ipairs(events) do
+      EventWatcher:RegisterEvent(event)
+    end
+  end)
+
+  WorldMapFrame:HookScript("OnHide", function()
+    for eventFired in pairs(eventsFired) do
+      Private.ScanForLoads(nil, eventFired)
+    end
+    for _, event in ipairs(events) do
+      EventWatcher:UnregisterEvent(event)
+    end
+    wipe(eventsFired)
+  end)
 end
 
 local loadFrame = CreateFrame("Frame");
