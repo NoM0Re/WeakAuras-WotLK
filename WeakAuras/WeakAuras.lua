@@ -15,8 +15,8 @@ local IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInR
   = IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
 local InCombatLockdown, UnitAffectingCombat, GetInstanceInfo, IsInInstance
   = InCombatLockdown, UnitAffectingCombat, GetInstanceInfo, IsInInstance
-local GetCurrentMapAreaID, GetRealZoneText, GetSubZoneText
-  = GetCurrentMapAreaID, GetRealZoneText, GetSubZoneText
+local GetCurrentMapAreaID, GetRealZoneText, GetSubZoneText, SetMapToCurrentZone
+  = GetCurrentMapAreaID, GetRealZoneText, GetSubZoneText, SetMapToCurrentZone
 local UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
   = UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
 local UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
@@ -29,7 +29,7 @@ local GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS
   = GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS or 40
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
   = CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
-local debugstack, GetSpellInfo = debugstack, GetSpellInfo
+local debugstack, wipe, GetSpellInfo = debugstack, wipe, GetSpellInfo
 
 local ADDON_NAME = "WeakAuras"
 local WeakAuras = WeakAuras
@@ -1600,9 +1600,6 @@ loadFrame:RegisterEvent("VEHICLE_UPDATE");
 
 loadFrame:RegisterEvent("PARTY_MEMBERS_CHANGED");
 loadFrame:RegisterEvent("RAID_ROSTER_UPDATE");
-loadFrame:RegisterEvent("ZONE_CHANGED");
-loadFrame:RegisterEvent("ZONE_CHANGED_INDOORS");
-loadFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 loadFrame:RegisterEvent("PLAYER_LEVEL_UP");
 loadFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
 loadFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
@@ -1640,6 +1637,38 @@ function Private.RegisterLoadEvents()
     Private.StopProfileSystem("load");
   end);
 end
+
+-- Workaround: the map may not always show the correct zone, that is req. for AreaID.
+-- Also auras may not load correctly if the event fires while the map is open
+-- We resolve this once the map is closed.
+local zoneEventGuard = CreateFrame("Frame")
+Private.frames["Display Load Handling 3"] = zoneEventGuard;
+
+local eventsFired = {}
+zoneEventGuard:RegisterEvent("ZONE_CHANGED");
+zoneEventGuard:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+zoneEventGuard:RegisterEvent("ZONE_CHANGED_INDOORS");
+
+zoneEventGuard:SetScript("OnEvent", function(_, event)
+  Private.StartProfileSystem("load");
+  if WorldMapFrame:IsShown() then
+    eventsFired[event] = true
+  else
+    SetMapToCurrentZone()
+  end
+  Private.ScanForLoads(nil, event) -- send regardless of the map being open
+  Private.StopProfileSystem("load");
+end)
+
+WorldMapFrame:HookScript("OnHide", function()
+  -- SetMapToCurrentZone is already called by the SetScript
+  Private.StartProfileSystem("load");
+  for eventFired in pairs(eventsFired) do
+    Private.ScanForLoads(nil, eventFired)
+  end
+  wipe(eventsFired)
+  Private.StopProfileSystem("load");
+end)
 
 local function UnloadAll()
   -- Even though auras are collapsed, their finish animation can be running
