@@ -208,6 +208,16 @@ function OptionsPrivate.GetActionOptions(data)
           return data.actions.start.message_type ~= "WHISPER"
         end
       },
+      start_message_tts_voice = {
+        type = "select",
+        width = WeakAuras.doubleWidth,
+        name = L["Voice"],
+        order = 3.2,
+        disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.start.do_message end,
+        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.start.message_type ~= "TTS" end,
+        values = OptionsPrivate.Private.tts_voices,
+        desc = L["Available Voices are system specific"]
+      },
       start_message = {
         type = "input",
         width = WeakAuras.doubleWidth - 0.15,
@@ -713,6 +723,16 @@ function OptionsPrivate.GetActionOptions(data)
           return data.actions.finish.message_type ~= "WHISPER"
         end
       },
+      finish_message_tts_voice = {
+        type = "select",
+        width = WeakAuras.doubleWidth,
+        name = L["Voice"],
+        order = 23.2,
+        disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.finish.do_message end,
+        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.finish.message_type ~= "TTS" end,
+        values = OptionsPrivate.Private.tts_voices,
+        desc = L["Available Voices are system specific"]
+      },
       finish_message = {
         type = "input",
         width = WeakAuras.doubleWidth - 0.15,
@@ -793,6 +813,42 @@ function OptionsPrivate.GetActionOptions(data)
         order = 29,
         hidden = function() return data.actions.finish.sound ~= " KitID" end,
         disabled = function() return not data.actions.finish.do_sound end
+      },
+      finish_stop_sound = {
+        type = "toggle",
+        width = WeakAuras.doubleWidth,
+        name = L["Stop Sound"],
+        order = 29.1,
+        hidden = function() return not StopSound end,
+        disabled = function() return not StopSound end,
+      },
+      finish_do_sound_fade = {
+        type = "toggle",
+        width = WeakAuras.normalWidth,
+        name = L["Fadeout Sound"],
+        order = 29.2,
+        hidden = function() return not StopSound end,
+        disabled = function() return not StopSound or not data.actions.finish.stop_sound end,
+      },
+      finish_stop_sound_fade = {
+        type = "range",
+        control = "WeakAurasSpinBox",
+        width = WeakAuras.normalWidth,
+        name = L["Fadeout Time (seconds)"],
+        order = 29.3,
+        hidden = function() return not StopSound or not data.actions.finish.do_sound_fade end,
+        disabled = function() return not StopSound or not data.actions.finish.stop_sound end,
+        min = 0,
+        softMax = 10,
+        bigStep = 1,
+      },
+      finish_stop_sound_fade_space = {
+        type = "description",
+        width = WeakAuras.doubleWidth,
+        order = 29.4,
+        name = "",
+        hidden = function() return not StopSound end,
+        disabled = function() return not StopSound end,
       },
       finish_do_glow = {
         type = "toggle",

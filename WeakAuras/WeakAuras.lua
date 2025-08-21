@@ -45,6 +45,8 @@ WeakAuras.LGT = LibStub("LibGroupTalents-1.0") or {
   GetUnitRole = function(_) end
 }
 
+Private.maxTimerDuration = 604800; -- A week, in seconds
+
 Private.watched_trigger_events = {}
 
 -- The worlds simplest callback system.
@@ -1047,6 +1049,8 @@ local function tooltip_draw()
   tooltip:AddLine(L["|cffeda55fMiddle-Click|r to toggle the minimap icon on or off."], 0.2, 1, 0.2);
   tooltip:Show();
 end
+
+WeakAuras.GenerateTooltip = tooltip_draw;
 
 local colorFrame = CreateFrame("Frame");
 Private.frames["LDB Icon Recoloring"] = colorFrame;
@@ -2721,53 +2725,89 @@ local oldDataStub2 = {
 }
 
 function Private.UpdateSoundIcon(data)
-  local function anySoundCondition()
+  local function testConditions()
+    local sound, tts
     if data.conditions then
       for _, condition in ipairs(data.conditions) do
         for changeIndex, change in ipairs(condition.changes) do
           if change.property == "sound" then
-            return true
+            sound = true
           end
+          if change.property == "chat" and change.value and change.value.message_type == "TTS" then
+            tts = true
         end
+          if sound and tts then break end
       end
     end
+    end
+    return sound, tts
   end
 
+  local soundCondition, ttsCondition = testConditions()
+
+  -- sound
   if data.actions.start.do_sound or data.actions.finish.do_sound then
     Private.AuraWarnings.UpdateWarning(data.uid, "sound_action", "sound", L["This aura plays a sound via an action."])
   else
     Private.AuraWarnings.UpdateWarning(data.uid, "sound_action")
   end
 
-  if anySoundCondition() then
+  if soundCondition then
     Private.AuraWarnings.UpdateWarning(data.uid, "sound_condition", "sound", L["This aura plays a sound via a condition."])
   else
     Private.AuraWarnings.UpdateWarning(data.uid, "sound_condition")
   end
 
+  -- tts
+  if WeakAuras.IsAwesomeEnabled() ~= 2 then return end
+  if (data.actions.start.do_message and data.actions.start.message_type == "TTS")
+  or (data.actions.finish.do_message and data.actions.finish.message_type == "TTS")
+  then
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_action", "tts", L["This aura plays a Text To Speech via an action."])
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_action")
+  end
+
+  if ttsCondition then
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_condition", "tts", L["This aura plays a Text To Speech via a condition."])
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_condition")
+  end
 end
 
-function Private.ClearSounds(uid)
+function Private.ClearSounds(uid, severity)
   local data = Private.GetDataByUID(uid)
+
   for child in Private.TraverseLeafsOrAura(data) do
     local changed = false
-    -- Conditions
     if child.conditions then
       for _, condition in ipairs(child.conditions) do
         for changeIndex = #condition.changes, 1, -1 do
           local change = condition.changes[changeIndex]
-          if change.property == "sound" then
+          if change.property == "sound" and severity == "sound" then
+            tremove(condition.changes, changeIndex)
+            changed = true
+          elseif change.property == "chat" and change.value and change.value.message_type == "TTS" and severity == "tts" then
             tremove(condition.changes, changeIndex)
             changed = true
           end
         end
       end
     end
-    -- Actions
-    if child.actions.start.do_sound or child.actions.finish.do_sound then
+
+    if severity == "sound" and (child.actions.start.do_sound or child.actions.finish.do_sound) then
       child.actions.start.do_sound = false
       child.actions.finish.do_sound = false
       changed = true
+    elseif severity == "tts" then
+      if child.actions.start.do_message and child.actions.start.message_type == "TTS" then
+        child.actions.start.do_message = false
+      changed = true
+      end
+      if child.actions.finish.do_message and child.actions.finish.message_type == "TTS" then
+        child.actions.finish.do_message = false
+        changed = true
+      end
     end
     if changed then
       WeakAuras.Add(child)
@@ -3220,13 +3260,28 @@ function Private.ReleaseClone(id, cloneId, regionType)
   end
 end
 
-function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters)
+function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters, voice)
   local useHiddenStates = when == "finish"
   if (message:find('%%')) then
     message = Private.ReplacePlaceHolders(message, region, customFunc, useHiddenStates, formatters);
   end
   if(message_type == "PRINT") then
     DEFAULT_CHAT_FRAME:AddMessage(message, r or 1, g or 1, b or 1);
+  elseif message_type == "TTS" then
+    if WeakAuras.IsAwesomeEnabled() == 2 then
+      local validVoice = voice and Private.tts_voices[voice]
+      if not Private.SquelchingActions() then
+        pcall(function()
+          C_VoiceChat.SpeakText(
+            validVoice and voice or next(Private.tts_voices) or 0,
+            message,
+            1,
+            C_TTSSettings and C_TTSSettings.GetSpeechRate() or 0,
+            C_TTSSettings and C_TTSSettings.GetSpeechVolume() or 100
+          );
+        end)
+      end
+    end
   elseif message_type == "ERROR" then
     UIErrorsFrame:AddMessage(message, r or 1, g or 1, b or 1)
   elseif(message_type == "COMBAT") then
@@ -3239,8 +3294,6 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
         message_dest = Private.ReplacePlaceHolders(message_dest, region, customFunc, useHiddenStates, formatters);
       end
       if message_dest_isunit == true then
-        -- send to server like retail doesnt work here
-        -- message_dest = GetUnitName(message_dest, true)
         message_dest = UnitName(message_dest)
       end
       pcall(function() SendChatMessage(message, "WHISPER", nil, message_dest) end);
@@ -3504,7 +3557,14 @@ function Private.PerformActions(data, when, region)
 
   if(actions.do_message and actions.message_type and actions.message) then
     local customFunc = Private.customActionsFunctions[data.id][when .. "_message"];
-    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters);
+    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters, actions.message_tts_voice);
+  end
+
+  if (actions.stop_sound) then
+    if (region.SoundStop) then
+      local fadeoutTime = actions.do_sound_fade and actions.stop_sound_fade and actions.stop_sound_fade * 1000 or 0
+      region:SoundStop(fadeoutTime);
+    end
   end
 
   if(actions.do_sound and actions.sound) then
@@ -4077,7 +4137,6 @@ end
 local threads = {
   frame = CreateFrame("Frame"),
   size = 0,
-  ---@type table<string, threadPriority>
   prios = {},
   pools = {
     urgent = {},

@@ -12,7 +12,9 @@ local versionStringFromToc = GetAddOnMetadata("WeakAuras", "Version")
 local versionString = "5.20.2 Beta"
 -- Year, Month, Day, Hour, Minute, Seconds
 local buildTime = "2025".."08".."15".."22".."00".."00"
-local isAwesomeEnabled = C_NamePlate and C_NamePlate.GetNamePlateForUnit and true or false
+local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS available
+                        or C_NamePlate and C_NamePlate.GetNamePlateForUnit and 1 -- Nameplates available
+                        or false
 
 local flavor
 if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1) then
@@ -29,7 +31,7 @@ WeakAuras.newFeatureString = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeat
 WeakAuras.BuildInfo = select(4, GetBuildInfo())
 
 function WeakAuras.IsAwesomeEnabled()
-  return isAwesomeEnabled or false
+  return isAwesomeEnabled
 end
 
 function WeakAuras.IsCorrectVersion()

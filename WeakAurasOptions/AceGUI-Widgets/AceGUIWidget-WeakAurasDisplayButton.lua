@@ -431,7 +431,9 @@ local function IsParentRecursive(needle, parent)
 end
 
 local tabsForWarning = {
+  tts_condition = "conditions",
   sound_condition = "conditions",
+  tts_action = "action",
   sound_action = "action",
   spammy_event_warning = "trigger"
 }
@@ -1425,16 +1427,20 @@ local methods = {
   end,
   ["UpdateWarning"] = function(self)
     local warnings = OptionsPrivate.Private.AuraWarnings.GetAllWarnings(self.data.uid)
-    local warningTypes = {"info", "sound", "warning", "error"}
+    local warningTypes = {"info", "sound", "tts", "warning", "error"}
     for _, key in ipairs(warningTypes) do
       self:ClearStatusIcon(key)
     end
     if warnings then
       for severity, warning in pairs(warnings) do
         local onClick
-        if severity == "sound" then
+        if severity == "sound" or severity == "tts" then
           local soundText = L["Show Sound Setting"]
           local removeText = L["Remove All Sounds"]
+          if severity == "tts" then
+            soundText = L["Show Text To Speech Setting"]
+            removeText = L["Remove All Text To Speech"]
+          end
           onClick = function()
             local menu = {
               {
@@ -1446,7 +1452,7 @@ local methods = {
               {
                 text = removeText,
                 func = function()
-                  OptionsPrivate.Private.ClearSounds(self.data.uid)
+                  OptionsPrivate.Private.ClearSounds(self.data.uid, severity)
                 end
               }
             }

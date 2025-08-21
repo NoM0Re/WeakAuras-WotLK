@@ -147,19 +147,18 @@ local function SoundRepeatStop(self)
   Private.StopProfileSystem("sound");
 end
 
---[[
-local function SoundStop(self)
+local function SoundStop(self, fadeoutTime)
   Private.StartProfileSystem("sound");
-  if (self.soundHandle) then
-    StopSound(self.soundHandle);
+  if (StopSound and self.soundHandle) then
+    StopSound(self.soundHandle, fadeoutTime);
   end
   Private.StopProfileSystem("sound");
 end
-]]
 
 local function SoundPlayHelper(self)
   Private.StartProfileSystem("sound");
   local options = self.soundOptions;
+  self.soundHandle = nil;
   if (not options or options.sound_type == "Stop") then
     Private.StopProfileSystem("sound");
     return;
@@ -172,27 +171,27 @@ local function SoundPlayHelper(self)
 
   if (options.sound == " custom") then
     local ok, _, handle = pcall(PlaySoundFile, options.sound_path, options.sound_channel or "Master")
-    --if ok then
-      --self.soundHandle = handle
-    --end
+    if ok then
+      self.soundHandle = handle
+    end
   elseif (options.sound == " KitID") then
-    local ok, _, handle = pcall(PlaySound, options.sound_kit_id, options.sound_channel or "Master")
-    --if ok then
-      --self.soundHandle = handle
-    --end
+    local ok, _, handle = pcall(PlaySound,options.sound_kit_id, options.sound_channel or "Master")
+    if ok then
+      self.soundHandle = handle
+    end
   else
     local ok, _, handle = pcall(PlaySoundFile, options.sound, options.sound_channel or "Master")
-    --if ok then
-      --self.soundHandle = handle
-    --end
+    if ok then
+      self.soundHandle = handle
+    end
   end
   Private.StopProfileSystem("sound");
 end
 
 local function hasSound(options)
-  --if options.sound_type == "Stop" then
-    --return true
-  --end
+  if options.sound_type == "Stop" then
+    return true
+  end
   if (options.sound == " custom") then
     if (options.sound_path and options.sound_path ~= "") then
       return true
@@ -219,14 +218,15 @@ local function SoundPlay(self, options)
     return
   end
 
-  --self:SoundStop();
+  local fadeoutTime = options.sound_type == "Stop" and options.sound_fade and options.sound_fade * 1000 or 0
+  self:SoundStop(fadeoutTime);
   self:SoundRepeatStop();
 
   self.soundOptions = options;
   SoundPlayHelper(self);
 
   local loop = options.do_loop or options.sound_type == "Loop";
-  if (loop and options.sound_repeat) then
+  if (loop and options.sound_repeat and options.sound_repeat < Private.maxTimerDuration) then
     self.soundRepeatTimer = WeakAuras.timer:ScheduleRepeatingTimer(SoundPlayHelper, options.sound_repeat, self);
   end
   Private.StopProfileSystem("sound");
@@ -236,7 +236,7 @@ local function SendChat(self, options)
   if (not options or WeakAuras.IsOptionsOpen()) then
     return
   end
-  Private.HandleChatAction(options.message_type, options.message, options.message_dest, options.message_dest_isunit, options.message_channel, options.r, options.g, options.b, self, options.message_custom, nil, options.message_formaters);
+  Private.HandleChatAction(options.message_type, options.message, options.message_dest, options.message_dest_isunit, options.message_channel, options.r, options.g, options.b, self, options.message_custom, nil, options.message_formaters, options.message_voice);
 end
 
 local function RunCode(self, func)
@@ -715,6 +715,7 @@ Private.regionPrototype.AnchorSubRegion = AnchorSubRegion
 function Private.regionPrototype.create(region)
   local defaultsForRegion = Private.regionTypes[region.regionType] and Private.regionTypes[region.regionType].default;
   region.SoundPlay = SoundPlay;
+  region.SoundStop = SoundStop;
   region.SoundRepeatStop = SoundRepeatStop;
   region.SendChat = SendChat;
   region.RunCode = RunCode;
