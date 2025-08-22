@@ -5665,12 +5665,16 @@ Private.event_prototypes = {
   },
   ["Stance/Form/Aura"] = {
     type = "unit",
-    events = {
-      ["events"] = {
+    events = function()
+      local events = {
         "UPDATE_SHAPESHIFT_FORM",
         "UPDATE_SHAPESHIFT_COOLDOWN"
       }
-    },
+      if WeakAuras.IsClassicPlus() then -- Stances workaround for Epoch
+        tinsert(events, "ACTIONBAR_SLOT_CHANGED")
+      end
+      return { ["events"] = events }
+    end,
     internal_events = { "WA_DELAYED_PLAYER_ENTERING_WORLD" },
     force_events = "WA_DELAYED_PLAYER_ENTERING_WORLD",
     name = L["Stance/Form/Aura"],
