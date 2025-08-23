@@ -74,7 +74,7 @@ local function formatValueForAssignment(vType, value, pathToCustomFunction, path
         )
         return serialized
       else
-        local serialized = string.format("{%s, %s, %s, %s, %s, %s, %s, %s}",
+        local serialized = string.format("{%s, %s, %s, %s, %s, %s, %s}",
             trigger,
             Private.QuotedString(progressType),
             Private.QuotedString(property or "nil"),
