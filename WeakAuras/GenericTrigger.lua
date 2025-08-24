@@ -4597,6 +4597,10 @@ WeakAuras.CheckForItemEquipped = function(itemId, specificSlot)
   end
 end
 
+Private.ExecEnv.IsEquippedItemType = function(itemType)
+  return IsEquippedItemType(Private.item_weapon_types[itemType] or '')
+end
+
 WeakAuras.GetCritChance = function()
   -- Based on what the wow paper doll does
   local spellCrit = 0

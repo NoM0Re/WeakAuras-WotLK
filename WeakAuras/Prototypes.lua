@@ -1350,6 +1350,14 @@ Private.load_prototype = {
       events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
       only_exact = true,
     },
+    {
+      name = "itemtypeequipped",
+      display = L["Item Type Equipped"],
+      type = "multiselect",
+      test = "Private.ExecEnv.IsEquippedItemType(%s or '')",
+      events = { "UNIT_INVENTORY_CHANGED", "PLAYER_EQUIPMENT_CHANGED"},
+      values = "item_weapon_types"
+    },
   }
 };
 
@@ -6497,6 +6505,33 @@ Private.event_prototypes = {
       }
     },
     hasItemID = true,
+    automaticrequired = true,
+    progressType = "none"
+  },
+  ["Item Type Equipped"] = {
+    type = "item",
+    events = {
+      ["events"] = {
+        "PLAYER_EQUIPMENT_CHANGED",
+      },
+      ["unit_events"] = {
+        ["player"] = {"UNIT_INVENTORY_CHANGED"}
+      }
+    },
+    internal_events = { "WA_DELAYED_PLAYER_ENTERING_WORLD", },
+    force_events = "UNIT_INVENTORY_CHANGED",
+    name = L["Item Type Equipped"],
+    args = {
+      {
+        name = "itemTypeName",
+        display = L["Item Type"],
+        type = "multiselect",
+        values = "item_weapon_types",
+        required = true,
+        test = "Private.ExecEnv.IsEquippedItemType(%s)",
+        multiNoSingle = true
+      },
+    },
     automaticrequired = true,
     progressType = "none"
   },

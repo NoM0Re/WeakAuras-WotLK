@@ -3672,6 +3672,38 @@ Private.noreset_swing_spells = {
   --35474 Drums of Panic DO reset the swing timer, do not add
 }
 
+Private.item_weapon_types = {}
+do
+  local weapon = { GetAuctionItemSubClasses(1) }
+  local armor  = { GetAuctionItemSubClasses(2) }
+
+  Private.item_weapon_types = {
+    [512] = weapon[1],   -- One-Handed Axes
+    [513] = weapon[2],   -- Two-Handed Axes
+    [514] = weapon[3],   -- Bows
+    [515] = weapon[4],   -- Guns
+    [516] = weapon[5],   -- One-Handed Maces
+    [517] = weapon[6],   -- Two-Handed Maces
+    [518] = weapon[7],   -- Polearms
+    [519] = weapon[8],   -- One-Handed Swords
+    [520] = weapon[9],   -- Two-Handed Swords
+    -- [521] = nil,       -- Warglaives
+    [522] = weapon[10],  -- Staves
+    -- [523] = nil,       -- Bear Claws
+    -- [524] = nil,       -- Cat Claws
+    [525] = weapon[11],  -- Fist Weapons
+    [526] = weapon[12],  -- Misc
+    [527] = weapon[13],  -- Daggers
+    [528] = weapon[14],  -- Thrown
+    -- [529] = nil,       -- Spears
+    [530] = weapon[15],  -- Crossbows
+    [531] = weapon[16],  -- Wands
+    [532] = weapon[17],  -- Fishing Poles
+    [1030] = armor[6],   -- Shields
+  }
+end
+WeakAuras.item_weapon_types = Private.item_weapon_types
+
 WeakAuras.StopMotion = WeakAuras.StopMotion or {}
 WeakAuras.StopMotion.texture_types = WeakAuras.StopMotion.texture_types or {}
 WeakAuras.StopMotion.texture_data = WeakAuras.StopMotion.texture_data or {}
