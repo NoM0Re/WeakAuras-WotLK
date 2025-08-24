@@ -985,6 +985,7 @@ function Private.Modernize(data, oldSnapshot)
       ["Item Count"] = "item",
       ["BigWigs Timer"] = "addons",
       ["DBM Timer"] = "addons",
+      ["Item Type Equipped"] = "item",
       ["Item Equipped"] = "item",
       ["DBM Announce"] = "addons",
       ["Swing Timer"] = "unit",
