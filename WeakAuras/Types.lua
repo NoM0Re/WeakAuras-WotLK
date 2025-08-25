@@ -2857,7 +2857,7 @@ Private.send_chat_message_types = {
 
 Private.tts_voices = {}
 
-if WeakAuras.IsAwesomeEnabled() then
+if WeakAuras.IsAwesomeEnabled() == 2 then
 
   Private.send_chat_message_types.TTS = L["Text-to-speech"]
 
