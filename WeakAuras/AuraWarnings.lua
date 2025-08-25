@@ -50,13 +50,15 @@ end
 local severityLevel = {
   info = 0,
   sound = 1,
-  warning = 2,
-  error = 3
+  tts = 2,
+  warning = 3,
+  error = 4
 }
 
 local icons = {
   info = [[Interface\FriendsFrame\InformationIcon]],
   sound = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ChatFrame",
+  tts = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\chatframe-button-icon-TTS",
   warning = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ServicesAtlas",
   error = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\HelpIcon-Bug",
 }
@@ -64,6 +66,7 @@ local icons = {
 local titles = {
   info = L["Information"],
   sound = L["Sound"],
+  tts = L["Text To Speech"],
   warning = L["Warning"],
   error = L["Error"],
 }
@@ -114,6 +117,7 @@ function Private.AuraWarnings.FormatWarnings(uid)
   result = AddMessages(result, messagePerSeverity["error"], icons["error"], mixedSeverity)
   result = AddMessages(result, messagePerSeverity["warning"], icons["warning"], mixedSeverity)
   result = AddMessages(result, messagePerSeverity["sound"], icons["sound"], mixedSeverity)
+  result = AddMessages(result, messagePerSeverity["tts"], icons["tts"], mixedSeverity)
   result = AddMessages(result, messagePerSeverity["info"], icons["info"], mixedSeverity)
   return icons[maxSeverity], titles[maxSeverity], result
 end

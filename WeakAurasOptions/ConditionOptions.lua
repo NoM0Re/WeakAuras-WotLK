@@ -846,6 +846,35 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
     }
     order = order + 1;
 
+    if StopSound then
+      args["condition" .. i .. "value" .. j .. "sound_fade"] = {
+        type = "range",
+        control = "WeakAurasSpinBox",
+        width = WeakAuras.normalWidth,
+        min = 0,
+        softMax = 10,
+        bigStep = 1,
+        name = blueIfNoValue2(data, conditions[i].changes[j], "value", "sound_fade", L["Fadeout Time (seconds)"], L["Fadeout Time (seconds)"]),
+        desc = descIfNoValue2(data, conditions[i].changes[j], "value", "sound_fade", propertyType),
+        order = order,
+        get = function()
+          return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.sound_fade;
+        end,
+        set = setValueComplex("sound_fade"),
+        disabled = function() return not anySoundType("Stop") end,
+        hidden = function() return not (anySoundType("Stop")) end
+      }
+      order = order + 1;
+
+      args["condition" .. i .. "value" .. j .. "sound_fade_space"] = {
+        type = "description",
+        width = WeakAuras.normalWidth,
+        name = "",
+        order = order,
+        hidden = function() return not (anySoundType("Stop")) end
+      }
+      order = order + 1;
+    end
 
   elseif (propertyType == "chat") then
     args["condition" .. i .. "value" .. j .. "message type"] = {
@@ -986,6 +1015,25 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
       end
     }
     order = order + 1;
+
+    if WeakAuras.IsAwesomeEnabled() == 2 then
+      args["condition" .. i .. "value" .. j .. "message voice"] = {
+        type = "select",
+        width = WeakAuras.doubleWidth,
+        name = blueIfNoValue2(data, conditions[i].changes[j], "value", "message_voice", L["Voice"], L["Voice"]),
+        desc = (descIfNoValue2(data, conditions[i].changes[j], "value", "message_voice", propertyType, OptionsPrivate.Private.tts_voices) or "") .. "\n" .. L["Available Voices are system specific"],
+        values = OptionsPrivate.Private.tts_voices,
+        order = order,
+        get = function()
+          return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.message_voice;
+        end,
+        set = setValueComplex("message_voice"),
+        hidden = function()
+          return not anyMessageType("TTS");
+        end,
+      }
+      order = order + 1;
+    end
 
     local message_getter = function()
       return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.message;
@@ -2871,7 +2919,7 @@ local function SubPropertiesForChange(change)
       "glow_scale", "glow_border"
     }
   elseif change.property == "chat" then
-    local result = { "message_type", "message_dest", "message_channel", "message_color", "message", "custom" }
+    local result = { "message_type", "message_dest", "message_channel", "message_color", "message", "custom", "message_voice" }
     local input = change.value and change.value.message
     if input then
       local getter = function(key)
