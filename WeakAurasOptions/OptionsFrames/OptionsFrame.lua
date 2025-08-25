@@ -522,8 +522,8 @@ function OptionsPrivate.CreateFrame()
 
   local awesomeWotlkButton
   if not WeakAuras.IsAwesomeEnabled() then
-    awesomeWotlkButton = addFooter("Awesome WotLK", [[Interface\AddOns\WeakAuras\Media\Textures\GitHub.tga]], "https://github.com/FrostAtom/awesome_wotlk/releases",
-                                    L["Unlock nameplate anchoring & units in WeakAuras with the Awesome WotLK client patch"])
+    awesomeWotlkButton = addFooter("Awesome WotLK", [[Interface\AddOns\WeakAuras\Media\Textures\GitHub.tga]], "https://github.com/NoM0Re/awesome_wotlk/releases",
+                                    L["Unlock nameplate anchoring & units and Text-to-speech in WeakAuras with the Awesome WotLK client patch."])
     awesomeWotlkButton:SetParent(tipFrame)
     awesomeWotlkButton:SetPoint("LEFT", changelogButton or thanksButton, "RIGHT", footerSpacing, 0)
   end
