@@ -3595,10 +3595,16 @@ Private.event_prototypes = {
         conditionType = "number"
       },
       {
+        name = "overEnergize",
+        display = L["Over Energize"],
+        type = "number",
+        init = "arg",
+        store = true,
+        conditionType = "number",
         enable = function(trigger)
           return trigger.subeventSuffix and (trigger.subeventSuffix == "_ENERGIZE")
         end
-      }, -- unknown argument for _ENERGIZE ignored
+      },
       {
         name = "powerType",
         display = L["Power Type"],
@@ -3617,7 +3623,7 @@ Private.event_prototypes = {
         type = "number",
         init = "arg",
         enable = function(trigger)
-          return trigger.subeventSuffix and (trigger.subeventSuffix == "_ENERGIZE" or trigger.subeventSuffix == "_DRAIN" or trigger.subeventSuffix == "_LEECH")
+          return trigger.subeventSuffix and (trigger.subeventSuffix == "_DRAIN" or trigger.subeventSuffix == "_LEECH")
         end,
         store = true,
         conditionType = "number"
