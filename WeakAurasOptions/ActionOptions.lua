@@ -208,15 +208,28 @@ function OptionsPrivate.GetActionOptions(data)
           return data.actions.start.message_type ~= "WHISPER"
         end
       },
-      start_message_tts_voice = {
-        type = "select",
-        width = WeakAuras.doubleWidth,
-        name = L["Voice"],
+      start_message_tts_space = {
+        type = "execute",
+        width = WeakAuras.normalWidth,
+        name = "",
+        order = 3.19,
+        image = function() return "", 0, 0 end,
+        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.start.message_type ~= "TTS" end,
+      },
+      start_message_tts_settings = {
+        type = "execute",
+        width = WeakAuras.normalWidth,
+        func = function()
+          if AwesomeCVar and AwesomeCVar.ToggleFrame then
+            AwesomeCVar:ToggleFrame("Text to Speech")
+          end 
+        end,
+        desc = IsAddOnLoaded("AwesomeCVar") and L["Open the Voice Chat settings to configure the TTS."]
+                or L["Install AwesomeCVar to open the Voice Chat settings."],
+        name = L["Voice Settings"],
         order = 3.2,
         disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.start.do_message end,
         hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.start.message_type ~= "TTS" end,
-        values = OptionsPrivate.Private.tts_voices,
-        desc = L["Available Voices are system specific"]
       },
       start_message = {
         type = "input",
@@ -723,15 +736,28 @@ function OptionsPrivate.GetActionOptions(data)
           return data.actions.finish.message_type ~= "WHISPER"
         end
       },
-      finish_message_tts_voice = {
-        type = "select",
-        width = WeakAuras.doubleWidth,
-        name = L["Voice"],
+      finish_message_tts_space = {
+        type = "execute",
+        width = WeakAuras.normalWidth,
+        name = "",
+        order = 23.19,
+        image = function() return "", 0, 0 end,
+        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.finish.message_type ~= "TTS" end,
+      },
+      finish_message_tts_settings = {
+        type = "execute",
+        width = WeakAuras.normalWidth,
+        func = function()
+          if AwesomeCVar and AwesomeCVar.ToggleFrame then
+            AwesomeCVar:ToggleFrame("Text to Speech")
+          end
+        end,
+        desc = IsAddOnLoaded("AwesomeCVar") and L["Open the Voice Chat settings to configure the TTS."]
+                or L["Install AwesomeCVar to open the Voice Chat settings."],
+        name = L["Voice Settings"],
         order = 23.2,
         disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.finish.do_message end,
         hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.finish.message_type ~= "TTS" end,
-        values = OptionsPrivate.Private.tts_voices,
-        desc = L["Available Voices are system specific"]
       },
       finish_message = {
         type = "input",

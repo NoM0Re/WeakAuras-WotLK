@@ -2854,25 +2854,8 @@ Private.send_chat_message_types = {
   PRINT = L["Chat Frame"],
   ERROR = L["Error Frame"]
 }
-
-Private.tts_voices = {}
-
 if WeakAuras.IsAwesomeEnabled() == 2 then
-
   Private.send_chat_message_types.TTS = L["Text-to-speech"]
-
-  local function updateTts()
-    wipe(Private.tts_voices)
-    for i, voiceInfo in pairs(C_VoiceChat.GetTtsVoices()) do
-      Private.tts_voices[voiceInfo.voiceID] = voiceInfo.name
-    end
-  end
-
-  updateTts()
-
-  local TtsUpdateFrame = CreateFrame("FRAME")
-  TtsUpdateFrame:RegisterEvent("VOICE_CHAT_TTS_VOICES_UPDATE")
-  TtsUpdateFrame:SetScript("OnEvent", updateTts)
 end
 
 Private.group_aura_name_info_types = {

@@ -1018,15 +1018,17 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
 
     if WeakAuras.IsAwesomeEnabled() == 2 then
       args["condition" .. i .. "value" .. j .. "message voice"] = {
-        type = "select",
-        width = WeakAuras.doubleWidth,
-        name = blueIfNoValue2(data, conditions[i].changes[j], "value", "message_voice", L["Voice"], L["Voice"]),
-        desc = (descIfNoValue2(data, conditions[i].changes[j], "value", "message_voice", propertyType, OptionsPrivate.Private.tts_voices) or "") .. "\n" .. L["Available Voices are system specific"],
-        values = OptionsPrivate.Private.tts_voices,
+        type = "execute",
+        name = L["Voice Settings"],
         order = order,
-        get = function()
-          return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.message_voice;
+        width = WeakAuras.normalWidth,
+        func = function()
+          if AwesomeCVar and AwesomeCVar.ToggleFrame then
+            AwesomeCVar:ToggleFrame("Text to Speech")
+          end
         end,
+        desc = IsAddOnLoaded("AwesomeCVar") and L["Open the Voice Chat settings to configure the TTS."]
+                or L["Install AwesomeCVar to open the Voice Chat settings."],
         set = setValueComplex("message_voice"),
         hidden = function()
           return not anyMessageType("TTS");

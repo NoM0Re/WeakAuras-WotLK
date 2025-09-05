@@ -3260,7 +3260,7 @@ function Private.ReleaseClone(id, cloneId, regionType)
   end
 end
 
-function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters, voice)
+function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters)
   local useHiddenStates = when == "finish"
   if (message:find('%%')) then
     message = Private.ReplacePlaceHolders(message, region, customFunc, useHiddenStates, formatters);
@@ -3269,11 +3269,12 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
     DEFAULT_CHAT_FRAME:AddMessage(message, r or 1, g or 1, b or 1);
   elseif message_type == "TTS" then
     if WeakAuras.IsAwesomeEnabled() == 2 then
-      local validVoice = voice and Private.tts_voices[voice]
       if not Private.SquelchingActions() then
         pcall(function()
+        local voice = C_TTSSettings and C_TTSSettings.GetSpeechVoiceID()
+        if not voice then return end
           C_VoiceChat.SpeakText(
-            validVoice and voice or next(Private.tts_voices) or 0,
+            voice,
             message,
             1,
             C_TTSSettings and C_TTSSettings.GetSpeechRate() or 0,
@@ -3557,7 +3558,7 @@ function Private.PerformActions(data, when, region)
 
   if(actions.do_message and actions.message_type and actions.message) then
     local customFunc = Private.customActionsFunctions[data.id][when .. "_message"];
-    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters, actions.message_tts_voice);
+    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters);
   end
 
   if (actions.stop_sound) then
