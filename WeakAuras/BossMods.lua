@@ -5,6 +5,7 @@ local Private = select(2, ...)
 local timer = WeakAuras.timer;
 local L = WeakAuras.L
 
+
 local function TestForMultiSelect(trigger, name, checkValue)
   if(trigger["use_"..name] == false) then -- multi selection
     if trigger[name] and trigger[name].multi then
@@ -25,6 +26,7 @@ local function TestForMultiSelect(trigger, name, checkValue)
     return "nil"
   end
 end
+
 
 Private.ExecEnv.BossMods = {}
 
@@ -843,7 +845,6 @@ Private.ExecEnv.BossMods.BigWigs = {
     if cooldown ~= nil and v.isCooldown ~= cooldown then
       return false
     end
-
     if isPullTimer or isBreakTimer or isTimer then
       if (isPullTimer and v.timerType == "pull")
       or (isBreakTimer and v.timerType == "break")
@@ -854,7 +855,6 @@ Private.ExecEnv.BossMods.BigWigs = {
         return false
       end
     end
-
     return true
   end,
 
@@ -1783,7 +1783,7 @@ Private.event_prototypes["Boss Mod Timer"] = {
               end
             end
           end
-          local bar = Private.ExecEnv.BossMods.Generic:GetTimerGeneric(triggerText, triggerTextOperator, triggerSpellId, extendTimer, counter, isBarEnabled)
+          local bar = Private.ExecEnv.BossMods.Generic:GetTimerGeneric(triggerText, triggerTextOperator, triggerSpellId, extendTimer, counter, isBarEnabled, isPullTimer, isBreakTimer, isTimer)
           if bar then
             if extendTimer == 0
               or not (state and state.show)
@@ -1820,6 +1820,7 @@ Private.event_prototypes["Boss Mod Timer"] = {
       trigger.use_isBarEnabled == nil and "nil" or trigger.use_isBarEnabled and "true" or "false",
       trigger.remaining_operator or "<"
     )
+    
   end,
   statesParameter = "full",
   args = {
