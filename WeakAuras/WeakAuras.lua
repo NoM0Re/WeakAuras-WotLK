@@ -1421,6 +1421,9 @@ local function GetInstanceTypeAndSize()
   if inInstance or instanceType ~= "none" then
     local ZoneMapID = GetCurrentMapAreaID()
     size = Type
+    if Type == "arena" or Type == "pvp" then
+      difficultyIndex = 0
+    end
     if Type == "raid" then
       if maxPlayers == 10 then
         size = "ten"
