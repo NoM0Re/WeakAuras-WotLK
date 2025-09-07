@@ -1421,6 +1421,7 @@ local function GetInstanceTypeAndSize()
   if inInstance or instanceType ~= "none" then
     local ZoneMapID = GetCurrentMapAreaID()
     size = Type
+    -- WORKAROUND Tol'Viron arena returning a difficulty index of 1
     if Type == "arena" or Type == "pvp" then
       difficultyIndex = 0
     end
@@ -4754,7 +4755,10 @@ end
 
 local function ReplaceValuePlaceHolders(textStr, region, customFunc, state, formatter, trigger)
   local value;
-  if string.sub(textStr, 1, 1) == "c" then
+
+  local customIndexSubStr = textStr:match("^c(%d*)$")
+
+  if customIndexSubStr then
     local custom
     if customFunc then
       custom = Private.RunCustomTextFunc(region, customFunc)
@@ -4762,7 +4766,7 @@ local function ReplaceValuePlaceHolders(textStr, region, customFunc, state, form
       custom = region.values.custom
     end
 
-    local index = tonumber(textStr:match("^c(%d+)$") or 1)
+    local index = tonumber(customIndexSubStr) or 1
 
     if custom then
       value = custom[index]
@@ -4961,8 +4965,8 @@ function Private.ReplacePlaceHolders(textStr, region, customFunc, useHiddenState
     return textStr;
   end
 
-  if (endPos == 2) then
-    if string.byte(textStr, 1) == 37 then
+  if (endPos == 2) then -- Two byte string, quickly check for all cases
+    if string.byte(textStr, 1) == 37 then -- "%"
       local symbol = string.sub(textStr, 2)
       if symbol == "%" then
         return "%" -- Double % input
