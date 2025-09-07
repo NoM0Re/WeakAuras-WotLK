@@ -351,6 +351,7 @@ local function GetCustomTriggerOptions(data, triggernum)
     inverse = "string",
     paused = "string",
     remaining = "string",
+    formatter = "string"
   }
 
   local function validateCustomVariables(variables)
