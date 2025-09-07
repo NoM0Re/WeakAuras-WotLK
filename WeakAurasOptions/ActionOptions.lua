@@ -222,7 +222,7 @@ function OptionsPrivate.GetActionOptions(data)
         func = function()
           if AwesomeCVar and AwesomeCVar.ToggleFrame then
             AwesomeCVar:ToggleFrame("Text to Speech")
-          end 
+          end
         end,
         desc = IsAddOnLoaded("AwesomeCVar") and L["Open the Voice Chat settings to configure the TTS."]
                 or L["Install AwesomeCVar to open the Voice Chat settings."],

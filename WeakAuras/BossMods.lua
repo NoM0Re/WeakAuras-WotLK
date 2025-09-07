@@ -1820,7 +1820,7 @@ Private.event_prototypes["Boss Mod Timer"] = {
       trigger.use_isBarEnabled == nil and "nil" or trigger.use_isBarEnabled and "true" or "false",
       trigger.remaining_operator or "<"
     )
-    
+
   end,
   statesParameter = "full",
   args = {

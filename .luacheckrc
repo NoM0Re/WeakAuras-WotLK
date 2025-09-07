@@ -19572,5 +19572,5 @@ globals = {
 	"GetNumGlyphSockets", "GetGlyphLink", "GetGlyphSocketInfo", "APIDocumentationMixin", "BaseAPIMixin",
     "EventsAPIMixin", "FieldsAPIMixin", "FunctionsAPIMixin", "SystemsAPIMixin", "TablesAPIMixin",
 	"CopyToClipboard", "ChatFrame_OpenChat", "ChatTypeInfo", "EditBox_ClearFocus", "EditBox_ClearHighlight",
-	"EditBox_HighlightText"
+	"EditBox_HighlightText", "AwesomeCVar"
 }
