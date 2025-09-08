@@ -1,6 +1,6 @@
-if ObjectPoolMixin then
-	return
-end
+--if ObjectPoolMixin then
+--	return
+--end
 
 local assert = assert
 local ipairs = ipairs
