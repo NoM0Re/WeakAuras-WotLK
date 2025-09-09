@@ -520,7 +520,6 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
   if type(inData) == 'string' then
     -- encoded data
     local received = StringToTable(inData, true)
-    DevTools_Dump(StringToTable)
     if type(received) == 'string' then
       -- this is probably an error message from LibDeflate. Display it.
       ShowTooltip{
