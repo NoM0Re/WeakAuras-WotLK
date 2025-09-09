@@ -203,7 +203,8 @@ local LibDeflate = LibStub:GetLibrary("LibDeflate")
 local Serializer = LibStub:GetLibrary("AceSerializer-3.0")
 local LibSerialize = LibStub("LibSerialize")
 local Comm = LibStub:GetLibrary("AceComm-3.0")
-local configForDeflate = {level = 9} -- the biggest bottleneck by far is in transmission and printing; so use maximal compression
+-- the biggest bottleneck by far is in transmission and printing; so use maximal compression
+local configForDeflate = {level = 9}
 local configForLS = {
   errorOnUnserializableType =  false
 }
@@ -213,7 +214,7 @@ local receivedData;
 
 hooksecurefunc("SetItemRef", function(link, text)
   if(link == "BNplayer::weakauras") then
-    local _, _, characterName, displayName = text:find("|HBNplayer::weakauras|h|cFF8800FF%[([^%s]+) |r|cFF8800FF%- ([^%]]+)%]|h");
+    local _, _, characterName, displayName = text:find("|HBNplayer::weakauras|h|cFF8800FF%[([^%s]+) |r|cFF8800FF%- (.*)%]|h");
     if(characterName and displayName) then
       characterName = characterName:gsub("|c[Ff][Ff]......", ""):gsub("|r", "");
       displayName = displayName:gsub("|c[Ff][Ff]......", ""):gsub("|r", "");
@@ -226,8 +227,7 @@ hooksecurefunc("SetItemRef", function(link, text)
         characterName = characterName:gsub("%.", "")
         ShowTooltip({
           {2, "WeakAuras", displayName, 0.5, 0, 1, 1, 1, 1},
-          {1, L["Requesting display information from %s ..."]:format(characterName), 1, 0.82, 0},
-          {1, L["Note, that cross realm transmission is possible if you are on the same group"], 1, 0.82, 0}
+          {1, L["Requesting display information from %s ..."]:format(characterName), 1, 0.82, 0}
         });
         tooltipLoading = true;
         receivedData = false;
@@ -236,8 +236,7 @@ hooksecurefunc("SetItemRef", function(link, text)
           if (tooltipLoading and not receivedData and ItemRefTooltip:IsVisible()) then
             ShowTooltip({
               {2, "WeakAuras", displayName, 0.5, 0, 1, 1, 1, 1},
-              {1, L["Error not receiving display information from %s"]:format(characterName), 1, 0, 0},
-              {1, L["Note, that cross realm transmission is possible if you are on the same group"], 1, 0.82, 0}
+              {1, L["Error not receiving display information from %s"]:format(characterName), 1, 0, 0}
             })
           end
         end, 5);
@@ -521,6 +520,7 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
   if type(inData) == 'string' then
     -- encoded data
     local received = StringToTable(inData, true)
+    DevTools_Dump(StringToTable)
     if type(received) == 'string' then
       -- this is probably an error message from LibDeflate. Display it.
       ShowTooltip{
@@ -542,7 +542,6 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     return nil, "Invalid import data."
   end
 
-  --[[
   local highestVersion = data.internalVersion or 0
   if children then
     for _, child in ipairs(children) do
@@ -554,7 +553,6 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     tooltipLoading = nil;
     return ImportNow(data, children, target, linkedAuras, nil, callbackFunc)
   end
-  ]]
 
   if version < 2000 then
     if children then
@@ -589,31 +587,17 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
   return ImportNow(data, children, target, linkedAuras, nil, callbackFunc)
 end
 
-local function crossRealmSendCommMessage(prefix, text, target, queueName, callbackFn, callbackArg)
-  local chattype = "WHISPER"
-  --[[if target and not UnitIsSameServer(target) then
-  -- WORKAROUND https://github.com/Stanzilla/WoWUIBugs/issues/535, and use RAID/PARTY comms for connected realms
-  if target and (UnitRealmRelationship(target) or 0) ~= 1 then
-    if UnitInRaid(target) then
-      chattype = "RAID"
-      text = ("§§%s:%s"):format(target, text)
-    elseif UnitInParty(target) then
-      chattype = "PARTY"
-      text = ("§§%s:%s"):format(target, text)
-    end
-  end]]
-  Comm:SendCommMessage(prefix, text, chattype, target, queueName, callbackFn, callbackArg)
-end
-
 local safeSenders = {}
 function RequestDisplay(characterName, displayName)
   safeSenders[characterName] = true
+  local version = nil
   local transmit = {
     m = "dR",
-    d = displayName
+    d = displayName,
+    v = version
   };
   local transmitString = TableToString(transmit);
-  crossRealmSendCommMessage("WeakAuras", transmitString, characterName);
+  Comm:SendCommMessage("WeakAuras", transmitString, "WHISPER", characterName);
 end
 
 function TransmitError(errorMsg, characterName)
@@ -621,39 +605,35 @@ function TransmitError(errorMsg, characterName)
     m = "dE",
     eM = errorMsg
   };
-  crossRealmSendCommMessage("WeakAuras", TableToString(transmit), characterName);
+  Comm:SendCommMessage("WeakAuras", TableToString(transmit), "WHISPER", characterName);
 end
 
-function TransmitDisplay(id, characterName)
+function TransmitDisplay(id, characterName, version)
   local encoded = Private.DisplayToString(id);
   if(encoded ~= "") then
-    crossRealmSendCommMessage("WeakAuras", encoded, characterName, "BULK", function(displayName, done, total)
-      crossRealmSendCommMessage("WeakAurasProg", done.." "..total.." "..displayName, characterName, "ALERT");
+    Comm:SendCommMessage("WeakAuras", encoded, "WHISPER", characterName, "BULK", function(displayName, done, total)
+      Comm:SendCommMessage("WeakAurasProg", done.." "..total.." "..displayName, "WHISPER", characterName, "ALERT");
     end, id);
   else
     TransmitError("dne", characterName);
   end
 end
 
-Comm:RegisterComm("WeakAurasProg", function(prefix, message, distribution, sender)
-  if distribution == "PARTY" or distribution == "RAID" then
-    local dest, msg = string.match(message, "^§§(.+):(.+)$")
-    if dest then
-      local dName, dServer = string.match(dest, "^(.*)-(.*)$")
-      local myName, myServer = UnitName("player")
-      if myName == dName and myServer == dServer then
-        message = msg
-      else
-        return
-      end
-    end
-  end
+local function HandleProgressComm(prefix, message, distribution, sender)
   if tooltipLoading and ItemRefTooltip:IsVisible() and safeSenders[sender] then
     receivedData = true;
     local done, total, displayName = strsplit(" ", message, 3)
     done = tonumber(done)
     total = tonumber(total)
-    if(done and total and total >= done) then
+    if done and total then
+      if done == -1 then
+        ShowTooltip({
+          {2, "WeakAuras", displayName, 0.5, 0, 1, 1, 1, 1},
+          {1, L["Receiving display information"]:format(sender), 1, 0.82, 0},
+          {2, L["No Progress Information available."]},
+          {2, L["Receiving %s Bytes"]:format(total)}
+        })
+      elseif total >= done then
       local red = min(255, (1 - done / total) * 511)
       local green = min(255, (done / total) * 511)
       ShowTooltip({
@@ -662,23 +642,11 @@ Comm:RegisterComm("WeakAurasProg", function(prefix, message, distribution, sende
         {2, " ", ("|cFF%2x%2x00"):format(red, green)..done.."|cFF00FF00/"..total}
       })
     end
-  end
-end)
-
-Comm:RegisterComm("WeakAuras", function(prefix, message, distribution, sender)
-  if distribution == "PARTY" or distribution == "RAID" then
-    local dest, msg = string.match(message, "^§§([^:]+):(.+)$")
-    if dest then
-      local dName, dServer = string.match(dest, "^(.*)-(.*)$")
-      local myName, myServer = UnitName("player")
-      if myName == dName and myServer == dServer then
-        message = msg
-      else
-        return
       end
     end
   end
 
+local function HandleComm(prefix, message, distribution, sender)
   local linkValidityDuration = 60 * 5
   local safeSender = safeSenders[sender]
   local validLink = false
@@ -719,7 +687,7 @@ Comm:RegisterComm("WeakAuras", function(prefix, message, distribution, sender)
       ImportNow(data, children, nil, nil, sender)
     elseif(received.m == "dR") then
       if(Private.linked and Private.linked[received.d] and Private.linked[received.d] > GetTime() - linkValidityDuration) then
-        TransmitDisplay(received.d, sender);
+        TransmitDisplay(received.d, sender, received.v);
       end
     elseif(received.m == "dE") then
       tooltipLoading = nil;
@@ -741,4 +709,9 @@ Comm:RegisterComm("WeakAuras", function(prefix, message, distribution, sender)
       {1, L["Transmission error"], 1, 0, 0}
     });
   end
-end);
+end
+
+Comm:RegisterComm("WeakAurasProg", HandleProgressComm)
+Comm:RegisterComm("WeakAuras", HandleComm)
+
+
