@@ -155,8 +155,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Anchor Mode"
 	L["Anchor Point"] = "Punto di ancoraggio"
 	L["Anchored To"] = "Ancorato a"
-	L["And "] = "E"
 	L["and"] = "e"
+	L["And "] = "E"
 	L["and %s"] = "e %s"
 	L["and aligned left"] = "e allineato a sinistra"
 	L["and aligned right"] = "e allineato a destra"
@@ -194,7 +194,6 @@ Off Screen]=] ] = "L'aura è fuori dallo schermo"
 	L["Aura: '%s'"] = "Aura: '%s'"
 	L["Auto-Clone (Show All Matches)"] = "Auto-Clona (Mostra tutte le corrispondenze)"
 	L["Automatic length"] = "Lunghezza automatica"
-	L["Available Voices are system specific"] = "Le voci disponibili sono specifiche del sistema"
 	L["Backdrop Color"] = "Colore Fondale"
 	L["Backdrop in Front"] = "Fondale d'avanti"
 	L["Backdrop Style"] = "Stile Fondale"
@@ -1287,6 +1286,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Stop Sound"] = "Stop Sound"
 	--[[Translation missing --]]
+	L["Stretched by Foreground"] = "Stretched by Foreground"
+	--[[Translation missing --]]
 	L["Sub Elements"] = "Sub Elements"
 	--[[Translation missing --]]
 	L["Sub Option %i"] = "Sub Option %i"
@@ -1473,9 +1474,9 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["Use SetTransform"] = "Use SetTransform"
 	--[[Translation missing --]]
-	L["Used in Auras:"] = "Used in Auras:"
-	--[[Translation missing --]]
 	L["Used in auras:"] = "Used in auras:"
+	--[[Translation missing --]]
+	L["Used in Auras:"] = "Used in Auras:"
 	--[[Translation missing --]]
 	L["Uses Texture Coordinates to rotate the texture."] = "Uses Texture Coordinates to rotate the texture."
 	--[[Translation missing --]]
@@ -1505,7 +1506,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["View custom code"] = "View custom code"
 	--[[Translation missing --]]
-	L["Voice"] = "Voice"
+	L["Voice Settings"] = "Voice Settings"
 	--[[Translation missing --]]
 	L["We thank"] = "We thank"
 	--[[Translation missing --]]

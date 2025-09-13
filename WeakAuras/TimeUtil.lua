@@ -11,7 +11,7 @@ local time, format, floor = time, format, floor
 -- WoW APIs
 local GetLocale = GetLocale
 
-local TIME_UTIL_WHITE_SPACE_STRIPPABLE = true;
+local TIME_UTIL_WHITE_SPACE_STRIPPABLE = not (GetLocale() == "deDE" or GetLocale() == "ruRU");
 local SECONDS_PER_MIN = 60;
 local SECONDS_PER_HOUR = 60 * SECONDS_PER_MIN;
 local SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
@@ -39,6 +39,8 @@ SecondsFormatterConstants =
   DontConvertToLower = false,
   RoundUpLastUnit = true,
   DontRoundUpLastUnit = false,
+  RoundUpIntervals = true,
+  DontRoundUpIntervals = false,
 }
 
 SecondsFormatter.Abbreviation =
@@ -72,11 +74,13 @@ SecondsFormatterMixin = {}
 -- approximationSeconds: threshold for representing the seconds as an approximation (ex. "< 2 hours").
 -- roundUpLastUnit: determines if the last unit in the output format string is ceiled (floored by default).
 -- convertToLower: converts the format string to lowercase.
-function SecondsFormatterMixin:Init(approximationSeconds, defaultAbbreviation, roundUpLastUnit, convertToLower)
+-- roundUpIntervals: determines if units can be promoted to a higher interval after (ex. 60m -> 1h).
+function SecondsFormatterMixin:Init(approximationSeconds, defaultAbbreviation, roundUpLastUnit, convertToLower, roundUpIntervals)
   self:SetApproximationSeconds(approximationSeconds or 0);
   self:SetMinInterval(SecondsFormatter.Interval.Seconds);
   self:SetDefaultAbbreviation(defaultAbbreviation or SecondsFormatter.Abbreviation.None);
-  self:SetCanRoundUpLastUnit(roundUpLastUnit or false);
+  self:SetCanRoundUpLastUnit(roundUpLastUnit or SecondsFormatterConstants.DontRoundUpLastUnit);
+  self:SetCanRoundUpIntervals(roundUpIntervals or SecondsFormatterConstants.DontRoundUpIntervals);
   self:SetDesiredUnitCount(2);
   self:SetStripIntervalWhitespace(false);
   self:SetConvertToLower(convertToLower or false);
@@ -112,7 +116,7 @@ function SecondsFormatterMixin:CanApproximate(seconds)
 end
 
 function SecondsFormatterMixin:SetDefaultAbbreviation(defaultAbbreviation)
-	self.defaultAbbreviation = defaultAbbreviation;
+  self.defaultAbbreviation = defaultAbbreviation;
 end
 
 function SecondsFormatterMixin:GetDefaultAbbreviation()
@@ -133,6 +137,14 @@ end
 
 function SecondsFormatterMixin:CanRoundUpLastUnit()
   return self.roundUpLastUnit;
+end
+
+function SecondsFormatterMixin:SetCanRoundUpIntervals(roundUpIntervals)
+  self.roundUpIntervals = roundUpIntervals;
+end
+
+function SecondsFormatterMixin:CanRoundUpIntervals()
+  return self.roundUpIntervals;
 end
 
 function SecondsFormatterMixin:SetDesiredUnitCount(unitCount)
@@ -209,32 +221,62 @@ function SecondsFormatterMixin:Format(seconds, abbreviation)
   local desiredCount = self:GetDesiredUnitCount(seconds);
   local convertToLower = self.convertToLower;
 
+  local intervalUnits = {};
+  for interval, value in pairs(SecondsFormatter.Interval) do
+    intervalUnits[value] = 0;
+  end
+
   local currentInterval = maxInterval;
   while ((appendedCount < desiredCount) and (currentInterval >= minInterval)) do
       local intervalDescription = self:GetIntervalDescription(currentInterval);
       local intervalSeconds = intervalDescription.seconds;
       if (seconds >= intervalSeconds) then
           appendedCount = appendedCount + 1;
-          if (output ~= "") then
-              output = output..L["TIME_UNIT_DELIMITER"];
-          end
 
-          local formatString = self:GetFormatString(currentInterval, abbreviation, convertToLower);
           local quotient = seconds / intervalSeconds;
           if (quotient > 0) then
-              if (self:CanRoundUpLastUnit() and ((minInterval == currentInterval) or (appendedCount == desiredCount))) then
-                  output = output..formatString:format(math.ceil(quotient));
-              else
-                  output = output..formatString:format(math.floor(quotient));
+            if (self:CanRoundUpLastUnit() and ((minInterval == currentInterval) or (appendedCount == desiredCount))) then
+              intervalUnits[currentInterval] = math.ceil(quotient);
+            else
+              intervalUnits[currentInterval] = math.floor(quotient);
               end
           else
-              break;
+            break;
           end
 
           seconds = math.fmod(seconds, intervalSeconds);
       end
 
       currentInterval = currentInterval - 1;
+  end
+
+  if self:CanRoundUpIntervals() then
+    -- Intervals are promoted to a higher interval if possible (60m -> 1h) so that a value isn't expressed
+    -- as 1h 60m as a result of individual interval round-up. This promotion can only happen within the
+    -- min interval, max interval band so that we don't promote to an interval we don't intend to display.
+    for interval, value in ipairs(intervalUnits) do
+      local intervalDescription = self:GetIntervalDescription(interval);
+      local intervalSeconds = intervalDescription.seconds;
+
+      if value == intervalSeconds then
+        local nextInterval = interval + 1;
+        if nextInterval <= maxInterval then
+          intervalUnits[nextInterval] = intervalUnits[nextInterval] + 1;
+          intervalUnits[interval] = 0;
+        end
+      end
+    end
+  end
+
+  for interval, value in ipairs_reverse(intervalUnits) do
+    if value > 0 then
+      if (output ~= "") then
+        output = output..TIME_UNIT_DELIMITER;
+      end
+
+      local formatString = self:GetFormatString(interval, abbreviation, convertToLower);
+      output = output..formatString:format(value);
+    end
   end
 
   -- Return the zero format if an acceptable representation couldn't be formed.
@@ -430,38 +472,69 @@ function BreakUpLargeNumbers(value)
   return retString;
 end
 
-function AbbreviateLargeNumbers(value)
-local strLen = strlen(value);
-local retString = value;
-if ( strLen > 8 ) then
-  retString = string.sub(value, 1, -7)..L["SECOND_NUMBER_CAP"];
-elseif ( strLen > 5 ) then
-  retString = string.sub(value, 1, -4)..L["FIRST_NUMBER_CAP"];
-elseif (strLen > 3 ) then
-  retString = BreakUpLargeNumbers(value);
-end
-return retString;
+if GetLocale() ~= "zhCN" or GetLocale() ~= "zhTW" or GetLocale() ~= "koKR" then -- non Asian locales use different number abbreviations
+  function AbbreviateLargeNumbers(value)
+    local strLen = strlen(value);
+    local retString = value;
+    if ( strLen > 8 ) then
+      retString = string.sub(value, 1, -7)..L["SECOND_NUMBER_CAP"];
+    elseif ( strLen > 5 ) then
+      retString = string.sub(value, 1, -4)..L["FIRST_NUMBER_CAP"];
+    elseif (strLen > 3 ) then
+      retString = BreakUpLargeNumbers(value);
+    end
+    return retString;
+  end
+else -- Asian locales use different number abbreviations
+  function AbbreviateLargeNumbers(value)
+    local strLen = strlen(value);
+    local retString = value;
+    if ( strLen >= 11 ) then
+      retString = string.sub(value, 1, -8)..L["SECOND_NUMBER_CAP"];
+    elseif ( strLen >= 9 ) then
+      retString = string.sub(value, 1, -9).."."..string.sub(value, -8, -7)..L["SECOND_NUMBER_CAP"];
+    elseif ( strLen >= 7 ) then
+      retString = string.sub(value, 1, -5)..L["FIRST_NUMBER_CAP"];
+    elseif (strLen > 3 ) then
+      retString = BreakUpLargeNumbers(value);
+    end
+    return retString;
+  end
 end
 
-NUMBER_ABBREVIATION_DATA = {
-  -- Order these from largest to smallest
-  -- (significandDivisor and fractionDivisor should multiply to be equal to breakpoint)
-  { breakpoint = 10000000000000,	abbreviation = L["FOURTH_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000000000,	fractionDivisor = 1 },
-  { breakpoint = 1000000000000,	abbreviation = L["FOURTH_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000000000,	fractionDivisor = 10 },
-  { breakpoint = 10000000000,		abbreviation = L["THIRD_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000000,	fractionDivisor = 1 },
-  { breakpoint = 1000000000,		abbreviation = L["THIRD_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000000,	fractionDivisor = 10 },
-  { breakpoint = 10000000,		abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000,	fractionDivisor = 1 },
-  { breakpoint = 1000000,			abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000,		fractionDivisor = 10 },
-  { breakpoint = 10000,			abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000,		fractionDivisor = 1 },
-  { breakpoint = 1000,			abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100,		fractionDivisor = 10 },
-}
+if GetLocale() ~= "zhCN" or GetLocale() ~= "zhTW" or GetLocale() ~= "koKR" then -- Asian locales use different number abbreviations
+  NUMBER_ABBREVIATION_DATA = {
+    -- Order these from largest to smallest
+    -- (significandDivisor and fractionDivisor should multiply to be equal to breakpoint)
+    { breakpoint = 10000000000000,	abbreviation = L["FOURTH_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000000000,	fractionDivisor = 1 },
+    { breakpoint = 1000000000000,	abbreviation = L["FOURTH_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000000000,	fractionDivisor = 10 },
+    { breakpoint = 10000000000,		abbreviation = L["THIRD_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000000,	fractionDivisor = 1 },
+    { breakpoint = 1000000000,		abbreviation = L["THIRD_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000000,	fractionDivisor = 10 },
+    { breakpoint = 10000000,		abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000000,	fractionDivisor = 1 },
+    { breakpoint = 1000000,			abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100000,		fractionDivisor = 10 },
+    { breakpoint = 10000,			abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],		significandDivisor = 1000,		fractionDivisor = 1 },
+    { breakpoint = 1000,			abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],		significandDivisor = 100,		fractionDivisor = 10 },
+  };
+else
+  NUMBER_ABBREVIATION_DATA = {
+    -- Order these from largest to smallest.
+    { breakpoint = 1000000000,	abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],	significandDivisor = 100000000,	fractionDivisor = 1 },
+    { breakpoint = 100000000,	abbreviation = L["SECOND_NUMBER_CAP_NO_SPACE"],	significandDivisor = 10000000,	fractionDivisor = 10 },
+    { breakpoint = 100000,		abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],	significandDivisor = 10000,		fractionDivisor = 1 },
+    { breakpoint = 10000,		abbreviation = L["FIRST_NUMBER_CAP_NO_SPACE"],	significandDivisor = 1000,		fractionDivisor = 10 },
+  };
+end
+
+function GetLocalizedNumberAbbreviationData()
+  return NUMBER_ABBREVIATION_DATA;
+end
 
 function AbbreviateNumbers(value)
-  for i, data in ipairs(NUMBER_ABBREVIATION_DATA) do
-      if value >= data.breakpoint then
-          local finalValue = math.floor(value / data.significandDivisor) / data.fractionDivisor;
-          return finalValue .. data.abbreviation;
-      end
+  for i, data in ipairs(GetLocalizedNumberAbbreviationData()) do
+    if value >= data.breakpoint then
+      local finalValue = math.floor(value / data.significandDivisor) / data.fractionDivisor;
+      return finalValue .. data.abbreviation;
+    end
   end
   return tostring(value);
 end

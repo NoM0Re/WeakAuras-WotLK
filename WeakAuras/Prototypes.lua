@@ -3595,10 +3595,16 @@ Private.event_prototypes = {
         conditionType = "number"
       },
       {
+        name = "overEnergize",
+        display = L["Over Energize"],
+        type = "number",
+        init = "arg",
+        store = true,
+        conditionType = "number",
         enable = function(trigger)
           return trigger.subeventSuffix and (trigger.subeventSuffix == "_ENERGIZE")
         end
-      }, -- unknown argument for _ENERGIZE ignored
+      },
       {
         name = "powerType",
         display = L["Power Type"],
@@ -3617,7 +3623,7 @@ Private.event_prototypes = {
         type = "number",
         init = "arg",
         enable = function(trigger)
-          return trigger.subeventSuffix and (trigger.subeventSuffix == "_ENERGIZE" or trigger.subeventSuffix == "_DRAIN" or trigger.subeventSuffix == "_LEECH")
+          return trigger.subeventSuffix and (trigger.subeventSuffix == "_DRAIN" or trigger.subeventSuffix == "_LEECH")
         end,
         store = true,
         conditionType = "number"
@@ -5513,11 +5519,17 @@ Private.event_prototypes = {
         store = true,
       },
       {
+        name = "inverse",
+        display = L["Inverse"],
+        type = "toggle",
+        test = "true",
+      },
+      {
         name = "clones",
         display = L["Clone per Match"],
         type = "toggle",
         test = "true",
-        enable = function(trigger) return not trigger.use_totemType end,
+        enable = function(trigger) return not (trigger.use_totemType or trigger.use_inverse) end,
       },
       {
         name = "remaining",
@@ -5525,13 +5537,6 @@ Private.event_prototypes = {
         type = "number",
         enable = function(trigger) return not(trigger.use_inverse) end
       },
-      {
-        name = "inverse",
-        display = L["Inverse"],
-        type = "toggle",
-        test = "true",
-        enable = function(trigger) return (trigger.use_totemName or trigger.use_totemNamePattern) and not trigger.use_clones end
-      }
     },
     automaticrequired = true
   },

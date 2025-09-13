@@ -263,6 +263,8 @@ L["Bar enabled in DBM settings"] = "Bar enabled in DBM settings"
 --[[Translation missing --]]
 L["Bar Texture"] = "Bar Texture"
 --[[Translation missing --]]
+L["Bar Type"] = "Bar Type"
+--[[Translation missing --]]
 L["Baron Geddon"] = "Baron Geddon"
 --[[Translation missing --]]
 L["Battle for Azeroth"] = "Battle for Azeroth"
@@ -328,6 +330,8 @@ L["Bottom Right"] = "Unten Rechts"
 L["Bottom to Top"] = "Unten -> Oben"
 L["Bounce"] = "Hüpfen"
 L["Bounce with Decay"] = "Abklingendes Hüpfen"
+--[[Translation missing --]]
+L["Break"] = "Break"
 --[[Translation missing --]]
 L["BreakUpLargeNumbers (Blizzard)"] = "BreakUpLargeNumbers (Blizzard)"
 --[[Translation missing --]]
@@ -744,7 +748,7 @@ L["Error Frame"] = "Fehlerfenster"
 --[[Translation missing --]]
 L["ERROR in '%s' unknown or incompatible sub element type '%s'"] = "ERROR in '%s' unknown or incompatible sub element type '%s'"
 --[[Translation missing --]]
-L["Error in aura '%s'"] = "Error in aura '%s'"
+L["Error in Aura '%s'"] = "Error in Aura '%s'"
 --[[Translation missing --]]
 L["Error not receiving display information from %s"] = "Error not receiving display information from %s"
 --[[Translation missing --]]
@@ -1049,9 +1053,9 @@ L["Install the addons BugSack and BugGrabber for detailed error logs."] = "Insta
 L["Instance"] = "Instanz"
 L["Instance Difficulty"] = "Instanzschwierigkeit"
 --[[Translation missing --]]
-L["Instance Id"] = "Instance Id"
---[[Translation missing --]]
 L["Instance ID"] = "Instance ID"
+--[[Translation missing --]]
+L["Instance Id"] = "Instance Id"
 --[[Translation missing --]]
 L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
@@ -1199,7 +1203,7 @@ L["Lowest Spell Id"] = "Lowest Spell Id"
 --[[Translation missing --]]
 L["Lua error"] = "Lua error"
 --[[Translation missing --]]
-L["Lua error in aura '%s': %s"] = "Lua error in aura '%s': %s"
+L["Lua error in Aura '%s': %s"] = "Lua error in Aura '%s': %s"
 --[[Translation missing --]]
 L["Lucifron"] = "Lucifron"
 --[[Translation missing --]]
@@ -1501,6 +1505,8 @@ L["Other Events"] = "Other Events"
 --[[Translation missing --]]
 L["Ouro"] = "Ouro"
 L["Outline"] = "Kontur"
+--[[Translation missing --]]
+L["Over Energize"] = "Over Energize"
 L["Overhealing"] = "Überheilung"
 L["Overkill"] = "Overkill"
 --[[Translation missing --]]
@@ -1619,11 +1625,13 @@ L["Progress"] = "Progress"
 L["Progress Source"] = "Progress Source"
 L["Progress Total"] = "Totaler Fortschritt"
 L["Progress Value"] = "Fortschrittswert"
+--[[Translation missing --]]
+L["Pull"] = "Pull"
 L["Pulse"] = "Pulsieren"
 L["PvP Flagged"] = "PvP aktiv"
-L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["PvP Talent Selected"] = "PvP Talent Selected"
+L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -1803,6 +1811,8 @@ L[ [=[Secure frame detected. Find more information:
 https://github.com/WeakAuras/WeakAuras2/wiki/Protected-Frames]=] ] = [=[Secure frame detected. Find more information:
 https://github.com/WeakAuras/WeakAuras2/wiki/Protected-Frames]=]
 L["Select Frame"] = "Frame auswählen"
+--[[Translation missing --]]
+L["Select the type of timer to filter"] = "Select the type of timer to filter"
 --[[Translation missing --]]
 L["Selection Mode"] = "Selection Mode"
 --[[Translation missing --]]
@@ -2063,8 +2073,8 @@ L["Talent |cFFFF0000Not|r Known"] = "Talent |cFFFF0000Not|r Known"
 L["Talent |cFFFF0000Not|r Selected"] = "Talent |cFFFF0000Not|r Selected"
 --[[Translation missing --]]
 L["Talent Known"] = "Talent Known"
-L["Talent Selected"] = "Talent gewählt"
 L["Talent selected"] = "Gewähltes Talent"
+L["Talent Selected"] = "Talent gewählt"
 L["Talent Specialization"] = "Talentspezialisierung"
 L["Tanking And Highest"] = "Höchster und Aggro"
 L["Tanking But Not Highest"] = "Aggro aber nicht höchste"
@@ -2162,6 +2172,8 @@ L["Time since stack lost"] = "Time since stack lost"
 L["Timed"] = "Zeitgesteuert"
 --[[Translation missing --]]
 L["Timed Progress"] = "Timed Progress"
+--[[Translation missing --]]
+L["Timer"] = "Timer"
 --[[Translation missing --]]
 L["Timer Id"] = "Timer Id"
 L["Toggle"] = "Umschalten"

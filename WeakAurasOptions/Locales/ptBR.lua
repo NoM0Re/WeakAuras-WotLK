@@ -224,9 +224,9 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Anchor Mode"
 	L["Anchor Point"] = "Ponto da âncora"
 	L["Anchored To"] = "Ancorado a"
-	L["And "] = "E"
 	--[[Translation missing --]]
 	L["and"] = "and"
+	L["And "] = "E"
 	--[[Translation missing --]]
 	L["and %s"] = "and %s"
 	L["and aligned left"] = "e alinhado à esquerda"
@@ -275,8 +275,6 @@ Off Screen]=] ] = "Aura está fora da tela"
 	--[[Translation missing --]]
 	L["Auto-Clone (Show All Matches)"] = "Auto-Clone (Show All Matches)"
 	L["Automatic length"] = "Comprimento Automático"
-	--[[Translation missing --]]
-	L["Available Voices are system specific"] = "Available Voices are system specific"
 	--[[Translation missing --]]
 	L["Backdrop Color"] = "Backdrop Color"
 	--[[Translation missing --]]
@@ -1296,6 +1294,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Stop Motion Settings"] = "Configurações de Stop Motion"
 	L["Stop Sound"] = "Parar Som"
 	--[[Translation missing --]]
+	L["Stretched by Foreground"] = "Stretched by Foreground"
+	--[[Translation missing --]]
 	L["Sub Elements"] = "Sub Elements"
 	--[[Translation missing --]]
 	L["Sub Option %i"] = "Sub Option %i"
@@ -1507,7 +1507,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["View custom code"] = "View custom code"
 	--[[Translation missing --]]
-	L["Voice"] = "Voice"
+	L["Voice Settings"] = "Voice Settings"
 	--[[Translation missing --]]
 	L["We thank"] = "We thank"
 	--[[Translation missing --]]

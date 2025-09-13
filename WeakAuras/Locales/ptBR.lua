@@ -256,6 +256,8 @@ L["Bar enabled in Boss Mod addon settings"] = "Bar enabled in Boss Mod addon set
 L["Bar enabled in DBM settings"] = "Bar enabled in DBM settings"
 --[[Translation missing --]]
 L["Bar Texture"] = "Bar Texture"
+--[[Translation missing --]]
+L["Bar Type"] = "Bar Type"
 L["Baron Geddon"] = "Barão Geddon"
 --[[Translation missing --]]
 L["Battle for Azeroth"] = "Battle for Azeroth"
@@ -315,6 +317,8 @@ L["Bottom Right"] = "Embaixo à direita"
 L["Bottom to Top"] = "De baixo para cima"
 L["Bounce"] = "Salto"
 L["Bounce with Decay"] = "Salto com declínio"
+--[[Translation missing --]]
+L["Break"] = "Break"
 --[[Translation missing --]]
 L["BreakUpLargeNumbers (Blizzard)"] = "BreakUpLargeNumbers (Blizzard)"
 L["Broodlord Lashlayer"] = "Prolemestre Flagelador"
@@ -779,7 +783,7 @@ L["Error Frame"] = "Error Frame"
 --[[Translation missing --]]
 L["ERROR in '%s' unknown or incompatible sub element type '%s'"] = "ERROR in '%s' unknown or incompatible sub element type '%s'"
 --[[Translation missing --]]
-L["Error in aura '%s'"] = "Error in aura '%s'"
+L["Error in Aura '%s'"] = "Error in Aura '%s'"
 --[[Translation missing --]]
 L["Error not receiving display information from %s"] = "Error not receiving display information from %s"
 --[[Translation missing --]]
@@ -1078,9 +1082,9 @@ L["Icon Function"] = "Icon Function"
 --[[Translation missing --]]
 L["Icon Function (fallback state)"] = "Icon Function (fallback state)"
 --[[Translation missing --]]
-L["Id"] = "Id"
---[[Translation missing --]]
 L["ID"] = "ID"
+--[[Translation missing --]]
+L["Id"] = "Id"
 --[[Translation missing --]]
 L["If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"] = "If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"
 --[[Translation missing --]]
@@ -1142,9 +1146,9 @@ L["Install the addons BugSack and BugGrabber for detailed error logs."] = "Insta
 L["Instance"] = "Instance"
 L["Instance Difficulty"] = "Dificuldade da Instância"
 --[[Translation missing --]]
-L["Instance Id"] = "Instance Id"
---[[Translation missing --]]
 L["Instance ID"] = "Instance ID"
+--[[Translation missing --]]
+L["Instance Id"] = "Instance Id"
 --[[Translation missing --]]
 L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
@@ -1312,7 +1316,7 @@ L["Lowest Spell Id"] = "Lowest Spell Id"
 --[[Translation missing --]]
 L["Lua error"] = "Lua error"
 --[[Translation missing --]]
-L["Lua error in aura '%s': %s"] = "Lua error in aura '%s': %s"
+L["Lua error in Aura '%s': %s"] = "Lua error in Aura '%s': %s"
 --[[Translation missing --]]
 L["Lucifron"] = "Lucifron"
 --[[Translation missing --]]
@@ -1644,6 +1648,8 @@ L["Other Events"] = "Other Events"
 L["Ouro"] = "Ouro"
 --[[Translation missing --]]
 L["Outline"] = "Outline"
+--[[Translation missing --]]
+L["Over Energize"] = "Over Energize"
 L["Overhealing"] = "Sobrecura"
 L["Overkill"] = "Sobreassassinato"
 --[[Translation missing --]]
@@ -1772,12 +1778,14 @@ L["Progress Source"] = "Progress Source"
 L["Progress Total"] = "Progress Total"
 --[[Translation missing --]]
 L["Progress Value"] = "Progress Value"
+--[[Translation missing --]]
+L["Pull"] = "Pull"
 L["Pulse"] = "Pulsar"
 L["PvP Flagged"] = "Marcado para JxJ"
 --[[Translation missing --]]
-L["PvP Talent selected"] = "PvP Talent selected"
---[[Translation missing --]]
 L["PvP Talent Selected"] = "PvP Talent Selected"
+--[[Translation missing --]]
+L["PvP Talent selected"] = "PvP Talent selected"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -1976,6 +1984,8 @@ https://github.com/WeakAuras/WeakAuras2/wiki/Protected-Frames]=] ] = [=[Secure f
 https://github.com/WeakAuras/WeakAuras2/wiki/Protected-Frames]=]
 --[[Translation missing --]]
 L["Select Frame"] = "Select Frame"
+--[[Translation missing --]]
+L["Select the type of timer to filter"] = "Select the type of timer to filter"
 --[[Translation missing --]]
 L["Selection Mode"] = "Selection Mode"
 --[[Translation missing --]]
@@ -2359,6 +2369,8 @@ L["Time since stack lost"] = "Time since stack lost"
 L["Timed"] = "Temporizado"
 --[[Translation missing --]]
 L["Timed Progress"] = "Timed Progress"
+--[[Translation missing --]]
+L["Timer"] = "Timer"
 --[[Translation missing --]]
 L["Timer Id"] = "Timer Id"
 --[[Translation missing --]]

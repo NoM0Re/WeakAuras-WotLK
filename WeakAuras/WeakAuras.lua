@@ -110,7 +110,7 @@ do
     if data then
       Private.AuraWarnings.UpdateWarning(data.uid, "LuaError", "error",
         L["This aura has caused a Lua error."] .. "\n" .. L["Install the addons BugSack and BugGrabber for detailed error logs."], true)
-      table.insert(juicedMessage, L["Lua error in aura '%s': %s"]:format(data.id, currentErrorHandlerContext or L["unknown location"]))
+      table.insert(juicedMessage, L["Lua error in Aura '%s': %s"]:format(data.id, currentErrorHandlerContext or L["unknown location"]))
     else
       table.insert(juicedMessage, L["Lua error"])
     end
@@ -1421,6 +1421,10 @@ local function GetInstanceTypeAndSize()
   if inInstance or instanceType ~= "none" then
     local ZoneMapID = GetCurrentMapAreaID()
     size = Type
+    -- WORKAROUND Tol'Viron arena returning a difficulty index of 1
+    if Type == "arena" or Type == "pvp" then
+      difficultyIndex = 0
+    end
     if Type == "raid" then
       if maxPlayers == 10 then
         size = "ten"
@@ -3260,7 +3264,7 @@ function Private.ReleaseClone(id, cloneId, regionType)
   end
 end
 
-function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters, voice)
+function Private.HandleChatAction(message_type, message, message_dest, message_dest_isunit, message_channel, r, g, b, region, customFunc, when, formatters)
   local useHiddenStates = when == "finish"
   if (message:find('%%')) then
     message = Private.ReplacePlaceHolders(message, region, customFunc, useHiddenStates, formatters);
@@ -3269,11 +3273,12 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
     DEFAULT_CHAT_FRAME:AddMessage(message, r or 1, g or 1, b or 1);
   elseif message_type == "TTS" then
     if WeakAuras.IsAwesomeEnabled() == 2 then
-      local validVoice = voice and Private.tts_voices[voice]
       if not Private.SquelchingActions() then
         pcall(function()
+        local voice = C_TTSSettings and C_TTSSettings.GetSpeechVoiceID()
+        if not voice then return end
           C_VoiceChat.SpeakText(
-            validVoice and voice or next(Private.tts_voices) or 0,
+            voice,
             message,
             1,
             C_TTSSettings and C_TTSSettings.GetSpeechRate() or 0,
@@ -3557,7 +3562,7 @@ function Private.PerformActions(data, when, region)
 
   if(actions.do_message and actions.message_type and actions.message) then
     local customFunc = Private.customActionsFunctions[data.id][when .. "_message"];
-    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters, actions.message_tts_voice);
+    Private.HandleChatAction(actions.message_type, actions.message, actions.message_dest, actions.message_dest_isunit, actions.message_channel, actions.r, actions.g, actions.b, region, customFunc, when, formatters);
   end
 
   if (actions.stop_sound) then
@@ -4750,7 +4755,10 @@ end
 
 local function ReplaceValuePlaceHolders(textStr, region, customFunc, state, formatter, trigger)
   local value;
-  if string.sub(textStr, 1, 1) == "c" then
+
+  local customIndexSubStr = textStr:match("^c(%d*)$")
+
+  if customIndexSubStr then
     local custom
     if customFunc then
       custom = Private.RunCustomTextFunc(region, customFunc)
@@ -4758,7 +4766,7 @@ local function ReplaceValuePlaceHolders(textStr, region, customFunc, state, form
       custom = region.values.custom
     end
 
-    local index = tonumber(textStr:match("^c(%d+)$") or 1)
+    local index = tonumber(customIndexSubStr) or 1
 
     if custom then
       value = custom[index]
@@ -4957,8 +4965,8 @@ function Private.ReplacePlaceHolders(textStr, region, customFunc, useHiddenState
     return textStr;
   end
 
-  if (endPos == 2) then
-    if string.byte(textStr, 1) == 37 then
+  if (endPos == 2) then -- Two byte string, quickly check for all cases
+    if string.byte(textStr, 1) == 37 then -- "%"
       local symbol = string.sub(textStr, 2)
       if symbol == "%" then
         return "%" -- Double % input

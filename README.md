@@ -25,9 +25,15 @@ WeakAuras is a powerful and flexible framework that allows the display of highly
 
 To open the options window, type `/wa` or `/weakauras` into your chat and hit enter or use the minimap icon.
 
+## Install
+
+1. [Download the package](https://github.com/NoM0Re/WeakAuras-WotLK/archive/refs/heads/master.zip).
+2. Open the archive, then open folder `WeakAuras-WotLK-master`, extract all folders to `Interface\AddOns`.
+
 ## Client Extensions
+
 * [Large Address Aware](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/Large-Address-Aware): Enables the WoW client to use up to 4GB of RAM instead of the default 2GB, improving stability and performance on modern systems. This patch is highly recommended for WotLK 3.3.5a users.
-* [Awesome WotLK](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/awesome_wotlk): Adds modern retail-style nameplate search functions, unit tracking, and events to WotLK 3.3.5a, enabling better API access and event handling for nameplates. This adds a lot of additional functionality to WeakAuras.
+* [Awesome WotLK](https://github.com/NoM0Re/WeakAuras-WotLK/wiki/awesome_wotlk): Adds modern retail-style nameplate search functions, unit tracking, and events. Additionally adds the modern Text-to-Speech functions to the client. This adds a lot of additional functionality to WeakAuras, that are not enabled without it.
 
 ## Extensions
 

@@ -50,25 +50,6 @@ local WA_IterateGroupMembers = function(reversed, forceParty)
   end
 end
 
--- Wrapping a unit's name in its class colour is very common in custom Auras
-local WA_ClassColorName = function(unit)
-  if unit and UnitExists(unit) then
-    local name = WeakAuras.UnitName(unit)
-    local _, class = UnitClass(unit)
-    if not class then
-      return name
-    else
-      local classData = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
-      local coloredName = ("|c%s%s|r"):format(classData.colorStr, name)
-      return coloredName
-    end
-  else
-    return "" -- ¯\_(ツ)_/¯
-  end
-end
-
-WeakAuras.WA_ClassColorName = WA_ClassColorName
-
 -- UTF-8 Sub is pretty commonly needed
 local WA_Utf8Sub = function(input, size)
   local output = ""
@@ -113,6 +94,27 @@ end
 
 WeakAuras.WA_Utf8Sub = WA_Utf8Sub
 
+-- Wrapping a unit's name in its class colour is very common in custom Auras
+local WA_ClassColorName = function(unit, maxlen)
+  if unit and UnitExists(unit) then
+    local name = WeakAuras.UnitName(unit)
+    if maxlen and maxlen > 0 then
+      name = WA_Utf8Sub(name, maxlen)
+    end
+    local _, class = UnitClass(unit)
+    if not class then
+      return name
+    else
+      local classData = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+      local coloredName = ("|c%s%s|r"):format(classData.colorStr, name)
+      return coloredName
+    end
+  else
+    return "" -- ¯\_(ツ)_/¯
+  end
+end
+
+WeakAuras.WA_ClassColorName = WA_ClassColorName
 
 WeakAuras.PadString = function(input, padMode, padLength)
   input = tostring(input)
@@ -646,7 +648,7 @@ local function CreateFunctionCache(exec_env)
       local loadedFunction, errorString = loadstring(string, firstLine(string))
       if errorString then
         if not silent then
-          print(string.format(L["Error in aura '%s'"], id), errorString)
+          print(string.format(L["Error in Aura '%s'"], id), errorString)
         end
         return nil, errorString
       elseif loadedFunction then
