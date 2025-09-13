@@ -9,9 +9,9 @@ WeakAuras.halfWidth = WeakAuras.normalWidth / 2
 WeakAuras.doubleWidth = WeakAuras.normalWidth * 2
 
 local versionStringFromToc = GetAddOnMetadata("WeakAuras", "Version")
-local versionString = "5.20.2 Beta"
+local versionString = "5.20.3 Beta"
 -- Year, Month, Day, Hour, Minute, Seconds
-local buildTime = "2025".."08".."15".."22".."00".."00"
+local buildTime = "2025".."09".."13".."18".."00".."00"
 local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS available
                         or C_NamePlate and C_NamePlate.GetNamePlateForUnit and 1 -- Nameplates available
                         or false
