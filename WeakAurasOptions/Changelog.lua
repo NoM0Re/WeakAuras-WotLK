@@ -4,18 +4,11 @@ local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
 OptionsPrivate.changelog = {
-  versionString = '5.20.3',
+  versionString = '5.20.4',
   dateString = '2025-09-08',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.2...5.20.3',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.1...5.20.4',
   highlightText = [==[
-- Important change:
-  - Text to speach voice is no longer a per aura setting, instead we use
-    the game configured text to speech voice.
-  - The game's tts settings are somewhat hidden under:
-    Esc/Options/Accessibility/Read Chat Text out loud/Configure Text to
-    Speech
-  - And you have to remember to disable the Read Chat Text out loud
-    afterwards.]==],  commitText = [==[InfusOnWoW (11):
+- Re-tag, no changes]==],  commitText = [==[InfusOnWoW (11):
 
 - SubRegion Model: Reintroduce clipped by foreground mode
 - Remove workaround for SetTexture not adjusting to different wrapModes
