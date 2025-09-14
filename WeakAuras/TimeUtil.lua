@@ -271,7 +271,7 @@ function SecondsFormatterMixin:Format(seconds, abbreviation)
   for interval, value in ipairs_reverse(intervalUnits) do
     if value > 0 then
       if (output ~= "") then
-        output = output..TIME_UNIT_DELIMITER;
+        output = output..L["TIME_UNIT_DELIMITER"];
       end
 
       local formatString = self:GetFormatString(interval, abbreviation, convertToLower);
