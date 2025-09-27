@@ -36,10 +36,12 @@ globals = {
 	"_G",
 	"bit",
 	"Constants",
+	"OKAY",
 
 	-- misc custom
 	"AceGUIWeakAurasMultiLineEditBoxInsertLink",
 	"AceGUIWeakAurasMultiLineEditBoxWithEnterInsertLink",
+	"AceGUIWeakAurasInputWithIndentationInsertLink",
 	"AceGUIWidgetLSMlists",
 	"CUSTOM_CLASS_COLORS",
 	"LibStub",
@@ -13613,7 +13615,6 @@ globals = {
 	"OFFICER",
 	"OFFICER_CHAT",
 	"OFFICER_NOTE_COLON",
-	"OKAY",
 	"OLD_GUILD_NAME",
 	"OLD_TITLE_LOST",
 	"ONLY_EMPTY_BAGS",
