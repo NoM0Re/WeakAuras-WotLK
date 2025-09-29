@@ -7,6 +7,595 @@ if not WeakAuras.IsTBC() then
   return
 end
 
+local WeakAuras = WeakAuras;
+local L = WeakAuras.L;
+
+local encounter_list = ""
+function Private.InitializeEncounterAndZoneLists()
+  if encounter_list ~= "" then
+    return
+  end
+  local raids = {
+    {
+      L["Karazhan"],
+      {
+        { L["Attumen the Huntsman"], 652 },
+        { L["Moroes"], 653 },
+        { L["Maiden of Virtue"], 654 },
+        { L["Opera Hall"], 655 },
+        { L["The Curator"], 656 },
+        { L["Terestian Illhoof"], 657 },
+        { L["Shade of Aran"], 658 },
+        { L["Netherspite"], 659 },
+        { L["Chess Event"], 660 },
+        { L["Prince Malchezaar"], 661 },
+        { L["Nightbane"], 662 },
+      }
+    },
+    {
+      L["Gruul's Lair"],
+      {
+        { L["High King Maulgar"], 649 },
+        { L["Gruul the Dragonkiller"], 650 },
+      }
+    },
+    {
+      L["Magtheridon's Lair"],
+      {
+        { L["Magtheridon"], 651 },
+      }
+    },
+    {
+      L["Coilfang: Serpentshrine Cavern"],
+      {
+        { L["Hydross the Unstable"], 623 },
+        { L["The Lurker Below"], 624 },
+        { L["Leotheras the Blind"], 625 },
+        { L["Fathom-Lord Karathress"], 626 },
+        { L["Morogrim Tidewalker"], 627 },
+        { L["Lady Vashj"], 628 },
+      }
+    },
+    {
+      L["Tempest Keep"],
+      {
+        { L["Al'ar"], 730 },
+        { L["Void Reaver"], 731 },
+        { L["High Astromancer Solarian"], 732 },
+        { L["Kael'thas Sunstrider"], 733 },
+      }
+    },
+    {
+      L["The Battle for Mount Hyjal"],
+      {
+        { L["Rage Winterchill"], 618 },
+        { L["Anetheron"], 619 },
+        { L["Kaz'rogal"], 620 },
+        { L["Azgalor"], 621 },
+        { L["Archimonde"], 622 },
+      }
+    },
+    {
+      L["Black Temple"],
+      {
+        { L["High Warlord Naj'entus"], 601 },
+        { L["Supremus"], 602 },
+        { L["Shade of Akama"], 603 },
+        { L["Teron Gorefiend"], 604 },
+        { L["Gurtogg Bloodboil"], 605 },
+        { L["Reliquary of Souls"], 606 },
+        { L["Mother Shahraz"], 607 },
+        { L["The Illidari Council"], 608 },
+        { L["Illidan Stormrage"], 609 },
+      }
+    },
+    {
+      L["Zul'Aman"],
+      {
+        { L["Akil'zon"], 1189 },
+        { L["Nalorakk"], 1190 },
+        { L["Jan'alai"], 1191 },
+        { L["Halazzi"], 1192 },
+        { L["Hex Lord Malacrass"], 1193 },
+        { L["Daakara"], 1194 },
+      }
+    },
+    {
+      L["The Sunwell Plateau"],
+      {
+        { L["Kalecgos"], 724 },
+        { L["Brutallus"], 725 },
+        { L["Felmyst"], 726 },
+        { L["Eredar Twins"], 727 },
+        { L["M'uru"], 728 },
+        { L["Kil'jaeden"], 729 },
+      }
+    }
+  }
+  for _, raid in ipairs(raids) do
+    encounter_list = ("%s|cffffd200%s|r\n"):format(encounter_list, raid[1])
+    for _, boss in ipairs(raid[2]) do
+        encounter_list = ("%s%s: %d\n"):format(encounter_list, boss[1], boss[2])
+    end
+    encounter_list = encounter_list .. "\n"
+  end
+
+  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Supports multiple entries, separated by commas\n"]
+end
+
+function Private.get_encounters_list()
+  return encounter_list
+end
+
+function Private.get_zoneId_list()
+  return ""
+end
+
+Private.encounterId_to_modName = {
+  [224] = "386",-- 9938:Magmus, DBM-Party-Classic/BlackrockDepths/Magmus.lua
+  [227] = "369",-- 9018:High Interrogator Gerstahn, DBM-Party-Classic/BlackrockDepths/Gerstahn.lua
+  [228] = "370",-- 9025:Lord Roccor, DBM-Party-Classic/BlackrockDepths/LordRoccor.lua
+  [229] = "371",-- 9319:Houndmaster Grebmar, DBM-Party-Classic/BlackrockDepths/HoundmasterGrebmar.lua
+  [230] = "372",-- 9027:Gorosh the Dervish |9028:Grizzle |9029:Eviscerator |9030:Ok'thor the Breaker |9031:Anub'shiah |9032:Hedrum the Creeper, DBM-Party-Classic/BlackrockDepths/RingofLaw.lua
+  [231] = "373",-- 9024:Pyromancer Loregrain, DBM-Party-Classic/BlackrockDepths/PyromancerLoregrain.lua
+  [232] = "374",-- 9017:Lord Incendius, DBM-Party-Classic/BlackrockDepths/LordIncendius.lua
+  [233] = "375",-- 9041:Warder Stilgiss, DBM-Party-Classic/BlackrockDepths/WardenStilgiss.lua
+  [234] = "376",-- 9056:Fineous Darkvire, DBM-Party-Classic/BlackrockDepths/FineousDarkvire.lua
+  [235] = "377",-- 9016:Bael'Gar, DBM-Party-Classic/BlackrockDepths/BaelGar.lua
+  [236] = "378",-- 9033:General Angerforge, DBM-Party-Classic/BlackrockDepths/GeneralAngerforge.lua
+  [237] = "379",-- 8983:Golem Lord Argelmach, DBM-Party-Classic/BlackrockDepths/GolemLordArgelmach.lua
+  [238] = "380",-- 9537:Hurley Blackbreath, DBM-Party-Classic/BlackrockDepths/HurleyBlackbreath.lua
+  [239] = "381",-- 9502:Phalanx, DBM-Party-Classic/BlackrockDepths/Phalanx.lua
+  [241] = "383",-- 9499:Plugger Spazzring, DBM-Party-Classic/BlackrockDepths/PluggerSpazzring.lua
+  [242] = "384",-- 9156:Ambassador Flamelash, DBM-Party-Classic/BlackrockDepths/AmbassadorFlamelash.lua
+  [243] = "385",-- 9034:Hate'rel |9035:Anger'rel |9036:Vile'rel |9037:Gloom'rel |9038:Seeth'rel |9039:Doom'rel |9040:Dope'rel, DBM-Party-Classic/BlackrockDepths/TheSeven.lua
+  [245] = "387",-- 9019:Emperor Dagran Thaurissan, DBM-Party-Classic/BlackrockDepths/EmperorDagranThaurissan.lua
+  [250] = "536",-- 22930:Yor, DBM-Party-BC/Auct_Tombs/Yor.lua
+  [267] = "388",-- 9196:Highlord Omokk, DBM-Party-Classic/LowerBlackrockSpire/HighlordOmokk.lua
+  [268] = "389",-- 9236:Shadow Hunter Vosh'gajin, DBM-Party-Classic/LowerBlackrockSpire/ShadowHunterVoshgajin.lua
+  [269] = "390",-- 9237:War Master Voone, DBM-Party-Classic/LowerBlackrockSpire/WarMasterVoone.lua
+  [270] = "391",-- 10596:Mother Smolderweb, DBM-Party-Classic/LowerBlackrockSpire/MotherSmolderweb.lua
+  [271] = "392",-- 10584:Urok Doomhowl, DBM-Party-Classic/LowerBlackrockSpire/UrokDoomhowl.lua
+  [272] = "393",-- 9736:Quartermaster Zigris, DBM-Party-Classic/LowerBlackrockSpire/QuartermasterZigris.lua
+  [273] = "395",-- 10268:Gizrul the Slavener, DBM-Party-Classic/LowerBlackrockSpire/Gizrul.lua
+  [274] = "394",-- 10220:Halycon, DBM-Party-Classic/LowerBlackrockSpire/Halycon.lua
+  [275] = "396",-- 9568:Overlord Wyrmthalak, DBM-Party-Classic/LowerBlackrockSpire/OverlordWyrmthalak.lua
+  [276] = "PyroguardEmberseer",-- 9816:Pyroguard Emberseer, DBM-Party-Classic/UpperBlackrockSpire/PyroguardEmberseer.lua
+  [277] = "SolakarFlamewreath",-- 10264:Solakar Flamewreath, DBM-Party-Classic/UpperBlackrockSpire/SolakarFlamewreath.lua
+  [278] = "WarchiefRendBlackhand",-- 10339:Gyth |10429:Warchief Rend Blackhand, DBM-Party-Classic/UpperBlackrockSpire/WarchiefRendBlackhand.lua
+  [279] = "TheBeast",-- 10430:The Beast, DBM-Party-Classic/UpperBlackrockSpire/TheBeast.lua
+  [280] = "GeneralDrakkisath",-- 10363:General Drakkisath, DBM-Party-Classic/UpperBlackrockSpire/GeneralDrakkisath.lua
+  [343] = "402",-- 11490:Zevrim Thornhoof, DBM-Party-Classic/DireMaul/ZevrimThornhoof.lua
+  [344] = "403",-- 13280:Hydrospawn, DBM-Party-Classic/DireMaul/Hydrospawn.lua
+  [345] = "404",-- 14327:Lethtendris, DBM-Party-Classic/DireMaul/Lethtendris.lua
+  [346] = "405",-- 11492:Alzzin the Wildshaper, DBM-Party-Classic/DireMaul/Alzzin.lua
+  [347] = "407",-- 11488:Illyanna Ravenoak, DBM-Party-Classic/DireMaul/IllyannaRavenoak.lua
+  [348] = "408",-- 11487:Magister Kalendris, DBM-Party-Classic/DireMaul/MagisterKelendris.lua
+  [349] = "409",-- 11496:Immol'thar, DBM-Party-Classic/DireMaul/Immolthar.lua
+  [350] = "406",-- 11489:Tendris Warpwood, DBM-Party-Classic/DireMaul/TendrisWarpwood.lua
+  [361] = "410",-- 11486:Prince Tortheldrin, DBM-Party-Classic/DireMaul/PrinceTortheldrin.lua
+  [362] = "411",-- 14326:Guard Mol'dar, DBM-Party-Classic/DireMaul/GuardMoldar.lua
+  [363] = "412",-- 14322:Stomper Kreeg, DBM-Party-Classic/DireMaul/StomperKreeg.lua
+  [364] = "413",-- 14321:Guard Fengus, DBM-Party-Classic/DireMaul/GuardFengus.lua
+  [365] = "414",-- 14323:Guard Slip'kik, DBM-Party-Classic/DireMaul/GuardSlipkik.lua
+  [366] = "415",-- 14325:Captain Kromcrush, DBM-Party-Classic/DireMaul/CaptainKromcrush.lua
+  [367] = "416",-- 14324:Cho'Rush the Observer, DBM-Party-Classic/DireMaul/ChoRush.lua
+  [368] = "417",-- 11501:King Gordok, DBM-Party-Classic/DireMaul/KingGordok.lua
+  [378] = "420",-- 7079:Viscous Fallout, DBM-Party-Classic/Gnomeregan/ViscousFallout.lua
+  [379] = "419",-- 7361:Grubbis, DBM-Party-Classic/Gnomeregan/Grubbis.lua
+  [380] = "421",-- 6235:Electrocutioner 6000, DBM-Party-Classic/Gnomeregan/Electrocutioner6000.lua
+  [381] = "418",-- 6229:Crowd Pummeler 9-60, DBM-Party-Classic/Gnomeregan/CrowdPummeler.lua
+  [382] = "422",-- 7800:Mekgineer Thermaplugg, DBM-Party-Classic/Gnomeregan/MekgineerThermaplugg.lua
+  [422] = "423",-- 13282:Noxxion, DBM-Party-Classic/Maraudon/Noxxion.lua
+  [423] = "424",-- 12258:Razorlash, DBM-Party-Classic/Maraudon/Razorlash.lua
+  [424] = "427",-- 12236:Lord Vyletongue, DBM-Party-Classic/Maraudon/LordVyletongue.lua
+  [425] = "428",-- 12225:Celebras the Cursed, DBM-Party-Classic/Maraudon/CelebrastheCursed.lua
+  [426] = "429",-- 12203:Landslide, DBM-Party-Classic/Maraudon/Landslide.lua
+  [427] = "425",-- 13601:Tinkerer Gizlock, DBM-Party-Classic/Maraudon/TinkererGizlock.lua
+  [428] = "430",-- 13596:Rotgrip, DBM-Party-Classic/Maraudon/Rotgrip.lua
+  [429] = "431",-- 12201:Princess Theradras, DBM-Party-Classic/Maraudon/PrincessTheradras.lua
+  [438] = "AgathelostheRaging|AggemThorncurse|DeathSpeakerJargba|BlindHunter|Roogug|EarthcallerHalmgar",-- 4422:Agathelos the Raging |4424:Aggem Thorncurse |4428:Death Speaker Jargba |4425:Blind Hunter |6168:Roogug |4842:Earthcaller Halmgar, DBM-Party-Classic/RazorfenKraul/AgathelostheRaging.lua | DBM-Party-Classic/RazorfenKraul/AggemThorncurse.lua | DBM-Party-Classic/RazorfenKraul/DeathSpeakerJargba.lua | DBM-Party-Classic/RazorfenKraul/BlindHunter.lua | DBM-Party-Classic/RazorfenKraul/Roogug.lua | DBM-Party-Classic/RazorfenKraul/EarthcallerHalmgar.lua
+  [444] = "InterrogatorVishas",-- 3983:Interrogator Vishas, DBM-Party-Classic/ScarletMonastery/InterrogatorVishas.lua
+  [446] = "HoundmasterLoksey",-- 3974:Houndmaster Loksey, DBM-Party-Classic/ScarletMonastery/HoundmasterLoksey.lua
+  [447] = "ArcanistDoan",-- 6487:Arcanist Doan, DBM-Party-Classic/ScarletMonastery/ArcanistDoan.lua
+  [448] = "Herod",-- 3975:Herod, DBM-Party-Classic/ScarletMonastery/Herod.lua
+  [449] = "Fairbanks",-- 4542:High Inquisitor Fairbanks, DBM-Party-Classic/ScarletMonastery/HighInquisitorFairbanks.lua
+  [450] = "Mograine_and_Whitemane",-- 3976:Scarlet Commander Mograine |3977:High Inquisitor Whitemane |99999:Lord Solanar Bloodwrath, DBM-Party-Classic/ScarletMonastery/Mograine_and_Whitemane.lua
+  [451] = "KirtonostheHerald",-- 10506:Kirtonos the Herald, DBM-Party-Classic/Scholomance/KirtonostheHerald.lua
+  [452] = "JandiceBarov",-- 10503:Jandice Barov, DBM-Party-Classic/Scholomance/JandiceBarov.lua
+  [453] = "Rattlegore",-- 11622:Rattlegore, DBM-Party-Classic/Scholomance/Rattlegore.lua
+  [454] = "MardukBlackpool",-- 10433:Marduk Blackpool, DBM-Party-Classic/Scholomance/MardukBlackpool.lua
+  [455] = "Vectus",-- 10432:Vectus, DBM-Party-Classic/Scholomance/Vectus.lua
+  [456] = "RasFrostwhisper",-- 10508:Ras Frostwhisper, DBM-Party-Classic/Scholomance/RasFrostwhisper.lua
+  [457] = "InstructorMalicia",-- 10505:Instructor Malicia, DBM-Party-Classic/Scholomance/InstructorMalicia.lua
+  [458] = "DoctorTheolenKrastinov",-- 11261:Doctor Theolen Krastinov, DBM-Party-Classic/Scholomance/DoctorTheolenKrastinov.lua
+  [459] = "LorekeeperPolkelt",-- 10901:Lorekeeper Polkelt, DBM-Party-Classic/Scholomance/LorekeeperPolkelt.lua
+  [460] = "TheRavenian",-- 10507:The Ravenian, DBM-Party-Classic/Scholomance/TheRavenian.lua
+  [461] = "LordAlexeiBarov",-- 10504:Lord Alexei Barov, DBM-Party-Classic/Scholomance/LordAlexeiBarov.lua
+  [462] = "LadyIlluciaBarov",-- 10502:Lady Illucia Barov, DBM-Party-Classic/Scholomance/LadyIlluciaBarov.lua
+  [463] = "DarkmasterGandling",-- 1853:Darkmaster Gandling, DBM-Party-Classic/Scholomance/DarkmasterGandling.lua
+  [464] = "Rethilgore",-- 3914:Rethilgore, DBM-Party-Classic/Shadowfangkeep/Rethilgore.lua
+  [465] = "RazorclawtheButcher",-- 3886:Razorclaw the Butcher, DBM-Party-Classic/Shadowfangkeep/RazorclawtheButcher.lua
+  [468] = "OdotheBlindwatcher",-- 4279:Odo the Blindwatcher, DBM-Party-Classic/Shadowfangkeep/OdotheBlindwatcher.lua
+  [469] = "FenrustheDevourer",-- 4274:Fenrus the Devourer, DBM-Party-Classic/Shadowfangkeep/FenrustheDevourer.lua
+  [470] = "WolfMasterNandos",-- 3927:Wolf Master Nandos, DBM-Party-Classic/Shadowfangkeep/WolfMasterNandos.lua
+  [471] = "ArchmageArugal",-- 4275:Archmage Arugal, DBM-Party-Classic/Shadowfangkeep/ArchmageArugal.lua
+  [472] = "450",-- 10516:The Unforgiven, DBM-Party-Classic/Stratholme/TheUnforgiven.lua
+  [473] = "443",-- 10558:Hearthsinger Forresten, DBM-Party-Classic/Stratholme/HearthsingerForresten.lua
+  [474] = "445",-- 10808:Timmy the Cruel, DBM-Party-Classic/Stratholme/TimmytheCruel.lua
+  [475] = "446",-- 10997:Willey Hopebreaker, DBM-Party-Classic/Stratholme/WilleyHopebreaker.lua
+  [476] = "749",-- 11032:Commander Malor, DBM-Party-Classic/Stratholme/CommanderMalor.lua
+  [477] = "448",-- 10811:Instructor Galford, DBM-Party-Classic/Stratholme/InstructorGalford.lua
+  [478] = "449",-- 10812:Grand Crusader Dathrohan |10813:Balnazzar, DBM-Party-Classic/Stratholme/Balnazzar.lua
+  [479] = "451",-- 10436:Baroness Anastari, DBM-Party-Classic/Stratholme/BaronessAnastari.lua
+  [480] = "452",-- 10437:Nerub'enkan, DBM-Party-Classic/Stratholme/Narubenkan.lua
+  [481] = "453",-- 10438:Maleki the Pallid, DBM-Party-Classic/Stratholme/MalekithePallid.lua
+  [482] = "454",-- 10435:Magistrate Barthilas, DBM-Party-Classic/Stratholme/MagistrateBarthilas.lua
+  [483] = "455",-- 10439:Ramstein the Gorger, DBM-Party-Classic/Stratholme/RamsteintheGorger.lua
+  [484] = "456",-- 10440:Baron Rivendare, DBM-Party-Classic/Stratholme/LordAuriusRivendare.lua
+  [486] = "Dreamscythe",-- 5721:Dreamscythe, DBM-Party-Classic/SunkenTemple/Dreamscythe.lua
+  [487] = "Weaver|598|599",-- 5720:Weaver, DBM-Party-Classic/SunkenTemple/Weaver.lua
+  [488] = "458",-- 5710:Jammal'an the Prophet, DBM-Party-Classic/SunkenTemple/JammalantheProphet.lua
+  [490] = "Morphaz",-- 5719:Morphaz, DBM-Party-Classic/SunkenTemple/Morphaz.lua
+  [491] = "Hazzas",-- 5722:Hazzas, DBM-Party-Classic/SunkenTemple/Hazzas.lua
+  [492] = "457",-- 8443:Avatar of Hakkar, DBM-Party-Classic/SunkenTemple/AvatarofHakkar.lua
+  [493] = "463",-- 5709:Shade of Eranikus, DBM-Party-Classic/SunkenTemple/ShadeofEranikus.lua
+  -- [519] = "Commander",-- 26796:Commander Stoutbeard |26798:Commander Kolurg, DBM-Party-WotLK/TheNexus/Commander.lua
+  -- [530] = "VarosCloudstrider",-- 27447:Varos Cloudstrider, DBM-Party-WotLK/TheOculus/VarosCloudstrider.lua
+  -- [533] = "MageLordUrom",-- 27655:Mage-Lord Urom, DBM-Party-WotLK/TheOculus/MageLordUrom.lua
+  -- [534] = "LeyGuardianEregos",-- 27656:Ley-Guardian Eregos, DBM-Party-WotLK/TheOculus/LeyGuardianEregos.lua
+  [547] = "467",-- 6910:Revelosh, DBM-Party-Classic/Uldaman/Revelosh.lua
+  [548] = "468",-- 6906:Baelog |6907:Eric |6908:Olaf, DBM-Party-Classic/Uldaman/TheLostDwarves.lua
+  [549] = "469",-- 7228:Ironaya, DBM-Party-Classic/Uldaman/Ironaya.lua
+  [551] = "470",-- 7206:Ancient Stone Keeper, DBM-Party-Classic/Uldaman/AncientStoneKeeper.lua
+  [552] = "471",-- 7291:Galgann Firehammer, DBM-Party-Classic/Uldaman/GalgannFirehammer.lua
+  [553] = "472",-- 4854:Grimlok, DBM-Party-Classic/Uldaman/Grimlok.lua
+  [554] = "473",-- 2748:Archaedas, DBM-Party-Classic/Uldaman/Archaedas.lua
+  [585] = "Tutenkash|474|AmnennartheColdbringer|Glutton|MordreshFireEye|PlaguemawtheRotting|Ragglesnout",-- 7355:Tuten'kash |7358:Amnennar the Coldbringer |8567:Glutton |7357:Mordresh Fire Eye |7356:Plaguemaw the Rotting |7354:Ragglesnout, DBM-Party-Classic/RazorfenDowns/Tutenkash.lua | DBM-Party-Classic/RazorfenDowns/AmnennartheColdbringer.lua | DBM-Party-Classic/RazorfenDowns/Glutton.lua | DBM-Party-Classic/RazorfenDowns/MordreshFireEye.lua | DBM-Party-Classic/RazorfenDowns/PlaguemawtheRotting.lua | DBM-Party-Classic/RazorfenDowns/Ragglesnout.lua
+  [586] = "475",-- 3669:Lord Cobrahn, DBM-Party-Classic/WailingCaverns/LordCobrahn.lua
+  [587] = "477",-- 3653:Kresh, DBM-Party-Classic/WailingCaverns/Kresh.lua
+  [588] = "476",-- 3670:Lord Pythas, DBM-Party-Classic/WailingCaverns/LordPythas.lua
+  [589] = "478",-- 3674:Skum, DBM-Party-Classic/WailingCaverns/Skum.lua
+  [590] = "479",-- 3673:Lord Serpentis, DBM-Party-Classic/WailingCaverns/LordSerpentis.lua
+  [591] = "480",-- 5775:Verdan the Everliving, DBM-Party-Classic/WailingCaverns/VerantheEverliving.lua
+  [592] = "481",-- 3654:Mutanus the Devourer, DBM-Party-Classic/WailingCaverns/MutanustheDevourer.lua
+  [593] = "HydromancerVelrath",-- 7795:Hydromancer Velratha, DBM-Party-Classic/ZulFarrak/HydromancerVelrath.lua
+  [594] = "483",-- 7273:Gahz'rilla, DBM-Party-Classic/ZulFarrak/Gahzrilla.lua
+  [595] = "484",-- 8127:Antu'sul, DBM-Party-Classic/ZulFarrak/Antusul.lua
+  [596] = "485",-- 7272:Theka the Martyr, DBM-Party-Classic/ZulFarrak/ThekatheMartyr.lua
+  [597] = "486",-- 7271:Witch Doctor Zum'rah, DBM-Party-Classic/ZulFarrak/WitchDoctorZumrah.lua
+  [600] = "489",-- 7267:Chief Ukorz Sandscalp, DBM-Party-Classic/ZulFarrak/ChiefUkorzSandscalp.lua
+  [601] = "Najentus",-- 22887:High Warlord Naj'entus, DBM-BlackTemple/Najentus.lua
+  [602] = "Supremus",-- 22898:Supremus, DBM-BlackTemple/Supremus.lua
+  [603] = "Akama",-- 22841:Shade of Akama, DBM-BlackTemple/ShadeOfAkama.lua
+  [604] = "TeronGorefiend",-- 22871:Teron Gorefiend, DBM-BlackTemple/TeronGorefiend.lua
+  [605] = "Bloodboil",-- 22948:Gurtogg Bloodboil, DBM-BlackTemple/Bloodboil.lua
+  [606] = "Souls",-- 23418:Essence of Suffering, DBM-BlackTemple/EssenceOfSouls.lua
+  [607] = "Shahraz",-- 22947:Mother Shahraz, DBM-BlackTemple/Shahraz.lua
+  [608] = "Council",-- 22949:Gathios the Shatterer |22950:High Nethermancer Zerevor |22951:Lady Malande |22952:Veras Darkshadow, DBM-BlackTemple/IllidariCouncil.lua
+  [609] = "Illidan",-- 22917:Illidan Stormrage, DBM-BlackTemple/Illidan.lua
+  [610] = "Razorgore",-- 12435:Razorgore the Untamed |99999:Lord Solanar Bloodwrath, DBM-BWL/Razorgore.lua
+  [611] = "Vaelastrasz",-- 13020:Vaelastrasz the Corrupt, DBM-BWL/Vaelastrasz.lua
+  [612] = "Broodlord",-- 12017:Broodlord Lashlayer, DBM-BWL/Broodlord.lua
+  [613] = "Firemaw",-- 11983:Firemaw, DBM-BWL/Firemaw.lua
+  [614] = "Ebonroc",-- 14601:Ebonroc, DBM-BWL/Ebonroc.lua
+  [615] = "Flamegor",-- 11981:Flamegor, DBM-BWL/Flamegor.lua
+  [616] = "Chromaggus",-- 14020:Chromaggus, DBM-BWL/Chromaggus.lua
+  [617] = "Nefarian-Classic",-- 11583:Nefarian, DBM-BWL/Nefarian.lua
+  [618] = "Rage",-- 17767:Rage Winterchill, DBM-Hyjal/RageWinterchill.lua
+  [619] = "Anetheron",-- 17808:Anetheron, DBM-Hyjal/Anetheron.lua
+  [620] = "Kazrogal",-- 17888:Kaz'rogal, DBM-Hyjal/Kazrogal.lua
+  [621] = "Azgalor",-- 17842:Azgalor, DBM-Hyjal/Azgalor.lua
+  [622] = "Archimonde",-- 17968:Archimonde, DBM-Hyjal/Archimonde.lua
+  [623] = "Hydross",-- 21216:Hydross the Unstable, DBM-Serpentshrine/Hydross.lua
+  [624] = "LurkerBelow",-- 21217:The Lurker Below, DBM-Serpentshrine/TheLurkerBelow.lua
+  [625] = "Leotheras",-- 21215:Leotheras the Blind, DBM-Serpentshrine/Leotheras.lua
+  [626] = "Fathomlord",-- 21214:Fathom-Lord Karathress, DBM-Serpentshrine/Fathomlord.lua
+  [627] = "Tidewalker",-- 21213:Morogrim Tidewalker, DBM-Serpentshrine/Tidewalker.lua
+  [628] = "Vashj",-- 21212:Lady Vashj, DBM-Serpentshrine/Vashj.lua
+  [649] = "Maulgar",-- 18831:High King Maulgar |18832:Krosh Firehand |18834:Olm the Summoner |18835:Kiggler the Crazed |18836:Blindeye the Seer, DBM-Gruul/Maulgar.lua
+  [650] = "Gruul",-- 19044:Gruul the Dragonkiller, DBM-Gruul/Gruul.lua
+  [651] = "Magtheridon",-- 17257:Magtheridon, DBM-Magtheridon/Magtheridon.lua
+  [652] = "Attumen",-- 16151:Midnight |16152:Attumen the Huntsman, DBM-Karazhan/Attumen.lua
+  [653] = "Moroes",-- 15687:Moroes, DBM-Karazhan/Moroes.lua
+  [654] = "Maiden",-- 16457:Maiden of Virtue, DBM-Karazhan/MaidenOfVirtue.lua
+  [655] = "BigBadWolf|RomuloAndJulianne|Oz",-- 17521:The Big Bad Wolf |17533:Romulo |17534:Julianne |99999:Lord Solanar Bloodwrath |18168:The Crone, DBM-Karazhan/BigBadWolf.lua | DBM-Karazhan/RomuloAndJulianne.lua | DBM-Karazhan/WizardOfOz.lua
+  [656] = "Curator",-- 15691:The Curator, DBM-Karazhan/Curator.lua
+  [657] = "TerestianIllhoof",-- 15688:Terestian Illhoof, DBM-Karazhan/TerestianIllhoof.lua
+  [658] = "Aran",-- 16524:Shade of Aran, DBM-Karazhan/ShadeOfAran.lua
+  [659] = "Netherspite",-- 15689:Netherspite, DBM-Karazhan/Netherspite.lua
+  [660] = "Chess",-- 21684:King Llane |21752:Warchief Blackhand, DBM-Karazhan/Chess.lua
+  [661] = "Prince",-- 15690:Prince Malchezaar, DBM-Karazhan/PrinceMalchezaar.lua
+  [662] = "NightbaneRaid",-- 17225:Nightbane, DBM-Karazhan/Nightbane.lua
+  [663] = "Lucifron",-- 12118:Lucifron, DBM-MC/Lucifron.lua
+  [664] = "Magmadar",-- 11982:Magmadar, DBM-MC/Magmadar.lua
+  [665] = "Gehennas",-- 12259:Gehennas, DBM-MC/Gehennas.lua
+  [666] = "Garr-Classic",-- 12057:Garr, DBM-MC/Garr.lua
+  [667] = "Shazzrah",-- 12264:Shazzrah, DBM-MC/Shazzrah.lua
+  [668] = "Geddon",-- 12056:Baron Geddon, DBM-MC/Geddon.lua
+  [669] = "Sulfuron",-- 12098:Sulfuron Harbinger, DBM-MC/Sulfuron.lua
+  [670] = "Golemagg",-- 11988:Golemagg the Incinerator, DBM-MC/Golemagg.lua
+  [671] = "Majordomo",-- 11663:Flamewaker Healer |11664:Flamewaker Elite |12018:Majordomo Executus, DBM-MC/Majordomo.lua
+  [672] = "Ragnaros-Classic",-- 11502:Ragnaros, DBM-MC/Ragnaros.lua
+  [709] = "Skeram",-- 15263:The Prophet Skeram, DBM-AQ40/Skeram.lua
+  [710] = "ThreeBugs",-- 15511:Lord Kri |15543:Princess Yauj |15544:Vem, DBM-AQ40/ThreeBugs.lua
+  [711] = "Sartura",-- 15516:Battleguard Sartura, DBM-AQ40/Sartura.lua
+  [712] = "Fankriss",-- 15510:Fankriss the Unyielding, DBM-AQ40/Fankriss.lua
+  [713] = "Viscidus",-- 15299:Viscidus, DBM-AQ40/Viscidus.lua
+  [714] = "Huhuran",-- 15509:Princess Huhuran, DBM-AQ40/Huhuran.lua
+  [715] = "TwinEmpsAQ",-- 15275:Emperor Vek'nilash |15276:Emperor Vek'lor, DBM-AQ40/TwinEmps.lua
+  [716] = "Ouro",-- 15517:Ouro, DBM-AQ40/Ouro.lua
+  [717] = "CThun",-- 15589:Eye of C'Thun |15727:C'Thun, DBM-AQ40/CThun.lua
+  [718] = "Kurinnaxx",-- 15348:Kurinnaxx, DBM-AQ20/Kurinnaxx.lua
+  [719] = "Rajaxx",-- 15341:General Rajaxx, DBM-AQ20/Rajaxx.lua
+  [720] = "Moam",-- 15340:Moam, DBM-AQ20/Moam.lua
+  [721] = "Buru",-- 15370:Buru the Gorger, DBM-AQ20/Buru.lua
+  [722] = "Ayamiss",-- 15369:Ayamiss the Hunter, DBM-AQ20/Ayamiss.lua
+  [723] = "Ossirian",-- 15339:Ossirian the Unscarred, DBM-AQ20/Ossirian.lua
+  [724] = "Kal",-- 24850:Kalecgos, DBM-Sunwell/Kalecgos.lua
+  [725] = "Brutallus",-- 24882:Brutallus, DBM-Sunwell/Brutallus.lua
+  [726] = "Felmyst",-- 25038:Felmyst, DBM-Sunwell/Felmyst.lua
+  [727] = "Twins",-- 25165:Lady Sacrolash |25166:Grand Warlock Alythess, DBM-Sunwell/EredarTwins.lua
+  [728] = "Muru",-- 25741:M'uru, DBM-Sunwell/M'uru.lua
+  [729] = "Kil",-- 25315:Kil'jaeden, DBM-Sunwell/Kil'jaeden.lua
+  [730] = "Alar",-- 19514:Al'ar, DBM-TheEye/Alar.lua
+  [731] = "VoidReaver",-- 19516:Void Reaver, DBM-TheEye/VoidReaver.lua
+  [732] = "Solarian",-- 18805:High Astromancer Solarian, DBM-TheEye/Solarian.lua
+  [733] = "KaelThas",-- 19622:Kael'thas Sunstrider, DBM-TheEye/KaelThas.lua
+  [784] = "Venoxis",-- 14507:High Priest Venoxis, DBM-ZG/Venoxis.lua
+  [785] = "Jeklik",-- 14517:High Priestess Jeklik, DBM-ZG/Jeklik.lua
+  [786] = "Marli",-- 14510:High Priestess Mar'li, DBM-ZG/Marli.lua
+  [787] = "Bloodlord",-- 11382:Bloodlord Mandokir |14988:Ohgan, DBM-ZG/Bloodlord.lua
+  [788] = "EdgeOfMadness",-- 15083:Hazza'rah, DBM-ZG/EdgeOfMadness.lua
+  [789] = "Thekal",-- 11347:Zealot Lor'Khan |11348:Zealot Zath |14509:High Priest Thekal, DBM-ZG/Thekal.lua
+  [790] = "Gahzranka",-- 15114:Gahz'ranka, DBM-ZG/Gahzranka.lua
+  [791] = "Arlokk",-- 14515:High Priestess Arlokk, DBM-ZG/Arlokk.lua
+  [792] = "Jindo",-- 11380:Jin'do the Hexxer, DBM-ZG/Jindo.lua
+  [793] = "Hakkar",-- 14834:Hakkar, DBM-ZG/Hakkar.lua
+  [1070] = "BaronSilverlaine",-- 3887:Baron Silverlaine, DBM-Party-Classic/Shadowfangkeep/BaronSilverlaine.lua
+  [1071] = "CommanderSpringvale",-- 4278:Commander Springvale, DBM-Party-Classic/Shadowfangkeep/CommanderSpringvale.lua
+  [1084] = "Onyxia|Onyxia-Vanilla",-- 10184:Onyxia |10184:Onyxia, DBM-Onyxia/Onyxia.lua | DBM-VanillaOnyxia/Onyxia.lua
+  -- [1085] = "Anub'arak_Coliseum",
+  -- [1086] = "Champions",-- 34441:Vivienne Blackwhisper |34444:Thrakgar |34445:Liandra Suncaller |34447:Caiphus the Stern |34448:Ruj'kah |34449:Ginselle Blightslinger |34450:Harkzog |34451:Birana Stormhoof |34453:Narrhok Steelbreaker |34454:Maz'dinah |34455:Broln Stouthorn |34456:Malithas Brightblade |34458:Gorgrim Shadowcleave |34459:Erin Misthoof |34460:Kavina Grovesong |34461:Tyrius Duskblade |34463:Shaabad |34465:Velanaa |34466:Anthar Forgemender |34467:Alyssia Moonstalker |34468:Noozle Whizzlestick |34469:Melador Valestrider |34470:Saamul |34471:Baelnor Lightbearer |34472:Irieth Shadowstep |34473:Brienna Nightfell |34474:Serissa Grimdabbler |34475:Shocuul, DBM-Coliseum/Champions.lua
+  -- [1087] = "Jaraxxus",-- 34780:Lord Jaraxxus, DBM-Coliseum/Jaraxxus.lua
+  -- [1088] = "NorthrendBeasts",-- 34796:Gormok the Impaler |34797:Icehowl |34799:Dreadscale |35144:Acidmaw, DBM-Coliseum/NorthrendBeasts.lua
+  -- [1089] = "ValkTwins",-- 34496:Eydis Darkbane |34497:Fjola Lightbane, DBM-Coliseum/Twins.lua
+  -- [1090] = "Sartharion",-- 28860:Sartharion, DBM-ChamberOfAspects/Obsidian/Sartharion.lua
+  -- [1091] = "Shadron",-- 30451:Shadron, DBM-ChamberOfAspects/Obsidian/Shadron.lua
+  -- [1092] = "Tenebron",-- 30452:Tenebron, DBM-ChamberOfAspects/Obsidian/Tenebron.lua
+  -- [1093] = "Vesperon",-- 30449:Vesperon, DBM-ChamberOfAspects/Obsidian/Vesperon.lua
+  -- [1094] = "Malygos",-- 28859:Malygos, DBM-EyeOfEternity/Malygos.lua
+  -- [1095] = "BPCouncil",-- 37970:Prince Valanar |37972:Prince Keleseth |37973:Prince Taldaram, DBM-Icecrown/TheCrimsonHall/BPCouncil.lua
+  -- [1096] = "Deathbringer",-- 37813:Deathbringer Saurfang, DBM-Icecrown/TheLowerSpire/Deathbringer.lua
+  -- [1097] = "Festergut",-- 36626:Festergut, DBM-Icecrown/ThePlagueworks/Festergut.lua
+  -- [1098] = "Valithria",-- 36789:Valithria Dreamwalker, DBM-Icecrown/FrostwingHalls/Valithria.lua
+  -- [1099] = "GunshipBattle",-- 36939:High Overlord Saurfang |36948:Muradin Bronzebeard |37215:Orgrim's Hammer |37540:The Skybreaker, DBM-Icecrown/TheLowerSpire/GunshipBattle.lua
+  -- [1100] = "Deathwhisper",-- 36855:Lady Deathwhisper, DBM-Icecrown/TheLowerSpire/Deathwhisper.lua
+  -- [1101] = "LordMarrowgar",-- 36612:Lord Marrowgar, DBM-Icecrown/TheLowerSpire/LordMarrowgar.lua
+  -- [1102] = "Putricide",-- 36678:Professor Putricide, DBM-Icecrown/ThePlagueworks/Putricide.lua
+  -- [1103] = "Lanathel",-- 37955:Blood-Queen Lana'thel, DBM-Icecrown/TheCrimsonHall/Lanathel.lua
+  -- [1104] = "Rotface",-- 36627:Rotface, DBM-Icecrown/ThePlagueworks/Rotface.lua
+  -- [1105] = "Sindragosa",-- 36853:Sindragosa, DBM-Icecrown/FrostwingHalls/Sindragosa.lua
+  -- [1106] = "LichKing",-- 36597:The Lich King, DBM-Icecrown/TheFrozenThrone/LichKing.lua
+  [1107] = "Anub'Rekhan|Anub'Rekhan-Vanilla",
+  [1108] = "Gluth|Gluth-Vanilla",-- 15932:Gluth |15932:Gluth, DBM-Naxx/ConstructQuarter/Gluth.lua | DBM-VanillaNaxx/ConstructQuarter/Gluth.lua
+  [1109] = "Gothik|Gothik-Vanilla",-- 16060:Gothik the Harvester |16060:Gothik the Harvester, DBM-Naxx/MilitaryQuarter/Gothik.lua | DBM-VanillaNaxx/MilitaryQuarter/Gothik.lua
+  [1110] = "Faerlina|Faerlina-Vanilla",-- 15953:Grand Widow Faerlina |15953:Grand Widow Faerlina, DBM-Naxx/ArachnidQuarter/Faerlina.lua | DBM-VanillaNaxx/ArachnidQuarter/Faerlina.lua
+  [1111] = "Grobbulus|Grobbulus-Vanilla",-- 15931:Grobbulus |15931:Grobbulus, DBM-Naxx/ConstructQuarter/Grobbulus.lua | DBM-VanillaNaxx/ConstructQuarter/Grobbulus.lua
+  [1112] = "Heigan|Heigan-Vanilla",-- 15936:Heigan the Unclean |15936:Heigan the Unclean, DBM-Naxx/PlagueQuarter/Heigan.lua | DBM-VanillaNaxx/PlagueQuarter/Heigan.lua
+  [1113] = "Razuvious|Razuvious-Vanilla",-- 16061:Instructor Razuvious |16061:Instructor Razuvious, DBM-Naxx/MilitaryQuarter/Razuvious.lua | DBM-VanillaNaxx/MilitaryQuarter/Razuvious.lua
+  [1114] = "Kel'Thuzad|Kel'Thuzad-Vanilla",
+  [1115] = "Loatheb|Loatheb-Vanilla",-- 16011:Loatheb |16011:Loatheb, DBM-Naxx/PlagueQuarter/Loatheb.lua | DBM-VanillaNaxx/PlagueQuarter/Loatheb.lua
+  [1116] = "Maexxna|Maexxna-Vanilla",-- 15952:Maexxna |15952:Maexxna, DBM-Naxx/ArachnidQuarter/Maexxna.lua | DBM-VanillaNaxx/ArachnidQuarter/Maexxna.lua
+  [1117] = "Noth|Noth-Vanilla",-- 15954:Noth the Plaguebringer |15954:Noth the Plaguebringer, DBM-Naxx/PlagueQuarter/Noth.lua | DBM-VanillaNaxx/PlagueQuarter/Noth.lua
+  [1118] = "Patchwerk|Patchwerk-Vanilla",-- 16028:Patchwerk |16028:Patchwerk, DBM-Naxx/ConstructQuarter/Patchwerk.lua | DBM-VanillaNaxx/ConstructQuarter/Patchwerk.lua
+  [1119] = "Sapphiron|Sapphiron-Vanilla",-- 15989:Sapphiron |15989:Sapphiron, DBM-Naxx/FrostwyrmLair/Sapphiron.lua | DBM-VanillaNaxx/FrostwyrmLair/Sapphiron.lua
+  [1120] = "Thaddius|Thaddius-Vanilla",-- 15928:Thaddius |15928:Thaddius, DBM-Naxx/ConstructQuarter/Thaddius.lua | DBM-VanillaNaxx/ConstructQuarter/Thaddius.lua
+  [1121] = "Horsemen|Horsemen-Vanilla",-- 16063:Sir Zeliek |16064:Thane Korth'azz |16065:Lady Blaumeux |30549:Baron Rivendare |16063:Sir Zeliek |16064:Thane Korth'azz |16065:Lady Blaumeux |30549:Baron Rivendare, DBM-Naxx/MilitaryQuarter/Horsemen.lua | DBM-VanillaNaxx/MilitaryQuarter/Horsemen.lua
+  -- [1126] = "Archavon",-- 31125:Archavon the Stone Watcher, DBM-VoA/Archavon.lua
+  -- [1127] = "Emalon",-- 33993:Emalon the Storm Watcher, DBM-VoA/Emalon.lua
+  -- [1128] = "Koralon",-- 35013:Koralon the Flame Watcher, DBM-VoA/Koralon.lua
+  -- [1129] = "Toravon",-- 38433:Toravon the Ice Watcher, DBM-VoA/Toravon.lua
+  -- [1130] = "Algalon",-- 32871:Algalon the Observer, DBM-Ulduar/Algalon.lua
+  -- [1131] = "Auriaya",-- 33515:Auriaya, DBM-Ulduar/Auriaya.lua
+  -- [1132] = "FlameLeviathan",-- 33113:Flame Leviathan, DBM-Ulduar/FlameLeviathan.lua
+  -- [1133] = "Freya",-- 32906:Freya, DBM-Ulduar/Freya.lua
+  -- [1134] = "GeneralVezax",-- 33271:General Vezax, DBM-Ulduar/GeneralVezax.lua
+  -- [1135] = "Hodir",-- 32845:Hodir |32926:Flash Freeze, DBM-Ulduar/Hodir.lua
+  -- [1136] = "Ignis",-- 33118:Ignis the Furnace Master, DBM-Ulduar/Ignis.lua
+  -- [1137] = "Kologarn",-- 32930:Kologarn, DBM-Ulduar/Kologarn.lua
+  -- [1138] = "Mimiron",-- 33432:Leviathan Mk II, DBM-Ulduar/Mimiron.lua
+  -- [1139] = "Razorscale",-- 33186:Razorscale, DBM-Ulduar/Razorscale.lua
+  -- [1140] = "IronCouncil",-- 32857:Stormcaller Brundir |32867:Steelbreaker |32927:Runemaster Molgeim, DBM-Ulduar/IronCouncil.lua
+  -- [1141] = "Thorim",-- 32865:Thorim, DBM-Ulduar/Thorim.lua
+  -- [1142] = "XT002",-- 33293:XT-002 Deconstructor, DBM-Ulduar/XT002.lua
+  -- [1143] = "YoggSaron",-- 33288:Yogg-Saron, DBM-Ulduar/YoggSaron.lua
+  [1144] = "MinerJohnson",-- 3586:Miner Johnson, DBM-Party-Classic/Deadmines/MinerJohnson.lua
+  -- [1147] = "Baltharus",-- 39751:Baltharus the Warborn, DBM-ChamberOfAspects/Ruby/Baltharus.lua
+  -- [1148] = "Zarithrian",-- 39746:General Zarithrian, DBM-ChamberOfAspects/Ruby/Zarithrian.lua
+  -- [1149] = "Saviana",-- 39747:Saviana Ragefire, DBM-ChamberOfAspects/Ruby/Saviana.lua
+  -- [1150] = "Halion",-- 39863:Halion, DBM-ChamberOfAspects/Ruby/Halion.lua
+  [1189] = "Akilzon",-- 23574:Akil'zon, DBM-ZulAman/Akil'zon.lua
+  [1190] = "Nalorakk",-- 23576:Nalorakk, DBM-ZulAman/Nalorakk.lua
+  [1191] = "Janalai",-- 23578:Jan'alai, DBM-ZulAman/Jan'alai.lua
+  [1192] = "Halazzi",-- 23577:Halazzi, DBM-ZulAman/Halazzi.lua
+  [1193] = "Malacrass",-- 24239:Hex Lord Malacrass, DBM-ZulAman/Malacrass.lua
+  [1194] = "ZulJin",-- 23863:Daakara, DBM-ZulAman/Zul'jin.lua
+  [1443] = "Oggleflint",-- 11517:Oggleflint, DBM-Party-Classic/RagefireChasm/Oggleflint.lua
+  [1444] = "Jergosh",-- 11518:Jergosh the Invoker, DBM-Party-Classic/RagefireChasm/Jergosh.lua
+  [1445] = "Bazzalan",-- 11519:Bazzalan, DBM-Party-Classic/RagefireChasm/Bazzalan.lua
+  [1446] = "Taragaman",-- 11520:Taragaman the Hungerer, DBM-Party-Classic/RagefireChasm/Taragaman.lua
+  [1659] = "OverlordRamtusk",-- 4420:Overlord Ramtusk, DBM-Party-Classic/RazorfenKraul/OverlordRamtusk.lua
+  [1661] = "CharlgaRazorflank",-- 4421:Charlga Razorflank, DBM-Party-Classic/RazorfenKraul/CharlgaRazorflank.lua
+  [1801] = "Kazzak|KazzakClassic",-- 18728:Doom Lord Kazzak |12397:Lord Kazzak, DBM-Outland/Kazzak.lua | DBM-Azeroth/KazzakClassic.lua
+  [1887] = "748",-- 7023:Obsidian Sentinel, DBM-Party-Classic/Uldaman/ObsidianSentinel.lua
+  [1889] = "524",-- 18373:Exarch Maladaar, DBM-Party-BC/Auct_Crypts/Maladaar.lua
+  [1890] = "523",-- 18371:Shirrak the Dead Watcher, DBM-Party-BC/Auct_Crypts/Shirrak.lua
+  [1891] = "528",-- 17308:Omor the Unscarred, DBM-Party-BC/Hellfire_Ramp/Omor.lua
+  [1892] = "529",-- 17307:Vazruden the Herald |17537:Vazruden, DBM-Party-BC/Hellfire_Ramp/Vazruden.lua
+  [1893] = "527",-- 17306:Watchkeeper Gargolmar, DBM-Party-BC/Hellfire_Ramp/Gargolmar.lua
+  [1894] = "533",-- 24664:Kael'thas Sunstrider, DBM-Party-BC/MagistersTerrace/Kael'thas.lua
+  [1895] = "532",-- 24560:Priestess Delrissa, DBM-Party-BC/MagistersTerrace/Delrissa.lua
+  [1897] = "530",-- 24723:Selin Fireheart, DBM-Party-BC/MagistersTerrace/Selin.lua
+  [1898] = "531",-- 24744:Vexallus, DBM-Party-BC/MagistersTerrace/Vexallus.lua
+  [1899] = "537",-- 18344:Nexus-Prince Shaffar, DBM-Party-BC/Auct_Tombs/Shaffar.lua
+  [1900] = "534",-- 18341:Pandemonius, DBM-Party-BC/Auct_Tombs/Pandemonius.lua
+  [1901] = "535",-- 18343:Tavarok, DBM-Party-BC/Auct_Tombs/Tavarok.lua
+  [1902] = "543",-- 18473:Talon King Ikiss, DBM-Party-BC/Auct_SethekkHalls/Ikiss.lua
+  [1903] = "541",-- 18472:Darkweaver Syth, DBM-Party-BC/Auct_SethekkHalls/Syth.lua
+  [1904] = "542",-- 23035:Anzu, DBM-Party-BC/Auct_SethekkHalls/Anzu.lua
+  [1905] = "538",-- 17848:Lieutenant Drake, DBM-Party-BC/CoT_OldHillsbrad/Drake.lua
+  [1906] = "540",-- 18096:Epoch Hunter, DBM-Party-BC/CoT_OldHillsbrad/EpochHunter.lua
+  [1907] = "539",-- 17862:Captain Skarloc, DBM-Party-BC/CoT_OldHillsbrad/Skarloc.lua
+  [1908] = "544",-- 18731:Ambassador Hellmaw, DBM-Party-BC/Auct_ShadowLabyrinth/Hellmaw.lua
+  [1909] = "545",-- 18667:Blackheart the Inciter, DBM-Party-BC/Auct_ShadowLabyrinth/Inciter.lua
+  [1910] = "547",-- 18708:Murmur, DBM-Party-BC/Auct_ShadowLabyrinth/Murmur.lua
+  [1911] = "546",-- 18732:Grandmaster Vorpil, DBM-Party-BC/Auct_ShadowLabyrinth/Vorpil.lua
+  [1913] = "549",-- 20885:Dalliah the Doomsayer, DBM-Party-BC/TK_Arcatraz/Dalliah.lua
+  [1914] = "551",-- 20912:Harbinger Skyriss, DBM-Party-BC/TK_Arcatraz/Skyriss.lua
+  [1915] = "550",-- 20886:Wrath-Scryer Soccothrates, DBM-Party-BC/TK_Arcatraz/Soccothrates.lua
+  [1916] = "548",-- 20870:?, DBM-Party-BC/TK_Arcatraz/Zereketh.lua
+  [1919] = "554",-- 17881:Aeonus, DBM-Party-BC/CoT_BlackMorass/Aeonus.lua
+  [1920] = "552",-- 17879:Chrono Lord Deja, DBM-Party-BC/CoT_BlackMorass/Deja.lua
+  [1921] = "553",-- 17880:Temporus, DBM-Party-BC/CoT_BlackMorass/Temporus.lua
+  [1922] = "555",-- 17381:The Maker, DBM-Party-BC/Hellfire_BloodFurnace/Maker.lua
+  [1923] = "557",-- 17377:Keli'dan the Breaker, DBM-Party-BC/Hellfire_BloodFurnace/Keli'dan.lua
+  [1924] = "556",-- 17380:Broggok, DBM-Party-BC/Hellfire_BloodFurnace/Broggok.lua
+  [1925] = "558",-- 17976:Commander Sarannis, DBM-Party-BC/TK_Botanica/Sarannis.lua
+  [1926] = "559",-- 17975:High Botanist Freywinn, DBM-Party-BC/TK_Botanica/Freywinn.lua
+  [1927] = "561",-- 17980:Laj, DBM-Party-BC/TK_Botanica/Laj.lua
+  [1928] = "560",-- 17978:Thorngrin the Tender, DBM-Party-BC/TK_Botanica/Thorngrin.lua
+  [1929] = "562",-- 17977:Warp Splinter, DBM-Party-BC/TK_Botanica/WarpSplinter.lua
+  [1930] = "564",-- 19221:Nethermancer Sepethrea, DBM-Party-BC/TK_Mechanar/Sepethrea.lua
+  [1931] = "565",-- 19220:Pathaleon the Calculator, DBM-Party-BC/TK_Mechanar/Pathaleon.lua
+  [1932] = "563",-- 19219:Mechano-Lord Capacitus, DBM-Party-BC/TK_Mechanar/Capacitus.lua
+  [1933] = "Gyrokill",-- 19218:Gatewatcher Gyro-Kill, DBM-Party-BC/TK_Mechanar/Gyrokill.lua
+  [1934] = "Ironhand",-- 19710:Gatewatcher Iron-Hand, DBM-Party-BC/TK_Mechanar/Ironhand.lua
+  [1935] = "728",-- 20923:Blood Guard Porung, DBM-Party-BC/Hellfire_ShatteredHalls/Porung.lua
+  [1936] = "566",-- 16807:Grand Warlock Nethekurse, DBM-Party-BC/Hellfire_ShatteredHalls/Nethekurse.lua
+  [1937] = "568",-- 16809:Warbringer O'mrogg, DBM-Party-BC/Hellfire_ShatteredHalls/O'mrogg.lua
+  [1938] = "569",-- 16808:Warchief Kargath Bladefist, DBM-Party-BC/Hellfire_ShatteredHalls/Kargath.lua
+  [1939] = "570",-- 17941:Mennu the Betrayer, DBM-Party-BC/Coil_Slavepens/Mennu.lua
+  [1940] = "572",-- 17942:Quagmirran, DBM-Party-BC/Coil_Slavepens/Quagmirran.lua
+  [1941] = "571",-- 17991:Rokmar the Crackler, DBM-Party-BC/Coil_Slavepens/Rokmar.lua
+  [1942] = "573",-- 17797:Hydromancer Thespia, DBM-Party-BC/Coil_Steamvault/Thespia.lua
+  [1943] = "574",-- 17796:Mekgineer Steamrigger, DBM-Party-BC/Coil_Steamvault/Steamrigger.lua
+  [1944] = "575",-- 17798:Warlord Kalithresh, DBM-Party-BC/Coil_Steamvault/Kalithresh.lua
+  [1945] = "577",-- 18105:Ghaz'an, DBM-Party-BC/Coil_Underbog/Ghazan.lua
+  [1946] = "576",-- 17770:Hungarfen, DBM-Party-BC/Coil_Underbog/Hungarfen.lua
+  [1947] = "578",-- 17826:Swamplord Musel'ek, DBM-Party-BC/Coil_Underbog/Muselek.lua
+  [1948] = "579",-- 17882:The Black Stalker, DBM-Party-BC/Coil_Underbog/Stalker.lua
+  -- [1966] = "Taldaram",-- 29308:Prince Taldaram, DBM-Party-WotLK/AhnKahet/Taldaram.lua
+  -- [1967] = "JedogaShadowseeker",-- 29310:Jedoga Shadowseeker, DBM-Party-WotLK/AhnKahet/JedogaShadowseeker.lua
+  -- [1968] = "Volazj",-- 29311:Herald Volazj, DBM-Party-WotLK/AhnKahet/Volazj.lua
+  -- [1969] = "Nadox",-- 29309:Elder Nadox, DBM-Party-WotLK/AhnKahet/Nadox.lua
+  -- [1971] = "Krikthir",-- 28684:Krik'thir the Gatewatcher, DBM-Party-WotLK/AzjolNerub/Krikthir.lua
+  -- [1972] = "Hadronox",-- 28921:Hadronox, DBM-Party-WotLK/AzjolNerub/Hadronox.lua
+  -- [1973] = "Anubarak",-- 29120:Anub'arak, DBM-Party-WotLK/AzjolNerub/Anubarak.lua
+  -- [1974] = "Trollgore",-- 26630:Trollgore, DBM-Party-WotLK/DrakTharon/Trollgore.lua
+  -- [1975] = "ProphetTharonja",-- 26632:The Prophet Tharon'ja, DBM-Party-WotLK/DrakTharon/ProphetTharonja.lua
+  -- [1976] = "NovosTheSummoner",-- 26631:Novos the Summoner, DBM-Party-WotLK/DrakTharon/NovosTheSummoner.lua
+  -- [1977] = "KingDred",-- 27483:King Dred, DBM-Party-WotLK/DrakTharon/Dred.lua
+  -- [1978] = "Sladran",-- 29304:Slad'ran, DBM-Party-WotLK/Gundrak/Sladran.lua
+  -- [1980] = "Moorabi",-- 29305:Moorabi, DBM-Party-WotLK/Gundrak/Moorabi.lua
+  -- [1981] = "Galdarah",-- 29306:Gal'darah, DBM-Party-WotLK/Gundrak/Galdarah.lua
+  -- [1983] = "BloodstoneAnnihilator",-- 29307:Drakkari Colossus, DBM-Party-WotLK/Gundrak/BloodstoneAnnihilator.lua
+  -- [1984] = "Ionar",-- 28546:Ionar, DBM-Party-WotLK/HallsOfLightning/Ionar.lua
+  -- [1985] = "Volkhan",-- 28587:Volkhan, DBM-Party-WotLK/HallsOfLightning/Volkhan.lua
+  -- [1986] = "Loken",-- 28923:Loken, DBM-Party-WotLK/HallsOfLightning/Loken.lua
+  -- [1987] = "Bjarngrin",-- 28586:General Bjarngrim, DBM-Party-WotLK/HallsOfLightning/Bjarngrin.lua
+  -- [1988] = "Eck",-- 29932:Eck the Ferocious, DBM-Party-WotLK/Gundrak/Eck.lua
+  -- [1989] = "Amanitar",-- 30258:Amanitar, DBM-Party-WotLK/AhnKahet/Amanitar.lua
+  -- [1992] = "Falric",-- 38112:Falric, DBM-Party-WotLK/HallsofReflection/Falric.lua
+  -- [1993] = "Marwyn",-- 38113:Marwyn, DBM-Party-WotLK/HallsofReflection/Marwyn.lua
+  -- [1994] = "Krystallus",-- 27977:Krystallus, DBM-Party-WotLK/HallsOfStone/Krystallus.lua
+  -- [1995] = "BrannBronzebeard",-- 28070:Brann Bronzebeard, DBM-Party-WotLK/HallsOfStone/BrannBronzebeard.lua
+  -- [1996] = "MaidenOfGrief",-- 27975:Maiden of Grief, DBM-Party-WotLK/HallsOfStone/MaidenOfGrief.lua
+  -- [1998] = "SjonnirTheIronshaper",-- 27978:Sjonnir The Ironshaper, DBM-Party-WotLK/HallsOfStone/SjonnirTheIronshaper.lua
+  -- [1999] = "ForgemasterGarfrost",-- 36494:Forgemaster Garfrost, DBM-Party-WotLK/PitofSaron/ForgemasterGarfrost.lua
+  -- [2000] = "ScourgelordTyrannus",-- 36658:Scourgelord Tyrannus |36661:Rimefang, DBM-Party-WotLK/PitofSaron/ScourgelordTyrannus.lua
+  -- [2001] = "Ick",-- 36476:Ick, DBM-Party-WotLK/PitofSaron/Ick.lua
+  -- [2002] = "Meathook",-- 26529:Meathook, DBM-Party-WotLK/OldStratholme/Meathook.lua
+  -- [2003] = "ChronoLordEpoch",-- 26532:Chrono-Lord Epoch, DBM-Party-WotLK/OldStratholme/ChronoLordEpoch.lua
+  -- [2004] = "SalrammTheFleshcrafter",-- 26530:Salramm the Fleshcrafter, DBM-Party-WotLK/OldStratholme/SalrammTheFleshCrafter.lua
+  -- [2005] = "MalGanis",-- 26533:Mal'Ganis, DBM-Party-WotLK/OldStratholme/MalGanis.lua
+  -- [2006] = "Bronjahm",-- 36497:Bronjahm, DBM-Party-WotLK/ForgeofSouls/Bronjahm.lua
+  -- [2007] = "DevourerofSouls",-- 36502:Devourer of Souls, DBM-Party-WotLK/ForgeofSouls/DevourerofSouls.lua
+  -- [2009] = "Anomalus",-- 26763:Anomalus, DBM-Party-WotLK/TheNexus/Anomalus.lua
+  -- [2010] = "GrandMagusTelestra",-- 26731:Grand Magus Telestra, DBM-Party-WotLK/TheNexus/GrandMagusTelestra.lua
+  -- [2011] = "Keristrasza",-- 26723:Keristrasza, DBM-Party-WotLK/TheNexus/Keristrasza.lua
+  -- [2012] = "OrmorokTheTreeShaper",-- 26794:Ormorok the Tree-Shaper, DBM-Party-WotLK/TheNexus/OrmorokTheTreeShaper.lua
+  -- [2016] = "DrakosTheInterrogator",-- 27654:Drakos the Interrogator, DBM-Party-WotLK/TheOculus/DrakosTheInterrogator.lua
+  -- [2020] = "Cyanigosa",-- 31134:Cyanigosa, DBM-Party-WotLK/VioletHold/Cyanigosa.lua
+  -- [2021] = "BlackKnight",-- 10000:Arugal |35451:The Black Knight, DBM-Party-WotLK/TrialoftheChampion/Black_Knight.lua
+  -- [2022] = "GrandChampions",-- 34657:Jaelyne Evensong |34701:Colosos |34702:Ambrose Boltspark |34703:Lana Stouthammer |34705:Marshal Jacob Alerius |35569:Eressea Dawnsinger |35570:Zul'tore |35571:Runok Wildmane |35572:Mokra the Skullcrusher |35617:Deathstalker Visceri, DBM-Party-WotLK/TrialoftheChampion/Champions.lua
+  -- [2023] = "Confessor|EadricthePure",-- 34928:Argent Confessor Paletress |35119:Eadric the Pure, DBM-Party-WotLK/TrialoftheChampion/Confessor.lua | DBM-Party-WotLK/TrialoftheChampion/Eadric_the_Pure.lua
+  -- [2024] = "ConstructorAndController",-- 24200:Skarvald the Constructor |24201:Dalronn the Controller, DBM-Party-WotLK/UtgardeKeep/ConstructorAndController.lua
+  -- [2025] = "IngvarThePlunderer",-- 23954:Ingvar the Plunderer |23980:Ingvar the Plunderer, DBM-Party-WotLK/UtgardeKeep/IngvarThePlunderer.lua
+  -- [2026] = "Keleseth",-- 23953:Prince Keleseth, DBM-Party-WotLK/UtgardeKeep/Keleseth.lua
+  -- [2027] = "GortokPalehoof",-- 26687:Gortok Palehoof, DBM-Party-WotLK/UtgardePinnacle/GortokPalehoof.lua
+  -- [2028] = "Ymiron",-- 26861:King Ymiron, DBM-Party-WotLK/UtgardePinnacle/Ymiron.lua
+  -- [2029] = "SkadiTheRuthless",-- 26693:Skadi the Ruthless, DBM-Party-WotLK/UtgardePinnacle/SkadiTheRuthless.lua
+  -- [2030] = "SvalaSorrowgrave",-- 29281:Svala, DBM-Party-WotLK/UtgardePinnacle/SvalaSorrowgrave.lua
+  -- [2321] = "LichKingEvent",-- DBM-Party-WotLK/HallsofReflection/LichKingEvent.lua
+  [2456] = "Gruul",-- 19044:Gruul the Dragonkiller, DBM-Gruul/Gruul.lua
+  -- [2658] = "Erekem",-- 29315:Erekem, DBM-Party-WotLK/VioletHold/Erekem.lua
+  -- [2659] = "Moragg",-- 29316:Moragg, DBM-Party-WotLK/VioletHold/Moragg.lua
+  -- [2660] = "Ichoron",-- 29313:Ichoron, DBM-Party-WotLK/VioletHold/Ichoron.lua
+  -- [2661] = "Xevoss",-- 29266:Xevozz, DBM-Party-WotLK/VioletHold/Xevoss.lua
+  -- [2662] = "Lavanthor",-- 29312:Lavanthor, DBM-Party-WotLK/VioletHold/Lavanthor.lua
+  -- [2663] = "Zuramat",-- 29314:Zuramat the Obliterator, DBM-Party-WotLK/VioletHold/Zuramat.lua
+  [2725] = "HeadlessHorseman",-- 23682:Headless Horseman |23775:Head of the Horseman, DBM-WorldEvents/Holidays/HeadlessHorseman.lua
+  [2761] = "GhamooRa",-- 4887:Ghamoo-Ra, DBM-Party-Classic/BlackfathomDeeps/GhamooRa.lua
+  [2762] = "LadySerevess",-- 4831:Lady Sarevess, DBM-Party-Classic/BlackfathomDeeps/LadySerevess.lua
+  [2763] = "Gelihast",-- 6243:Gelihast, DBM-Party-Classic/BlackfathomDeeps/Gelihast.lua
+  [2765] = "OldSerrakis",-- 4830:Old Serra'kis, DBM-Party-Classic/BlackfathomDeeps/OldSerrakis.lua
+  [2766] = "TwilightLordKelris",-- 4832:Twilight Lord Kelris, DBM-Party-Classic/BlackfathomDeeps/TwilightLordKelris.lua
+  [2767] = "Akumai",-- 4829:Aku'mai, DBM-Party-Classic/BlackfathomDeeps/Akumai.lua
+  [2818] = "BloodmageThalnos",-- 4543:Bloodmage Thalnos, DBM-Party-Classic/ScarletMonastery/BloodmageThalnos.lua
+  [2879] = "ApothecaryTrio",-- 36272:Apothecary Frye |36296:Apothecary Hummel |36565:Apothecary Baxter, DBM-WorldEvents/Holidays/ApothecaryTrio.lua
+  [2967] = "RhahkZor",-- 644:Rhahk'Zor, DBM-Party-Classic/Deadmines/RhahkZor.lua
+  [2968] = "SneedsShredder",-- 642:Sneed's Shredder |643:Sneed, DBM-Party-Classic/Deadmines/SneedsShredder.lua
+  [2969] = "Gilnid",-- 1763:Gilnid, DBM-Party-Classic/Deadmines/Gilnid.lua
+  [2970] = "MrSmite",-- 646:Mr. Smite, DBM-Party-Classic/Deadmines/MrSmite.lua
+  [2971] = "CaptainGreenskin",-- 647:Captain Greenskin, DBM-Party-Classic/Deadmines/CaptainGreenskin.lua
+  [2972] = "EdwinVanCleef",-- 639:Edwin VanCleef, DBM-Party-Classic/Deadmines/EdwinVanCleef.lua
+  [2986] = "Cookie",-- 645:Cookie, DBM-Party-Classic/Deadmines/Cookie.lua
+  -- fictional encounterIds
+  [3000] = "AQ20Trash",-- DBM-AQ20/AQ20Trash.lua
+  [3001] = "AQ40Trash",-- DBM-AQ40/AQ40Trash.lua
+  [3002] = "MCTrash",-- DBM-MC/MCTrash.lua
+  [3003] = "AuctTombsTrash",-- DBM-Party-BC/Auct_Tombs/AuctTombsTrash.lua
+  -- [3004] = "Freya_Elders",-- 32913:Elder Ironbranch |32914:Elder Stonebark |32915:Elder Brightleaf, DBM-Ulduar/Freya_Elders.lua
+  -- [3005] = "ICCTrash",-- DBM-Icecrown/Trash.lua
+  -- [3010] = "HoRWaveTimer",-- 30658:Lieutenant Sinclari, DBM-Party-WotLK/HallsofReflection/WaveTimers.lua
+  -- [3011] = "StratWaves",-- DBM-Party-WotLK/OldStratholme/OldStratholmeWaves.lua
+  [3012] = "HyjalWaveTimers",-- DBM-Hyjal/WaveTimers.lua
+  -- [3013] = "PortalTimers",-- 30658:Lieutenant Sinclari, DBM-Party-WotLK/VioletHold/PortalTimers.lua
+  [3017] = "Ahune",-- 25740:Ahune, DBM-WorldEvents/Holidays/Ahune.lua
+  [3018] = "CorenDirebrew",-- 23872:Coren Direbrew, DBM-WorldEvents/Holidays/CorenDirebrew.lua
+  [3020] = "Azuregos",-- 6109:Azuregos, DBM-Azeroth/Azuregos.lua
+  [3022] = "Emeriss",-- 14889:Emeriss, DBM-Azeroth/Emeriss.lua
+  [3023] = "Lethon",-- 14888:Lethon, DBM-Azeroth/Lethon.lua
+  [3024] = "Taerar",-- 14890:Taerar, DBM-Azeroth/Taerar.lua
+  [3025] = "Ysondre",-- 14887:Ysondre, DBM-Azeroth/Ysondre.lua
+  [3026] = "Doomwalker",-- 17711:Doomwalker, DBM-Outland/Doomwalker.lua
+  [3030] = "PT",-- DBM-Party-BC/CoT_BlackMorass/PortalTimers.lua
+  [3031] = "Quest",-- DBM-Outland/Quest.lua
+  [3032] = "TalonGuards",-- 12460:Death Talon Wyrmguard |12461:Death Talon Overseer |99999:Lord Solanar Bloodwrath, DBM-BWL/TalonGuards.lua
+  [3040] = "BazilThredd",-- 1716:Bazil Thredd, DBM-Party-Classic/StormwindStockaid/BazilThredd.lua
+  [3041] = "BruegalIronknuckle",-- 1720:Bruegal Ironknuckle, DBM-Party-Classic/StormwindStockaid/BruegalIronknuckle.lua
+  [3042] = "DextrenWard",-- 1663:Dextren Ward, DBM-Party-Classic/StormwindStockaid/DextrenWard.lua
+  [3043] = "Hamhock",-- 1717:Hamhock, DBM-Party-Classic/StormwindStockaid/Hamhock.lua
+  [3044] = "KamDeepfury",-- 1666:Kam Deepfury, DBM-Party-Classic/StormwindStockaid/KamDeepfury.lua
+  [3045] = "Targorr",-- 1696:Targorr the Dread, DBM-Party-Classic/StormwindStockaid/Targorr.lua
+  [3046] = "GoralukAnvilcrack",-- 10899:Goraluk Anvilcrack, DBM-Party-Classic/UpperBlackrockSpire/GoralukAnvilcrack.lua
+  [3047] = "JedRunewatcher",-- 10509:Jed Runewatcher, DBM-Party-Classic/UpperBlackrockSpire/JedRunewatcher.lua
+  [3048] = "DeathswornCaptain",-- 3872:Deathsworn Captain, DBM-Party-Classic/Shadowfangkeep/DeathswornCaptain.lua
+  [3049] = "DeviateFaerie",-- 5912:Deviate Faerie Dragon, DBM-Party-Classic/WailingCaverns/DeviateFaerieDragon.lua
+  [3050] = "Shadikith|Hyakiss|Rokad"
+}
+
 Private.talentInfo = {
   ["HUNTER"] = {
     {
