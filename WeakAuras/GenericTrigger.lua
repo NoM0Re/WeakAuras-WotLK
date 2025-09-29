@@ -3905,6 +3905,16 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
 
+Private.DBMEncounterEvents = function(event, ...)
+  if event == "DBM_Pull" then
+    Private.ScanForLoads(nil, "ENCOUNTER_START", ...)
+    WeakAuras.ScanEvents("ENCOUNTER_START", ...)
+  else
+    Private.ScanForLoads(nil, "ENCOUNTER_END", ...)
+    WeakAuras.ScanEvents("ENCOUNTER_END", ...)
+  end
+end
+
 do
   local scheduled_scans = {};
 

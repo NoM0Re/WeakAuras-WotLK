@@ -16,6 +16,18 @@ local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS avai
                         or C_NamePlate and C_NamePlate.GetNamePlateForUnit and 1 -- Nameplates available
                         or false
 
+local isDBMRegistered = false
+
+Private.DBMEncounterEvents = function() end -- noop
+if DBM and DBM.RegisterCallback then
+  local events = {"DBM_Pull", "DBM_Kill", "DBM_Wipe"}
+  isDBMRegistered = pcall(function()
+    for i, event in ipairs(events) do
+      DBM:RegisterCallback(event, Private.DBMEncounterEvents)
+    end
+  end)
+end
+
 local flavor
 if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1) then
   flavor = "TBC"
@@ -32,6 +44,10 @@ WeakAuras.BuildInfo = select(4, GetBuildInfo())
 
 function WeakAuras.IsAwesomeEnabled()
   return isAwesomeEnabled
+end
+
+function WeakAuras.IsDBMRegistered()
+  return isDBMRegistered
 end
 
 function WeakAuras.IsCorrectVersion()
