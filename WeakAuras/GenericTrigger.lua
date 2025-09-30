@@ -3905,13 +3905,23 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
 
-Private.DBMEncounterEvents = function(event, ...)
+Private.DBMEncounterEvents = function(event, mod)
+  local encounterID, encounterName, difficultyID, groupSize =
+    0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
+
+  if type(mod) == "table" then
+    encounterID = mod.encounterId or 0
+    encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
+  end
+
   if event == "DBM_Pull" then
-    Private.ScanForLoads(nil, "ENCOUNTER_START", ...)
-    WeakAuras.ScanEvents("ENCOUNTER_START", ...)
+    -- ENCOUNTER_START: encounterID, encounterName, difficultyID, groupSize
+    Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
+    WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
   else
-    Private.ScanForLoads(nil, "ENCOUNTER_END", ...)
-    WeakAuras.ScanEvents("ENCOUNTER_END", ...)
+    -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
+    Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
+    WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
   end
 end
 
