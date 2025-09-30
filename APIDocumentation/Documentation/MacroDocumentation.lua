@@ -2,7 +2,7 @@ local Macro =
 {
 	Name = "Macro",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Macro",
 
 	Functions =
 	{

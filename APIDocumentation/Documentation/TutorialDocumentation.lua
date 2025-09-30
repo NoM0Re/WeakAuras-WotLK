@@ -2,7 +2,7 @@ local Tutorial =
 {
 	Name = "Tutorial",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Tutorial",
 
 	Functions =
 	{

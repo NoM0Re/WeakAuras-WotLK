@@ -2,7 +2,7 @@ local Battlefield =
 {
 	Name = "Battlefield",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Battlefield",
 
 	Functions =
 	{

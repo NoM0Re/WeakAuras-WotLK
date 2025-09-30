@@ -2,7 +2,7 @@ local Instance =
 {
 	Name = "Instance",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Instance",
 
 	Functions =
 	{

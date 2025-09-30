@@ -2,7 +2,7 @@ local Sound =
 {
 	Name = "Sound",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Sound",
 
 	Functions =
 	{

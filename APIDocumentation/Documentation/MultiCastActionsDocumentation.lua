@@ -2,7 +2,7 @@ local MultiCastActions =
 {
 	Name = "Multi-cast_actions",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Multi-cast_actions",
 
 	Functions =
 	{

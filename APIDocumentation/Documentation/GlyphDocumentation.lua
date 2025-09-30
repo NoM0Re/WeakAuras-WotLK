@@ -2,7 +2,7 @@ local Glyph =
 {
 	Name = "Glyph",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Glyph",
 
 	Functions =
 	{

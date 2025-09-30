@@ -2,7 +2,7 @@ local Social =
 {
 	Name = "Social",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Social",
 
 	Functions =
 	{

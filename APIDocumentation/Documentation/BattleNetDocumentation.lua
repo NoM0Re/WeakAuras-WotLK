@@ -2,7 +2,7 @@ local BattleNet =
 {
 	Name = "Battle.net",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Battle.net",
 
 	Functions =
 	{

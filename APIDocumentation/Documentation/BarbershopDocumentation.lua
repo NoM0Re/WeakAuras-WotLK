@@ -2,7 +2,7 @@ local Barbershop =
 {
 	Name = "Barbershop",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Barbershop",
 
 	Functions =
 	{

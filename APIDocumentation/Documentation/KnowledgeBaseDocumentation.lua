@@ -2,7 +2,7 @@ local KnowledgeBase =
 {
 	Name = "Knowledge-base",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Knowledge-base",
 
 	Functions =
 	{

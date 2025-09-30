@@ -2,7 +2,7 @@ local Combat =
 {
 	Name = "Combat",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Combat",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Camera =
 {
 	Name = "Camera",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Camera",
 
 	Functions =
 	{

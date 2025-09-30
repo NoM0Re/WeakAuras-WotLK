@@ -2,7 +2,7 @@ local AddonRelated =
 {
 	Name = "Addon-related",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Addon-related",
 
 	Functions =
 	{

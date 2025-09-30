@@ -2,7 +2,7 @@ local Buff =
 {
 	Name = "Buff",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Buff",
 
 	Functions =
 	{

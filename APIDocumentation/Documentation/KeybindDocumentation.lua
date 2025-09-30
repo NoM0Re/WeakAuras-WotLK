@@ -2,7 +2,7 @@ local Keybind =
 {
 	Name = "Keybind",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Keybind",
 
 	Functions =
 	{

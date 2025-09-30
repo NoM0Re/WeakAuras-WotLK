@@ -2,7 +2,7 @@ local Spell =
 {
 	Name = "Spell",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Spell",
 
 	Functions =
 	{

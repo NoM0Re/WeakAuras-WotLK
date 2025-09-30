@@ -2,7 +2,7 @@ local Cvar =
 {
 	Name = "CVar",
 	Type = "System",
-	Namespace = "",
+	Namespace = "CVar",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Petition =
 {
 	Name = "Petition",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Petition",
 
 	Functions =
 	{

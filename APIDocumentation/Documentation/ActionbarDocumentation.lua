@@ -2,7 +2,7 @@ local Actionbar =
 {
 	Name = "ActionBar",
 	Type = "System",
-	Namespace = "",
+	Namespace = "ActionBar",
 
 	Functions =
 	{

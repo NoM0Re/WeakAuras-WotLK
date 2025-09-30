@@ -2,7 +2,7 @@ local Voice =
 {
 	Name = "Voice",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Voice",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Vehicle =
 {
 	Name = "Vehicle",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Vehicle",
 
 	Functions =
 	{

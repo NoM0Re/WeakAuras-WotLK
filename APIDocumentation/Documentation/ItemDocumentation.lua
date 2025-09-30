@@ -2,7 +2,7 @@ local Item =
 {
 	Name = "Item",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Item",
 
 	Functions =
 	{

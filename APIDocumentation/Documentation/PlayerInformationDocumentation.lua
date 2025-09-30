@@ -2,7 +2,7 @@ local PlayerInformation =
 {
 	Name = "Player_information",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Player_information",
 
 	Functions =
 	{

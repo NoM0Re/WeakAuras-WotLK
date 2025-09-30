@@ -2,7 +2,7 @@ local Loot =
 {
 	Name = "Loot",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Loot",
 
 	Functions =
 	{

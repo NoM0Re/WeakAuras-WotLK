@@ -2,7 +2,7 @@ local Trade =
 {
 	Name = "Trade",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Trade",
 
 	Functions =
 	{

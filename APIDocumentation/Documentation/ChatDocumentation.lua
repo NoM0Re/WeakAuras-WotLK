@@ -2,7 +2,7 @@ local Chat =
 {
 	Name = "Chat",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Chat",
 
 	Functions =
 	{

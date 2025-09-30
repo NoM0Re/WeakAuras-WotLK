@@ -2,7 +2,7 @@ local Complaint =
 {
 	Name = "Complaint",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Complaint",
 
 	Functions =
 	{

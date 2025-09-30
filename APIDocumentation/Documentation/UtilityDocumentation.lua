@@ -2,7 +2,7 @@ local Utility =
 {
 	Name = "Utility",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Utility",
 
 	Functions =
 	{

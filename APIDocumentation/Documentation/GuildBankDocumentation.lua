@@ -2,7 +2,7 @@ local GuildBank =
 {
 	Name = "Guild_bank",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Guild_bank",
 
 	Functions =
 	{

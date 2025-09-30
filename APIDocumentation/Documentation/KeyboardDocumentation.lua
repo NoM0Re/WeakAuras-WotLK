@@ -2,7 +2,7 @@ local Keyboard =
 {
 	Name = "Keyboard",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Keyboard",
 
 	Functions =
 	{

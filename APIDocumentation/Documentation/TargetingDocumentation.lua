@@ -2,7 +2,7 @@ local Targeting =
 {
 	Name = "Targeting",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Targeting",
 
 	Functions =
 	{

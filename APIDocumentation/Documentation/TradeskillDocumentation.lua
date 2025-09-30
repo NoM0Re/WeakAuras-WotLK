@@ -2,7 +2,7 @@ local Tradeskill =
 {
 	Name = "Tradeskill",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Tradeskill",
 
 	Functions =
 	{

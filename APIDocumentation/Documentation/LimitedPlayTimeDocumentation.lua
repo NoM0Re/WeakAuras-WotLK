@@ -2,7 +2,7 @@ local LimitedPlayTime =
 {
 	Name = "Limited_play_time",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Limited_play_time",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local InGameMoviePlayback =
 {
 	Name = "In-game_movie_playback",
 	Type = "System",
-	Namespace = "",
+	Namespace = "In-game_movie_playback",
 
 	Functions =
 	{

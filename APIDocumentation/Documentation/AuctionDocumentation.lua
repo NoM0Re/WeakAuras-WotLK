@@ -2,7 +2,7 @@ local Auction =
 {
 	Name = "Auction",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Auction",
 
 	Functions =
 	{

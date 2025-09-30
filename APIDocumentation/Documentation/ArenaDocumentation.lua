@@ -2,7 +2,7 @@ local Arena =
 {
 	Name = "Arena",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Arena",
 
 	Functions =
 	{

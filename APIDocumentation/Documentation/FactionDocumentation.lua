@@ -2,7 +2,7 @@ local Faction =
 {
 	Name = "Faction",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Faction",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Money =
 {
 	Name = "Money",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Money",
 
 	Functions =
 	{

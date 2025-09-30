@@ -2,7 +2,7 @@ local Container =
 {
 	Name = "Container",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Container",
 
 	Functions =
 	{

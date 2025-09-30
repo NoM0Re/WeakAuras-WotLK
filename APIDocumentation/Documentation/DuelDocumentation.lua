@@ -2,7 +2,7 @@ local Duel =
 {
 	Name = "Duel",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Duel",
 
 	Functions =
 	{

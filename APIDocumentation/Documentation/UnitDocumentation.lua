@@ -2,7 +2,7 @@ local Unit =
 {
 	Name = "Unit",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Unit",
 
 	Functions =
 	{

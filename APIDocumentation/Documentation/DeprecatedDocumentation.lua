@@ -2,7 +2,7 @@ local Deprecated =
 {
 	Name = "Deprecated",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Deprecated",
 
 	Functions =
 	{

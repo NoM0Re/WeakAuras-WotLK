@@ -2,7 +2,7 @@ local Uivisual =
 {
 	Name = "UIVisual",
 	Type = "System",
-	Namespace = "",
+	Namespace = "UIVisual",
 
 	Functions =
 	{

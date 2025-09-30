@@ -2,7 +2,7 @@ local Map =
 {
 	Name = "Map",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Map",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local GmSurvey =
 {
 	Name = "GM_Survey",
 	Type = "System",
-	Namespace = "",
+	Namespace = "GM_Survey",
 
 	Functions =
 	{

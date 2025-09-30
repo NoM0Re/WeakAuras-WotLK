@@ -2,7 +2,7 @@ local Party =
 {
 	Name = "Party",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Party",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local ModifiedClick =
 {
 	Name = "Modified_click",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Modified_click",
 
 	Functions =
 	{

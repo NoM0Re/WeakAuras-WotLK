@@ -2,7 +2,7 @@ local Achievement =
 {
 	Name = "Achievement",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Achievement",
 
 	Functions =
 	{

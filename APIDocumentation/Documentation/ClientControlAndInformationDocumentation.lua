@@ -2,7 +2,7 @@ local ClientControlAndInformation =
 {
 	Name = "Client_control_and_information",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Client_control_and_information",
 
 	Functions =
 	{

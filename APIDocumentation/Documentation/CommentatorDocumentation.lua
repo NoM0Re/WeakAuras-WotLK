@@ -2,7 +2,7 @@ local Commentator =
 {
 	Name = "Commentator",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Commentator",
 
 	Functions =
 	{

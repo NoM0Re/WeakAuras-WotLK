@@ -2,7 +2,7 @@ local Video =
 {
 	Name = "Video",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Video",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Combatlog =
 {
 	Name = "CombatLog",
 	Type = "System",
-	Namespace = "",
+	Namespace = "CombatLog",
 
 	Functions =
 	{

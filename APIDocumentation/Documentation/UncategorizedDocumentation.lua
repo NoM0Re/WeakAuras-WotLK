@@ -2,7 +2,7 @@ local Uncategorized =
 {
 	Name = "Uncategorized",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Uncategorized",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Pet =
 {
 	Name = "Pet",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Pet",
 
 	Functions =
 	{

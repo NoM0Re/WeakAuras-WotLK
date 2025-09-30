@@ -2,7 +2,7 @@ local Threat =
 {
 	Name = "Threat",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Threat",
 
 	Functions =
 	{

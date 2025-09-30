@@ -2,7 +2,7 @@ local Socketing =
 {
 	Name = "Socketing",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Socketing",
 
 	Functions =
 	{

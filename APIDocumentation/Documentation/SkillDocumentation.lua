@@ -2,7 +2,7 @@ local Skill =
 {
 	Name = "Skill",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Skill",
 
 	Functions =
 	{

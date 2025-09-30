@@ -2,7 +2,7 @@ local Action =
 {
 	Name = "Action",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Action",
 
 	Functions =
 	{

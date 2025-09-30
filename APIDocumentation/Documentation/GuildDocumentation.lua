@@ -2,7 +2,7 @@ local Guild =
 {
 	Name = "Guild",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Guild",
 
 	Functions =
 	{

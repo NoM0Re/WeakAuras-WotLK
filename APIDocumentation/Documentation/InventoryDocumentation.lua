@@ -2,7 +2,7 @@ local Inventory =
 {
 	Name = "Inventory",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Inventory",
 
 	Functions =
 	{

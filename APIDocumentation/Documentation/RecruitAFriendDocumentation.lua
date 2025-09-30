@@ -2,7 +2,7 @@ local RecruitAFriend =
 {
 	Name = "Recruit-a-friend",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Recruit-a-friend",
 
 	Functions =
 	{

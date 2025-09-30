@@ -2,7 +2,7 @@ local SecureExecutionUtility =
 {
 	Name = "Secure_execution_utility",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Secure_execution_utility",
 
 	Functions =
 	{

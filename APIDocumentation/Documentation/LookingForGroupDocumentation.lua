@@ -2,7 +2,7 @@ local LookingForGroup =
 {
 	Name = "Looking_for_group",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Looking_for_group",
 
 	Functions =
 	{

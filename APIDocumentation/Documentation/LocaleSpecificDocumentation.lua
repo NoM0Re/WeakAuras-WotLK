@@ -2,7 +2,7 @@ local LocaleSpecific =
 {
 	Name = "Locale-specific",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Locale-specific",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Raid =
 {
 	Name = "Raid",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Raid",
 
 	Functions =
 	{

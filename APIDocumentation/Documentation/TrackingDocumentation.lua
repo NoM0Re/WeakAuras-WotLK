@@ -2,7 +2,7 @@ local Tracking =
 {
 	Name = "Tracking",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Tracking",
 
 	Functions =
 	{

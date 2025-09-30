@@ -2,7 +2,7 @@ local Merchant =
 {
 	Name = "Merchant",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Merchant",
 
 	Functions =
 	{

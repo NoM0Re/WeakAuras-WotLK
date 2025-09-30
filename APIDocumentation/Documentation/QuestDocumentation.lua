@@ -2,7 +2,7 @@ local Quest =
 {
 	Name = "Quest",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Quest",
 
 	Functions =
 	{

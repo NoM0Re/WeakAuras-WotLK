@@ -2,7 +2,7 @@ local Summoning =
 {
 	Name = "Summoning",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Summoning",
 
 	Functions =
 	{

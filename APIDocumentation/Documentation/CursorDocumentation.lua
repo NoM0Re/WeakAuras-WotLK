@@ -2,7 +2,7 @@ local Cursor =
 {
 	Name = "Cursor",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Cursor",
 
 	Functions =
 	{

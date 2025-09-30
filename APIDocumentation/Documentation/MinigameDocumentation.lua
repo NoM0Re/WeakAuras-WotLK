@@ -2,7 +2,7 @@ local Minigame =
 {
 	Name = "Minigame",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Minigame",
 
 	Functions =
 	{

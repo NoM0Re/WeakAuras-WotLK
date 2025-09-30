@@ -2,7 +2,7 @@ local Companion =
 {
 	Name = "Companion",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Companion",
 
 	Functions =
 	{

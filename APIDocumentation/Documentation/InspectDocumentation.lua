@@ -2,7 +2,7 @@ local Inspect =
 {
 	Name = "Inspect",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Inspect",
 
 	Functions =
 	{

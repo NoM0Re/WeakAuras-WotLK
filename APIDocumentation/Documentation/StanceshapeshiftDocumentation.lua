@@ -2,7 +2,7 @@ local Stanceshapeshift =
 {
 	Name = "StanceShapeshift",
 	Type = "System",
-	Namespace = "",
+	Namespace = "StanceShapeshift",
 
 	Functions =
 	{

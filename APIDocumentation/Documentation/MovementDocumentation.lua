@@ -2,7 +2,7 @@ local Movement =
 {
 	Name = "Movement",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Movement",
 
 	Functions =
 	{

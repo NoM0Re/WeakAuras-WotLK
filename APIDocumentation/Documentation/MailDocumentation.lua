@@ -2,7 +2,7 @@ local Mail =
 {
 	Name = "Mail",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Mail",
 
 	Functions =
 	{

@@ -2,7 +2,7 @@ local Channel =
 {
 	Name = "Channel",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Channel",
 
 	Functions =
 	{

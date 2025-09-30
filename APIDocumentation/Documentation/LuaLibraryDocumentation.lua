@@ -2,7 +2,7 @@ local LuaLibrary =
 {
 	Name = "Lua_library",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Lua_library",
 
 	Functions =
 	{

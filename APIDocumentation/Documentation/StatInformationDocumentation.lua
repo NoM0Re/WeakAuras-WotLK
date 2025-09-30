@@ -2,7 +2,7 @@ local StatInformation =
 {
 	Name = "Stat_information",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Stat_information",
 
 	Functions =
 	{

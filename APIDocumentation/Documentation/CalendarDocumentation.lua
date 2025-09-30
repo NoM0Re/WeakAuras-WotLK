@@ -2,7 +2,7 @@ local Calendar =
 {
 	Name = "Calendar",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Calendar",
 
 	Functions =
 	{

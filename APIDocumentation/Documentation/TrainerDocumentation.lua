@@ -2,7 +2,7 @@ local Trainer =
 {
 	Name = "Trainer",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Trainer",
 
 	Functions =
 	{

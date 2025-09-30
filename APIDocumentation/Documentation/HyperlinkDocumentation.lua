@@ -2,7 +2,7 @@ local Hyperlink =
 {
 	Name = "Hyperlink",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Hyperlink",
 
 	Functions =
 	{

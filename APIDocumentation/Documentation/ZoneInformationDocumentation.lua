@@ -2,7 +2,7 @@ local ZoneInformation =
 {
 	Name = "Zone_information",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Zone_information",
 
 	Functions =
 	{

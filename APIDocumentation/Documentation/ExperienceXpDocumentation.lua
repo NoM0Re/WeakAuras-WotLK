@@ -2,7 +2,7 @@ local ExperienceXp =
 {
 	Name = "Experience_(XP)",
 	Type = "System",
-	Namespace = "",
+	Namespace = "Experience_(XP)",
 
 	Functions =
 	{

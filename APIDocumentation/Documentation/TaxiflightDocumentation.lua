@@ -2,7 +2,7 @@ local Taxiflight =
 {
 	Name = "TaxiFlight",
 	Type = "System",
-	Namespace = "",
+	Namespace = "TaxiFlight",
 
 	Functions =
 	{

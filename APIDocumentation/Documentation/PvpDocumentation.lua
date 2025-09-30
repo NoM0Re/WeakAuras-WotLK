@@ -2,7 +2,7 @@ local Pvp =
 {
 	Name = "PvP",
 	Type = "System",
-	Namespace = "",
+	Namespace = "PvP",
 
 	Functions =
 	{
