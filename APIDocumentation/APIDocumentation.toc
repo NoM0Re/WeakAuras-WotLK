@@ -31,6 +31,7 @@ Documentation\ActionDocumentation.lua
 Documentation\AddonRelatedDocumentation.lua
 Documentation\ArenaDocumentation.lua
 Documentation\AuctionDocumentation.lua
+Documentation\Awesome_WotLKDocumentation.lua
 Documentation\BankDocumentation.lua
 Documentation\BarbershopDocumentation.lua
 Documentation\BattlefieldDocumentation.lua
