@@ -2,78 +2,154 @@ local Item =
 {
 	Name = "Item",
 	Type = "System",
-	Namespace = "C_Item",
+	Namespace = "Item",
 
 	Functions =
 	{
 		{
-			Name = "DoesItemExist",
+			Name = "BindEnchant",
+			Type = "Function",
+
+		},
+		{
+			Name = "CancelPendingEquip",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "emptiableItemLocation", Type = "EmptiableItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
+
+		},
+		{
+			Name = "ConfirmBindOnUse",
+			Type = "Function",
+
+		},
+		{
+			Name = "CursorHasItem",
+			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "itemExists", Type = "bool", Nilable = false },
+				{ Name = "hasItem", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "DoesItemExistByID",
+			Name = "DeleteCursorItem",
+			Type = "Function",
+
+		},
+		{
+			Name = "EndBoundTradeable",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
+				{ Name = "id", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "EndRefund",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "EquipItemByName",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+		},
+		{
+			Name = "EquipPendingItem",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "GetItemCooldown",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemExists", Type = "bool", Nilable = false },
+				{ Name = "start", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
+				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetCurrentItemLevel",
+			Name = "GetItemCount",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemId", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+				{ Name = "includeBank", Type = "bool", Nilable = true },
+				{ Name = "includeCharges", Type = "bool", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "currentItemLevel", Type = "number", Nilable = true },
+				{ Name = "itemCount", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetItemGUID",
+			Name = "GetItemFamily",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemGUID", Type = "WOWGUID", Nilable = false },
+				{ Name = "bagType", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetItemID",
+			Name = "GetItemGem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemID", Type = "number", Nilable = false },
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "link", Type = "hyperlink", Nilable = false },
 			},
 		},
 		{
@@ -82,305 +158,361 @@ local Item =
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "icon", Type = "fileID", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemIconByID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "icon", Type = "fileID", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemInventoryType",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "inventoryType", Type = "InventoryType", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemInventoryTypeByID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "inventoryType", Type = "InventoryType", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemLink",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
-			},
-
-			Returns =
-			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
 				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
+
+			Returns =
+			{
+				{ Name = "texture", Type = "string", Nilable = false },
+			},
 		},
 		{
-			Name = "GetItemMaxStackSize",
+			Name = "GetItemInfo",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "stackSize", Type = "number", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemMaxStackSizeByID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "stackSize", Type = "number", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemName",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
-			},
-
-			Returns =
-			{
+				{ Name = "itemID", Type = "number", Nilable = true },
 				{ Name = "itemName", Type = "string", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemNameByID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "link", Type = "string", Nilable = false },
+				{ Name = "quality", Type = "itemQuality", Nilable = false },
+				{ Name = "iLevel", Type = "number", Nilable = false },
+				{ Name = "reqLevel", Type = "number", Nilable = false },
+				{ Name = "class", Type = "string", Nilable = false },
+				{ Name = "subclass", Type = "string", Nilable = false },
+				{ Name = "maxStack", Type = "number", Nilable = false },
+				{ Name = "equipSlot", Type = "string", Nilable = false },
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "vendorPrice", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetItemQualityColor",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "quality", Type = "itemQuality", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "redComponent", Type = "number", Nilable = false },
+				{ Name = "greenComponent", Type = "number", Nilable = false },
+				{ Name = "blueComponent", Type = "number", Nilable = false },
+				{ Name = "hexColor", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "GetItemSpell",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
 				{ Name = "itemName", Type = "string", Nilable = true },
-			},
-		},
-		{
-			Name = "GetItemQuality",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemQuality", Type = "ItemQuality", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "rank", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "GetItemQualityByID",
+			Name = "GetItemStatDelta",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
+				{ Name = "item1Link", Type = "string", Nilable = false },
+				{ Name = "item2Link", Type = "string", Nilable = false },
+				{ Name = "returnTable", Type = "table", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemQuality", Type = "ItemQuality", Nilable = true },
+				{ Name = "statTable", Type = "table", Nilable = false },
 			},
 		},
 		{
-			Name = "GetStackCount",
+			Name = "GetItemStats",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemLink", Type = "string", Nilable = false },
+				{ Name = "returnTable", Type = "table", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "stackCount", Type = "number", Nilable = false },
+				{ Name = "statTable", Type = "table", Nilable = false },
 			},
 		},
 		{
-			Name = "IsBound",
+			Name = "GetItemUniqueness",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "isBound", Type = "bool", Nilable = false },
+				{ Name = "uniqueFamily", Type = "number", Nilable = false },
+				{ Name = "maxEquipped", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "IsItemDataCached",
+			Name = "IsConsumableItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "isCached", Type = "bool", Nilable = false },
+				{ Name = "consumable", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "IsItemDataCachedByID",
+			Name = "IsCurrentItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "isCached", Type = "bool", Nilable = false },
+				{ Name = "isItem", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "IsLocked",
+			Name = "IsDressableItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "isLocked", Type = "bool", Nilable = false },
+				{ Name = "isDressable", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "LockItem",
+			Name = "IsEquippableItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isEquippable", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "LockItemByGUID",
+			Name = "IsEquippedItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemGUID", Type = "WOWGUID", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isEquipped", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "RequestLoadItemData",
+			Name = "IsEquippedItemType",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "type", Type = "string", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isEquipped", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "RequestLoadItemDataByID",
+			Name = "IsHarmfulItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemInfo", Type = "ItemInfo", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isHarmful", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "UnlockItem",
+			Name = "IsHelpfulItem",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isHarmful", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "UnlockItemByGUID",
+			Name = "IsItemInRange",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "itemGUID", Type = "WOWGUID", Nilable = false },
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
+
+			Returns =
+			{
+				{ Name = "inRange", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "IsUsableItem",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isUsable", Type = "bool", Nilable = false },
+				{ Name = "notEnoughMana", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "ItemHasRange",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "hasRange", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "PickupItem",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+		},
+		{
+			Name = "ReplaceEnchant",
+			Type = "Function",
+
+		},
+		{
+			Name = "SpellCanTargetItem",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "canTarget", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "SpellTargetItem",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "itemID", Type = "number", Nilable = true },
+				{ Name = "itemName", Type = "string", Nilable = true },
+				{ Name = "itemLink", Type = "string", Nilable = true },
+			},
+
+		},
+		{
+			Name = "UseItemByName",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "target", Type = "string", Nilable = false },
+			},
+
 		},
 	},
 
 	Events =
 	{
 		{
-			Name = "ActionWillBindItem",
+			Name = "CloseInboxItem",
 			Type = "Event",
-			LiteralName = "ACTION_WILL_BIND_ITEM",
-		},
-		{
-			Name = "BindEnchant",
-			Type = "Event",
-			LiteralName = "BIND_ENCHANT",
-		},
-		{
-			Name = "CharacterItemFixupNotification",
-			Type = "Event",
-			LiteralName = "CHARACTER_ITEM_FIXUP_NOTIFICATION",
+			LiteralName = "CLOSE_INBOX_ITEM",
 			Payload =
 			{
-				{ Name = "fixupVersion", Type = "number", Nilable = false },
+				{ Name = "id", Type = "number", Nilable = false },
 			},
-		},
-		{
-			Name = "ConfirmBeforeUse",
-			Type = "Event",
-			LiteralName = "CONFIRM_BEFORE_USE",
 		},
 		{
 			Name = "DeleteItemConfirm",
@@ -388,89 +520,44 @@ local Item =
 			LiteralName = "DELETE_ITEM_CONFIRM",
 			Payload =
 			{
-				{ Name = "itemName", Type = "cstring", Nilable = false },
-				{ Name = "qualityID", Type = "number", Nilable = false },
-				{ Name = "bonding", Type = "number", Nilable = false },
-				{ Name = "questWarn", Type = "number", Nilable = false },
+				{ Name = "itemName", Type = "string", Nilable = false },
+				{ Name = "itemQuality", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "EndBoundTradeable",
+			Name = "ItemLocked",
 			Type = "Event",
-			LiteralName = "END_BOUND_TRADEABLE",
+			LiteralName = "ITEM_LOCKED",
+		},
+		{
+			Name = "ItemLockChanged",
+			Type = "Event",
+			LiteralName = "ITEM_LOCK_CHANGED",
+		},
+		{
+			Name = "ItemPush",
+			Type = "Event",
+			LiteralName = "ITEM_PUSH",
 			Payload =
 			{
-				{ Name = "reason", Type = "cstring", Nilable = false },
+				{ Name = "bagID", Type = "number", Nilable = false },
+				{ Name = "icon", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "GetItemInfoReceived",
+			Name = "ItemUnlocked",
 			Type = "Event",
-			LiteralName = "GET_ITEM_INFO_RECEIVED",
-			Payload =
-			{
-				{ Name = "itemID", Type = "number", Nilable = false },
-				{ Name = "success", Type = "bool", Nilable = false },
-			},
+			LiteralName = "ITEM_UNLOCKED",
 		},
 		{
-			Name = "ItemDataLoadResult",
+			Name = "MailLockSendItems",
 			Type = "Event",
-			LiteralName = "ITEM_DATA_LOAD_RESULT",
-			Payload =
-			{
-				{ Name = "itemID", Type = "number", Nilable = false },
-				{ Name = "success", Type = "bool", Nilable = false },
-			},
+			LiteralName = "MAIL_LOCK_SEND_ITEMS",
 		},
 		{
-			Name = "MerchantConfirmTradeTimerRemoval",
+			Name = "MailUnlockSendItems",
 			Type = "Event",
-			LiteralName = "MERCHANT_CONFIRM_TRADE_TIMER_REMOVAL",
-			Payload =
-			{
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ReplaceEnchant",
-			Type = "Event",
-			LiteralName = "REPLACE_ENCHANT",
-			Payload =
-			{
-				{ Name = "existingStr", Type = "cstring", Nilable = false },
-				{ Name = "replacementStr", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ReplaceTradeskillEnchant",
-			Type = "Event",
-			LiteralName = "REPLACE_TRADESKILL_ENCHANT",
-			Payload =
-			{
-				{ Name = "existing", Type = "cstring", Nilable = false },
-				{ Name = "replacement", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "TradeReplaceEnchant",
-			Type = "Event",
-			LiteralName = "TRADE_REPLACE_ENCHANT",
-			Payload =
-			{
-				{ Name = "existing", Type = "cstring", Nilable = false },
-				{ Name = "replacement", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "UseBindConfirm",
-			Type = "Event",
-			LiteralName = "USE_BIND_CONFIRM",
-		},
-		{
-			Name = "UseNoRefundConfirm",
-			Type = "Event",
-			LiteralName = "USE_NO_REFUND_CONFIRM",
+			LiteralName = "MAIL_UNLOCK_SEND_ITEMS",
 		},
 	},
 

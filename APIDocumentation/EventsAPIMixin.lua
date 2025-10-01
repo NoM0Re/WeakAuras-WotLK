@@ -26,10 +26,7 @@ function EventsAPIMixin:GetClipboardString()
 	return table.concat(lines, "\r\n");
 end
 
-function EventsAPIMixin:GetFullName(decorateOptionals, includeColorCodes) -- override
-	if self.System then
-		return ("Event.%s.%s -> %s"):format(self.System:GetName(), self:GetName(), self:GetPayloadString(decorateOptionals, includeColorCodes));
-	end
+function EventsAPIMixin:GetFullName(decorateOptionals, includeColorCodes)
 	return ("Event.%s -> %s"):format(self:GetName(), self:GetPayloadString(decorateOptionals, includeColorCodes));
 end
 

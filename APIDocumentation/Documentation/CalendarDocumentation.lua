@@ -2,70 +2,68 @@ local Calendar =
 {
 	Name = "Calendar",
 	Type = "System",
-	Namespace = "C_Calendar",
+	Namespace = "Calendar",
 
 	Functions =
 	{
 		{
-			Name = "AddEvent",
+			Name = "CalendarAddEvent",
 			Type = "Function",
+
 		},
 		{
-			Name = "AreNamesReady",
+			Name = "CalendarCanAddEvent",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "ready", Type = "bool", Nilable = false },
+				{ Name = "canAdd", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "CanAddEvent",
+			Name = "CalendarCanSendInvite",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "canAddEvent", Type = "bool", Nilable = false },
+				{ Name = "canInvite", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "CanSendInvite",
+			Name = "CalendarCloseEvent",
 			Type = "Function",
 
-			Returns =
-			{
-				{ Name = "canSendInvite", Type = "bool", Nilable = false },
-			},
 		},
 		{
-			Name = "CloseEvent",
+			Name = "CalendarContextDeselectEvent",
 			Type = "Function",
+
 		},
 		{
-			Name = "ContextMenuEventCanComplain",
+			Name = "CalendarContextEventCanComplain",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "canComplain", Type = "bool", Nilable = false },
+				{ Name = "canReport", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "ContextMenuEventCanEdit",
+			Name = "CalendarContextEventCanEdit",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -74,119 +72,230 @@ local Calendar =
 			},
 		},
 		{
-			Name = "ContextMenuEventCanRemove",
+			Name = "CalendarContextEventClipboard",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "canPaste", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarContextEventComplain",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
-			Returns =
-			{
-				{ Name = "canRemove", Type = "bool", Nilable = false },
-			},
 		},
 		{
-			Name = "ContextMenuEventClipboard",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "exists", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "ContextMenuEventCopy",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuEventGetCalendarType",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "calendarType", Type = "string", Nilable = true },
-			},
-		},
-		{
-			Name = "ContextMenuEventPaste",
+			Name = "CalendarContextEventCopy",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
-		},
-		{
-			Name = "ContextMenuEventRemove",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuEventSignUp",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuGetEventIndex",
-			Type = "Function",
 
-			Returns =
-			{
-				{ Name = "info", Type = "CalendarEventIndexInfo", Nilable = false },
-			},
 		},
 		{
-			Name = "ContextMenuInviteAvailable",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuInviteDecline",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuInviteRemove",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuInviteTentative",
-			Type = "Function",
-		},
-		{
-			Name = "ContextMenuSelectEvent",
+			Name = "CalendarContextEventGetCalendarType",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "calendarType", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "CreateCommunitySignUpEvent",
+			Name = "CalendarContextEventPaste",
 			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+			},
+
 		},
 		{
-			Name = "CreateGuildAnnouncementEvent",
+			Name = "CalendarContextEventRemove",
 			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
 		},
 		{
-			Name = "CreateGuildSignUpEvent",
+			Name = "CalendarContextEventSignUp",
 			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
 		},
 		{
-			Name = "CreatePlayerEvent",
+			Name = "CalendarContextGetEventIndex",
 			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
 		},
 		{
-			Name = "EventAvailable",
+			Name = "CalendarContextInviteAvailable",
 			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
 		},
 		{
-			Name = "EventCanEdit",
+			Name = "CalendarContextInviteDecline",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarContextInviteIsPending",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "pendingInvite", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarContextInviteModeratorStatus",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "modStatus", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarContextInviteRemove",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarContextInviteStatus",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "inviteStatus", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarContextInviteType",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "inviteType", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarContextSelectEvent",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = true },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarDefaultGuildFilter",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "minLevel", Type = "number", Nilable = false },
+				{ Name = "maxLevel", Type = "number", Nilable = false },
+				{ Name = "rank", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarEventAvailable",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventCanEdit",
 			Type = "Function",
 
 			Returns =
@@ -195,74 +304,95 @@ local Calendar =
 			},
 		},
 		{
-			Name = "EventClearAutoApprove",
-			Type = "Function",
-		},
-		{
-			Name = "EventClearLocked",
-			Type = "Function",
-		},
-		{
-			Name = "EventClearModerator",
+			Name = "CalendarEventCanModerate",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "inviteIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
-		},
-		{
-			Name = "EventDecline",
-			Type = "Function",
-		},
-		{
-			Name = "EventGetCalendarType",
-			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "calendarType", Type = "string", Nilable = true },
+				{ Name = "canModerate", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "EventGetClubId",
+			Name = "CalendarEventClearAutoApprove",
 			Type = "Function",
 
-			Returns =
-			{
-				{ Name = "info", Type = "ClubId", Nilable = true },
-			},
 		},
 		{
-			Name = "EventGetInvite",
+			Name = "CalendarEventClearLocked",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventClearModerator",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
+
+		},
+		{
+			Name = "CalendarEventDecline",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventGetCalendarType",
+			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "info", Type = "CalendarEventInviteInfo", Nilable = false },
+				{ Name = "calendarType", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "EventGetInviteResponseTime",
+			Name = "CalendarEventGetInvite",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "time", Type = "CalendarTime", Nilable = false },
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "level", Type = "number", Nilable = false },
+				{ Name = "className", Type = "string", Nilable = false },
+				{ Name = "classFileName", Type = "string", Nilable = false },
+				{ Name = "inviteStatus", Type = "number", Nilable = false },
+				{ Name = "modStatus", Type = "number", Nilable = false },
+				{ Name = "inviteIsMine", Type = "bool", Nilable = false },
+				{ Name = "inviteType", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "EventGetInviteSortCriterion",
+			Name = "CalendarEventGetInviteResponseTime",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+				{ Name = "hour", Type = "number", Nilable = false },
+				{ Name = "minute", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarEventGetInviteSortCriterion",
 			Type = "Function",
 
 			Returns =
@@ -272,181 +402,164 @@ local Calendar =
 			},
 		},
 		{
-			Name = "EventGetSelectedInvite",
+			Name = "CalendarEventGetNumInvites",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "inviteIndex", Type = "luaIndex", Nilable = true },
+				{ Name = "numInvites", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "EventGetStatusOptions",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "options", Type = "table", InnerType = "CalendarEventStatusOption", Nilable = false },
-			},
-		},
-		{
-			Name = "EventGetTextures",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "eventType", Type = "CalendarEventType", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "textures", Type = "table", InnerType = "CalendarEventTextureInfo", Nilable = false },
-			},
-		},
-		{
-			Name = "EventGetTypes",
+			Name = "CalendarEventGetRepeatOptions",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "types", Type = "table", InnerType = "string", Nilable = false },
+				{ Name = "...", Type = "list", Nilable = false },
 			},
 		},
 		{
-			Name = "EventGetTypesDisplayOrdered",
+			Name = "CalendarEventGetSelectedInvite",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "infos", Type = "table", InnerType = "CalendarEventTypeDisplayInfo", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
-			Name = "EventHasPendingInvite",
+			Name = "CalendarEventGetStatusOptions",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "hasPendingInvite", Type = "bool", Nilable = false },
+				{ Name = "...", Type = "list", Nilable = false },
 			},
 		},
 		{
-			Name = "EventHaveSettingsChanged",
+			Name = "CalendarEventGetTextures",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "eventType", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "icon", Type = "string", Nilable = false },
+				{ Name = "expansion", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarEventGetTypes",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "haveSettingsChanged", Type = "bool", Nilable = false },
+				{ Name = "...", Type = "list", Nilable = false },
 			},
 		},
 		{
-			Name = "EventInvite",
+			Name = "CalendarEventHasPendingInvite",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "pendingInvite", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarEventHaveSettingsChanged",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "settingsChanged", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarEventInvite",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "name", Type = "cstring", Nilable = false },
+				{ Name = "name", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventIsModerator",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "isModerator", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "EventRemoveInvite",
+			Name = "CalendarEventRemoveInvite",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "inviteIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventRemoveInviteByGuid",
+			Name = "CalendarEventSelectInvite",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "guid", Type = "WOWGUID", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventSelectInvite",
+			Name = "CalendarEventSetAutoApprove",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventSetDate",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "inviteIndex", Type = "luaIndex", Nilable = false },
-			},
-		},
-		{
-			Name = "EventSetAutoApprove",
-			Type = "Function",
-		},
-		{
-			Name = "EventSetClubId",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "clubId", Type = "ClubId", Nilable = true },
-			},
-		},
-		{
-			Name = "EventSetDate",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "month", Type = "luaIndex", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
 				{ Name = "year", Type = "number", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventSetDescription",
+			Name = "CalendarEventSetDescription",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventSetLocked",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventSetLockoutDate",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "description", Type = "cstring", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
 			},
-		},
-		{
-			Name = "EventSetInviteStatus",
-			Type = "Function",
 
-			Arguments =
-			{
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
-				{ Name = "status", Type = "CalendarStatus", Nilable = false },
-			},
 		},
 		{
-			Name = "EventSetLocked",
-			Type = "Function",
-		},
-		{
-			Name = "EventSetModerator",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "inviteIndex", Type = "luaIndex", Nilable = false },
-			},
-		},
-		{
-			Name = "EventSetTextureID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "textureIndex", Type = "luaIndex", Nilable = false },
-			},
-		},
-		{
-			Name = "EventSetTime",
+			Name = "CalendarEventSetLockoutTime",
 			Type = "Function",
 
 			Arguments =
@@ -454,372 +567,470 @@ local Calendar =
 				{ Name = "hour", Type = "number", Nilable = false },
 				{ Name = "minute", Type = "number", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventSetTitle",
+			Name = "CalendarEventSetModerator",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "title", Type = "cstring", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventSetType",
+			Name = "CalendarEventSetRepeatOption",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "typeIndex", Type = "CalendarEventType", Nilable = false },
+				{ Name = "title", Type = "number", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventSignUp",
-			Type = "Function",
-		},
-		{
-			Name = "EventSortInvites",
+			Name = "CalendarEventSetSize",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "criterion", Type = "cstring", Nilable = false },
+				{ Name = "size", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSetStatus",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "inviteStatus", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSetTextureID",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSetTime",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "hour", Type = "number", Nilable = false },
+				{ Name = "minute", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSetTitle",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "title", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSetType",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "eventType", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarEventSignUp",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarEventSortInvites",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "criterion", Type = "string", Nilable = false },
 				{ Name = "reverse", Type = "bool", Nilable = false },
 			},
+
 		},
 		{
-			Name = "EventTentative",
-			Type = "Function",
-		},
-		{
-			Name = "GetClubCalendarEvents",
+			Name = "CalendarGetAbsMonth",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "clubId", Type = "ClubId", Nilable = false },
-				{ Name = "startTime", Type = "CalendarTime", Nilable = false },
-				{ Name = "endTime", Type = "CalendarTime", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "events", Type = "table", InnerType = "CalendarDayEvent", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+				{ Name = "numDays", Type = "number", Nilable = false },
+				{ Name = "firstWeekday", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetDayEvent",
+			Name = "CalendarGetDate",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetDayEvent",
 			Type = "Function",
 
 			Arguments =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
 				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "event", Type = "CalendarDayEvent", Nilable = false },
+				{ Name = "title", Type = "string", Nilable = false },
+				{ Name = "hour", Type = "number", Nilable = false },
+				{ Name = "minute", Type = "number", Nilable = false },
+				{ Name = "calendarType", Type = "string", Nilable = false },
+				{ Name = "sequenceType", Type = "string", Nilable = false },
+				{ Name = "eventType", Type = "number", Nilable = false },
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "modStatus", Type = "number", Nilable = false },
+				{ Name = "inviteStatus", Type = "string", Nilable = false },
+				{ Name = "invitedBy", Type = "string", Nilable = false },
+				{ Name = "difficulty", Type = "number", Nilable = false },
+				{ Name = "inviteType", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "GetDefaultGuildFilter",
+			Name = "CalendarGetEventIndex",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "info", Type = "CalendarGuildFilterInfo", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
-			Name = "GetEventIndex",
+			Name = "CalendarGetEventInfo",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "info", Type = "CalendarEventIndexInfo", Nilable = false },
+				{ Name = "title", Type = "string", Nilable = false },
+				{ Name = "description", Type = "string", Nilable = false },
+				{ Name = "creator", Type = "string", Nilable = false },
+				{ Name = "eventType", Type = "number", Nilable = false },
+				{ Name = "repeatOption", Type = "number", Nilable = false },
+				{ Name = "maxSize", Type = "number", Nilable = false },
+				{ Name = "textureIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+				{ Name = "hour", Type = "number", Nilable = false },
+				{ Name = "minute", Type = "number", Nilable = false },
+				{ Name = "lockoutWeekday", Type = "number", Nilable = false },
+				{ Name = "lockoutMonth", Type = "number", Nilable = false },
+				{ Name = "lockoutDay", Type = "number", Nilable = false },
+				{ Name = "lockoutYear", Type = "number", Nilable = false },
+				{ Name = "lockoutHour", Type = "number", Nilable = false },
+				{ Name = "lockoutMinute", Type = "number", Nilable = false },
+				{ Name = "locked", Type = "bool", Nilable = false },
+				{ Name = "autoApprove", Type = "bool", Nilable = false },
+				{ Name = "pendingInvite", Type = "bool", Nilable = false },
+				{ Name = "inviteStatus", Type = "number", Nilable = false },
+				{ Name = "inviteType", Type = "number", Nilable = false },
+				{ Name = "calendarType", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "GetEventIndexInfo",
+			Name = "CalendarGetFirstPendingInvite",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "eventID", Type = "CalendarEventID", Nilable = false },
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetHolidayInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "description", Type = "string", Nilable = false },
+				{ Name = "texture", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetMaxCreateDate",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetMaxDate",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetMinDate",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetMinHistoryDate",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "weekday", Type = "number", Nilable = false },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetMonth",
+			Type = "Function",
+
+			Arguments =
+			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
-				{ Name = "monthDay", Type = "number", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "eventIndexInfo", Type = "CalendarEventIndexInfo", Nilable = true },
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = false },
+				{ Name = "numDays", Type = "number", Nilable = false },
+				{ Name = "firstWeekday", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetEventInfo",
+			Name = "CalendarGetMonthNames",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "info", Type = "CalendarEventInfo", Nilable = false },
+				{ Name = "...", Type = "list", Nilable = false },
 			},
 		},
 		{
-			Name = "GetFirstPendingInvite",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "firstPendingInvite", Type = "luaIndex", Nilable = true },
-			},
-		},
-		{
-			Name = "GetGuildEventInfo",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "index", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "info", Type = "CalendarGuildEventInfo", Nilable = false },
-			},
-		},
-		{
-			Name = "GetGuildEventSelectionInfo",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "index", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "info", Type = "CalendarEventIndexInfo", Nilable = false },
-			},
-		},
-		{
-			Name = "GetHolidayInfo",
+			Name = "CalendarGetNumDayEvents",
 			Type = "Function",
 
 			Arguments =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "numEvents", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetNumPendingInvites",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "numInvites", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CalendarGetRaidInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
 				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "event", Type = "CalendarHolidayInfo", Nilable = false },
+				{ Name = "title", Type = "number", Nilable = false },
+				{ Name = "calendarType", Type = "string", Nilable = false },
+				{ Name = "raidID", Type = "number", Nilable = false },
+				{ Name = "hour", Type = "number", Nilable = false },
+				{ Name = "minute", Type = "number", Nilable = false },
+				{ Name = "difficulty", Type = "number", Nilable = false },
 			},
 		},
 		{
-			Name = "GetMaxCreateDate",
+			Name = "CalendarGetWeekdayNames",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "maxCreateDate", Type = "CalendarTime", Nilable = false },
+				{ Name = "...", Type = "list", Nilable = false },
 			},
 		},
 		{
-			Name = "GetMinDate",
+			Name = "CalendarIsActionPending",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "minDate", Type = "CalendarTime", Nilable = false },
+				{ Name = "isPending", Type = "bool", Nilable = false },
 			},
 		},
 		{
-			Name = "GetMonthInfo",
+			Name = "CalendarMassInviteArenaTeam",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false, Default = 0 },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
-			Returns =
-			{
-				{ Name = "monthInfo", Type = "CalendarMonthInfo", Nilable = false },
-			},
 		},
 		{
-			Name = "GetNextClubId",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "clubId", Type = "ClubId", Nilable = true },
-			},
-		},
-		{
-			Name = "GetNumDayEvents",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "numDayEvents", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "GetNumGuildEvents",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "numGuildEvents", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "GetNumInvites",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "num", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "GetNumPendingInvites",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "num", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "GetRaidInfo",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "info", Type = "CalendarRaidInfo", Nilable = false },
-			},
-		},
-		{
-			Name = "IsActionPending",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "actionPending", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "IsEventOpen",
-			Type = "Function",
-
-			Returns =
-			{
-				{ Name = "isOpen", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "MassInviteCommunity",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "clubId", Type = "ClubId", Nilable = false },
-				{ Name = "minLevel", Type = "number", Nilable = false },
-				{ Name = "maxLevel", Type = "number", Nilable = false },
-				{ Name = "maxRankOrder", Type = "luaIndex", Nilable = true },
-			},
-		},
-		{
-			Name = "MassInviteGuild",
+			Name = "CalendarMassInviteGuild",
 			Type = "Function",
 
 			Arguments =
 			{
 				{ Name = "minLevel", Type = "number", Nilable = false },
 				{ Name = "maxLevel", Type = "number", Nilable = false },
-				{ Name = "maxRankOrder", Type = "luaIndex", Nilable = false },
+				{ Name = "rank", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarNewEvent",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarNewGuildAnnouncement",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarNewGuildEvent",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarOpenEvent",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+				{ Name = "day", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarRemoveEvent",
+			Type = "Function",
+
+		},
+		{
+			Name = "CalendarSetAbsMonth",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "month", Type = "number", Nilable = false },
+				{ Name = "year", Type = "number", Nilable = true },
+			},
+
+		},
+		{
+			Name = "CalendarSetMonth",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "monthOffset", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "CalendarUpdateEvent",
+			Type = "Function",
+
+		},
+		{
+			Name = "CanEditGuildEvent",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "canEdit", Type = "bool", Nilable = false },
 			},
 		},
 		{
 			Name = "OpenCalendar",
 			Type = "Function",
-		},
-		{
-			Name = "OpenEvent",
-			Type = "Function",
 
-			Arguments =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "index", Type = "luaIndex", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "success", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "RemoveEvent",
-			Type = "Function",
-		},
-		{
-			Name = "SetAbsMonth",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "month", Type = "luaIndex", Nilable = false },
-				{ Name = "year", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "SetMonth",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "SetNextClubId",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "clubId", Type = "ClubId", Nilable = true },
-			},
-		},
-		{
-			Name = "UpdateEvent",
-			Type = "Function",
 		},
 	},
 
@@ -829,10 +1040,6 @@ local Calendar =
 			Name = "CalendarActionPending",
 			Type = "Event",
 			LiteralName = "CALENDAR_ACTION_PENDING",
-			Payload =
-			{
-				{ Name = "pending", Type = "bool", Nilable = false },
-			},
 		},
 		{
 			Name = "CalendarCloseEvent",
@@ -843,59 +1050,21 @@ local Calendar =
 			Name = "CalendarEventAlarm",
 			Type = "Event",
 			LiteralName = "CALENDAR_EVENT_ALARM",
-			Payload =
-			{
-				{ Name = "title", Type = "cstring", Nilable = false },
-				{ Name = "hour", Type = "number", Nilable = false },
-				{ Name = "minute", Type = "number", Nilable = false },
-			},
 		},
 		{
 			Name = "CalendarNewEvent",
 			Type = "Event",
 			LiteralName = "CALENDAR_NEW_EVENT",
-			Payload =
-			{
-				{ Name = "isCopy", Type = "bool", Nilable = false },
-			},
 		},
 		{
 			Name = "CalendarOpenEvent",
 			Type = "Event",
 			LiteralName = "CALENDAR_OPEN_EVENT",
-			Payload =
-			{
-				{ Name = "calendarType", Type = "cstring", Nilable = false },
-			},
 		},
 		{
 			Name = "CalendarUpdateError",
 			Type = "Event",
 			LiteralName = "CALENDAR_UPDATE_ERROR",
-			Payload =
-			{
-				{ Name = "errorReason", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarUpdateErrorWithCount",
-			Type = "Event",
-			LiteralName = "CALENDAR_UPDATE_ERROR_WITH_COUNT",
-			Payload =
-			{
-				{ Name = "errorReason", Type = "cstring", Nilable = false },
-				{ Name = "count", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarUpdateErrorWithPlayerName",
-			Type = "Event",
-			LiteralName = "CALENDAR_UPDATE_ERROR_WITH_PLAYER_NAME",
-			Payload =
-			{
-				{ Name = "errorReason", Type = "cstring", Nilable = false },
-				{ Name = "playerName", Type = "cstring", Nilable = false },
-			},
 		},
 		{
 			Name = "CalendarUpdateEvent",
@@ -908,18 +1077,9 @@ local Calendar =
 			LiteralName = "CALENDAR_UPDATE_EVENT_LIST",
 		},
 		{
-			Name = "CalendarUpdateGuildEvents",
-			Type = "Event",
-			LiteralName = "CALENDAR_UPDATE_GUILD_EVENTS",
-		},
-		{
 			Name = "CalendarUpdateInviteList",
 			Type = "Event",
 			LiteralName = "CALENDAR_UPDATE_INVITE_LIST",
-			Payload =
-			{
-				{ Name = "hasCompleteList", Type = "bool", Nilable = true },
-			},
 		},
 		{
 			Name = "CalendarUpdatePendingInvites",
@@ -930,182 +1090,6 @@ local Calendar =
 
 	Tables =
 	{
-		{
-			Name = "CalendarDayEvent",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "eventID", Type = "CalendarEventID", Nilable = false },
-				{ Name = "title", Type = "string", Nilable = false },
-				{ Name = "isCustomTitle", Type = "bool", Nilable = false },
-				{ Name = "startTime", Type = "CalendarTime", Nilable = false },
-				{ Name = "endTime", Type = "CalendarTime", Nilable = false },
-				{ Name = "calendarType", Type = "cstring", Nilable = false },
-				{ Name = "sequenceType", Type = "cstring", Nilable = false },
-				{ Name = "eventType", Type = "CalendarEventType", Nilable = false },
-				{ Name = "iconTexture", Type = "fileID", Nilable = true },
-				{ Name = "modStatus", Type = "cstring", Nilable = false },
-				{ Name = "inviteStatus", Type = "CalendarStatus", Nilable = false },
-				{ Name = "invitedBy", Type = "string", Nilable = false },
-				{ Name = "difficulty", Type = "number", Nilable = false },
-				{ Name = "inviteType", Type = "CalendarInviteType", Nilable = false },
-				{ Name = "sequenceIndex", Type = "luaIndex", Nilable = false },
-				{ Name = "numSequenceDays", Type = "number", Nilable = false },
-				{ Name = "difficultyName", Type = "cstring", Nilable = false },
-				{ Name = "dontDisplayBanner", Type = "bool", Nilable = false },
-				{ Name = "dontDisplayEnd", Type = "bool", Nilable = false },
-				{ Name = "clubID", Type = "ClubId", Nilable = false },
-				{ Name = "isLocked", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarEventIndexInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "offsetMonths", Type = "number", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "eventIndex", Type = "luaIndex", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarEventInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "title", Type = "string", Nilable = false },
-				{ Name = "description", Type = "string", Nilable = false },
-				{ Name = "creator", Type = "string", Nilable = true },
-				{ Name = "eventType", Type = "CalendarEventType", Nilable = false },
-				{ Name = "repeatOption", Type = "CalendarEventRepeatOptions", Nilable = false },
-				{ Name = "maxSize", Type = "number", Nilable = false },
-				{ Name = "textureIndex", Type = "luaIndex", Nilable = true },
-				{ Name = "time", Type = "CalendarTime", Nilable = false },
-				{ Name = "lockoutTime", Type = "CalendarTime", Nilable = false },
-				{ Name = "isLocked", Type = "bool", Nilable = false },
-				{ Name = "isAutoApprove", Type = "bool", Nilable = false },
-				{ Name = "hasPendingInvite", Type = "bool", Nilable = false },
-				{ Name = "inviteStatus", Type = "CalendarStatus", Nilable = true },
-				{ Name = "inviteType", Type = "CalendarInviteType", Nilable = true },
-				{ Name = "calendarType", Type = "string", Nilable = false },
-				{ Name = "communityName", Type = "string", Nilable = true },
-			},
-		},
-		{
-			Name = "CalendarEventInviteInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "level", Type = "number", Nilable = false },
-				{ Name = "className", Type = "string", Nilable = true },
-				{ Name = "classFilename", Type = "string", Nilable = true },
-				{ Name = "inviteStatus", Type = "CalendarStatus", Nilable = true },
-				{ Name = "modStatus", Type = "string", Nilable = true },
-				{ Name = "inviteIsMine", Type = "bool", Nilable = false },
-				{ Name = "type", Type = "CalendarInviteType", Nilable = false },
-				{ Name = "notes", Type = "string", Nilable = false },
-				{ Name = "classID", Type = "number", Nilable = true },
-				{ Name = "guid", Type = "WOWGUID", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarEventStatusOption",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "status", Type = "CalendarStatus", Nilable = false },
-				{ Name = "statusString", Type = "string", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarEventTextureInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "title", Type = "string", Nilable = false },
-				{ Name = "iconTexture", Type = "fileID", Nilable = false },
-				{ Name = "expansionLevel", Type = "number", Nilable = false },
-				{ Name = "difficultyId", Type = "number", Nilable = true },
-				{ Name = "mapId", Type = "number", Nilable = true },
-				{ Name = "isLfr", Type = "bool", Nilable = true },
-			},
-		},
-		{
-			Name = "CalendarEventTypeDisplayInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "displayString", Type = "string", Nilable = false },
-				{ Name = "eventType", Type = "CalendarEventType", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarGuildEventInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "eventID", Type = "CalendarEventID", Nilable = false },
-				{ Name = "year", Type = "number", Nilable = false },
-				{ Name = "month", Type = "luaIndex", Nilable = false },
-				{ Name = "monthDay", Type = "luaIndex", Nilable = false },
-				{ Name = "weekday", Type = "luaIndex", Nilable = false },
-				{ Name = "hour", Type = "number", Nilable = false },
-				{ Name = "minute", Type = "number", Nilable = false },
-				{ Name = "eventType", Type = "CalendarEventType", Nilable = false },
-				{ Name = "title", Type = "string", Nilable = false },
-				{ Name = "calendarType", Type = "string", Nilable = false },
-				{ Name = "texture", Type = "fileID", Nilable = false },
-				{ Name = "inviteStatus", Type = "CalendarStatus", Nilable = false },
-				{ Name = "clubID", Type = "ClubId", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarGuildFilterInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "minLevel", Type = "number", Nilable = false },
-				{ Name = "maxLevel", Type = "number", Nilable = false },
-				{ Name = "rank", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarHolidayInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "name", Type = "cstring", Nilable = false },
-				{ Name = "description", Type = "cstring", Nilable = false },
-				{ Name = "texture", Type = "fileID", Nilable = false },
-				{ Name = "startTime", Type = "CalendarTime", Nilable = true },
-				{ Name = "endTime", Type = "CalendarTime", Nilable = true },
-			},
-		},
-		{
-			Name = "CalendarMonthInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "month", Type = "luaIndex", Nilable = false },
-				{ Name = "year", Type = "number", Nilable = false },
-				{ Name = "numDays", Type = "number", Nilable = false },
-				{ Name = "firstWeekday", Type = "luaIndex", Nilable = false },
-			},
-		},
-		{
-			Name = "CalendarRaidInfo",
-			Type = "Structure",
-			Fields =
-			{
-				{ Name = "name", Type = "string", Nilable = false },
-				{ Name = "calendarType", Type = "string", Nilable = false },
-				{ Name = "raidID", Type = "number", Nilable = false },
-				{ Name = "time", Type = "CalendarTime", Nilable = false },
-				{ Name = "difficulty", Type = "number", Nilable = false },
-				{ Name = "difficultyName", Type = "string", Nilable = true },
-			},
-		},
 	},
 };
 

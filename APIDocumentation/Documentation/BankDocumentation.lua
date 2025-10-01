@@ -2,23 +2,76 @@ local Bank =
 {
 	Name = "Bank",
 	Type = "System",
-	Namespace = "C_Bank",
+	Namespace = "Bank",
 
 	Functions =
 	{
+		{
+			Name = "BankButtonIDToInvSlotID",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "buttonID", Type = "number", Nilable = false },
+				{ Name = "isBag", Type = "bool", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "inventoryID", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "CloseBankFrame",
+			Type = "Function",
+
+		},
+		{
+			Name = "EquipmentManager_UnpackLocation",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "location", Type = "number", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "player", Type = "bool", Nilable = false },
+				{ Name = "bank", Type = "bool", Nilable = false },
+				{ Name = "bags", Type = "bool", Nilable = false },
+				{ Name = "location or slot", Type = "number", Nilable = false },
+				{ Name = "bag", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetBankSlotCost",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "cost", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetNumBankSlots",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "numSlots", Type = "number", Nilable = false },
+				{ Name = "isFull", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "PurchaseSlot",
+			Type = "Function",
+
+		},
 	},
 
 	Events =
 	{
-		{
-			Name = "BankBagSlotFlagsUpdated",
-			Type = "Event",
-			LiteralName = "BANK_BAG_SLOT_FLAGS_UPDATED",
-			Payload =
-			{
-				{ Name = "slot", Type = "number", Nilable = false },
-			},
-		},
 		{
 			Name = "BankframeClosed",
 			Type = "Event",
@@ -40,7 +93,7 @@ local Bank =
 			LiteralName = "PLAYERBANKSLOTS_CHANGED",
 			Payload =
 			{
-				{ Name = "slot", Type = "number", Nilable = false },
+				{ Name = "slotID", Type = "number", Nilable = false },
 			},
 		},
 	},

@@ -2,10 +2,30 @@ local Tutorial =
 {
 	Name = "Tutorial",
 	Type = "System",
-	Namespace = "C_Tutorial",
+	Namespace = "Tutorial",
 
 	Functions =
 	{
+		{
+			Name = "ClearTutorials",
+			Type = "Function",
+
+		},
+		{
+			Name = "FlagTutorial",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "tutorial", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "ResetTutorials",
+			Type = "Function",
+
+		},
 	},
 
 	Events =
@@ -16,8 +36,7 @@ local Tutorial =
 			LiteralName = "TUTORIAL_TRIGGER",
 			Payload =
 			{
-				{ Name = "tutorialIndex", Type = "number", Nilable = false },
-				{ Name = "forceShow", Type = "bool", Nilable = false },
+				{ Name = "id", Type = "number", Nilable = false },
 			},
 		},
 	},

@@ -2,32 +2,280 @@ local Loot =
 {
 	Name = "Loot",
 	Type = "System",
-	Namespace = "C_Loot",
+	Namespace = "Loot",
 
 	Functions =
 	{
 		{
-			Name = "IsLegacyLootModeEnabled",
+			Name = "CloseLoot",
+			Type = "Function",
+
+		},
+		{
+			Name = "ConfirmLootRoll",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+				{ Name = "rollType", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "ConfirmLootSlot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "GetLootMethod",
 			Type = "Function",
 
 			Returns =
 			{
-				{ Name = "isLegacyLootModeEnabled", Type = "bool", Nilable = false },
+				{ Name = "method", Type = "string", Nilable = false },
+				{ Name = "partyMaster", Type = "number", Nilable = false },
+				{ Name = "raidMaster", Type = "number", Nilable = false },
 			},
+		},
+		{
+			Name = "GetLootRollItemInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "count", Type = "number", Nilable = false },
+				{ Name = "quality", Type = "itemQuality", Nilable = false },
+				{ Name = "bindOnPickUp", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "GetLootRollItemLink",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "link", Type = "hyperlink", Nilable = false },
+			},
+		},
+		{
+			Name = "GetLootRollTimeLeft",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "timeLeft", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetLootSlotInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "item", Type = "string", Nilable = false },
+				{ Name = "quantity", Type = "number", Nilable = false },
+				{ Name = "quality", Type = "itemQuality", Nilable = false },
+				{ Name = "locked", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "GetLootSlotLink",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "link", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "GetLootThreshold",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "threshold", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetMasterLootCandidate",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "candidate", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "GetNumLootItems",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "numItems", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "GetOptOutOfLoot",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "isOptOut", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "GiveMasterLoot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "IsFishingLoot",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "isFishing", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "LootSlot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "LootSlotIsCoin",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isCoin", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "LootSlotIsItem",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "slot", Type = "number", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isItem", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "RollOnLoot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "id", Type = "number", Nilable = false },
+				{ Name = "rollType", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "SetLootMethod",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "method", Type = "string", Nilable = false },
+				{ Name = "master", Type = "string", Nilable = true },
+			},
+
+		},
+		{
+			Name = "SetLootPortrait",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "texture", Type = "table", Nilable = false },
+			},
+
+		},
+		{
+			Name = "SetLootThreshold",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "threshold", Type = "number", Nilable = false },
+			},
+
+		},
+		{
+			Name = "SetOptOutOfLoot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "enable", Type = "bool", Nilable = false },
+			},
+
 		},
 	},
 
 	Events =
 	{
-		{
-			Name = "AzeriteEmpoweredItemLooted",
-			Type = "Event",
-			LiteralName = "AZERITE_EMPOWERED_ITEM_LOOTED",
-			Payload =
-			{
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-			},
-		},
 		{
 			Name = "CancelLootRoll",
 			Type = "Event",
@@ -43,19 +291,8 @@ local Loot =
 			LiteralName = "CONFIRM_LOOT_ROLL",
 			Payload =
 			{
-				{ Name = "rollID", Type = "number", Nilable = false },
-				{ Name = "rollType", Type = "number", Nilable = false },
-				{ Name = "confirmReason", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ItemPush",
-			Type = "Event",
-			LiteralName = "ITEM_PUSH",
-			Payload =
-			{
-				{ Name = "bagSlot", Type = "luaIndex", Nilable = false },
-				{ Name = "iconFileID", Type = "number", Nilable = false },
+				{ Name = "id", Type = "number", Nilable = false },
+				{ Name = "rolltype", Type = "number", Nilable = false },
 			},
 		},
 		{
@@ -64,66 +301,13 @@ local Loot =
 			LiteralName = "LOOT_BIND_CONFIRM",
 			Payload =
 			{
-				{ Name = "lootSlot", Type = "luaIndex", Nilable = false },
+				{ Name = "slotID", Type = "number", Nilable = false },
 			},
 		},
 		{
 			Name = "LootClosed",
 			Type = "Event",
 			LiteralName = "LOOT_CLOSED",
-		},
-		{
-			Name = "LootHistoryAutoShow",
-			Type = "Event",
-			LiteralName = "LOOT_HISTORY_AUTO_SHOW",
-			Payload =
-			{
-				{ Name = "rollID", Type = "number", Nilable = false },
-				{ Name = "isMasterLoot", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "LootHistoryFullUpdate",
-			Type = "Event",
-			LiteralName = "LOOT_HISTORY_FULL_UPDATE",
-		},
-		{
-			Name = "LootHistoryRollChanged",
-			Type = "Event",
-			LiteralName = "LOOT_HISTORY_ROLL_CHANGED",
-			Payload =
-			{
-				{ Name = "historyIndex", Type = "number", Nilable = false },
-				{ Name = "playerIndex", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "LootHistoryRollComplete",
-			Type = "Event",
-			LiteralName = "LOOT_HISTORY_ROLL_COMPLETE",
-		},
-		{
-			Name = "LootItemAvailable",
-			Type = "Event",
-			LiteralName = "LOOT_ITEM_AVAILABLE",
-			Payload =
-			{
-				{ Name = "itemTooltip", Type = "cstring", Nilable = false },
-				{ Name = "lootHandle", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "LootItemRollWon",
-			Type = "Event",
-			LiteralName = "LOOT_ITEM_ROLL_WON",
-			Payload =
-			{
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-				{ Name = "rollQuantity", Type = "number", Nilable = false },
-				{ Name = "rollType", Type = "number", Nilable = false },
-				{ Name = "roll", Type = "number", Nilable = false },
-				{ Name = "upgraded", Type = "bool", Nilable = false },
-			},
 		},
 		{
 			Name = "LootOpened",
@@ -135,31 +319,9 @@ local Loot =
 			},
 		},
 		{
-			Name = "LootReady",
-			Type = "Event",
-			LiteralName = "LOOT_READY",
-			Payload =
-			{
-				{ Name = "autoloot", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "LootRollsComplete",
-			Type = "Event",
-			LiteralName = "LOOT_ROLLS_COMPLETE",
-			Payload =
-			{
-				{ Name = "lootHandle", Type = "number", Nilable = false },
-			},
-		},
-		{
 			Name = "LootSlotChanged",
 			Type = "Event",
 			LiteralName = "LOOT_SLOT_CHANGED",
-			Payload =
-			{
-				{ Name = "lootSlot", Type = "luaIndex", Nilable = false },
-			},
 		},
 		{
 			Name = "LootSlotCleared",
@@ -167,7 +329,7 @@ local Loot =
 			LiteralName = "LOOT_SLOT_CLEARED",
 			Payload =
 			{
-				{ Name = "lootSlot", Type = "luaIndex", Nilable = false },
+				{ Name = "slotID", Type = "number", Nilable = false },
 			},
 		},
 		{
@@ -176,74 +338,14 @@ local Loot =
 			LiteralName = "OPEN_MASTER_LOOT_LIST",
 		},
 		{
-			Name = "ShowLootToastLegendaryLooted",
-			Type = "Event",
-			LiteralName = "SHOW_LOOT_TOAST_LEGENDARY_LOOTED",
-			Payload =
-			{
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ShowLootToastUpgrade",
-			Type = "Event",
-			LiteralName = "SHOW_LOOT_TOAST_UPGRADE",
-			Payload =
-			{
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-				{ Name = "quantity", Type = "number", Nilable = false },
-				{ Name = "specID", Type = "number", Nilable = false },
-				{ Name = "sex", Type = "number", Nilable = false },
-				{ Name = "baseQuality", Type = "number", Nilable = false },
-				{ Name = "personalLootToast", Type = "bool", Nilable = false },
-				{ Name = "lessAwesome", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "ShowPvpFactionLootToast",
-			Type = "Event",
-			LiteralName = "SHOW_PVP_FACTION_LOOT_TOAST",
-			Payload =
-			{
-				{ Name = "typeIdentifier", Type = "cstring", Nilable = false },
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-				{ Name = "quantity", Type = "number", Nilable = false },
-				{ Name = "specID", Type = "number", Nilable = false },
-				{ Name = "sex", Type = "number", Nilable = false },
-				{ Name = "personalLootToast", Type = "bool", Nilable = false },
-				{ Name = "lessAwesome", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "ShowRatedPvpRewardToast",
-			Type = "Event",
-			LiteralName = "SHOW_RATED_PVP_REWARD_TOAST",
-			Payload =
-			{
-				{ Name = "typeIdentifier", Type = "cstring", Nilable = false },
-				{ Name = "itemLink", Type = "cstring", Nilable = false },
-				{ Name = "quantity", Type = "number", Nilable = false },
-				{ Name = "specID", Type = "number", Nilable = false },
-				{ Name = "sex", Type = "number", Nilable = false },
-				{ Name = "personalLootToast", Type = "bool", Nilable = false },
-				{ Name = "lessAwesome", Type = "bool", Nilable = false },
-			},
-		},
-		{
 			Name = "StartLootRoll",
 			Type = "Event",
 			LiteralName = "START_LOOT_ROLL",
 			Payload =
 			{
-				{ Name = "rollID", Type = "number", Nilable = false },
-				{ Name = "rollTime", Type = "number", Nilable = false },
-				{ Name = "lootHandle", Type = "number", Nilable = true },
+				{ Name = "id", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
-		},
-		{
-			Name = "TrialCapReachedMoney",
-			Type = "Event",
-			LiteralName = "TRIAL_CAP_REACHED_MONEY",
 		},
 		{
 			Name = "UpdateMasterLootList",

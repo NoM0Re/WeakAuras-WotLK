@@ -2,21 +2,164 @@ local Unit =
 {
 	Name = "Unit",
 	Type = "System",
+	Namespace = "Unit",
 
 	Functions =
 	{
 		{
-			Name = "IsPlayerInGuildFromGUID",
+			Name = "CanInspect",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "playerGUID", Type = "WOWGUID", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "showError", Type = "bool", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "IsInGuild", Type = "bool", Nilable = false },
+				{ Name = "canInspect", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "CheckInteractDistance",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "distIndex", Type = "luaIndex", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "canInteract", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "GetGuildInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "guildName", Type = "string", Nilable = false },
+				{ Name = "guildRankName", Type = "string", Nilable = false },
+				{ Name = "guildRankIndex", Type = "luaIndex", Nilable = false },
+			},
+		},
+		{
+			Name = "GetMuteStatus",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+				{ Name = "channel", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "muteStatus", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "GetPlayerInfoByGUID",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "class", Type = "string", Nilable = false },
+				{ Name = "classFilename", Type = "string", Nilable = false },
+				{ Name = "race", Type = "string", Nilable = false },
+				{ Name = "raceFilename", Type = "string", Nilable = false },
+				{ Name = "sex", Type = "number", Nilable = false },
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "realm", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "GetUnitName",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "showServerName", Type = "bool", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "nameString", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "GetUnitSpeed",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "speed", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "IsIgnoredOrMuted",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isIgnoredOrMuted", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "IsMuted",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "muted", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "IsUnitOnQuest",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "state", Type = "bool", Nilable = false },
 			},
 		},
 		{
@@ -25,42 +168,14 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "textureObject", Type = "SimpleTexture", Nilable = false },
-				{ Name = "unitToken", Type = "UnitToken", Nilable = false },
-				{ Name = "disableMasking", Type = "bool", Nilable = false, Default = false },
-			},
-		},
-		{
-			Name = "SetPortraitTextureFromCreatureDisplayID",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "textureObject", Type = "SimpleTexture", Nilable = false },
-				{ Name = "creatureDisplayID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "SetUnitCursorTexture",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "textureObject", Type = "SimpleTexture", Nilable = false },
+				{ Name = "texture", Type = "table", Nilable = false },
 				{ Name = "unit", Type = "UnitToken", Nilable = false },
-				{ Name = "style", Type = "CursorStyle", Nilable = true },
-				{ Name = "includeLowPriority", Type = "bool", Nilable = true },
 			},
 
-			Returns =
-			{
-				{ Name = "hasCursor", Type = "bool", Nilable = false },
-			},
 		},
 		{
-			Name = "ShouldKnowUnitHealth",
+			Name = "UnitAffectingCombat",
 			Type = "Function",
-			Documentation = { "Whether the player would have been able to know the unit's exact health value in the original game release." },
 
 			Arguments =
 			{
@@ -69,7 +184,123 @@ local Unit =
 
 			Returns =
 			{
-				{ Name = "shouldKnowUnitHealth", Type = "bool", Nilable = false },
+				{ Name = "inCombat", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitAura",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+				{ Name = "rank", Type = "string", Nilable = true },
+				{ Name = "filter", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "rank", Type = "string", Nilable = false },
+				{ Name = "icon", Type = "string", Nilable = false },
+				{ Name = "count", Type = "number", Nilable = false },
+				{ Name = "dispelType", Type = "string", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
+				{ Name = "expires", Type = "number", Nilable = false },
+				{ Name = "caster", Type = "string", Nilable = false },
+				{ Name = "isStealable", Type = "1nil", Nilable = false },
+				{ Name = "shouldConsolidate", Type = "bool", Nilable = false },
+				{ Name = "spellID", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCanAssist",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "canAssist", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCanAttack",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "canAttack", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCanCooperate",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "canCooperate", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCastingInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "subText", Type = "string", Nilable = false },
+				{ Name = "text", Type = "string", Nilable = false },
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
+				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
+				{ Name = "castID", Type = "number", Nilable = false },
+				{ Name = "notInterruptible", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitChannelInfo",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "subText", Type = "string", Nilable = false },
+				{ Name = "text", Type = "string", Nilable = false },
+				{ Name = "texture", Type = "string", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
+				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
+				{ Name = "notInterruptible", Type = "bool", Nilable = false },
 			},
 		},
 		{
@@ -78,18 +309,34 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "className", Type = "cstring", Nilable = false },
-				{ Name = "classFilename", Type = "cstring", Nilable = false },
-				{ Name = "classID", Type = "number", Nilable = false },
+				{ Name = "class", Type = "string", Nilable = false },
+				{ Name = "classFileName", Type = "string", Nilable = false },
 			},
 		},
 		{
 			Name = "UnitClassBase",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "class", Type = "string", Nilable = false },
+				{ Name = "classFileName", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitClassification",
 			Type = "Function",
 
 			Arguments =
@@ -99,8 +346,235 @@ local Unit =
 
 			Returns =
 			{
-				{ Name = "classFilename", Type = "cstring", Nilable = false },
-				{ Name = "classID", Type = "number", Nilable = false },
+				{ Name = "classification", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCreatureFamily",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "family", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitCreatureType",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "type", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitDebuff",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+				{ Name = "rank", Type = "string", Nilable = true },
+				{ Name = "filter", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "rank", Type = "string", Nilable = false },
+				{ Name = "icon", Type = "string", Nilable = false },
+				{ Name = "count", Type = "number", Nilable = false },
+				{ Name = "dispelType", Type = "string", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
+				{ Name = "expires", Type = "number", Nilable = false },
+				{ Name = "caster", Type = "string", Nilable = false },
+				{ Name = "isStealable", Type = "1nil", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitExists",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "exists", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitFactionGroup",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "factionGroup", Type = "string", Nilable = false },
+				{ Name = "factionName", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitGUID",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitHasRelicSlot",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "hasRelic", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitHealth",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "modifier", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitHealthMax",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "maxValue", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitInBattleground",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "raidNum", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitInParty",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "inParty", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitInRaid",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "inRaid", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitInRange",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "inRange", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsAFK",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isAFK", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsCharmed",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isCharmed", Type = "bool", Nilable = false },
 			},
 		},
 		{
@@ -118,68 +592,7 @@ local Unit =
 			},
 		},
 		{
-			Name = "UnitIsOwnerOrControllerOfUnit",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "controllingUnit", Type = "UnitToken", Nilable = false },
-				{ Name = "controlledUnit", Type = "UnitToken", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "unitIsOwnerOrControllerOfUnit", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPower",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "unitToken", Type = "UnitToken", Nilable = false },
-				{ Name = "powerType", Type = "PowerType", Nilable = false, Default = "NumPowerTypes" },
-				{ Name = "unmodified", Type = "bool", Nilable = false, Default = false },
-			},
-
-			Returns =
-			{
-				{ Name = "power", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerDisplayMod",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "powerType", Type = "PowerType", Nilable = false },
-			},
-
-			Returns =
-			{
-				{ Name = "displayMod", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerMax",
-			Type = "Function",
-
-			Arguments =
-			{
-				{ Name = "unitToken", Type = "UnitToken", Nilable = false },
-				{ Name = "powerType", Type = "PowerType", Nilable = false, Default = "NumPowerTypes" },
-				{ Name = "unmodified", Type = "bool", Nilable = false, Default = false },
-			},
-
-			Returns =
-			{
-				{ Name = "maxPower", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSex",
+			Name = "UnitIsControlling",
 			Type = "Function",
 
 			Arguments =
@@ -189,7 +602,602 @@ local Unit =
 
 			Returns =
 			{
-				{ Name = "sex", Type = "number", Nilable = true },
+				{ Name = "isControlling", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsCorpse",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isCorpse", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsDND",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "isDND", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsDead",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isDead", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsDeadOrGhost",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isDeadOrGhost", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsEnemy",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isEnemy", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsFeignDeath",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isFeign", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsFriend",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isFriends", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsGhost",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isGhost", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsInMyGuild",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "inGuild", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPVP",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isPVP", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPVPFreeForAll",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isFreeForAll", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPVPSanctuary",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "state", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPartyLeader",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "leader", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPlayer",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isPlayer", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsPossessed",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isPossessed", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsRaidOfficer",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "leader", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsSameServer",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isSame", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsTapped",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+		},
+		{
+			Name = "UnitIsTappedByAllThreatList",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "allTapped", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsTappedByPlayer",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isTapped", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsTrivial",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isTrivial", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsUnit",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isSame", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitIsVisible",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isVisible", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitLevel",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "level", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitMana",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "regen", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitManaMax",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "maxValue", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitName",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "showServerName", Type = "bool", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "nameString", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitOnTaxi",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "onTaxi", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPVPName",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "name", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPVPRank",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "rank", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPlayerControlled",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "isPlayer", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPlayerOrPetInParty",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "inParty", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPlayerOrPetInRaid",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "inParty", Type = "bool", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPower",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "modifier", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPowerMax",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
+				{ Name = "powerType", Type = "number", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "maxValue", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitPowerType",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "powerType", Type = "number", Nilable = false },
+				{ Name = "powerToken", Type = "string", Nilable = false },
+				{ Name = "altR", Type = "number", Nilable = false },
+				{ Name = "altG", Type = "number", Nilable = false },
+				{ Name = "altB", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitRace",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "race", Type = "string", Nilable = false },
+				{ Name = "fileName", Type = "string", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitReaction",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "reaction", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitSelectionColor",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "red", Type = "number", Nilable = false },
+				{ Name = "green", Type = "number", Nilable = false },
+				{ Name = "blue", Type = "number", Nilable = false },
+				{ Name = "alpha", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitSex",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "name", Type = "string", Nilable = true },
+			},
+
+			Returns =
+			{
+				{ Name = "gender", Type = "number", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitUsingVehicle",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+			},
+
+			Returns =
+			{
+				{ Name = "usingVehicle", Type = "bool", Nilable = false },
 			},
 		},
 	},
@@ -197,422 +1205,12 @@ local Unit =
 	Events =
 	{
 		{
-			Name = "ActivePlayerSpecializationChanged",
-			Type = "Event",
-			LiteralName = "ACTIVE_PLAYER_SPECIALIZATION_CHANGED",
-		},
-		{
-			Name = "ArenaCooldownsUpdate",
-			Type = "Event",
-			LiteralName = "ARENA_COOLDOWNS_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "ArenaCrowdControlSpellUpdate",
-			Type = "Event",
-			LiteralName = "ARENA_CROWD_CONTROL_SPELL_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-				{ Name = "itemID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "AutofollowBegin",
-			Type = "Event",
-			LiteralName = "AUTOFOLLOW_BEGIN",
-			Payload =
-			{
-				{ Name = "name", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "AutofollowEnd",
-			Type = "Event",
-			LiteralName = "AUTOFOLLOW_END",
-		},
-		{
-			Name = "CancelSummon",
-			Type = "Event",
-			LiteralName = "CANCEL_SUMMON",
-		},
-		{
-			Name = "ConfirmBinder",
-			Type = "Event",
-			LiteralName = "CONFIRM_BINDER",
-			Payload =
-			{
-				{ Name = "areaName", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ConfirmSummon",
-			Type = "Event",
-			LiteralName = "CONFIRM_SUMMON",
-			Payload =
-			{
-				{ Name = "summonReason", Type = "number", Nilable = false },
-				{ Name = "skippingStartExperience", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "HearthstoneBound",
-			Type = "Event",
-			LiteralName = "HEARTHSTONE_BOUND",
-		},
-		{
-			Name = "IncomingResurrectChanged",
-			Type = "Event",
-			LiteralName = "INCOMING_RESURRECT_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "LocalplayerPetRenamed",
-			Type = "Event",
-			LiteralName = "LOCALPLAYER_PET_RENAMED",
-		},
-		{
-			Name = "MirrorTimerPause",
-			Type = "Event",
-			LiteralName = "MIRROR_TIMER_PAUSE",
-			Payload =
-			{
-				{ Name = "timerName", Type = "cstring", Nilable = false },
-				{ Name = "paused", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "MirrorTimerStart",
-			Type = "Event",
-			LiteralName = "MIRROR_TIMER_START",
-			Payload =
-			{
-				{ Name = "timerName", Type = "cstring", Nilable = false },
-				{ Name = "value", Type = "number", Nilable = false },
-				{ Name = "maxValue", Type = "number", Nilable = false },
-				{ Name = "scale", Type = "number", Nilable = false },
-				{ Name = "paused", Type = "number", Nilable = false },
-				{ Name = "timerLabel", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "MirrorTimerStop",
-			Type = "Event",
-			LiteralName = "MIRROR_TIMER_STOP",
-			Payload =
-			{
-				{ Name = "timerName", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "ObjectEnteredAOI",
-			Type = "Event",
-			LiteralName = "OBJECT_ENTERED_AOI",
-			Payload =
-			{
-				{ Name = "guid", Type = "WOWGUID", Nilable = false },
-			},
-		},
-		{
-			Name = "ObjectLeftAOI",
-			Type = "Event",
-			LiteralName = "OBJECT_LEFT_AOI",
-			Payload =
-			{
-				{ Name = "guid", Type = "WOWGUID", Nilable = false },
-			},
-		},
-		{
-			Name = "PetBarUpdateUsable",
-			Type = "Event",
-			LiteralName = "PET_BAR_UPDATE_USABLE",
-		},
-		{
-			Name = "PetUiUpdate",
-			Type = "Event",
-			LiteralName = "PET_UI_UPDATE",
-		},
-		{
-			Name = "PlayerCanGlideChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_CAN_GLIDE_CHANGED",
-			Payload =
-			{
-				{ Name = "canGlide", Type = "bool", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerDamageDoneMods",
-			Type = "Event",
-			LiteralName = "PLAYER_DAMAGE_DONE_MODS",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerEnterCombat",
-			Type = "Event",
-			LiteralName = "PLAYER_ENTER_COMBAT",
-		},
-		{
-			Name = "PlayerFarsightFocusChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_FARSIGHT_FOCUS_CHANGED",
-		},
-		{
-			Name = "PlayerFlagsChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_FLAGS_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerFocusChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_FOCUS_CHANGED",
-		},
-		{
-			Name = "PlayerLeaveCombat",
-			Type = "Event",
-			LiteralName = "PLAYER_LEAVE_COMBAT",
-		},
-		{
-			Name = "PlayerLevelChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_LEVEL_CHANGED",
-			Payload =
-			{
-				{ Name = "oldLevel", Type = "number", Nilable = false },
-				{ Name = "newLevel", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerLevelUp",
-			Type = "Event",
-			LiteralName = "PLAYER_LEVEL_UP",
-			Payload =
-			{
-				{ Name = "level", Type = "number", Nilable = false },
-				{ Name = "healthDelta", Type = "number", Nilable = false },
-				{ Name = "powerDelta", Type = "number", Nilable = false },
-				{ Name = "numNewTalents", Type = "number", Nilable = false },
-				{ Name = "numNewPvpTalentSlots", Type = "number", Nilable = false },
-				{ Name = "strengthDelta", Type = "number", Nilable = false },
-				{ Name = "agilityDelta", Type = "number", Nilable = false },
-				{ Name = "staminaDelta", Type = "number", Nilable = false },
-				{ Name = "intellectDelta", Type = "number", Nilable = false },
-				{ Name = "spiritDelta", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerMaxLevelUpdate",
-			Type = "Event",
-			LiteralName = "PLAYER_MAX_LEVEL_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerMountDisplayChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_MOUNT_DISPLAY_CHANGED",
-		},
-		{
-			Name = "PlayerPvpKillsChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_PVP_KILLS_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerPvpRankChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_PVP_RANK_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerRegenDisabled",
-			Type = "Event",
-			LiteralName = "PLAYER_REGEN_DISABLED",
-		},
-		{
-			Name = "PlayerRegenEnabled",
-			Type = "Event",
-			LiteralName = "PLAYER_REGEN_ENABLED",
-		},
-		{
-			Name = "PlayerSoftEnemyChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_SOFT_ENEMY_CHANGED",
-		},
-		{
-			Name = "PlayerSoftFriendChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_SOFT_FRIEND_CHANGED",
-		},
-		{
-			Name = "PlayerSoftInteractChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_SOFT_INTERACT_CHANGED",
-			Payload =
-			{
-				{ Name = "oldTarget", Type = "WOWGUID", Nilable = false },
-				{ Name = "newTarget", Type = "WOWGUID", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerSoftTargetInteraction",
-			Type = "Event",
-			LiteralName = "PLAYER_SOFT_TARGET_INTERACTION",
-		},
-		{
-			Name = "PlayerStartedLooking",
-			Type = "Event",
-			LiteralName = "PLAYER_STARTED_LOOKING",
-		},
-		{
-			Name = "PlayerStartedMoving",
-			Type = "Event",
-			LiteralName = "PLAYER_STARTED_MOVING",
-		},
-		{
-			Name = "PlayerStartedTurning",
-			Type = "Event",
-			LiteralName = "PLAYER_STARTED_TURNING",
-		},
-		{
-			Name = "PlayerStoppedLooking",
-			Type = "Event",
-			LiteralName = "PLAYER_STOPPED_LOOKING",
-		},
-		{
-			Name = "PlayerStoppedMoving",
-			Type = "Event",
-			LiteralName = "PLAYER_STOPPED_MOVING",
-		},
-		{
-			Name = "PlayerStoppedTurning",
-			Type = "Event",
-			LiteralName = "PLAYER_STOPPED_TURNING",
-		},
-		{
-			Name = "PlayerTargetChanged",
-			Type = "Event",
-			LiteralName = "PLAYER_TARGET_CHANGED",
-		},
-		{
-			Name = "PlayerTargetSetAttacking",
-			Type = "Event",
-			LiteralName = "PLAYER_TARGET_SET_ATTACKING",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerTrialXpUpdate",
-			Type = "Event",
-			LiteralName = "PLAYER_TRIAL_XP_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PlayerUpdateResting",
-			Type = "Event",
-			LiteralName = "PLAYER_UPDATE_RESTING",
-		},
-		{
-			Name = "PlayerXpUpdate",
-			Type = "Event",
-			LiteralName = "PLAYER_XP_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "PortraitsUpdated",
-			Type = "Event",
-			LiteralName = "PORTRAITS_UPDATED",
-		},
-		{
-			Name = "PvpTimerUpdate",
-			Type = "Event",
-			LiteralName = "PVP_TIMER_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "RunePowerUpdate",
-			Type = "Event",
-			LiteralName = "RUNE_POWER_UPDATE",
-			Payload =
-			{
-				{ Name = "runeIndex", Type = "number", Nilable = false },
-				{ Name = "added", Type = "bool", Nilable = true },
-			},
-		},
-		{
-			Name = "RuneTypeUpdate",
-			Type = "Event",
-			LiteralName = "RUNE_TYPE_UPDATE",
-			Payload =
-			{
-				{ Name = "runeIndex", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "SpellConfirmationPrompt",
-			Type = "Event",
-			LiteralName = "SPELL_CONFIRMATION_PROMPT",
-			Payload =
-			{
-				{ Name = "spellID", Type = "number", Nilable = false },
-				{ Name = "effectValue", Type = "number", Nilable = false },
-				{ Name = "message", Type = "cstring", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
-				{ Name = "currencyTypesID", Type = "number", Nilable = false },
-				{ Name = "currencyCost", Type = "number", Nilable = false },
-				{ Name = "currentDifficulty", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "SpellConfirmationTimeout",
-			Type = "Event",
-			LiteralName = "SPELL_CONFIRMATION_TIMEOUT",
-			Payload =
-			{
-				{ Name = "spellID", Type = "number", Nilable = false },
-				{ Name = "effectValue", Type = "number", Nilable = false },
-			},
-		},
-		{
 			Name = "UnitAttack",
 			Type = "Event",
 			LiteralName = "UNIT_ATTACK",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -621,7 +1219,7 @@ local Unit =
 			LiteralName = "UNIT_ATTACK_POWER",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -630,13 +1228,17 @@ local Unit =
 			LiteralName = "UNIT_ATTACK_SPEED",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
-			Name = "UnitCheatToggleEvent",
+			Name = "UnitAura",
 			Type = "Event",
-			LiteralName = "UNIT_CHEAT_TOGGLE_EVENT",
+			LiteralName = "UNIT_AURA",
+			Payload =
+			{
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
+			},
 		},
 		{
 			Name = "UnitClassificationChanged",
@@ -644,31 +1246,13 @@ local Unit =
 			LiteralName = "UNIT_CLASSIFICATION_CHANGED",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
-			Name = "UnitCombat",
+			Name = "UnitComboPoints",
 			Type = "Event",
-			LiteralName = "UNIT_COMBAT",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "event", Type = "cstring", Nilable = false },
-				{ Name = "flagText", Type = "cstring", Nilable = false },
-				{ Name = "amount", Type = "number", Nilable = false },
-				{ Name = "schoolMask", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitConnection",
-			Type = "Event",
-			LiteralName = "UNIT_CONNECTION",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "isConnected", Type = "bool", Nilable = false },
-			},
+			LiteralName = "UNIT_COMBO_POINTS",
 		},
 		{
 			Name = "UnitDamage",
@@ -676,7 +1260,7 @@ local Unit =
 			LiteralName = "UNIT_DAMAGE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -685,7 +1269,7 @@ local Unit =
 			LiteralName = "UNIT_DEFENSE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -694,17 +1278,13 @@ local Unit =
 			LiteralName = "UNIT_DISPLAYPOWER",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
-			Name = "UnitFaction",
+			Name = "UnitDynamicFlags",
 			Type = "Event",
-			LiteralName = "UNIT_FACTION",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
+			LiteralName = "UNIT_DYNAMIC_FLAGS",
 		},
 		{
 			Name = "UnitFlags",
@@ -712,34 +1292,7 @@ local Unit =
 			LiteralName = "UNIT_FLAGS",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitFormChanged",
-			Type = "Event",
-			LiteralName = "UNIT_FORM_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitHappiness",
-			Type = "Event",
-			LiteralName = "UNIT_HAPPINESS",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitHealPrediction",
-			Type = "Event",
-			LiteralName = "UNIT_HEAL_PREDICTION",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -748,25 +1301,7 @@ local Unit =
 			LiteralName = "UNIT_HEALTH",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitHealthFrequent",
-			Type = "Event",
-			LiteralName = "UNIT_HEALTH_FREQUENT",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitInventoryChanged",
-			Type = "Event",
-			LiteralName = "UNIT_INVENTORY_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -775,7 +1310,7 @@ local Unit =
 			LiteralName = "UNIT_LEVEL",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -784,7 +1319,7 @@ local Unit =
 			LiteralName = "UNIT_MANA",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -793,17 +1328,7 @@ local Unit =
 			LiteralName = "UNIT_MAXHEALTH",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitMaxpower",
-			Type = "Event",
-			LiteralName = "UNIT_MAXPOWER",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "powerType", Type = "cstring", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -812,7 +1337,7 @@ local Unit =
 			LiteralName = "UNIT_MODEL_CHANGED",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -821,16 +1346,7 @@ local Unit =
 			LiteralName = "UNIT_NAME_UPDATE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitOtherPartyChanged",
-			Type = "Event",
-			LiteralName = "UNIT_OTHER_PARTY_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -839,35 +1355,13 @@ local Unit =
 			LiteralName = "UNIT_PET",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
 			Name = "UnitPetExperience",
 			Type = "Event",
 			LiteralName = "UNIT_PET_EXPERIENCE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPetTrainingPoints",
-			Type = "Event",
-			LiteralName = "UNIT_PET_TRAINING_POINTS",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPhase",
-			Type = "Event",
-			LiteralName = "UNIT_PHASE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
 		},
 		{
 			Name = "UnitPortraitUpdate",
@@ -875,72 +1369,16 @@ local Unit =
 			LiteralName = "UNIT_PORTRAIT_UPDATE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
-			Name = "UnitPowerBarHide",
+			Name = "UnitRage",
 			Type = "Event",
-			LiteralName = "UNIT_POWER_BAR_HIDE",
+			LiteralName = "UNIT_RAGE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerBarShow",
-			Type = "Event",
-			LiteralName = "UNIT_POWER_BAR_SHOW",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerBarTimerUpdate",
-			Type = "Event",
-			LiteralName = "UNIT_POWER_BAR_TIMER_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerFrequent",
-			Type = "Event",
-			LiteralName = "UNIT_POWER_FREQUENT",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "powerType", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitPowerUpdate",
-			Type = "Event",
-			LiteralName = "UNIT_POWER_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "powerType", Type = "cstring", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitQuestLogChanged",
-			Type = "Event",
-			LiteralName = "UNIT_QUEST_LOG_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitRangedAttackPower",
-			Type = "Event",
-			LiteralName = "UNIT_RANGED_ATTACK_POWER",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -949,7 +1387,16 @@ local Unit =
 			LiteralName = "UNIT_RANGEDDAMAGE",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
+			},
+		},
+		{
+			Name = "UnitRangedAttackPower",
+			Type = "Event",
+			LiteralName = "UNIT_RANGED_ATTACK_POWER",
+			Payload =
+			{
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -958,144 +1405,7 @@ local Unit =
 			LiteralName = "UNIT_RESISTANCES",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellHaste",
-			Type = "Event",
-			LiteralName = "UNIT_SPELL_HASTE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastChannelStart",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_CHANNEL_START",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastChannelStop",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_CHANNEL_STOP",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastChannelUpdate",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_CHANNEL_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastDelayed",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_DELAYED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastFailed",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_FAILED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastFailedQuiet",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_FAILED_QUIET",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastInterrupted",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_INTERRUPTED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastInterruptible",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_INTERRUPTIBLE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastNotInterruptible",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_NOT_INTERRUPTIBLE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastStart",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_START",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastStop",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_STOP",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitSpellcastSucceeded",
-			Type = "Event",
-			LiteralName = "UNIT_SPELLCAST_SUCCEEDED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-				{ Name = "castGUID", Type = "WOWGUID", Nilable = false },
-				{ Name = "spellID", Type = "number", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1104,7 +1414,7 @@ local Unit =
 			LiteralName = "UNIT_STATS",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1113,104 +1423,18 @@ local Unit =
 			LiteralName = "UNIT_TARGET",
 			Payload =
 			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
-		},
-		{
-			Name = "UnitTargetableChanged",
-			Type = "Event",
-			LiteralName = "UNIT_TARGETABLE_CHANGED",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitThreatListUpdate",
-			Type = "Event",
-			LiteralName = "UNIT_THREAT_LIST_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UnitThreatSituationUpdate",
-			Type = "Event",
-			LiteralName = "UNIT_THREAT_SITUATION_UPDATE",
-			Payload =
-			{
-				{ Name = "unitTarget", Type = "UnitToken", Nilable = false },
-			},
-		},
-		{
-			Name = "UpdateExhaustion",
-			Type = "Event",
-			LiteralName = "UPDATE_EXHAUSTION",
 		},
 		{
 			Name = "UpdateMouseoverUnit",
 			Type = "Event",
 			LiteralName = "UPDATE_MOUSEOVER_UNIT",
 		},
-		{
-			Name = "UpdateStealth",
-			Type = "Event",
-			LiteralName = "UPDATE_STEALTH",
-		},
-		{
-			Name = "VehicleAngleUpdate",
-			Type = "Event",
-			LiteralName = "VEHICLE_ANGLE_UPDATE",
-			Payload =
-			{
-				{ Name = "normalizedPitch", Type = "number", Nilable = false },
-				{ Name = "radians", Type = "number", Nilable = false },
-			},
-		},
 	},
 
 	Tables =
 	{
-		{
-			Name = "PowerType",
-			Type = "Enumeration",
-			NumValues = 29,
-			MinValue = -2,
-			MaxValue = 26,
-			Fields =
-			{
-				{ Name = "HealthCost", Type = "PowerType", EnumValue = -2 },
-				{ Name = "None", Type = "PowerType", EnumValue = -1 },
-				{ Name = "Mana", Type = "PowerType", EnumValue = 0 },
-				{ Name = "Rage", Type = "PowerType", EnumValue = 1 },
-				{ Name = "Focus", Type = "PowerType", EnumValue = 2 },
-				{ Name = "Energy", Type = "PowerType", EnumValue = 3 },
-				{ Name = "Happiness", Type = "PowerType", EnumValue = 4 },
-				{ Name = "Runes", Type = "PowerType", EnumValue = 5 },
-				{ Name = "RunicPower", Type = "PowerType", EnumValue = 6 },
-				{ Name = "SoulShards", Type = "PowerType", EnumValue = 7 },
-				{ Name = "LunarPower", Type = "PowerType", EnumValue = 8 },
-				{ Name = "HolyPower", Type = "PowerType", EnumValue = 9 },
-				{ Name = "Alternate", Type = "PowerType", EnumValue = 10 },
-				{ Name = "Maelstrom", Type = "PowerType", EnumValue = 11 },
-				{ Name = "Chi", Type = "PowerType", EnumValue = 12 },
-				{ Name = "Insanity", Type = "PowerType", EnumValue = 13 },
-				{ Name = "ComboPoints", Type = "PowerType", EnumValue = 14 },
-				{ Name = "Obsolete2", Type = "PowerType", EnumValue = 15 },
-				{ Name = "ArcaneCharges", Type = "PowerType", EnumValue = 16 },
-				{ Name = "Fury", Type = "PowerType", EnumValue = 17 },
-				{ Name = "Pain", Type = "PowerType", EnumValue = 18 },
-				{ Name = "Essence", Type = "PowerType", EnumValue = 19 },
-				{ Name = "RuneBlood", Type = "PowerType", EnumValue = 20 },
-				{ Name = "RuneFrost", Type = "PowerType", EnumValue = 21 },
-				{ Name = "RuneUnholy", Type = "PowerType", EnumValue = 22 },
-				{ Name = "AlternateQuest", Type = "PowerType", EnumValue = 23 },
-				{ Name = "AlternateEncounter", Type = "PowerType", EnumValue = 24 },
-				{ Name = "AlternateMount", Type = "PowerType", EnumValue = 25 },
-				{ Name = "NumPowerTypes", Type = "PowerType", EnumValue = 26 },
-			},
-		},
 	},
 };
 

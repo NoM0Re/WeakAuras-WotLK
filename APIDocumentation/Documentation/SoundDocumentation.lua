@@ -2,47 +2,175 @@ local Sound =
 {
 	Name = "Sound",
 	Type = "System",
-	Namespace = "C_Sound",
+	Namespace = "Sound",
 
 	Functions =
 	{
 		{
-			Name = "GetSoundScaledVolume",
+			Name = "PlayMusic",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "soundHandle", Type = "number", Nilable = false },
+				{ Name = "musicfile", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "PlaySound",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "sound", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "PlaySoundFile",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "soundFile", Type = "string", Nilable = false },
+			},
+
+		},
+		{
+			Name = "Sound_ChatSystem_GetInputDriverNameByIndex",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "Sound_ChatSystem_GetNumInputDrivers",
+			Type = "Function",
+
+		},
+		{
+			Name = "Sound_ChatSystem_GetNumOutputDrivers",
+			Type = "Function",
+
+		},
+		{
+			Name = "Sound_ChatSystem_GetOutputDriverNameByIndex",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "Sound_GameSystem_GetInputDriverNameByIndex",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "Sound_GameSystem_GetNumInputDrivers",
+			Type = "Function",
+
+		},
+		{
+			Name = "Sound_GameSystem_GetNumOutputDrivers",
+			Type = "Function",
+
+		},
+		{
+			Name = "Sound_GameSystem_GetOutputDriverNameByIndex",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+
+		},
+		{
+			Name = "Sound_GameSystem_RestartSoundSystem",
+			Type = "Function",
+
+		},
+		{
+			Name = "StopMusic",
+			Type = "Function",
+
+		},
+		{
+			Name = "VoiceEnumerateCaptureDevices",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "scaledVolume", Type = "number", Nilable = false },
+				{ Name = "deviceName", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "IsPlaying",
+			Name = "VoiceEnumerateOutputDevices",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "soundHandle", Type = "number", Nilable = false },
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "isPlaying", Type = "bool", Nilable = false },
+				{ Name = "device", Type = "string", Nilable = false },
 			},
 		},
 		{
-			Name = "PlayItemSound",
+			Name = "VoiceGetCurrentCaptureDevice",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+		},
+		{
+			Name = "VoiceGetCurrentOutputDevice",
+			Type = "Function",
+
+			Returns =
+			{
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+			},
+		},
+		{
+			Name = "VoiceSelectCaptureDevice",
 			Type = "Function",
 
 			Arguments =
 			{
-				{ Name = "soundType", Type = "ItemSoundType", Nilable = false },
-				{ Name = "itemLocation", Type = "ItemLocation", Mixin = "ItemLocationMixin", Nilable = false },
+				{ Name = "deviceName", Type = "string", Nilable = false },
 			},
+
+		},
+		{
+			Name = "VoiceSelectOutputDevice",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "deviceName", Type = "string", Nilable = false },
+			},
+
 		},
 	},
 
@@ -52,15 +180,6 @@ local Sound =
 			Name = "SoundDeviceUpdate",
 			Type = "Event",
 			LiteralName = "SOUND_DEVICE_UPDATE",
-		},
-		{
-			Name = "SoundkitFinished",
-			Type = "Event",
-			LiteralName = "SOUNDKIT_FINISHED",
-			Payload =
-			{
-				{ Name = "soundHandle", Type = "number", Nilable = false },
-			},
 		},
 	},
 
