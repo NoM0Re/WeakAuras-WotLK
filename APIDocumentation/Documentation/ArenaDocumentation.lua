@@ -145,7 +145,7 @@ local Arena =
 			Arguments =
 			{
 				{ Name = "team", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -173,7 +173,7 @@ local Arena =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -218,7 +218,7 @@ local Arena =
 
 			Arguments =
 			{
-				{ Name = "teamindex", Type = "number", Nilable = false },
+				{ Name = "teamindex", Type = "luaIndex", Nilable = false },
 				{ Name = "showOffline", Type = "bool", Nilable = false },
 			},
 
@@ -276,7 +276,7 @@ local Arena =
 			Arguments =
 			{
 				{ Name = "team", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},

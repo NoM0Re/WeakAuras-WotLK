@@ -12,7 +12,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "showError", Type = "bool", Nilable = false },
 			},
 
@@ -27,8 +27,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "distIndex", Type = "number", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "distIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -42,7 +42,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -50,7 +50,7 @@ local Unit =
 			{
 				{ Name = "guildName", Type = "string", Nilable = false },
 				{ Name = "guildRankName", Type = "string", Nilable = false },
-				{ Name = "guildRankIndex", Type = "number", Nilable = false },
+				{ Name = "guildRankIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -59,7 +59,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "channel", Type = "string", Nilable = true },
 			},
@@ -75,7 +75,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "guid", Type = "number", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 
 			Returns =
@@ -95,7 +95,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "showServerName", Type = "bool", Nilable = false },
 			},
 
@@ -110,7 +110,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -124,7 +124,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -138,7 +138,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -153,8 +153,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -169,7 +169,7 @@ local Unit =
 			Arguments =
 			{
 				{ Name = "texture", Type = "table", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 		},
@@ -179,7 +179,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -193,8 +193,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "rank", Type = "string", Nilable = true },
 				{ Name = "filter", Type = "string", Nilable = true },
@@ -207,7 +207,7 @@ local Unit =
 				{ Name = "icon", Type = "string", Nilable = false },
 				{ Name = "count", Type = "number", Nilable = false },
 				{ Name = "dispelType", Type = "string", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "expires", Type = "number", Nilable = false },
 				{ Name = "caster", Type = "string", Nilable = false },
 				{ Name = "isStealable", Type = "1nil", Nilable = false },
@@ -221,8 +221,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -236,8 +236,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -251,8 +251,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -266,7 +266,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -275,8 +275,8 @@ local Unit =
 				{ Name = "subText", Type = "string", Nilable = false },
 				{ Name = "text", Type = "string", Nilable = false },
 				{ Name = "texture", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "endTime", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
 				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
 				{ Name = "castID", Type = "number", Nilable = false },
 				{ Name = "notInterruptible", Type = "bool", Nilable = false },
@@ -288,7 +288,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -297,8 +297,8 @@ local Unit =
 				{ Name = "subText", Type = "string", Nilable = false },
 				{ Name = "text", Type = "string", Nilable = false },
 				{ Name = "texture", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "endTime", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
 				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
 				{ Name = "notInterruptible", Type = "bool", Nilable = false },
 			},
@@ -309,7 +309,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -325,7 +325,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -341,7 +341,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -355,7 +355,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -369,7 +369,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -383,8 +383,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "rank", Type = "string", Nilable = true },
 				{ Name = "filter", Type = "string", Nilable = true },
@@ -397,7 +397,7 @@ local Unit =
 				{ Name = "icon", Type = "string", Nilable = false },
 				{ Name = "count", Type = "number", Nilable = false },
 				{ Name = "dispelType", Type = "string", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "expires", Type = "number", Nilable = false },
 				{ Name = "caster", Type = "string", Nilable = false },
 				{ Name = "isStealable", Type = "1nil", Nilable = false },
@@ -409,7 +409,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -424,7 +424,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -440,12 +440,12 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "guid", Type = "number", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 		},
 		{
@@ -454,7 +454,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -468,7 +468,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -482,7 +482,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -497,7 +497,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -511,7 +511,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -525,7 +525,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -539,7 +539,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -554,7 +554,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -569,7 +569,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -583,7 +583,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -597,7 +597,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -611,7 +611,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -625,7 +625,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -640,7 +640,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -654,7 +654,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -668,8 +668,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -683,7 +683,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -697,8 +697,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -712,7 +712,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -726,7 +726,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -741,7 +741,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -755,7 +755,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -769,7 +769,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -783,7 +783,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -798,7 +798,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -812,7 +812,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -826,7 +826,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -841,8 +841,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -856,7 +856,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 		},
@@ -866,7 +866,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -880,7 +880,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -894,7 +894,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -908,8 +908,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -923,7 +923,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -937,7 +937,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -951,7 +951,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -965,7 +965,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -980,7 +980,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "showServerName", Type = "bool", Nilable = false },
 			},
 
@@ -995,7 +995,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1009,7 +1009,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1023,7 +1023,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1037,7 +1037,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1051,7 +1051,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -1066,7 +1066,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -1081,7 +1081,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1095,7 +1095,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "powerType", Type = "number", Nilable = true },
 			},
 
@@ -1110,7 +1110,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -1129,7 +1129,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1144,8 +1144,8 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1159,7 +1159,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -1177,7 +1177,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -1192,7 +1192,7 @@ local Unit =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -1210,7 +1210,7 @@ local Unit =
 			LiteralName = "UNIT_ATTACK",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1219,7 +1219,7 @@ local Unit =
 			LiteralName = "UNIT_ATTACK_POWER",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1228,7 +1228,7 @@ local Unit =
 			LiteralName = "UNIT_ATTACK_SPEED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1237,7 +1237,7 @@ local Unit =
 			LiteralName = "UNIT_AURA",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1246,7 +1246,7 @@ local Unit =
 			LiteralName = "UNIT_CLASSIFICATION_CHANGED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1260,7 +1260,7 @@ local Unit =
 			LiteralName = "UNIT_DAMAGE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1269,7 +1269,7 @@ local Unit =
 			LiteralName = "UNIT_DEFENSE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1278,7 +1278,7 @@ local Unit =
 			LiteralName = "UNIT_DISPLAYPOWER",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1292,7 +1292,7 @@ local Unit =
 			LiteralName = "UNIT_FLAGS",
 			Payload =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1301,7 +1301,7 @@ local Unit =
 			LiteralName = "UNIT_HEALTH",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1310,7 +1310,7 @@ local Unit =
 			LiteralName = "UNIT_LEVEL",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1319,7 +1319,7 @@ local Unit =
 			LiteralName = "UNIT_MANA",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1328,7 +1328,7 @@ local Unit =
 			LiteralName = "UNIT_MAXHEALTH",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1337,7 +1337,7 @@ local Unit =
 			LiteralName = "UNIT_MODEL_CHANGED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1346,7 +1346,7 @@ local Unit =
 			LiteralName = "UNIT_NAME_UPDATE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1355,7 +1355,7 @@ local Unit =
 			LiteralName = "UNIT_PET",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1369,7 +1369,7 @@ local Unit =
 			LiteralName = "UNIT_PORTRAIT_UPDATE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1378,7 +1378,7 @@ local Unit =
 			LiteralName = "UNIT_RAGE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1387,7 +1387,7 @@ local Unit =
 			LiteralName = "UNIT_RANGEDDAMAGE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1396,7 +1396,7 @@ local Unit =
 			LiteralName = "UNIT_RANGED_ATTACK_POWER",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1405,7 +1405,7 @@ local Unit =
 			LiteralName = "UNIT_RESISTANCES",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1414,7 +1414,7 @@ local Unit =
 			LiteralName = "UNIT_STATS",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -1423,7 +1423,7 @@ local Unit =
 			LiteralName = "UNIT_TARGET",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{

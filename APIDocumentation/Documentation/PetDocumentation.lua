@@ -12,8 +12,8 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 		},
@@ -53,13 +53,13 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
@@ -69,7 +69,7 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -89,7 +89,7 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -165,8 +165,8 @@ local Pet =
 			{
 				{ Name = "haveTotem", Type = "bool", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "icon", Type = "string", Nilable = false },
 			},
 		},
@@ -315,7 +315,7 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -335,7 +335,7 @@ local Pet =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},

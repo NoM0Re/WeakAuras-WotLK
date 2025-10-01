@@ -17,7 +17,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "accept", Type = "bool", Nilable = false },
 			},
 
@@ -61,12 +61,12 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "waitTime", Type = "number", Nilable = false },
+				{ Name = "waitTime", Type = "time_t", Nilable = false },
 			},
 		},
 		{
@@ -75,7 +75,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -100,7 +100,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -114,7 +114,7 @@ local Battlefield =
 
 			Returns =
 			{
-				{ Name = "time", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
 		},
 		{
@@ -132,7 +132,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -146,13 +146,13 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "unitX", Type = "number", Nilable = false },
-				{ Name = "unitY", Type = "number", Nilable = false },
+				{ Name = "unitX", Type = "UnitToken", Nilable = false },
+				{ Name = "unitY", Type = "UnitToken", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
 			},
 		},
@@ -162,7 +162,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -191,8 +191,8 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "statIndex", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "statIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -206,7 +206,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "statIndex", Type = "number", Nilable = false },
+				{ Name = "statIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -222,7 +222,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -242,7 +242,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -258,7 +258,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -272,7 +272,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -302,7 +302,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -364,7 +364,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -405,7 +405,7 @@ local Battlefield =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -457,7 +457,7 @@ local Battlefield =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -472,7 +472,7 @@ local Battlefield =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 		},
@@ -492,7 +492,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -512,7 +512,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -542,7 +542,7 @@ local Battlefield =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =

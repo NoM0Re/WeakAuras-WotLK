@@ -79,7 +79,7 @@ local Uivisual =
 			LiteralName = "MIRROR_TIMER_PAUSE",
 			Payload =
 			{
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 			},
 		},
 		{

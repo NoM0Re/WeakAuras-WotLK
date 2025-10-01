@@ -32,7 +32,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -87,7 +87,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -129,7 +129,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -144,14 +144,14 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
@@ -161,7 +161,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -207,7 +207,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -222,7 +222,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -237,7 +237,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -252,7 +252,7 @@ local Inventory =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -366,7 +366,7 @@ local Inventory =
 			Arguments =
 			{
 				{ Name = "texture", Type = "table", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -406,7 +406,7 @@ local Inventory =
 			LiteralName = "UNIT_INVENTORY_CHANGED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{

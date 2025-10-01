@@ -154,7 +154,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "id", Type = "number", Nilable = true },
@@ -163,7 +163,7 @@ local Spell =
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
@@ -173,7 +173,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -189,7 +189,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "id", Type = "number", Nilable = true },
@@ -203,7 +203,7 @@ local Spell =
 				{ Name = "powerCost", Type = "number", Nilable = false },
 				{ Name = "isFunnel", Type = "bool", Nilable = false },
 				{ Name = "powerType", Type = "number", Nilable = false },
-				{ Name = "castingTime", Type = "number", Nilable = false },
+				{ Name = "castingTime", Type = "time_t", Nilable = false },
 				{ Name = "minRange", Type = "number", Nilable = false },
 				{ Name = "maxRange", Type = "number", Nilable = false },
 			},
@@ -214,7 +214,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "id", Type = "number", Nilable = true },
@@ -248,7 +248,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -265,7 +265,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -291,7 +291,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -321,7 +321,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -337,7 +337,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -353,7 +353,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -369,7 +369,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -385,7 +385,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -401,10 +401,10 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -433,7 +433,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -490,7 +490,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -505,7 +505,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -552,7 +552,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -563,7 +563,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
@@ -575,7 +575,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -584,8 +584,8 @@ local Spell =
 				{ Name = "subText", Type = "string", Nilable = false },
 				{ Name = "text", Type = "string", Nilable = false },
 				{ Name = "texture", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "endTime", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
 				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
 				{ Name = "castID", Type = "number", Nilable = false },
 				{ Name = "notInterruptible", Type = "bool", Nilable = false },
@@ -597,7 +597,7 @@ local Spell =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -606,8 +606,8 @@ local Spell =
 				{ Name = "subText", Type = "string", Nilable = false },
 				{ Name = "text", Type = "string", Nilable = false },
 				{ Name = "texture", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "endTime", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "endTime", Type = "time_t", Nilable = false },
 				{ Name = "isTradeSkill", Type = "bool", Nilable = false },
 				{ Name = "notInterruptible", Type = "bool", Nilable = false },
 			},
@@ -667,7 +667,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_DELAYED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 			},
@@ -678,7 +678,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_FAILED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "unknownid", Type = "number", Nilable = false },
@@ -691,7 +691,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_FAILED_QUIET",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 			},
@@ -702,7 +702,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_INTERRUPTED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "lineID", Type = "number", Nilable = false },
@@ -715,7 +715,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_INTERRUPTIBLE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "unitID", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -724,7 +724,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_NOT_INTERRUPTIBLE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "unitID", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -733,7 +733,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_SENT",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "target", Type = "string", Nilable = false },
@@ -746,7 +746,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_START",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "lineID", Type = "number", Nilable = false },
@@ -759,7 +759,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_STOP",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "lineID", Type = "number", Nilable = false },
@@ -772,7 +772,7 @@ local Spell =
 			LiteralName = "UNIT_SPELLCAST_SUCCEEDED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "?", Type = "number", Nilable = false },

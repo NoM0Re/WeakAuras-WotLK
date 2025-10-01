@@ -22,7 +22,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -37,7 +37,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -62,7 +62,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -90,7 +90,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -104,7 +104,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -118,7 +118,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -132,7 +132,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -253,7 +253,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = true },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -372,12 +372,12 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -386,12 +386,12 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -401,7 +401,7 @@ local Quest =
 			Arguments =
 			{
 				{ Name = "type", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -420,7 +420,7 @@ local Quest =
 			Arguments =
 			{
 				{ Name = "itemType", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -434,7 +434,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -448,7 +448,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -485,7 +485,7 @@ local Quest =
 			Arguments =
 			{
 				{ Name = "itemType", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -496,7 +496,7 @@ local Quest =
 			Arguments =
 			{
 				{ Name = "objective", Type = "number", Nilable = false },
-				{ Name = "questIndex", Type = "number", Nilable = true },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -540,7 +540,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -597,7 +597,7 @@ local Quest =
 
 			Returns =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -606,13 +606,13 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
@@ -622,7 +622,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -656,7 +656,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -687,7 +687,7 @@ local Quest =
 
 			Returns =
 			{
-				{ Name = "time", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
 		},
 		{
@@ -827,7 +827,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -851,7 +851,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -865,7 +865,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -897,7 +897,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -911,7 +911,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -925,8 +925,8 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -964,7 +964,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = true },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -974,7 +974,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -984,7 +984,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -994,7 +994,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1004,7 +1004,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1014,7 +1014,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1024,7 +1024,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1034,7 +1034,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1044,7 +1044,7 @@ local Quest =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1077,7 +1077,7 @@ local Quest =
 			LiteralName = "QUEST_ACCEPTED",
 			Payload =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -1141,7 +1141,7 @@ local Quest =
 			LiteralName = "QUEST_WATCH_UPDATE",
 			Payload =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -1169,7 +1169,7 @@ local Quest =
 			LiteralName = "UNIT_QUEST_LOG_CHANGED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 	},

@@ -47,7 +47,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -63,7 +63,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -88,7 +88,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -100,7 +100,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -112,7 +112,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -139,7 +139,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -151,7 +151,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -163,7 +163,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -174,7 +174,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -186,7 +186,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -198,7 +198,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -214,7 +214,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -230,7 +230,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -242,7 +242,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -258,7 +258,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -274,7 +274,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -309,7 +309,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -333,7 +333,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -357,7 +357,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -378,7 +378,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -425,7 +425,7 @@ local Calendar =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -505,7 +505,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -515,7 +515,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -575,7 +575,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -605,7 +605,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "inviteStatus", Type = "number", Nilable = false },
 			},
 
@@ -616,7 +616,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -705,7 +705,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -732,7 +732,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -747,7 +747,7 @@ local Calendar =
 				{ Name = "eventType", Type = "number", Nilable = false },
 				{ Name = "repeatOption", Type = "number", Nilable = false },
 				{ Name = "maxSize", Type = "number", Nilable = false },
-				{ Name = "textureIndex", Type = "number", Nilable = false },
+				{ Name = "textureIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "weekday", Type = "number", Nilable = false },
 				{ Name = "month", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
@@ -780,7 +780,7 @@ local Calendar =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -791,7 +791,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -907,7 +907,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -944,7 +944,7 @@ local Calendar =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -983,7 +983,7 @@ local Calendar =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = false },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},

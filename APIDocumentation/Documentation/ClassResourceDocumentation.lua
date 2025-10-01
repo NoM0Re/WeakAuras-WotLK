@@ -28,7 +28,7 @@ local ClassResource =
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "runeReady", Type = "bool", Nilable = false },
 			},
 		},
@@ -73,8 +73,8 @@ local ClassResource =
 			{
 				{ Name = "haveTotem", Type = "bool", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
-				{ Name = "startTime", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "startTime", Type = "time_t", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "icon", Type = "string", Nilable = false },
 			},
 		},

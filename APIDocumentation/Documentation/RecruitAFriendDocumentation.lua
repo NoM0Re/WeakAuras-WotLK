@@ -17,7 +17,7 @@ local RecruitAFriend =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -32,7 +32,7 @@ local RecruitAFriend =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -52,7 +52,7 @@ local RecruitAFriend =
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 			},
 		},
 		{
@@ -61,7 +61,7 @@ local RecruitAFriend =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -75,7 +75,7 @@ local RecruitAFriend =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -90,7 +90,7 @@ local RecruitAFriend =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =

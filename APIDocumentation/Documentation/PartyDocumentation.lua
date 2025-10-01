@@ -18,7 +18,7 @@ local Party =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -65,7 +65,7 @@ local Party =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -81,7 +81,7 @@ local Party =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -90,7 +90,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -104,7 +104,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -146,7 +146,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -174,7 +174,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -187,7 +187,7 @@ local Party =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -209,7 +209,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -223,7 +223,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -238,7 +238,7 @@ local Party =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 

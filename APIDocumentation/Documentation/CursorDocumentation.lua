@@ -32,7 +32,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "autoReturn", Type = "bool", Nilable = false },
 			},
 
@@ -43,7 +43,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -53,7 +53,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -63,7 +63,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -133,7 +133,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -223,7 +223,7 @@ local Cursor =
 			Arguments =
 			{
 				{ Name = "type", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -287,7 +287,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -298,7 +298,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -308,7 +308,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -339,7 +339,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -402,7 +402,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -433,7 +433,7 @@ local Cursor =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},

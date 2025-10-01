@@ -35,7 +35,7 @@ local Glyph =
 			{
 				{ Name = "enabled", Type = "bool", Nilable = false },
 				{ Name = "glyphType", Type = "number", Nilable = false },
-				{ Name = "glyphTooltipIndex", Type = "number", Nilable = false },
+				{ Name = "glyphTooltipIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "glyphSpell", Type = "number", Nilable = false },
 				{ Name = "icon", Type = "string", Nilable = false },
 			},

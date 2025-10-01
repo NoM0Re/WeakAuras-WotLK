@@ -36,7 +36,7 @@ local Barbershop =
 
 			Arguments =
 			{
-				{ Name = "styleIndex", Type = "number", Nilable = false },
+				{ Name = "styleIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -80,7 +80,7 @@ local Barbershop =
 
 			Arguments =
 			{
-				{ Name = "styleIndex", Type = "number", Nilable = false },
+				{ Name = "styleIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "reverse", Type = "bool", Nilable = true },
 			},
 

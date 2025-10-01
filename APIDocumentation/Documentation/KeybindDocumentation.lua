@@ -22,7 +22,7 @@ local Keybind =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -179,7 +179,7 @@ local Keybind =
 			Arguments =
 			{
 				{ Name = "key", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -265,7 +265,7 @@ local Keybind =
 				{ Name = "owner", Type = "table", Nilable = true },
 				{ Name = "isPriority", Type = "bool", Nilable = true },
 				{ Name = "key", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 

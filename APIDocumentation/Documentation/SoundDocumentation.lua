@@ -42,7 +42,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -62,7 +62,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -72,7 +72,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -92,7 +92,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -112,7 +112,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "deviceIndex", Type = "number", Nilable = false },
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -126,7 +126,7 @@ local Sound =
 
 			Arguments =
 			{
-				{ Name = "deviceIndex", Type = "number", Nilable = false },
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -140,7 +140,7 @@ local Sound =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -149,7 +149,7 @@ local Sound =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{

@@ -12,7 +12,7 @@ local Combat =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -28,7 +28,7 @@ local Combat =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -129,7 +129,7 @@ local Combat =
 			LiteralName = "UNIT_COMBAT",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "action", Type = "string", Nilable = false },
 				{ Name = "descriptor", Type = "string", Nilable = false },
 				{ Name = "damage", Type = "number", Nilable = false },

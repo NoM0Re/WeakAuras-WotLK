@@ -13,9 +13,9 @@ local Combatlog =
 			Arguments =
 			{
 				{ Name = "events", Type = "string", Nilable = true },
-				{ Name = "srcGUID", Type = "number", Nilable = true },
+				{ Name = "srcGUID", Type = "WOWGUID", Nilable = true },
 				{ Name = "srcMask", Type = "number", Nilable = true },
-				{ Name = "destGUID", Type = "number", Nilable = true },
+				{ Name = "destGUID", Type = "WOWGUID", Nilable = true },
 				{ Name = "destMask", Type = "number", Nilable = true },
 			},
 
@@ -51,12 +51,12 @@ local Combatlog =
 
 			Returns =
 			{
-				{ Name = "timestamp", Type = "number", Nilable = false },
+				{ Name = "timestamp", Type = "time_t", Nilable = false },
 				{ Name = "event", Type = "string", Nilable = false },
-				{ Name = "srcGUID", Type = "number", Nilable = false },
+				{ Name = "srcGUID", Type = "WOWGUID", Nilable = false },
 				{ Name = "srcName", Type = "string", Nilable = false },
 				{ Name = "srcFlags", Type = "number", Nilable = false },
-				{ Name = "destGUID", Type = "number", Nilable = false },
+				{ Name = "destGUID", Type = "WOWGUID", Nilable = false },
 				{ Name = "destName", Type = "string", Nilable = false },
 				{ Name = "destFlags", Type = "number", Nilable = false },
 				{ Name = "...", Type = "list", Nilable = false },
@@ -92,7 +92,7 @@ local Combatlog =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "ignoreFilter", Type = "bool", Nilable = true },
 			},
 
@@ -113,7 +113,7 @@ local Combatlog =
 
 			Arguments =
 			{
-				{ Name = "unitFlags", Type = "number", Nilable = false },
+				{ Name = "unitFlags", Type = "UnitToken", Nilable = false },
 				{ Name = "mask", Type = "number", Nilable = false },
 			},
 
@@ -142,12 +142,12 @@ local Combatlog =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "guid", Type = "number", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 		},
 	},

@@ -136,7 +136,7 @@ local Loot =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -169,7 +169,7 @@ local Loot =
 			Arguments =
 			{
 				{ Name = "slot", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -344,7 +344,7 @@ local Loot =
 			Payload =
 			{
 				{ Name = "id", Type = "number", Nilable = false },
-				{ Name = "time", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
 		},
 		{

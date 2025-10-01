@@ -92,14 +92,14 @@ local Map =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
 				{ Name = "description", Type = "string", Nilable = false },
-				{ Name = "textureIndex", Type = "number", Nilable = false },
+				{ Name = "textureIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "x", Type = "number", Nilable = false },
 				{ Name = "y", Type = "number", Nilable = false },
 				{ Name = "mapLinkID", Type = "number", Nilable = false },
@@ -112,7 +112,7 @@ local Map =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -132,7 +132,7 @@ local Map =
 
 			Arguments =
 			{
-				{ Name = "continentIndex", Type = "number", Nilable = false },
+				{ Name = "continentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -191,13 +191,13 @@ local Map =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "unitX", Type = "number", Nilable = false },
-				{ Name = "unitY", Type = "number", Nilable = false },
+				{ Name = "unitX", Type = "UnitToken", Nilable = false },
+				{ Name = "unitY", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -237,8 +237,8 @@ local Map =
 
 			Arguments =
 			{
-				{ Name = "continentIndex", Type = "number", Nilable = false },
-				{ Name = "zoneIndex", Type = "number", Nilable = true },
+				{ Name = "continentIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "zoneIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -289,7 +289,7 @@ local Map =
 			LiteralName = "MINIMAP_PING",
 			Payload =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "x", Type = "number", Nilable = false },
 				{ Name = "y", Type = "number", Nilable = false },
 			},

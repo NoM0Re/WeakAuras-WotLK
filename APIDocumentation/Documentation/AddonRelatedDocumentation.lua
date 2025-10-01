@@ -13,7 +13,7 @@ local AddonRelated =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -28,7 +28,7 @@ local AddonRelated =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -45,7 +45,7 @@ local AddonRelated =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -59,7 +59,7 @@ local AddonRelated =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -80,7 +80,7 @@ local AddonRelated =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "variable", Type = "string", Nilable = true },
 			},
@@ -127,7 +127,7 @@ local AddonRelated =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -142,7 +142,7 @@ local AddonRelated =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -157,7 +157,7 @@ local AddonRelated =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =

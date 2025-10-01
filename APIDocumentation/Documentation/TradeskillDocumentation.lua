@@ -17,7 +17,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -27,7 +27,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "repeat", Type = "number", Nilable = true },
 			},
 
@@ -38,7 +38,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -48,7 +48,7 @@ local Tradeskill =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -66,7 +66,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -80,7 +80,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -94,7 +94,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -108,7 +108,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -126,7 +126,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -159,7 +159,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -202,7 +202,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -217,7 +217,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -231,8 +231,8 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "skillIndex", Type = "number", Nilable = false },
-				{ Name = "reagentIndex", Type = "number", Nilable = false },
+				{ Name = "skillIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "reagentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -249,8 +249,8 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "skillIndex", Type = "number", Nilable = false },
-				{ Name = "reagentIndex", Type = "number", Nilable = false },
+				{ Name = "skillIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "reagentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -264,7 +264,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -278,7 +278,7 @@ local Tradeskill =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -287,7 +287,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -310,7 +310,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -345,7 +345,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -355,7 +355,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 				{ Name = "exclusive", Type = "bool", Nilable = true },
 			},
@@ -388,7 +388,7 @@ local Tradeskill =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 				{ Name = "exclusive", Type = "bool", Nilable = true },
 			},

@@ -12,7 +12,7 @@ local BattleNet =
 
 			Arguments =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -66,8 +66,8 @@ local BattleNet =
 
 			Arguments =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
-				{ Name = "toonIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "toonIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -115,7 +115,7 @@ local BattleNet =
 
 			Arguments =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -139,7 +139,7 @@ local BattleNet =
 
 			Returns =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -298,7 +298,7 @@ local BattleNet =
 			LiteralName = "BN_NEW_PRESENCE",
 			Payload =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
 			},
 		},

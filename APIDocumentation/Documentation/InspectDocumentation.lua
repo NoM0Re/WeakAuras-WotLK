@@ -12,7 +12,7 @@ local Inspect =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "showError", Type = "bool", Nilable = false },
 			},
 
@@ -86,7 +86,7 @@ local Inspect =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 		},

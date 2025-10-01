@@ -73,7 +73,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "target", Type = "string", Nilable = true },
 			},
 
@@ -177,7 +177,7 @@ local PlayerInformation =
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "runeReady", Type = "bool", Nilable = false },
 			},
 		},
@@ -220,7 +220,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "titleIndex", Type = "number", Nilable = false },
+				{ Name = "titleIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -234,7 +234,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -248,7 +248,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -407,7 +407,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "titleIndex", Type = "number", Nilable = false },
+				{ Name = "titleIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -481,7 +481,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "titleIndex", Type = "number", Nilable = false },
+				{ Name = "titleIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -534,7 +534,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -548,7 +548,7 @@ local PlayerInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -606,7 +606,7 @@ local PlayerInformation =
 			LiteralName = "PLAYER_DAMAGE_DONE_MODS",
 			Payload =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -650,7 +650,7 @@ local PlayerInformation =
 			LiteralName = "PLAYER_FLAGS_CHANGED",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{

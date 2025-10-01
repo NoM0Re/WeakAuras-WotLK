@@ -18,7 +18,7 @@ local Raid =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -50,7 +50,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -77,7 +77,7 @@ local Raid =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -93,7 +93,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -117,7 +117,7 @@ local Raid =
 
 			Returns =
 			{
-				{ Name = "raidIndex", Type = "number", Nilable = false },
+				{ Name = "raidIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -126,13 +126,13 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -141,7 +141,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -215,7 +215,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -227,7 +227,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -240,7 +240,7 @@ local Raid =
 			Arguments =
 			{
 				{ Name = "assignment", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "exactMatch", Type = "bool", Nilable = true },
 			},
@@ -252,7 +252,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -262,7 +262,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "subgroup", Type = "number", Nilable = false },
 			},
 
@@ -273,9 +273,9 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -285,8 +285,8 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "index1", Type = "number", Nilable = false },
-				{ Name = "index2", Type = "number", Nilable = false },
+				{ Name = "index1", Type = "luaIndex", Nilable = false },
+				{ Name = "index2", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -306,7 +306,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -320,7 +320,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -335,7 +335,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -350,7 +350,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -365,7 +365,7 @@ local Raid =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =

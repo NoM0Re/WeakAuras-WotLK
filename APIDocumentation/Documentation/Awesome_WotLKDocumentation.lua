@@ -393,7 +393,7 @@ local Awesome_WotLK =
 			{
 				{ Name = "numConsumers", Type = "number", Nilable = false },
 				{ Name = "utteranceID", Type = "number", Nilable = false },
-				{ Name = "durationMS", Type = "number", Nilable = false },
+				{ Name = "durationMS", Type = "time_t", Nilable = false },
 				{ Name = "destination", Type = "number", Nilable = false },
 			},
 		},

@@ -90,7 +90,7 @@ local NpcGossipDialog =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -100,7 +100,7 @@ local NpcGossipDialog =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -110,7 +110,7 @@ local NpcGossipDialog =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "text", Type = "string", Nilable = false },
 				{ Name = "confirm", Type = "bool", Nilable = true },
 			},
@@ -131,7 +131,7 @@ local NpcGossipDialog =
 			LiteralName = "GOSSIP_CONFIRM",
 			Payload =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "message", Type = "string", Nilable = false },
 				{ Name = "cost", Type = "number", Nilable = false },
 			},

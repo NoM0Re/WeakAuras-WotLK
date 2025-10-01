@@ -27,7 +27,7 @@ local Hyperlink =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -41,7 +41,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -81,7 +81,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -126,7 +126,7 @@ local Hyperlink =
 			Arguments =
 			{
 				{ Name = "tab", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -150,7 +150,7 @@ local Hyperlink =
 			Arguments =
 			{
 				{ Name = "mailID", Type = "number", Nilable = false },
-				{ Name = "attachmentIndex", Type = "number", Nilable = false },
+				{ Name = "attachmentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -164,7 +164,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
 			},
 
@@ -182,7 +182,7 @@ local Hyperlink =
 				{ Name = "itemID", Type = "number", Nilable = true },
 				{ Name = "itemName", Type = "string", Nilable = true },
 				{ Name = "itemLink", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -225,7 +225,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -241,7 +241,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -255,7 +255,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -270,7 +270,7 @@ local Hyperlink =
 			Arguments =
 			{
 				{ Name = "itemType", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -284,7 +284,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "questIndex", Type = "number", Nilable = false },
+				{ Name = "questIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -299,7 +299,7 @@ local Hyperlink =
 			Arguments =
 			{
 				{ Name = "itemType", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -323,7 +323,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "bookType", Type = "string", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "id", Type = "number", Nilable = true },
@@ -341,8 +341,8 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -359,7 +359,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -373,7 +373,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -396,8 +396,8 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "skillIndex", Type = "number", Nilable = false },
-				{ Name = "reagentIndex", Type = "number", Nilable = false },
+				{ Name = "skillIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "reagentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -411,7 +411,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -425,7 +425,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -439,7 +439,7 @@ local Hyperlink =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =

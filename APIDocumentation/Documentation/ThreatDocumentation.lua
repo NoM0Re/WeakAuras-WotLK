@@ -37,9 +37,9 @@ local Threat =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "mobUnit", Type = "string", Nilable = true },
+				{ Name = "mobUnit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -57,9 +57,9 @@ local Threat =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "mobUnit", Type = "string", Nilable = true },
+				{ Name = "mobUnit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =

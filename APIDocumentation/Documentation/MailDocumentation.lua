@@ -46,7 +46,7 @@ local Mail =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "autoReturn", Type = "bool", Nilable = false },
 			},
 
@@ -113,7 +113,7 @@ local Mail =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -137,7 +137,7 @@ local Mail =
 			Arguments =
 			{
 				{ Name = "mailID", Type = "number", Nilable = false },
-				{ Name = "attachmentIndex", Type = "number", Nilable = false },
+				{ Name = "attachmentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -156,7 +156,7 @@ local Mail =
 			Arguments =
 			{
 				{ Name = "mailID", Type = "number", Nilable = false },
-				{ Name = "attachmentIndex", Type = "number", Nilable = false },
+				{ Name = "attachmentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -227,7 +227,7 @@ local Mail =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -294,7 +294,7 @@ local Mail =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -348,7 +348,7 @@ local Mail =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -398,7 +398,7 @@ local Mail =
 			Arguments =
 			{
 				{ Name = "mailID", Type = "number", Nilable = false },
-				{ Name = "attachmentIndex", Type = "number", Nilable = false },
+				{ Name = "attachmentIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},

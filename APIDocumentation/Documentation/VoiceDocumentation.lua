@@ -22,7 +22,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -35,7 +35,7 @@ local Voice =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -48,7 +48,7 @@ local Voice =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -61,7 +61,7 @@ local Voice =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -74,7 +74,7 @@ local Voice =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -86,7 +86,7 @@ local Voice =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -97,7 +97,7 @@ local Voice =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -107,7 +107,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -118,7 +118,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -128,7 +128,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -138,7 +138,7 @@ local Voice =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -147,7 +147,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -161,7 +161,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "channel", Type = "string", Nilable = true },
 			},
@@ -243,7 +243,7 @@ local Voice =
 			Arguments =
 			{
 				{ Name = "session", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -261,7 +261,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "channel", Type = "string", Nilable = true },
 			},
@@ -277,7 +277,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -291,7 +291,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -344,7 +344,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -364,7 +364,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -399,7 +399,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -481,7 +481,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "deviceIndex", Type = "number", Nilable = false },
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -495,7 +495,7 @@ local Voice =
 
 			Arguments =
 			{
-				{ Name = "deviceIndex", Type = "number", Nilable = false },
+				{ Name = "deviceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -509,7 +509,7 @@ local Voice =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -518,7 +518,7 @@ local Voice =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -581,7 +581,7 @@ local Voice =
 			Payload =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -591,7 +591,7 @@ local Voice =
 			Payload =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -620,7 +620,7 @@ local Voice =
 			LiteralName = "VOICE_START",
 			Payload =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 		{
@@ -634,7 +634,7 @@ local Voice =
 			LiteralName = "VOICE_STOP",
 			Payload =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 		},
 	},

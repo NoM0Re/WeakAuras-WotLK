@@ -90,7 +90,7 @@ local Uncategorized =
 			Arguments =
 			{
 				{ Name = "channel", Type = "number", Nilable = false },
-				{ Name = "memberIndex", Type = "number", Nilable = false },
+				{ Name = "memberIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -114,7 +114,7 @@ local Uncategorized =
 				{ Name = "presenceID", Type = "number", Nilable = false },
 				{ Name = "mutual", Type = "bool", Nilable = false },
 				{ Name = "non-mutual", Type = "bool", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -434,7 +434,7 @@ local Uncategorized =
 
 			Arguments =
 			{
-				{ Name = "availableIndex", Type = "number", Nilable = false },
+				{ Name = "availableIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -734,12 +734,12 @@ local Uncategorized =
 
 			Arguments =
 			{
-				{ Name = "questLogIndex", Type = "number", Nilable = false },
+				{ Name = "questLogIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "questWatchIndex", Type = "number", Nilable = false },
+				{ Name = "questWatchIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -1016,7 +1016,7 @@ local Uncategorized =
 
 			Arguments =
 			{
-				{ Name = "queueIndex", Type = "number", Nilable = false },
+				{ Name = "queueIndex", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -1203,7 +1203,7 @@ local Uncategorized =
 			LiteralName = "RUNE_POWER_UPDATE",
 			Payload =
 			{
-				{ Name = "runeIndex", Type = "string", Nilable = false },
+				{ Name = "runeIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "isEnergize", Type = "string", Nilable = false },
 			},
 		},
@@ -1213,7 +1213,7 @@ local Uncategorized =
 			LiteralName = "RUNE_TYPE_UPDATE",
 			Payload =
 			{
-				{ Name = "runeIndex", Type = "number", Nilable = false },
+				{ Name = "runeIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{

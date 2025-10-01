@@ -256,7 +256,7 @@ local LuaLibrary =
 			{
 				{ Name = "iterator", Type = "function", Nilable = false },
 				{ Name = "t", Type = "table", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -357,7 +357,7 @@ local LuaLibrary =
 			{
 				{ Name = "iterator", Type = "function", Nilable = false },
 				{ Name = "t", Type = "table", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -648,7 +648,7 @@ local LuaLibrary =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =

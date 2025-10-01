@@ -21,7 +21,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "statIndex", Type = "number", Nilable = false },
+				{ Name = "statIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "effectiveStat", Type = "number", Nilable = false },
 			},
 
@@ -45,7 +45,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "ratingIndex", Type = "number", Nilable = false },
+				{ Name = "ratingIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -59,7 +59,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "ratingIndex", Type = "number", Nilable = false },
+				{ Name = "ratingIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -82,7 +82,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -143,7 +143,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "ratingIndex", Type = "number", Nilable = false },
+				{ Name = "ratingIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -231,7 +231,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -254,7 +254,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -268,7 +268,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -282,7 +282,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -296,7 +296,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -310,7 +310,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -324,7 +324,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -342,7 +342,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -359,7 +359,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -375,7 +375,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -390,7 +390,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -410,7 +410,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -425,7 +425,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -440,7 +440,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -456,7 +456,7 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =
@@ -475,8 +475,8 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "resistanceIndex", Type = "number", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "resistanceIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -493,8 +493,8 @@ local StatInformation =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "statIndex", Type = "number", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "statIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =

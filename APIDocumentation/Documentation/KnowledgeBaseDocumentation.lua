@@ -48,8 +48,8 @@ local KnowledgeBase =
 			Arguments =
 			{
 				{ Name = "searchText", Type = "string", Nilable = false },
-				{ Name = "categoryIndex", Type = "number", Nilable = false },
-				{ Name = "subcategoryIndex", Type = "number", Nilable = false },
+				{ Name = "categoryIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "subcategoryIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "numArticles", Type = "number", Nilable = false },
 				{ Name = "page", Type = "number", Nilable = false },
 			},
@@ -70,7 +70,7 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -125,7 +125,7 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -151,7 +151,7 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -175,7 +175,7 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -190,7 +190,7 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -204,8 +204,8 @@ local KnowledgeBase =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "subindex", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "subindex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =

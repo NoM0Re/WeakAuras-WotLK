@@ -12,8 +12,8 @@ local GmSurvey =
 
 			Arguments =
 			{
-				{ Name = "questionIndex", Type = "number", Nilable = false },
-				{ Name = "answerIndex", Type = "number", Nilable = false },
+				{ Name = "questionIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "answerIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -49,7 +49,7 @@ local GmSurvey =
 
 			Arguments =
 			{
-				{ Name = "questionIndex", Type = "number", Nilable = false },
+				{ Name = "questionIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -63,7 +63,7 @@ local GmSurvey =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =

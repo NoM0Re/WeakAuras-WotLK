@@ -12,7 +12,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "channel", Type = "number", Nilable = false },
 			},
 
@@ -27,7 +27,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "messageGroup", Type = "string", Nilable = false },
 			},
 
@@ -132,7 +132,7 @@ local Chat =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -141,7 +141,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -157,7 +157,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -180,7 +180,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -203,7 +203,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -265,7 +265,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "channel", Type = "string", Nilable = false },
 			},
 
@@ -276,7 +276,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "messageGroup", Type = "string", Nilable = false },
 			},
 
@@ -310,7 +310,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "alpha", Type = "number", Nilable = false },
 			},
 
@@ -321,7 +321,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "r", Type = "number", Nilable = false },
 				{ Name = "g", Type = "number", Nilable = false },
 				{ Name = "b", Type = "number", Nilable = false },
@@ -334,7 +334,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "docked", Type = "bool", Nilable = false },
 			},
 
@@ -345,7 +345,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "locked", Type = "bool", Nilable = false },
 			},
 
@@ -356,7 +356,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
 			},
 
@@ -367,7 +367,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "shown", Type = "bool", Nilable = false },
 			},
 
@@ -378,7 +378,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "size", Type = "number", Nilable = false },
 			},
 
@@ -389,7 +389,7 @@ local Chat =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "setUninteractable", Type = "bool", Nilable = false },
 			},
 
@@ -432,7 +432,7 @@ local Chat =
 				{ Name = "channelName", Type = "string", Nilable = false },
 				{ Name = "unknown", Type = "number", Nilable = false },
 				{ Name = "counter", Type = "number", Nilable = false },
-				{ Name = "senderGUID", Type = "string", Nilable = false },
+				{ Name = "senderGUID", Type = "WOWGUID", Nilable = false },
 			},
 		},
 		{
@@ -585,7 +585,7 @@ local Chat =
 				{ Name = "channelName", Type = "string", Nilable = false },
 				{ Name = "unknown", Type = "number", Nilable = false },
 				{ Name = "counter", Type = "number", Nilable = false },
-				{ Name = "guid", Type = "string", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 		},
 		{
@@ -971,7 +971,7 @@ local Chat =
 				{ Name = "channelName", Type = "string", Nilable = false },
 				{ Name = "unknown", Type = "number", Nilable = false },
 				{ Name = "counter", Type = "number", Nilable = false },
-				{ Name = "guid", Type = "guid", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 		},
 		{

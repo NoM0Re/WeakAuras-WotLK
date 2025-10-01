@@ -68,7 +68,7 @@ local Achievement =
 			Arguments =
 			{
 				{ Name = "achievementID", Type = "number", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "statisticID", Type = "number", Nilable = true },
 			},
 
@@ -93,7 +93,7 @@ local Achievement =
 			Arguments =
 			{
 				{ Name = "category", Type = "number", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "id", Type = "number", Nilable = true },
 			},
 
@@ -181,7 +181,7 @@ local Achievement =
 			Arguments =
 			{
 				{ Name = "id", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -431,7 +431,7 @@ local Achievement =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
 			},
 
 			Returns =

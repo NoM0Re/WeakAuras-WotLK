@@ -63,7 +63,7 @@ local Social =
 
 			Arguments =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -90,7 +90,7 @@ local Social =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "string", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -133,7 +133,7 @@ local Social =
 
 			Returns =
 			{
-				{ Name = "friendIndex", Type = "number", Nilable = false },
+				{ Name = "friendIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -142,7 +142,7 @@ local Social =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -151,7 +151,7 @@ local Social =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -171,7 +171,7 @@ local Social =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -212,7 +212,7 @@ local Social =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},

@@ -23,7 +23,7 @@ local DebuggingAndProfiling =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -38,7 +38,7 @@ local DebuggingAndProfiling =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -168,7 +168,7 @@ local DebuggingAndProfiling =
 
 			Returns =
 			{
-				{ Name = "time", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
 		},
 		{

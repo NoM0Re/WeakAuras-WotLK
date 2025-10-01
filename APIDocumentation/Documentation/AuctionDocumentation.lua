@@ -12,7 +12,7 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "runTime", Type = "number", Nilable = false },
+				{ Name = "runTime", Type = "time_t", Nilable = false },
 			},
 
 			Returns =
@@ -26,7 +26,7 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -55,7 +55,7 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -88,8 +88,8 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "classIndex", Type = "number", Nilable = false },
-				{ Name = "subClassIndex", Type = "number", Nilable = false },
+				{ Name = "classIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "subClassIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -115,7 +115,7 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -142,7 +142,7 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -156,7 +156,7 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "classIndex", Type = "number", Nilable = false },
+				{ Name = "classIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -171,12 +171,12 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 			},
 		},
 		{
@@ -200,7 +200,7 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -220,7 +220,7 @@ local Auction =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -268,7 +268,7 @@ local Auction =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -294,7 +294,7 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "bid", Type = "number", Nilable = false },
 			},
 
@@ -308,9 +308,9 @@ local Auction =
 				{ Name = "name", Type = "string", Nilable = false },
 				{ Name = "minLevel", Type = "number", Nilable = false },
 				{ Name = "maxLevel", Type = "number", Nilable = false },
-				{ Name = "invTypeIndex", Type = "number", Nilable = false },
-				{ Name = "classIndex", Type = "number", Nilable = false },
-				{ Name = "subClassIndex", Type = "number", Nilable = false },
+				{ Name = "invTypeIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "classIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "subClassIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "page", Type = "number", Nilable = false },
 				{ Name = "isUsable", Type = "bool", Nilable = false },
 				{ Name = "minQuality", Type = "itemQuality", Nilable = false },
@@ -325,7 +325,7 @@ local Auction =
 			Arguments =
 			{
 				{ Name = "list", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -380,7 +380,7 @@ local Auction =
 			{
 				{ Name = "minBid", Type = "number", Nilable = false },
 				{ Name = "buyoutPrice", Type = "number", Nilable = false },
-				{ Name = "runTime", Type = "number", Nilable = false },
+				{ Name = "runTime", Type = "time_t", Nilable = false },
 				{ Name = "stackSize", Type = "number", Nilable = false },
 				{ Name = "numStacks", Type = "number", Nilable = false },
 			},

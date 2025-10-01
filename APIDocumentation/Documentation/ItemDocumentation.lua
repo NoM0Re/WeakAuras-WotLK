@@ -17,7 +17,7 @@ local Item =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -78,7 +78,7 @@ local Item =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -96,7 +96,7 @@ local Item =
 			Returns =
 			{
 				{ Name = "start", Type = "number", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "enable", Type = "number", Nilable = false },
 			},
 		},
@@ -143,7 +143,7 @@ local Item =
 				{ Name = "itemID", Type = "number", Nilable = true },
 				{ Name = "itemName", Type = "string", Nilable = true },
 				{ Name = "itemLink", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 			},
 
 			Returns =
@@ -411,7 +411,7 @@ local Item =
 				{ Name = "itemID", Type = "number", Nilable = true },
 				{ Name = "itemName", Type = "string", Nilable = true },
 				{ Name = "itemLink", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =

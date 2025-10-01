@@ -12,8 +12,8 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "points", Type = "number", Nilable = false },
 				{ Name = "isPet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -100,7 +100,7 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 			},
@@ -130,8 +130,8 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -157,8 +157,8 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -175,8 +175,8 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -197,7 +197,7 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "inspect", Type = "bool", Nilable = false },
 				{ Name = "pet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
@@ -247,8 +247,8 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
-				{ Name = "talentIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
+				{ Name = "talentIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "isPet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
 			},
@@ -271,7 +271,7 @@ local Talent =
 
 			Arguments =
 			{
-				{ Name = "tabIndex", Type = "number", Nilable = false },
+				{ Name = "tabIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "isPet", Type = "bool", Nilable = false },
 				{ Name = "talentGroup", Type = "number", Nilable = false },
 			},

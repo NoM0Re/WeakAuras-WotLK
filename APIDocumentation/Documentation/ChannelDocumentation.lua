@@ -12,7 +12,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "channel", Type = "number", Nilable = false },
 			},
 
@@ -85,7 +85,7 @@ local Channel =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -98,7 +98,7 @@ local Channel =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -121,7 +121,7 @@ local Channel =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -134,7 +134,7 @@ local Channel =
 			{
 				{ Name = "channelName", Type = "string", Nilable = true },
 				{ Name = "channelId", Type = "number", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -180,7 +180,7 @@ local Channel =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -191,7 +191,7 @@ local Channel =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -206,7 +206,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -227,7 +227,7 @@ local Channel =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -237,7 +237,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -247,7 +247,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -266,7 +266,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -276,7 +276,7 @@ local Channel =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -285,7 +285,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -307,7 +307,7 @@ local Channel =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "channel", Type = "string", Nilable = false },
 				{ Name = "...", Type = "list", Nilable = false },
 			},
@@ -318,7 +318,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 				{ Name = "channelName", Type = "string", Nilable = true },
 			},
 
@@ -335,8 +335,8 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
-				{ Name = "rosterIndex", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
+				{ Name = "rosterIndex", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -355,7 +355,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -394,7 +394,7 @@ local Channel =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -443,7 +443,7 @@ local Channel =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
 				{ Name = "password", Type = "string", Nilable = false },
-				{ Name = "chatFrameIndex", Type = "number", Nilable = false },
+				{ Name = "chatFrameIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "enableVoice", Type = "bool", Nilable = true },
 			},
 
@@ -480,7 +480,7 @@ local Channel =
 			Arguments =
 			{
 				{ Name = "channel", Type = "string", Nilable = true },
-				{ Name = "channelIndex", Type = "number", Nilable = true },
+				{ Name = "channelIndex", Type = "luaIndex", Nilable = true },
 			},
 
 		},
@@ -495,7 +495,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "channel", Type = "string", Nilable = false },
 			},
 
@@ -506,7 +506,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -548,7 +548,7 @@ local Channel =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -706,7 +706,7 @@ local Channel =
 				{ Name = "channelName", Type = "string", Nilable = false },
 				{ Name = "unknown", Type = "number", Nilable = false },
 				{ Name = "counter", Type = "number", Nilable = false },
-				{ Name = "guid", Type = "string", Nilable = false },
+				{ Name = "guid", Type = "WOWGUID", Nilable = false },
 			},
 		},
 		{
@@ -796,7 +796,7 @@ local Channel =
 			LiteralName = "UNIT_SPELLCAST_CHANNEL_START",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "lineID", Type = "number", Nilable = false },
@@ -809,7 +809,7 @@ local Channel =
 			LiteralName = "UNIT_SPELLCAST_CHANNEL_STOP",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 			},
@@ -820,7 +820,7 @@ local Channel =
 			LiteralName = "UNIT_SPELLCAST_CHANNEL_UPDATE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 				{ Name = "spell", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
 				{ Name = "lineID", Type = "number", Nilable = false },

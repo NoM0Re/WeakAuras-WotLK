@@ -27,8 +27,8 @@ local Buff =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "rank", Type = "string", Nilable = true },
 				{ Name = "filter", Type = "string", Nilable = true },
@@ -55,8 +55,8 @@ local Buff =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "rank", Type = "string", Nilable = true },
 				{ Name = "filter", Type = "string", Nilable = true },
@@ -69,7 +69,7 @@ local Buff =
 				{ Name = "icon", Type = "string", Nilable = false },
 				{ Name = "count", Type = "number", Nilable = false },
 				{ Name = "dispelType", Type = "string", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "expires", Type = "number", Nilable = false },
 				{ Name = "caster", Type = "string", Nilable = false },
 				{ Name = "isStealable", Type = "1nil", Nilable = false },
@@ -83,8 +83,8 @@ local Buff =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "rank", Type = "string", Nilable = true },
 				{ Name = "filter", Type = "string", Nilable = true },
@@ -97,7 +97,7 @@ local Buff =
 				{ Name = "icon", Type = "string", Nilable = false },
 				{ Name = "count", Type = "number", Nilable = false },
 				{ Name = "dispelType", Type = "string", Nilable = false },
-				{ Name = "duration", Type = "number", Nilable = false },
+				{ Name = "duration", Type = "time_t", Nilable = false },
 				{ Name = "expires", Type = "number", Nilable = false },
 				{ Name = "caster", Type = "string", Nilable = false },
 				{ Name = "isStealable", Type = "1nil", Nilable = false },

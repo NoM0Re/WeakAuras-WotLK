@@ -14,7 +14,7 @@ local Complaint =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -30,7 +30,7 @@ local Complaint =
 			{
 				{ Name = "monthOffset", Type = "number", Nilable = true },
 				{ Name = "day", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -97,7 +97,7 @@ local Complaint =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 			Returns =
@@ -112,7 +112,7 @@ local Complaint =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = true },
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 			},
 
 		},

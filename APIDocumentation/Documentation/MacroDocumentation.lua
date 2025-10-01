@@ -20,7 +20,7 @@ local Macro =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -38,7 +38,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -49,7 +49,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "name", Type = "string", Nilable = false },
 				{ Name = "iconTexture", Type = "string", Nilable = false },
 				{ Name = "body", Type = "string", Nilable = false },
@@ -57,7 +57,7 @@ local Macro =
 
 			Returns =
 			{
-				{ Name = "newIndex", Type = "number", Nilable = false },
+				{ Name = "newIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -66,7 +66,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -81,7 +81,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -100,7 +100,7 @@ local Macro =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -109,7 +109,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -126,7 +126,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -142,7 +142,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -156,7 +156,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -200,7 +200,7 @@ local Macro =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -218,7 +218,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -229,7 +229,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "button", Type = "string", Nilable = true },
 			},
@@ -267,7 +267,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "item", Type = "string", Nilable = true },
 				{ Name = "target", Type = "string", Nilable = true },
@@ -280,7 +280,7 @@ local Macro =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = true },
+				{ Name = "index", Type = "luaIndex", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 				{ Name = "spell", Type = "string", Nilable = true },
 				{ Name = "target", Type = "string", Nilable = true },

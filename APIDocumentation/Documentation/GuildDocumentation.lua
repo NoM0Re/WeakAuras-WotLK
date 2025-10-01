@@ -146,7 +146,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -167,7 +167,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -175,7 +175,7 @@ local Guild =
 			{
 				{ Name = "guildName", Type = "string", Nilable = false },
 				{ Name = "guildRankName", Type = "string", Nilable = false },
-				{ Name = "guildRankIndex", Type = "number", Nilable = false },
+				{ Name = "guildRankIndex", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -193,14 +193,14 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
 				{ Name = "rank", Type = "string", Nilable = false },
-				{ Name = "rankIndex", Type = "number", Nilable = false },
+				{ Name = "rankIndex", Type = "luaIndex", Nilable = false },
 				{ Name = "level", Type = "number", Nilable = false },
 				{ Name = "class", Type = "string", Nilable = false },
 				{ Name = "zone", Type = "string", Nilable = false },
@@ -217,7 +217,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -243,7 +243,7 @@ local Guild =
 
 			Returns =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 		},
 		{
@@ -384,7 +384,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "enabled", Type = "bool", Nilable = false },
 			},
 
@@ -446,7 +446,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "note", Type = "string", Nilable = false },
 			},
 
@@ -457,7 +457,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "note", Type = "string", Nilable = false },
 			},
 
@@ -531,7 +531,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 		},
@@ -566,7 +566,7 @@ local Guild =
 
 			Arguments =
 			{
-				{ Name = "unit", Type = "string", Nilable = true },
+				{ Name = "unit", Type = "UnitToken", Nilable = true },
 				{ Name = "name", Type = "string", Nilable = true },
 			},
 
@@ -657,7 +657,7 @@ local Guild =
 			LiteralName = "PLAYER_GUILD_UPDATE",
 			Payload =
 			{
-				{ Name = "unitID", Type = "string", Nilable = false },
+				{ Name = "unitID", Type = "UnitToken", Nilable = false },
 			},
 		},
 	},

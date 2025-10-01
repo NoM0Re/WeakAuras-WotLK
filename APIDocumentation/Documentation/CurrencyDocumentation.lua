@@ -12,7 +12,7 @@ local Currency =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "shouldExpand", Type = "number", Nilable = false },
 			},
 
@@ -23,7 +23,7 @@ local Currency =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -63,7 +63,7 @@ local Currency =
 			{
 				{ Name = "container", Type = "number", Nilable = false },
 				{ Name = "slot", Type = "number", Nilable = false },
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -79,7 +79,7 @@ local Currency =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 			},
 
 			Returns =
@@ -142,7 +142,7 @@ local Currency =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "watch", Type = "number", Nilable = false },
 			},
 
@@ -153,7 +153,7 @@ local Currency =
 
 			Arguments =
 			{
-				{ Name = "index", Type = "number", Nilable = false },
+				{ Name = "index", Type = "luaIndex", Nilable = false },
 				{ Name = "makeUnused", Type = "number", Nilable = false },
 			},
 

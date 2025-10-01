@@ -12,7 +12,7 @@ local LimitedPlayTime =
 
 			Returns =
 			{
-				{ Name = "time", Type = "number", Nilable = false },
+				{ Name = "time", Type = "time_t", Nilable = false },
 			},
 		},
 		{
