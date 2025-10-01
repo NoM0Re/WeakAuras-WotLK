@@ -34,7 +34,7 @@ local Utility =
 
 			Returns =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 			},
 		},
 		{
@@ -43,12 +43,12 @@ local Utility =
 
 			Arguments =
 			{
-				{ Name = "currentFrame", Type = "table", Nilable = true },
+				{ Name = "currentFrame", Type = "frame", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "nextFrame", Type = "table", Nilable = false },
+				{ Name = "nextFrame", Type = "frame", Nilable = false },
 			},
 		},
 		{
@@ -80,7 +80,7 @@ local Utility =
 
 			Returns =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 			},
 		},
 		{
@@ -89,7 +89,7 @@ local Utility =
 
 			Returns =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 			},
 		},
 		{
@@ -168,7 +168,7 @@ local Utility =
 
 			Returns =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 			},
 		},
 		{

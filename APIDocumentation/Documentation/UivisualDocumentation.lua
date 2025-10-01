@@ -27,7 +27,7 @@ local Uivisual =
 
 			Arguments =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 			},
 
 		},

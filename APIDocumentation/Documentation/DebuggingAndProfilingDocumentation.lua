@@ -67,7 +67,7 @@ local DebuggingAndProfiling =
 
 			Arguments =
 			{
-				{ Name = "frame", Type = "table", Nilable = false },
+				{ Name = "frame", Type = "frame", Nilable = false },
 				{ Name = "includeChildren", Type = "bool", Nilable = false },
 			},
 
