@@ -1,8 +1,8 @@
 local SecureExecutionUtility =
 {
-	Name = "Secure_execution_utility",
+	Name = "Secure Execution Utility",
 	Type = "System",
-	Namespace = "Secure_execution_utility",
+	Namespace = "Secure Execution Utility",
 
 	Functions =
 	{

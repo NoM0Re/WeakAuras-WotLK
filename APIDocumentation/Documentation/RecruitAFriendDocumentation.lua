@@ -1,8 +1,8 @@
 local RecruitAFriend =
 {
-	Name = "Recruit-a-friend",
+	Name = "Recruit Friend",
 	Type = "System",
-	Namespace = "Recruit-a-friend",
+	Namespace = "Recruit Friend",
 
 	Functions =
 	{

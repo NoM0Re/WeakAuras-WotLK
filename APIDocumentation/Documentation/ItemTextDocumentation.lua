@@ -1,8 +1,8 @@
 local ItemText =
 {
-	Name = "Item_Text",
+	Name = "Item Text",
 	Type = "System",
-	Namespace = "Item_Text",
+	Namespace = "Item Text",
 
 	Functions =
 	{

@@ -1,8 +1,8 @@
 local EquipmentManager =
 {
-	Name = "Equipment_Manager",
+	Name = "Equipment Manager",
 	Type = "System",
-	Namespace = "Equipment_Manager",
+	Namespace = "Equipment Manager",
 
 	Functions =
 	{

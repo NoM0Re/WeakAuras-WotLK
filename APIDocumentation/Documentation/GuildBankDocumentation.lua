@@ -1,8 +1,8 @@
 local GuildBank =
 {
-	Name = "Guild_bank",
+	Name = "Guild Bank",
 	Type = "System",
-	Namespace = "Guild_bank",
+	Namespace = "Guild Bank",
 
 	Functions =
 	{

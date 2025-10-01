@@ -1,8 +1,8 @@
 local PetStable =
 {
-	Name = "Pet_Stable",
+	Name = "Pet Stable",
 	Type = "System",
-	Namespace = "Pet_Stable",
+	Namespace = "Pet Stable",
 
 	Functions =
 	{

@@ -1,8 +1,8 @@
 local DebuggingAndProfiling =
 {
-	Name = "Debugging_and_Profiling",
+	Name = "Debugging and Profiling",
 	Type = "System",
-	Namespace = "Debugging_and_Profiling",
+	Namespace = "Debugging and Profiling",
 
 	Functions =
 	{

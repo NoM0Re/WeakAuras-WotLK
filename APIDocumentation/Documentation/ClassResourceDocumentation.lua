@@ -1,8 +1,8 @@
 local ClassResource =
 {
-	Name = "Class_resource",
+	Name = "Class Resource",
 	Type = "System",
-	Namespace = "Class_resource",
+	Namespace = "Class Resource",
 
 	Functions =
 	{

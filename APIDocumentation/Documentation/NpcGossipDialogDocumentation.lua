@@ -1,8 +1,8 @@
 local NpcGossipDialog =
 {
-	Name = "NPC_Gossip_Dialog",
+	Name = "NPC Gossip Dialog",
 	Type = "System",
-	Namespace = "NPC_Gossip_Dialog",
+	Namespace = "NPC Gossip Dialog",
 
 	Functions =
 	{

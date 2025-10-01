@@ -1,8 +1,8 @@
 local BlizzardInternal =
 {
-	Name = "Blizzard_internal",
+	Name = "Blizzard Internal",
 	Type = "System",
-	Namespace = "Blizzard_internal",
+	Namespace = "Blizzard Internal",
 
 	Functions =
 	{

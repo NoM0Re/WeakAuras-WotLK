@@ -1,8 +1,8 @@
 local Awesome_WotLK =
 {
-	Name = "Awesome_WotLK",
+	Name = "Awesome WotLK",
 	Type = "System",
-	Namespace = "Awesome_WotLK",
+	Namespace = "Awesome WotLK",
 
 	Functions =
 	{

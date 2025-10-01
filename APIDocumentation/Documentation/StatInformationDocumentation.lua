@@ -1,8 +1,8 @@
 local StatInformation =
 {
-	Name = "Stat_information",
+	Name = "Stat Information",
 	Type = "System",
-	Namespace = "Stat_information",
+	Namespace = "Stat Information",
 
 	Functions =
 	{

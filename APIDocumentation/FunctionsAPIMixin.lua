@@ -19,9 +19,6 @@ function FunctionsAPIMixin:GetLinkHexColor()
 end
 
 function FunctionsAPIMixin:GetFullName(decorateOptionals, includeColorCodes)
-	if self.System and self.System:GetNamespaceName() ~= "" then
-		return ("%s.%s(%s)"):format(self.System:GetNamespaceName(), self:GetName(), self:GetArgumentString(decorateOptionals, includeColorCodes));
-	end
 	return ("%s(%s)"):format(self:GetName(), self:GetArgumentString(decorateOptionals, includeColorCodes));
 end
 

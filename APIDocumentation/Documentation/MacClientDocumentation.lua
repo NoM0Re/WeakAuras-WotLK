@@ -1,8 +1,8 @@
 local MacClient =
 {
-	Name = "Mac_client",
+	Name = "Mac Client",
 	Type = "System",
-	Namespace = "Mac_client",
+	Namespace = "Mac Client",
 
 	Functions =
 	{

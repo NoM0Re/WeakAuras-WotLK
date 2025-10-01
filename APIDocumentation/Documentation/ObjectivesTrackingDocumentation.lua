@@ -1,8 +1,8 @@
 local ObjectivesTracking =
 {
-	Name = "Objectives_tracking",
+	Name = "Objectives Tracking",
 	Type = "System",
-	Namespace = "Objectives_tracking",
+	Namespace = "Objectives Tracking",
 
 	Functions =
 	{

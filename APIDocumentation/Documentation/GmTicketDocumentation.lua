@@ -1,8 +1,8 @@
 local GmTicket =
 {
-	Name = "GM_Ticket",
+	Name = "GM Ticket",
 	Type = "System",
-	Namespace = "GM_Ticket",
+	Namespace = "GM Ticket",
 
 	Functions =
 	{

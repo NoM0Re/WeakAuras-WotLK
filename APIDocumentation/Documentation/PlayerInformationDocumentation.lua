@@ -1,8 +1,8 @@
 local PlayerInformation =
 {
-	Name = "Player_information",
+	Name = "Player Information",
 	Type = "System",
-	Namespace = "Player_information",
+	Namespace = "Player Information",
 
 	Functions =
 	{

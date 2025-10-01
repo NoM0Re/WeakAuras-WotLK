@@ -1,8 +1,8 @@
 local ZoneInformation =
 {
-	Name = "Zone_information",
+	Name = "Zone Information",
 	Type = "System",
-	Namespace = "Zone_information",
+	Namespace = "Zone Information",
 
 	Functions =
 	{
