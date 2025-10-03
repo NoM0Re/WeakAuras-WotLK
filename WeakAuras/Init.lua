@@ -18,20 +18,12 @@ local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS avai
 
 local isDBMRegistered = false
 
-function Private.DBMEncounterEvents() end
-if DBM and DBM.RegisterCallback then
-  local events = {"DBM_Pull", "DBM_Kill", "DBM_Wipe"}
-  isDBMRegistered = pcall(function()
-    for i, event in ipairs(events) do
-      DBM:RegisterCallback(event, Private.DBMEncounterEvents)
-    end
-  end)
-  if not isDBMRegistered then
-    -- just in case pcall failed after some events were registered
-    for i, event in ipairs(events) do
-      DBM:UnregisterCallback(event, Private.DBMEncounterEvents)
-    end
+if (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250929200404) then
+  function Private.DBMEncounterEvents() end
+  for _, event in ipairs({"DBM_Pull", "DBM_Kill", "DBM_Wipe"}) do
+    DBM:RegisterCallback(event, Private.DBMEncounterEvents)
   end
+  isDBMRegistered = true
 end
 
 local flavor

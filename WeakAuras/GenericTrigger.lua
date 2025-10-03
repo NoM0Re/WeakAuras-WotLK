@@ -1612,6 +1612,7 @@ function GenericTrigger.Add(data, region)
   watched_trigger_events[id] = nil
 
   local warnAboutCLEUEvents = false
+  local warnEncounterEvent = false
 
   for triggernum, triggerData in ipairs(data.triggers) do
     local trigger, untrigger = triggerData.trigger, triggerData.untrigger
@@ -1653,6 +1654,8 @@ function GenericTrigger.Add(data, region)
               if not(Private.subevent_actual_prefix_types[trigger.subeventPrefix]) then
                 trigger.subeventSuffix = "";
               end
+            elseif (trigger.event == "Encounter Events") and not WeakAuras.IsDBMRegistered() then
+              warnEncounterEvent = true
             end
 
             prototype = event_prototypes[trigger.event]
@@ -1901,6 +1904,11 @@ function GenericTrigger.Add(data, region)
                 L["|cFFFF0000Support for unfiltered COMBAT_LOG_EVENT_UNFILTERED is deprecated|r\nCOMBAT_LOG_EVENT_UNFILTERED without a filter are disabled as it’s very performance costly.\nFind more information:\nhttps://github.com/WeakAuras/WeakAuras2/wiki/Custom-Triggers#events"])
   else
     Private.AuraWarnings.UpdateWarning(data.uid, "spammy_event_warning")
+  end
+
+  if warnEncounterEvent then
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_encounter_events", "error",
+                L["Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date."])
   end
 end
 
@@ -3905,23 +3913,28 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
 
-Private.DBMEncounterEvents = function(event, mod)
-  local encounterID, encounterName, difficultyID, groupSize =
-    0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
+if WeakAuras.IsDBMRegistered() then
+  function Private.DBMEncounterEvents(event, mod, ...)
+    local encounterID, encounterName, difficultyID, groupSize =
+      0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
 
-  if type(mod) == "table" then
-    encounterID = mod.encounterId or 0
-    encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
-  end
+    if type(mod) == "table" then
+      encounterID = mod.encounterId or 0
+      encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
+    end
 
-  if event == "DBM_Pull" then
-    -- ENCOUNTER_START: encounterID, encounterName, difficultyID, groupSize
-    Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
-    WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
-  else
-    -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
-    Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
-    WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
+    -- Fire DBM Callback Events too, because we have them anyway registered.
+    WeakAuras.ScanEvents(event, mod, ...)
+
+    if event == "DBM_Pull" then
+      -- ENCOUNTER_START: encounterID, encounterName, difficultyID, groupSize
+      Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
+      WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
+    else
+      -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
+      Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
+      WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
+    end
   end
 end
 

@@ -1444,14 +1444,9 @@ local function DestroyEncounterTable()
 end
 
 local function CreateEncounterTable(encounter_id)
-  local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
-  ---@class CurrentEncounter
-  ---@field encounterId number
-  ---@field zone_id number
-  ---@field boss_guids number[]
   WeakAuras.CurrentEncounter = {
     id = encounter_id,
-    zone_id = instanceId,
+    zone_id = GetCurrentMapAreaID(),
     boss_guids = {},
   }
   timer:ScheduleTimer(StoreBossGUIDs, 2)
@@ -1609,8 +1604,8 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
     if (data and not data.controlledChildren) then
       local loadFunc = loadFuncs[id];
       local loadOpt = loadFuncsForOptions[id];
-      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
-      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, size, difficulty);
+      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
+      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, role, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
 
       if(shouldBeLoaded and not loaded[id]) then
         changed = changed + 1;
@@ -1686,9 +1681,6 @@ end
 
 local loadFrame = CreateFrame("Frame");
 Private.frames["Display Load Handling"] = loadFrame;
-
-loadFrame:RegisterEvent("ENCOUNTER_START");
-loadFrame:RegisterEvent("ENCOUNTER_END");
 
 loadFrame:RegisterEvent("PLAYER_TALENT_UPDATE");
 loadFrame:RegisterEvent("SPELL_UPDATE_USABLE");
@@ -2475,7 +2467,7 @@ function Private.AddMany(tbl, takeSnapshots)
     else
       if next(WeakAuras.LoadFromArchive("Repository", "migration").stores) ~= nil then
         timer:ScheduleTimer(function()
-          prettyPrint(L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/UXSc7nt."])
+          prettyPrint(L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/UXSc7nt."])
         end, 1)
       end
     end
@@ -2817,6 +2809,13 @@ local oldDataStub2 = {
   conditions = {},
 }
 
+function Private.WarnEncounterEvent(data)
+  if data.load and (data.load.use_encounter ~= nil or data.load.use_encounterid) then
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_load_encounter", "error",
+            L["Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date."])
+  end
+end
+
 function Private.UpdateSoundIcon(data)
   local function testConditions()
     local sound, tts
@@ -3115,6 +3114,9 @@ function pAdd(data, simpleChange)
     end
 
     Private.UpdateSoundIcon(data)
+    if not WeakAuras.IsDBMRegistered() then
+      Private.WarnEncounterEvent(data)
+    end
     Private.callbacks:Fire("Add", data.uid, data.id, data, simpleChange)
   end
 end

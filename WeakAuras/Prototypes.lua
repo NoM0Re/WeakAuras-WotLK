@@ -972,6 +972,9 @@ Private.load_prototype = {
     {
       name = "encounter",
       display = L["In Encounter"],
+      desc = (WeakAuras.IsDBMRegistered() and "" or "|cffff0000")
+                  .. L["Requires Deadly Boss Mods (DBM) to detect encounters."]
+                  .. "|r",
       type = "tristate",
       width = WeakAuras.normalWidth,
       init = "arg",
@@ -6234,6 +6237,16 @@ Private.event_prototypes = {
     },
     name = L["Entering/Leaving Encounter"],
     args = {
+      {
+        name = "note",
+        type = "description",
+        display = "",
+        text = function()
+          return (WeakAuras.IsDBMRegistered() and "" or "|cffff0000")
+                  .. L["Requires Deadly Boss Mods (DBM) to detect encounters."]
+                  .. "|r"
+        end,
+      },
       {
         name = "eventtype",
         required = true,
