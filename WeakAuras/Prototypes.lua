@@ -831,20 +831,13 @@ function WeakAuras.IsSpellKnownForLoad(spell, exact)
   if exact or result then
     return result
   end
-  -- Dance through the spellname to the current spell id
-  spell = GetSpellInfo(spell)
-  if spell then
-    return WeakAuras.IsSpellKnown(spell)
-  end
 end
 
 function WeakAuras.IsSpellKnown(spell, pet)
+  if spell == 0 or spell >= 2^31 then return false end
   local id = tonumber(spell)
   if id then
-    if id > 0 and id < 2^31 then
-      return IsSpellKnown(id, pet)
-    end
-    return false
+    return IsSpellKnown(id, pet)
   end
   return GetSpellInfo(spell) and true or false
 end
