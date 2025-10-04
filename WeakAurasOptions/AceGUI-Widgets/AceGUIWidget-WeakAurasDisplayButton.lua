@@ -435,7 +435,9 @@ local tabsForWarning = {
   sound_condition = "conditions",
   tts_action = "action",
   sound_action = "action",
-  spammy_event_warning = "trigger"
+  spammy_event_warning = "trigger",
+  dbm_required_for_load_encounter = "load",
+  dbm_required_for_encounter_events = "trigger"
 }
 
 --[[-----------------------------------------------------------------------------

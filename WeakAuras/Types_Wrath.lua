@@ -7,6 +7,152 @@ if not WeakAuras.IsWrath() then
   return
 end
 
+local WeakAuras = WeakAuras;
+local L = WeakAuras.L;
+
+local encounter_list = ""
+function Private.InitializeEncounterAndZoneLists()
+  if encounter_list ~= "" then
+    return
+  end
+  local raids = {
+    {
+      L["Vault of Archavon"],
+      {
+        { L["Archavon the Stone Watcher"], 772 },
+        { L["Emalon the Storm Watcher"], 774 },
+        { L["Koralon the Flame Watcher"], 776 },
+        { L["Toravon the Ice Watcher"], 885 },
+      }
+    },
+    {
+      L["Naxxramas"],
+      {
+        -- The Arachnid Quarter
+        { L["Anub'Rekhan"], 1107 },
+        { L["Grand Widow Faerlina"], 1110 },
+        { L["Maexxna"], 1116 },
+        -- The Plague Quarter
+        { L["Noth the Plaguebringer"], 1117 },
+        { L["Heigan the Unclean"], 1112 },
+        { L["Loatheb"], 1115 },
+        -- The Military Quarter
+        { L["Instructor Razuvious"], 1113 },
+        { L["Gothik the Harvester"], 1109 },
+        { L["The Four Horsemen"], 1121 },
+        -- The Construct Quarter
+        { L["Patchwerk"], 1118 },
+        { L["Grobbulus"], 1111 },
+        { L["Gluth"], 1108 },
+        { L["Thaddius"], 1120 },
+        -- Frostwyrm Lair
+        { L["Sapphiron"], 1119 },
+        { L["Kel'Thuzad"], 1114 }
+      }
+    },
+    {
+      L["The Obsidian Sanctum"],
+      {
+        { L["Tenebron"], 736 },
+        { L["Shadron"], 738 },
+        { L["Vesperon"], 740 },
+        { L["Sartharion"], 742 },
+      }
+    },
+    {
+      L["The Eye of Eternity"],
+      {
+        { L["Malygos"], 734 },
+      }
+    },
+    {
+      L["Ulduar"],
+      {
+        -- The Siege of Ulduar
+        { L["Flame Leviathan"], 744 },
+        { L["Ignis the Furnace Master"], 745 },
+        { L["Razorscale"], 746 },
+        { L["XT-002 Deconstructor"], 747 },
+        -- The Antechamber of Ulduar
+        { L["Assembly of Iron"], 748 },
+        { L["Kologarn"], 749 },
+        { L["Auriaya"], 750 },
+        -- The Keepers of Ulduar
+        { L["Freya"], 753 },
+        { L["Hodir"], 751 },
+        { L["Mimiron"], 754 },
+        { L["Thorim"], 752 },
+        -- The Descent into Madness
+        { L["General Vezax"], 755 },
+        { L["Yogg-Saron"], 756 },
+        -- Celestial Planetarium
+        { L["Algalon the Observer"], 757 },
+      }
+    },
+    {
+      L["Trial of the Crusader"],
+      {
+        { L["Northrend Beasts"], 629 },
+        { L["Lord Jaraxxus"], 633 },
+        { L["Faction Champions"], 637 },
+        { L["Val'kyr Twins"], 641 },
+        { L["Anub'arak"], 645 },
+      }
+    },
+    {
+      L["Onyxia's Lair"],
+      {
+        { L["Onyxia"], 1084 },
+      }
+    },
+    {
+      L["Icecrown Citadel"],
+      {
+        -- The Lower Spire
+        { L["Lord Marrowgar"], 845 },
+        { L["Lady Deathwhisper"], 846 },
+        { L["Gunship Battle"], 847 },
+        { L["Deathbringer Saurfang"], 848 },
+        -- The Plagueworks
+        { L["Festergut"], 849 },
+        { L["Rotface"], 850 },
+        { L["Professor Putricide"], 851 },
+        -- The Crimson Hall
+        { L["Blood Prince Council"], 852 },
+        { L["Blood-Queen Lana'thel"], 853 },
+        -- The Frostwing Halls
+        { L["Valithria Dreamwalker"], 854 },
+        { L["Sindragosa"], 855 },
+        -- The Frozen Throne
+        { L["The Lich King"], 856 },
+      }
+    },
+    {
+      L["The Ruby Sanctum"],
+      {
+        { L["Baltharus the Warborn"], 890 },
+        { L["General Zarithrian"], 893 },
+        { L["Saviana Ragefire"], 891 },
+        { L["Halion"], 887 },
+      }
+    },
+  }
+  encounter_list = (WeakAuras.IsDBMRegistered() and "" or "|cFFFF0000") .. L["Requires Deadly Boss Mods (DBM) to detect encounters."] .. (WeakAuras.IsDBMRegistered() and "" or "|r") .. "\n\n"
+  for _, raid in ipairs(raids) do
+    encounter_list = ("%s|cffffd200%s|r\n"):format(encounter_list, raid[1])
+    for _, boss in ipairs(raid[2]) do
+        encounter_list = ("%s%s: %d\n"):format(encounter_list, boss[1], boss[2])
+    end
+    encounter_list = encounter_list .. "\n"
+  end
+
+  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Based on "] .. "https://wago.tools/db2/DungeonEncounter?build=3.4.5.63009\n" .. L["Supports multiple entries, separated by commas\n"]
+end
+
+function Private.get_encounters_list()
+  return encounter_list
+end
+
 Private.talentInfo = {
   ["HUNTER"] = {
     {

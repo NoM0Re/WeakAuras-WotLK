@@ -1612,6 +1612,7 @@ function GenericTrigger.Add(data, region)
   watched_trigger_events[id] = nil
 
   local warnAboutCLEUEvents = false
+  local warnEncounterEvent = false
 
   for triggernum, triggerData in ipairs(data.triggers) do
     local trigger, untrigger = triggerData.trigger, triggerData.untrigger
@@ -1653,6 +1654,8 @@ function GenericTrigger.Add(data, region)
               if not(Private.subevent_actual_prefix_types[trigger.subeventPrefix]) then
                 trigger.subeventSuffix = "";
               end
+            elseif (trigger.event == "Encounter Events") and not WeakAuras.IsDBMRegistered() then
+              warnEncounterEvent = true
             end
 
             prototype = event_prototypes[trigger.event]
@@ -1901,6 +1904,13 @@ function GenericTrigger.Add(data, region)
                 L["|cFFFF0000Support for unfiltered COMBAT_LOG_EVENT_UNFILTERED is deprecated|r\nCOMBAT_LOG_EVENT_UNFILTERED without a filter are disabled as it’s very performance costly.\nFind more information:\nhttps://github.com/WeakAuras/WeakAuras2/wiki/Custom-Triggers#events"])
   else
     Private.AuraWarnings.UpdateWarning(data.uid, "spammy_event_warning")
+  end
+
+  if warnEncounterEvent then
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_encounter_events", "error",
+                L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"])
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_encounter_events")
   end
 end
 
@@ -3904,6 +3914,36 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   end
   WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
+
+if WeakAuras.IsDBMRegistered() then
+  function Private.DBMEncounterEvents(event, mod, ...)
+    local encounterID, encounterName, difficultyID, groupSize =
+      0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
+
+    if type(mod) == "table" then
+      encounterID = mod.encounterId or encounterID
+      encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
+    end
+
+    -- Fire DBM Callback Events too, because we have them anyway registered.
+    WeakAuras.ScanEvents(event, mod, ...)
+
+    if event == "DBM_Pull" then
+      -- ENCOUNTER_START: encounterID, encounterName, difficultyID, groupSize
+      Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
+      WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
+    else
+      local success = (event == "DBM_Kill") and 1 or 0
+      -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
+      Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
+      WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
+    end
+  end
+
+  for _, event in ipairs({"DBM_Pull", "DBM_Kill", "DBM_Wipe"}) do
+    DBM:RegisterCallback(event, Private.DBMEncounterEvents)
+  end
+end
 
 do
   local scheduled_scans = {};
