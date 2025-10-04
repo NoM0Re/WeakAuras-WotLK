@@ -1908,7 +1908,9 @@ function GenericTrigger.Add(data, region)
 
   if warnEncounterEvent then
     Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_encounter_events", "error",
-                L["Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date."])
+                L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"])
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_encounter_events")
   end
 end
 
@@ -3919,7 +3921,7 @@ if WeakAuras.IsDBMRegistered() then
       0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
 
     if type(mod) == "table" then
-      encounterID = mod.encounterId or 0
+      encounterID = mod.encounterId or encounterID
       encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
     end
 
@@ -3931,10 +3933,15 @@ if WeakAuras.IsDBMRegistered() then
       Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
       WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
     else
+      local success = (event == "DBM_Kill") and 1 or 0
       -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
-      Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
-      WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, event == "DBM_Kill")
+      Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
+      WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
     end
+  end
+
+  for _, event in ipairs({"DBM_Pull", "DBM_Kill", "DBM_Wipe"}) do
+    DBM:RegisterCallback(event, Private.DBMEncounterEvents)
   end
 end
 

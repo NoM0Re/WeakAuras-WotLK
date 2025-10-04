@@ -88,7 +88,8 @@ end
 local constants = {
   nameRealmFilterDesc = L[" Filter formats: 'Name', 'Name-Realm', '-Realm'. \n\nSupports multiple entries, separated by commas\nCan use \\ to escape -."],
   instanceFilterDeprecated = L["This filter has been moved to the Location trigger. Change your aura to use the new Location trigger or join the WeakAuras Discord server for help."],
-  guildFilterDesc = L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."]
+  guildFilterDesc = L["Supports multiple entries, separated by commas. Escape with \\. Prefix with '-' for negation."],
+  encounterDBMDesc = (WeakAuras.IsDBMRegistered() and "" or "|cFFFF0000") .. L["Requires Deadly Boss Mods (DBM) to detect encounters."] .. (WeakAuras.IsDBMRegistered() and "" or "|r")
 }
 
 WeakAuras.UnitRaidRole = function(unit)
@@ -971,10 +972,8 @@ Private.load_prototype = {
     },
     {
       name = "encounter",
-      display = L["In Encounter"],
-      desc = (WeakAuras.IsDBMRegistered() and "" or "|cffff0000")
-                  .. L["Requires Deadly Boss Mods (DBM) to detect encounters."]
-                  .. "|r",
+      display = WeakAuras.newFeatureString .. L["In Encounter"],
+      desc = constants.encounterDBMDesc,
       type = "tristate",
       width = WeakAuras.normalWidth,
       init = "arg",
@@ -1318,7 +1317,7 @@ Private.load_prototype = {
     },
     {
       name = "encounterid",
-      display = L["Encounter ID(s)"],
+      display = WeakAuras.newFeatureString .. L["Encounter ID(s)"],
       type = "string",
       init = "arg",
       multiline = true,
@@ -6235,17 +6234,13 @@ Private.event_prototypes = {
         "ENCOUNTER_END"
       }
     },
-    name = L["Entering/Leaving Encounter"],
+    name = WeakAuras.newFeatureString..L["Entering/Leaving Encounter"],
     args = {
       {
         name = "note",
         type = "description",
         display = "",
-        text = function()
-          return (WeakAuras.IsDBMRegistered() and "" or "|cffff0000")
-                  .. L["Requires Deadly Boss Mods (DBM) to detect encounters."]
-                  .. "|r"
-        end,
+        text = constants.encounterDBMDesc
       },
       {
         name = "eventtype",
@@ -6260,6 +6255,7 @@ Private.event_prototypes = {
         name = "encounterId",
         display = L["Id"],
         type = "string",
+        desc = Private.get_encounters_list,
         validate = WeakAuras.ValidateNumeric,
         conditionType = "number",
         store = true,

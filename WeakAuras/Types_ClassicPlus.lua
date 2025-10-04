@@ -19,8 +19,6 @@ function Private.InitializeEncounterAndZoneLists()
     {
       L["World Bosses"],
       {
-        { L["Kazzak"], 1801 },
-        { L["Azuregos"], 3020 },
         { L["Onyxia"], 1084 }
       }
     },
@@ -118,9 +116,7 @@ function Private.InitializeEncounterAndZoneLists()
       }
     }
   }
-  encounter_list = (WeakAuras.IsDBMRegistered() and "" or "|cffff0000")
-                  .. L["Requires Deadly Boss Mods (DBM) to detect encounters."]
-                  .. "|r\n\n"
+  encounter_list = (WeakAuras.IsDBMRegistered() and "" or "|cFFFF0000") .. L["Requires Deadly Boss Mods (DBM) to detect encounters."] .. (WeakAuras.IsDBMRegistered() and "" or "|r") .. "\n\n"
   for _, raid in ipairs(raids) do
     encounter_list = ("%s|cffffd200%s|r\n"):format(encounter_list, raid[1])
     for _, boss in ipairs(raid[2]) do
@@ -129,7 +125,7 @@ function Private.InitializeEncounterAndZoneLists()
     encounter_list = encounter_list .. "\n"
   end
 
-  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Supports multiple entries, separated by commas\n"]
+  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Based on "] .. "https://wago.tools/db2/DungeonEncounter?build=3.4.5.63009\n" .. L["Supports multiple entries, separated by commas\n"]
 end
 
 function Private.get_encounters_list()

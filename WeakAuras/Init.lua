@@ -15,16 +15,7 @@ local buildTime = "2025".."09".."14".."20".."43".."00"
 local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS available
                         or C_NamePlate and C_NamePlate.GetNamePlateForUnit and 1 -- Nameplates available
                         or false
-
-local isDBMRegistered = false
-
-if (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250929200404) then
-  function Private.DBMEncounterEvents() end
-  for _, event in ipairs({"DBM_Pull", "DBM_Kill", "DBM_Wipe"}) do
-    DBM:RegisterCallback(event, Private.DBMEncounterEvents)
-  end
-  isDBMRegistered = true
-end
+local isDBMRegistered = (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250929200404) and true or false
 
 local flavor
 if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1) then

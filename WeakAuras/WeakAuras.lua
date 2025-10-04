@@ -2812,7 +2812,9 @@ local oldDataStub2 = {
 function Private.WarnEncounterEvent(data)
   if data.load and (data.load.use_encounter ~= nil or data.load.use_encounterid) then
     Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_load_encounter", "error",
-            L["Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date."])
+            L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"])
+  else
+    Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_load_encounter")
   end
 end
 
