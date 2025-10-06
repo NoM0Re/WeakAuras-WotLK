@@ -3916,31 +3916,24 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
 end)
 
 if WeakAuras.IsDBMRegistered() then
+  local encounterMapping = {
+    DBM_Pull = { "ENCOUNTER_START" },
+    DBM_Kill = { "ENCOUNTER_END", 1 },
+    DBM_Wipe = { "ENCOUNTER_END", 0 }
+  }
+
   function Private.DBMEncounterEvents(event, mod, ...)
-    local encounterID, encounterName, difficultyID, groupSize =
-      0, "", DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
+    local encounterID  = (type(mod) == "table" and mod.encounterId) or 0
+    local encounterName = (type(mod) == "table" and mod.combatInfo and mod.combatInfo.name) or ""
+    local difficultyID, groupSize = DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
+    local eventName, success = unpack(encounterMapping[event])
 
-    if type(mod) == "table" then
-      encounterID = mod.encounterId or encounterID
-      encounterName = mod.combatInfo and mod.combatInfo.name or encounterName
-    end
-
-    -- Fire DBM Callback Events too, because we have them anyway registered.
+    Private.ScanForLoads(nil, eventName, encounterID, encounterName, difficultyID, groupSize, success)
     WeakAuras.ScanEvents(event, mod, ...)
-
-    if event == "DBM_Pull" then
-      -- ENCOUNTER_START: encounterID, encounterName, difficultyID, groupSize
-      Private.ScanForLoads(nil, "ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
-      WeakAuras.ScanEvents("ENCOUNTER_START", encounterID, encounterName, difficultyID, groupSize)
-    else
-      local success = (event == "DBM_Kill") and 1 or 0
-      -- ENCOUNTER_END: encounterID, encounterName, difficultyID, groupSize, success
-      Private.ScanForLoads(nil, "ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
-      WeakAuras.ScanEvents("ENCOUNTER_END", encounterID, encounterName, difficultyID, groupSize, success)
-    end
+    WeakAuras.ScanEvents(eventName, encounterID, encounterName, difficultyID, groupSize, success)
   end
 
-  for _, event in ipairs({"DBM_Pull", "DBM_Kill", "DBM_Wipe"}) do
+  for event in pairs(encounterMapping) do
     DBM:RegisterCallback(event, Private.DBMEncounterEvents)
   end
 end
