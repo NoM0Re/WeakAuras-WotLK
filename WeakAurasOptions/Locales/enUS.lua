@@ -152,8 +152,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Anchor Mode"
 	L["Anchor Point"] = "Anchor Point"
 	L["Anchored To"] = "Anchored To"
-	L["and"] = "and"
 	L["And "] = "And "
+	L["and"] = "and"
 	L["and %s"] = "and %s"
 	L["and aligned left"] = "and aligned left"
 	L["and aligned right"] = "and aligned right"
@@ -233,6 +233,7 @@ Off Screen]=]
 	L["Circular Texture %s"] = "Circular Texture %s"
 	L["Clear Debug Logs"] = "Clear Debug Logs"
 	L["Clear Saved Data"] = "Clear Saved Data"
+	L["Click to replace the name with %s."] = "Click to replace the name with %s."
 	L["Clip Overlays"] = "Clip Overlays"
 	L["Clipped by Foreground"] = "Clipped by Foreground"
 	L["Close"] = "Close"
@@ -467,6 +468,7 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["Group Settings"] = "Group Settings"
 	L["Hawk"] = "Hawk"
 	L["Help"] = "Help"
+	L["Hide After"] = "Hide After"
 	L["Hide Background"] = "Hide Background"
 	L["Hide Glows applied by this aura"] = "Hide Glows applied by this aura"
 	L["Hide on"] = "Hide on"
@@ -557,6 +559,7 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["Magnetically Align"] = "Magnetically Align"
 	L["Main"] = "Main"
 	L["Manual with %i/%i"] = "Manual with %i/%i"
+	L["Matches %s spells"] = "Matches %s spells"
 	L["Matches the height setting of a horizontal bar or width for a vertical bar."] = "Matches the height setting of a horizontal bar or width for a vertical bar."
 	L["Max"] = "Max"
 	L["Max Length"] = "Max Length"
@@ -661,6 +664,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Paste Trigger Settings"] = "Paste Trigger Settings"
 	L["Places a tick on the bar"] = "Places a tick on the bar"
 	L["Play Sound"] = "Play Sound"
+	L["Player Spells found:"] = "Player Spells found:"
 	L["Portrait Zoom"] = "Portrait Zoom"
 	L["Position and Size Settings"] = "Position and Size Settings"
 	L["Preferred Match"] = "Preferred Match"
@@ -794,6 +798,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Spark Texture"] = "Spark Texture"
 	L["Specific Currency ID"] = "Specific Currency ID"
 	L["Spell Selection Filters"] = "Spell Selection Filters"
+	L["Spells found:"] = "Spells found:"
 	L["Stack Info"] = "Stack Info"
 	L["Stacks - The number of stacks of an aura (usually)"] = "Stacks - The number of stacks of an aura (usually)"
 	L["Standby"] = "Standby"
@@ -903,8 +908,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "Url: %s"
 	L["Use Display Info Id"] = "Use Display Info Id"
 	L["Use SetTransform"] = "Use SetTransform"
-	L["Used in auras:"] = "Used in auras:"
 	L["Used in Auras:"] = "Used in Auras:"
+	L["Used in auras:"] = "Used in auras:"
 	L["Uses Texture Coordinates to rotate the texture."] = "Uses Texture Coordinates to rotate the texture."
 	L["Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."] = "Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."
 	L["Value"] = "Value"
@@ -922,6 +927,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Voice Settings"] = "Voice Settings"
 	L["We thank"] = "We thank"
 	L["WeakAuras %s on WoW %s"] = "WeakAuras %s on WoW %s"
+	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."
 	L["What do you want to do?"] = "What do you want to do?"
 	L["Whole Area"] = "Whole Area"
 	L["wrapping"] = "wrapping"
@@ -937,6 +943,15 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You already have this group/aura. Importing will create a duplicate."] = "You already have this group/aura. Importing will create a duplicate."
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=]
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
 WeakAuras will always run custom anchor code if you include 'changed' in this list, or when a region is added, removed, or re-ordered.]=] ] = [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.

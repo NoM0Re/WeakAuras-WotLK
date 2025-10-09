@@ -148,8 +148,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Режим крепления"
 	L["Anchor Point"] = "Точка крепления"
 	L["Anchored To"] = "Прикрепить к"
-	L["and"] = "и"
 	L["And "] = "И "
+	L["and"] = "и"
 	L["and %s"] = "и %s"
 	L["and aligned left"] = "Выранивание по левому краю;"
 	L["and aligned right"] = "Выранивание по правому краю;"
@@ -230,6 +230,8 @@ Off Screen]=] ] = [=[Индикация за
 	L["Circular Texture %s"] = "Круглая текстура %s"
 	L["Clear Debug Logs"] = "Очистить записи"
 	L["Clear Saved Data"] = "Очистить данные"
+	--[[Translation missing --]]
+	L["Click to replace the name with %s."] = "Click to replace the name with %s."
 	L["Clip Overlays"] = "Обрезать наложения"
 	--[[Translation missing --]]
 	L["Clipped by Foreground"] = "Clipped by Foreground"
@@ -462,6 +464,8 @@ Bleed classification via LibDispel]=] ] = "Фильтровать только �
 	L["Group Settings"] = "Настройки группы"
 	L["Hawk"] = "Ястреб"
 	L["Help"] = "Справка"
+	--[[Translation missing --]]
+	L["Hide After"] = "Hide After"
 	L["Hide Background"] = "Скрыть задний план"
 	L["Hide Glows applied by this aura"] = "Скрыть свечения, применённые этой индикацией"
 	L["Hide on"] = "Скрыть на"
@@ -553,6 +557,8 @@ Bleed classification via LibDispel]=] ] = "Фильтровать только �
 	L["Magnetically Align"] = "Привязка к направляющим"
 	L["Main"] = "Основная"
 	L["Manual with %i/%i"] = "Вручную с %i/%i"
+	--[[Translation missing --]]
+	L["Matches %s spells"] = "Matches %s spells"
 	L["Matches the height setting of a horizontal bar or width for a vertical bar."] = "Совпадает с высотой горизонтальной полосы или с шириной вертикальной полосы"
 	L["Max"] = "Макс. значение"
 	L["Max Length"] = "Максимальная длина"
@@ -651,6 +657,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Время �
 	L["Paste Trigger Settings"] = "Вставить настройки триггера"
 	L["Places a tick on the bar"] = "Размещает такт (деление) на полосе"
 	L["Play Sound"] = "Воспроизвести звук"
+	--[[Translation missing --]]
+	L["Player Spells found:"] = "Player Spells found:"
 	L["Portrait Zoom"] = "Увеличить портрет"
 	L["Position and Size Settings"] = "Настройки положения и размера"
 	L["Preferred Match"] = "Предпочтительный результат"
@@ -792,6 +800,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Время �
 	L["Spark Texture"] = "Текстура искры"
 	L["Specific Currency ID"] = "ID валюты"
 	L["Spell Selection Filters"] = "Фильтры выбора заклинания"
+	--[[Translation missing --]]
+	L["Spells found:"] = "Spells found:"
 	L["Stack Info"] = "Информация о стаках"
 	L["Stacks - The number of stacks of an aura (usually)"] = "Стаки - количество стаков ауры (обычно)"
 	L["Standby"] = "Ожидает"
@@ -908,8 +918,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "URL-адрес: %s"
 	L["Use Display Info Id"] = "Использовать ID отображения существа"
 	L["Use SetTransform"] = "Использовать ф. SetTransform"
-	L["Used in auras:"] = "Использовано в индикациях:"
 	L["Used in Auras:"] = "Использовано в индикациях:"
+	L["Used in auras:"] = "Использовано в индикациях:"
 	L["Uses Texture Coordinates to rotate the texture."] = "Использует координаты текстуры для её вращения."
 	L["Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."] = "Использует функцию UnitIsVisible для проверки, может ли клиент игры видеть указанную единицу (загружен ли объект). Не определяет, находится ли единица в поле зрения. Расстояние составляет 100 метров. Опрос происходит каждую секунду."
 	L["Value"] = "Значение"
@@ -928,6 +938,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Voice Settings"] = "Voice Settings"
 	L["We thank"] = "Мы благодарим"
 	L["WeakAuras %s on WoW %s"] = "WeakAuras: %s. Интерфейс: %s"
+	--[[Translation missing --]]
+	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."
 	L["What do you want to do?"] = "Что вы хотите сделать?"
 	L["Whole Area"] = "Вся область"
 	L["wrapping"] = "Перенос слов при переполнении"
@@ -945,6 +957,16 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 |cFFFF0000Это действие необратимо!|r Продолжить?]=]
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = [=[Вы собираетесь удалить триггер.
 |cFFFF0000Это действие необратимо!|r Продолжить?]=]
+	--[[Translation missing --]]
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=]
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
 WeakAuras will always run custom anchor code if you include 'changed' in this list, or when a region is added, removed, or re-ordered.]=] ] = "Вы можете добавить сюда список значений состояния, разделенных запятыми, при изменении которых WeakAuras также выполнит код привязки. WeakAuras всегда выполнит пользовательский код привязки, если вы включите 'изменен' в этот список, или когда регион будет добавлен, удален или переупорядочен."
