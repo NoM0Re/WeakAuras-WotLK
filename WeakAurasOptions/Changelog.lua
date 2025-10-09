@@ -4,57 +4,46 @@ local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
 OptionsPrivate.changelog = {
-  versionString = '5.20.4',
-  dateString = '2025-09-08',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.1...5.20.4',
+  versionString = '5.20.5',
+  dateString = '2025-10-09',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.4...5.20.5',
   highlightText = [==[
-- Re-tag, no changes]==],  commitText = [==[InfusOnWoW (11):
+]==],  commitText = [==[InfusOnWoW (13):
 
-- SubRegion Model: Reintroduce clipped by foreground mode
-- Remove workaround for SetTexture not adjusting to different wrapModes
-- Revert "Fix KR/TW/CN large number formatting for >= 100.000.000"
-- Fix TSU custom variable warning about formatter
-- Tweak wording for lua errors
-- Priest Template Remove removed ability
-- Totem Trigger: Fix "inverse" option not being visible
-- Custom Text: Tweak rules for text replacement %cfoo ~= %c now
-- MOP: Workaround broken GetInstanceInfo in Tol'Viron Areana
-- Fix typo in variable name
-- Ticks: Fix color sometimes applying to the wrong tick
+- Update Discord List
+- BT2: Make the spell id tooltip in the options clickable
+- Conditions: Tweak handling of custom function
+- Totem trigger: Add spellId check and use slot information from event
+- Boss Mod Count Conditions: Use same cron syntax as for the trigger
+- Conditions: Properly escape string checks to support [].
+- Update Atlas File List from wago.tools
+- Update Discord List
+- CLEU: Replace combobox with one entry with a disabled checkbox
+- Fix inserting links into the display text boxes
+- Fix regression for textured Ticks
+- Revert "Revert "Fix KR/TW/CN large number formatting for >= 100.000.000""
+- Update Discord List
 
-Matt Weber (1):
+Stanzilla (5):
 
-- Add optional length limit to `WA_ClassColorName`
-
-Pewtro (2):
-
-- Re-export the .blp files
-- Add Celestial Dungeon load option instance type
-
-Stanzilla (3):
-
+- chore: update retail toc for 11.2.5
+- Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 
-dependabot[bot] (3):
+Veldt (1):
 
-- Bump cbrgm/mastodon-github-action from 2.1.14 to 2.1.19
-- Bump actions/checkout from 4 to 5
-- Bump actions/setup-python from 5 to 6
+- Add Bleak Arrows to reset_ranged_swing_spells
 
-emptyrivers (2):
+dependabot[bot] (1):
 
-- include overEnergize in combat log state
-- some more difficulty ids
+- Bump leafo/gh-actions-lua from 11 to 12
 
-mrbuds (5):
+mrbuds (2):
 
-- Fix Mists encounterID tooltip
-- Fix currency trigger default on 12.2.0 fixes #6008
-- Text To Speech: use global game voice settings, and use the tts queue system
-- BossMod Trigger: add multiselect filter for break & pull timer
-- Fix moving profiling window #noticket
+- Function for checking if we are on a Hardcore server doesn't exists on Retail
+- Scary warning on import on Hardcore server
 
 ]==]
 }

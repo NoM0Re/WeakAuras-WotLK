@@ -1053,9 +1053,9 @@ L["Install the addons BugSack and BugGrabber for detailed error logs."] = "Insta
 L["Instance"] = "Instanz"
 L["Instance Difficulty"] = "Instanzschwierigkeit"
 --[[Translation missing --]]
-L["Instance ID"] = "Instance ID"
---[[Translation missing --]]
 L["Instance Id"] = "Instance Id"
+--[[Translation missing --]]
+L["Instance ID"] = "Instance ID"
 --[[Translation missing --]]
 L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
@@ -1629,9 +1629,9 @@ L["Progress Value"] = "Fortschrittswert"
 L["Pull"] = "Pull"
 L["Pulse"] = "Pulsieren"
 L["PvP Flagged"] = "PvP aktiv"
+L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["PvP Talent Selected"] = "PvP Talent Selected"
-L["PvP Talent selected"] = "Gewähltes PvP-Talent"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]

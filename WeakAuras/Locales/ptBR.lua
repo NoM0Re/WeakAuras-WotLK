@@ -1082,9 +1082,9 @@ L["Icon Function"] = "Icon Function"
 --[[Translation missing --]]
 L["Icon Function (fallback state)"] = "Icon Function (fallback state)"
 --[[Translation missing --]]
-L["ID"] = "ID"
---[[Translation missing --]]
 L["Id"] = "Id"
+--[[Translation missing --]]
+L["ID"] = "ID"
 --[[Translation missing --]]
 L["If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"] = "If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"
 --[[Translation missing --]]
@@ -1146,9 +1146,9 @@ L["Install the addons BugSack and BugGrabber for detailed error logs."] = "Insta
 L["Instance"] = "Instance"
 L["Instance Difficulty"] = "Dificuldade da Instância"
 --[[Translation missing --]]
-L["Instance ID"] = "Instance ID"
---[[Translation missing --]]
 L["Instance Id"] = "Instance Id"
+--[[Translation missing --]]
+L["Instance ID"] = "Instance ID"
 --[[Translation missing --]]
 L["Instance Info"] = "Instance Info"
 --[[Translation missing --]]
@@ -1783,9 +1783,9 @@ L["Pull"] = "Pull"
 L["Pulse"] = "Pulsar"
 L["PvP Flagged"] = "Marcado para JxJ"
 --[[Translation missing --]]
-L["PvP Talent Selected"] = "PvP Talent Selected"
---[[Translation missing --]]
 L["PvP Talent selected"] = "PvP Talent selected"
+--[[Translation missing --]]
+L["PvP Talent Selected"] = "PvP Talent Selected"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -2265,9 +2265,9 @@ L["Talent |cFFFF0000Not|r Selected"] = "Talent |cFFFF0000Not|r Selected"
 --[[Translation missing --]]
 L["Talent Known"] = "Talent Known"
 --[[Translation missing --]]
-L["Talent selected"] = "Talent selected"
---[[Translation missing --]]
 L["Talent Selected"] = "Talent Selected"
+--[[Translation missing --]]
+L["Talent selected"] = "Talent selected"
 L["Talent Specialization"] = "Especialização de talentos"
 --[[Translation missing --]]
 L["Tanking And Highest"] = "Tanking And Highest"

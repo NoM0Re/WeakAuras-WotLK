@@ -237,6 +237,8 @@ Off Screen]=] ] = "L'aura è fuori dallo schermo"
 	L["Circular Texture %s"] = "Circular Texture %s"
 	L["Clear Debug Logs"] = "Cancella registri di debug"
 	L["Clear Saved Data"] = "Cancella dati salvati"
+	--[[Translation missing --]]
+	L["Click to replace the name with %s."] = "Click to replace the name with %s."
 	L["Clip Overlays"] = "Sovrapposizioni di clip"
 	--[[Translation missing --]]
 	L["Clipped by Foreground"] = "Clipped by Foreground"
@@ -629,6 +631,8 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	--[[Translation missing --]]
 	L["Help"] = "Help"
 	--[[Translation missing --]]
+	L["Hide After"] = "Hide After"
+	--[[Translation missing --]]
 	L["Hide Background"] = "Hide Background"
 	--[[Translation missing --]]
 	L["Hide Glows applied by this aura"] = "Hide Glows applied by this aura"
@@ -808,6 +812,8 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["Main"] = "Main"
 	--[[Translation missing --]]
 	L["Manual with %i/%i"] = "Manual with %i/%i"
+	--[[Translation missing --]]
+	L["Matches %s spells"] = "Matches %s spells"
 	--[[Translation missing --]]
 	L["Matches the height setting of a horizontal bar or width for a vertical bar."] = "Matches the height setting of a horizontal bar or width for a vertical bar."
 	--[[Translation missing --]]
@@ -995,6 +1001,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Places a tick on the bar"] = "Places a tick on the bar"
 	--[[Translation missing --]]
 	L["Play Sound"] = "Play Sound"
+	--[[Translation missing --]]
+	L["Player Spells found:"] = "Player Spells found:"
 	--[[Translation missing --]]
 	L["Portrait Zoom"] = "Portrait Zoom"
 	--[[Translation missing --]]
@@ -1262,6 +1270,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Spell Selection Filters"] = "Spell Selection Filters"
 	--[[Translation missing --]]
+	L["Spells found:"] = "Spells found:"
+	--[[Translation missing --]]
 	L["Stack Info"] = "Stack Info"
 	--[[Translation missing --]]
 	L["Stacks - The number of stacks of an aura (usually)"] = "Stacks - The number of stacks of an aura (usually)"
@@ -1512,6 +1522,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["WeakAuras %s on WoW %s"] = "WeakAuras %s on WoW %s"
 	--[[Translation missing --]]
+	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."
+	--[[Translation missing --]]
 	L["What do you want to do?"] = "What do you want to do?"
 	--[[Translation missing --]]
 	L["Whole Area"] = "Whole Area"
@@ -1541,6 +1553,16 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"
 	--[[Translation missing --]]
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"
+	--[[Translation missing --]]
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=]
 	--[[Translation missing --]]
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 

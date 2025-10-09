@@ -238,6 +238,8 @@ Off Screen]=] ] = "L’aura est hors écran"
 	L["Clear Debug Logs"] = "Clear Debug Logs"
 	--[[Translation missing --]]
 	L["Clear Saved Data"] = "Clear Saved Data"
+	--[[Translation missing --]]
+	L["Click to replace the name with %s."] = "Click to replace the name with %s."
 	L["Clip Overlays"] = "Superposition de l'attache "
 	--[[Translation missing --]]
 	L["Clipped by Foreground"] = "Clipped by Foreground"
@@ -551,6 +553,8 @@ Si le nombre entré est decimal (ex. 0.5), une fraction (ex. 1/2), ou un pourcen
 	L["Hawk"] = "Faucon"
 	L["Help"] = "Aide"
 	--[[Translation missing --]]
+	L["Hide After"] = "Hide After"
+	--[[Translation missing --]]
 	L["Hide Background"] = "Hide Background"
 	L["Hide Glows applied by this aura"] = "Cacher les brillances appliquées par cette aura"
 	L["Hide on"] = "Cacher à"
@@ -686,6 +690,8 @@ Si cette case est cochée, ce séparateur inclura du texte. Sinon, ce sera juste
 	L["Main"] = "Principal"
 	--[[Translation missing --]]
 	L["Manual with %i/%i"] = "Manual with %i/%i"
+	--[[Translation missing --]]
+	L["Matches %s spells"] = "Matches %s spells"
 	L["Matches the height setting of a horizontal bar or width for a vertical bar."] = "Correspond au paramètre de hauteur d'une barre horizontale ou de largeur pour une barre verticale."
 	L["Max"] = "Max"
 	L["Max Length"] = "Longueur max"
@@ -816,6 +822,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Places a tick on the bar"] = "Places a tick on the bar"
 	L["Play Sound"] = "Jouer un son"
+	--[[Translation missing --]]
+	L["Player Spells found:"] = "Player Spells found:"
 	L["Portrait Zoom"] = "Zoom Portrait"
 	--[[Translation missing --]]
 	L["Position and Size Settings"] = "Position and Size Settings"
@@ -1007,6 +1015,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Specific Currency ID"] = "Specific Currency ID"
 	--[[Translation missing --]]
 	L["Spell Selection Filters"] = "Spell Selection Filters"
+	--[[Translation missing --]]
+	L["Spells found:"] = "Spells found:"
 	L["Stack Info"] = "Info de Piles"
 	--[[Translation missing --]]
 	L["Stacks - The number of stacks of an aura (usually)"] = "Stacks - The number of stacks of an aura (usually)"
@@ -1173,8 +1183,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "Url: %s"
 	L["Use Display Info Id"] = "Utiliser les informations d'identifiant de l'affichage"
 	L["Use SetTransform"] = "Utiliser SetTransform"
-	L["Used in auras:"] = "Utilisé dans les auras:"
 	L["Used in Auras:"] = "Utilisé(e) dans les Auras:"
+	L["Used in auras:"] = "Utilisé dans les auras:"
 	--[[Translation missing --]]
 	L["Uses Texture Coordinates to rotate the texture."] = "Uses Texture Coordinates to rotate the texture."
 	--[[Translation missing --]]
@@ -1202,6 +1212,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["WeakAuras %s on WoW %s"] = "WeakAuras %s on WoW %s"
 	--[[Translation missing --]]
+	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."
+	--[[Translation missing --]]
 	L["What do you want to do?"] = "What do you want to do?"
 	--[[Translation missing --]]
 	L["Whole Area"] = "Whole Area"
@@ -1221,6 +1233,16 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "Vous êtes sur le point de supprimer %d aura(s). |cFFFF0000Cela ne peut pas être annulé !|r Voulez-vous continuer ?"
 	--[[Translation missing --]]
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"
+	--[[Translation missing --]]
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=]
 	--[[Translation missing --]]
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
