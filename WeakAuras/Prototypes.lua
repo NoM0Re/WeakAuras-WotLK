@@ -566,7 +566,14 @@ function WeakAuras.CheckTalentByIndex(index, extraOption)
   local num_talent = (index - 1) % MAX_NUM_TALENTS + 1
   local name, _, _, _, rank  = GetTalentInfo(tab, num_talent)
   if name == nil then
-    return nil
+    if GetTalentInfo(1, 1) == nil then
+      -- No talents at all, likely to early to grab
+      return nil
+    else
+      -- Talent doesn't exist; ignore it
+      -- Should be cleared if missing, but struc doesn't exist yet
+      return true
+    end
   end
   local result = rank and rank > 0
   if extraOption == 4 then
