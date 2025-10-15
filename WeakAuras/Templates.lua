@@ -126,8 +126,7 @@ WeakAuras.XMLTemplates = {
     middle:SetPoint("RIGHT", right, "LEFT")
     frame.Middle = middle
     -- FontString
-    local fontString = frame:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
-    frame.FontString = fontString
+    frame:SetFontObject("ChatFontNormal")
     -- Scripts
     frame:SetScript("OnEscapePressed", function(self)
       EditBox_ClearFocus(self)
