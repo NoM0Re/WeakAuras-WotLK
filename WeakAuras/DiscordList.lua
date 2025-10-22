@@ -11,6 +11,7 @@ Private.DiscordList = {
   [=[BadBrain]=],
   [=[Bart]=],
   [=[Boneshock]=],
+  [=[Boxthor]=],
   [=[Burlis]=],
   [=[Causese]=],
   [=[Chab]=],
@@ -24,6 +25,7 @@ Private.DiscordList = {
   [=[Fels]=],
   [=[Fenchurch]=],
   [=[Fliyin]=],
+  [=[Gameaholic]=],
   [=[Guffin]=],
   [=[Ifor]=],
   [=[Ironi]=],
@@ -38,7 +40,6 @@ Private.DiscordList = {
   [=[Luxthos]=],
   [=[m33shoq]=],
   [=[Manabanana]=],
-  [=[MetalMusicMan]=],
   [=[Murph]=],
   [=[Mynze]=],
   [=[NoM0Re]=],
@@ -57,7 +58,6 @@ Private.DiscordList = {
   [=[Translit]=],
   [=[Wizeowel]=],
   [=[Xepheris]=],
-  [=[Zytech]=],
 }
 Private.DiscordListCJ = {
 }

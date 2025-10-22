@@ -4,46 +4,40 @@ local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
 OptionsPrivate.changelog = {
-  versionString = '5.20.5',
-  dateString = '2025-10-09',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.4...5.20.5',
+  versionString = '5.20.6',
+  dateString = '2025-10-21',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.5...5.20.6',
   highlightText = [==[
-]==],  commitText = [==[InfusOnWoW (13):
+bugfix release for 1.15.8 & toc bump for classic era & mop classic
+
+fixes:
+
+- icon visible condition behavior is more sane now
+- another workaround for insane AbbreviateNumbers behavior
+- adjusted to new api environment in classic era
+
+removals:
+
+- WeakAuras now detects & refuses to boot if it was installed on a Midnight client, instead of spewing thousands of errors.]==],  commitText = [==[Adal (1):
+
+- update mists toc for 5.5.1
+
+InfusOnWoW (5):
 
 - Update Discord List
-- BT2: Make the spell id tooltip in the options clickable
-- Conditions: Tweak handling of custom function
-- Totem trigger: Add spellId check and use slot information from event
-- Boss Mod Count Conditions: Use same cron syntax as for the trigger
-- Conditions: Properly escape string checks to support [].
-- Update Atlas File List from wago.tools
 - Update Discord List
-- CLEU: Replace combobox with one entry with a disabled checkbox
-- Fix inserting links into the display text boxes
-- Fix regression for textured Ticks
-- Revert "Revert "Fix KR/TW/CN large number formatting for >= 100.000.000""
-- Update Discord List
+- Fix Icon visible Condition not reversing correctly
+- Midnight: Disable WeakAuras with an message
+- Mop/Classic: Workaround another bug in AbbreviateNumbers
 
-Stanzilla (5):
+Stanzilla (2):
 
-- chore: update retail toc for 11.2.5
-- Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 
-Veldt (1):
+mrbuds (1):
 
-- Add Bleak Arrows to reset_ranged_swing_spells
-
-dependabot[bot] (1):
-
-- Bump leafo/gh-actions-lua from 11 to 12
-
-mrbuds (2):
-
-- Function for checking if we are on a Hardcore server doesn't exists on Retail
-- Scary warning on import on Hardcore server
+- Classic Era 1.15.8 update
 
 ]==]
 }
