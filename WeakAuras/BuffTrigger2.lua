@@ -99,6 +99,8 @@ local activeGroupScanFuncs = {}
 
 local raidMarkScanFuncs = {}
 
+local pollingScanFuncs = {}
+
 -- Multi Target tracking
 local scanFuncNameMulti = {}
 local scanFuncSpellIdMulti = {}
@@ -1172,14 +1174,13 @@ local function TriggerInfoApplies(triggerInfo, unit)
     return false
   end
 
-if triggerInfo.specId then
-  if not triggerInfo.specId[Private.ExecEnv.GetSpecID(
-          (select(2, UnitClass(controllingUnit)) or "") ..
-          (Private.ExecEnv.GetUnitTalentSpec(controllingUnit) or ""))] then
-    return false
+  if triggerInfo.specId then
+    if not triggerInfo.specId[Private.ExecEnv.GetSpecID(
+            (select(2, UnitClass(controllingUnit)) or "") ..
+            (Private.ExecEnv.GetUnitTalentSpec(controllingUnit) or ""))] then
+      return false
+    end
   end
-end
-
 
   if triggerInfo.hostility and WeakAuras.GetPlayerReaction(unit) ~= triggerInfo.hostility then
     return false
@@ -1225,6 +1226,10 @@ end
   end
 
   if triggerInfo.nameChecker and not triggerInfo.nameChecker:Check(WeakAuras.UnitNameWithRealm(unit)) then
+    return false
+  end
+
+  if triggerInfo.inRange and not UnitInRangeFixed(unit) then
     return false
   end
 
@@ -1998,8 +2003,8 @@ if WeakAuras.IsAwesomeEnabled() then
 end
 Buff2Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Buff2Frame:SetScript("OnEvent", EventHandler)
-
-Buff2Frame:SetScript("OnUpdate", function()
+Buff2Frame.elapsed = 0
+Buff2Frame:SetScript("OnUpdate", function(self, elapsed)
   if WeakAuras.IsPaused() then
     return
   end
@@ -2008,6 +2013,18 @@ Buff2Frame:SetScript("OnUpdate", function()
     local time = GetTime()
     UpdateStates(matchDataChanged, time)
     wipe(matchDataChanged)
+  end
+
+  if next(pollingScanFuncs) then
+    self.elapsed = self.elapsed + elapsed
+    if self.elapsed >= 1.0 then
+      self.elapsed = 0
+      local deactivatedTriggerInfos = {}
+      for unit in GetAllUnits("group", true, "PlayersAndPets") do
+        RecheckActiveForUnitType("group", unit, deactivatedTriggerInfos)
+      end
+      DeactivateScanFuncs(deactivatedTriggerInfos)
+    end
   end
   Private.StopProfileSystem("bufftrigger2 - OnUpdate")
 end)
@@ -2088,6 +2105,7 @@ function BuffTrigger.UnloadAll()
   wipe(unitExistScanFunc)
   wipe(groupRoleScanFunc)
   wipe(groupScanFuncs)
+  wipe(pollingScanFuncs)
   wipe(raidMarkScanFuncs)
   wipe(matchDataByTrigger)
   wipe(matchDataMulti)
@@ -2142,13 +2160,23 @@ local function LoadAura(id, triggernum, triggerInfo)
   end
 
   if triggerInfo.fetchRaidMark then
-    raidMarkScanFuncs[id] = raidMarkScanFuncs[id]  or {}
+    raidMarkScanFuncs[id] = raidMarkScanFuncs[id] or {}
     tinsert(raidMarkScanFuncs[id], triggerInfo)
   end
 
   if triggerInfo.groupTrigger then
     groupScanFuncs[triggerInfo.unit] = groupScanFuncs[triggerInfo.unit] or {}
     tinsert(groupScanFuncs[triggerInfo.unit], triggerInfo)
+  end
+
+  if triggerInfo.inRange then
+    pollingScanFuncs[id] = pollingScanFuncs[id] or {}
+    tinsert(pollingScanFuncs[id], triggerInfo)
+  end
+
+  if triggerInfo.ignoreInvisible then
+    pollingScanFuncs[id] = pollingScanFuncs[id] or {}
+    table.insert(pollingScanFuncs[id], triggerInfo)
   end
 
   matchDataChanged[id] = matchDataChanged[id] or {}
@@ -2186,6 +2214,7 @@ function BuffTrigger.UnloadDisplays(toUnload)
 
     groupRoleScanFunc[id] = nil
     raidMarkScanFuncs[id] = nil
+    pollingScanFuncs[id] = nil
 
     for unit, unitData in pairs(matchData) do
       for filter, filterData in pairs(unitData) do
@@ -2267,6 +2296,8 @@ function BuffTrigger.Rename(oldid, newid)
   groupRoleScanFunc[oldid] = nil
   raidMarkScanFuncs[newid] = raidMarkScanFuncs[oldid]
   raidMarkScanFuncs[oldid] = nil
+  pollingScanFuncs[newid] = pollingScanFuncs[oldid]
+  pollingScanFuncs[oldid] = nil
   matchDataChanged[newid] = matchDataChanged[oldid]
   matchDataChanged[oldid] = nil
 end
@@ -2632,6 +2663,7 @@ function BuffTrigger.Add(data)
       local effectiveIgnoreInvisible = groupTrigger and trigger.ignoreInvisible
       local effectiveNameCheck = groupTrigger and trigger.useUnitName and trigger.unitName
       local effectiveNpcId = (trigger.unit == "nameplate" or trigger.unit == "boss") and trigger.useNpcId and Private.ExecEnv.ParseStringCheck(trigger.npcId)
+      local effectiveInRange = groupTrigger and trigger.inRange
 
       if trigger.unit == "multi" then
         BuffTrigger.InitMultiAura()
@@ -2687,6 +2719,7 @@ function BuffTrigger.Add(data)
         ignoreDead = effectiveIgnoreDead,
         ignoreDisconnected = effectiveIgnoreDisconnected,
         ignoreInvisible = effectiveIgnoreInvisible,
+        inRange = effectiveInRange,
         groupRole = effectiveGroupRole,
         raidRole = effectiveRaidRole,
         specId = effectiveSpecId,
