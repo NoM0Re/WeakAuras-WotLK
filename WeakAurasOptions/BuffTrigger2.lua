@@ -1082,6 +1082,14 @@ local function GetBuffTriggerOptions(data, triggernum)
       width = WeakAuras.doubleWidth,
       hidden = function() return not (trigger.type == "aura2" and (trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party")) end
     },
+    inRange = {
+      type = "toggle",
+      name = L["Ignore out of casting range"],
+      desc = L["Uses UnitInRange() to check if in range. Matches default raid frames out of range behavior, which is between 25 to 40 yards depending on your class and spec."],
+      order = 69.81,
+      width = WeakAuras.doubleWidth,
+      hidden = function() return not (trigger.type == "aura2" and (trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party")) end
+    },
     ignoreInvisible = {
       type = "toggle",
       name = L["Ignore out of checking range"],
