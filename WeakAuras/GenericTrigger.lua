@@ -73,7 +73,7 @@ local loaded_auras = {}; -- id to bool map
 local LoadEvent, HandleEvent, HandleUnitEvent, TestForTriState, TestForToggle, TestForLongString, TestForMultiSelect
 local ConstructTest, ConstructFunction
 
-
+local inRangeUnits = {}
 local nameplateExists = {}
 
 function WeakAuras.UnitExistsFixed(unit, smart)
@@ -1241,6 +1241,7 @@ function GenericTrigger.UnloadAll()
   wipe(loaded_auras);
   wipe(loaded_events);
   wipe(loaded_unit_events);
+  wipe(inRangeUnits);
   Private.CancelAllDelayedTriggers();
   Private.UnregisterAllEveryFrameUpdate();
 end
@@ -1260,6 +1261,9 @@ function GenericTrigger.UnloadDisplays(toUnload)
     for unit, events in pairs(loaded_unit_events) do
       for eventname, auras in pairs(events) do
         auras[id] = nil;
+        if eventname == "UNIT_IN_RANGE_UPDATE" and not next(auras) then
+          inRangeUnits[unit] = nil
+        end
       end
     end
 
@@ -1426,6 +1430,9 @@ function LoadEvent(id, triggernum, data)
             loaded_unit_events[u][event] = loaded_unit_events[u][event] or {};
             loaded_unit_events[u][event][id] = loaded_unit_events[u][event][id] or {}
             loaded_unit_events[u][event][id][triggernum] = data;
+            if event == "UNIT_IN_RANGE_UPDATE" then
+              inRangeUnits[u] = true
+            end
           end, unit, includePets
         )
       end
@@ -3790,6 +3797,34 @@ do
       playerMovingFrame.speed = GetUnitSpeed("player")
     end
     playerMovingFrame:SetScript("OnUpdate", PlayerMoveUpdate)
+  end
+end
+
+-- Player In Range
+do
+  local inRangeFrame = nil
+
+  local function PlayerInRangeUpdate(self, elapsed)
+    Private.StartProfileSystem("generictrigger player in range");
+    self.elapsed = self.elapsed + elapsed
+    if self.elapsed >= 1.0 then
+      self.elapsed = 0
+      for unit in next, inRangeUnits do
+        if UnitExists(unit) then
+          WeakAuras.ScanUnitEvents("UNIT_IN_RANGE_UPDATE", unit)
+        end
+      end
+    end
+    Private.StopProfileSystem("generictrigger player in range");
+  end
+
+  function WeakAuras.WatchForPlayerInRange()
+    if not inRangeFrame then
+      inRangeFrame = CreateFrame("Frame")
+      inRangeFrame.elapsed = 0
+      Private.frames["Player In Range Frame"] = inRangeFrame
+    end
+    inRangeFrame:SetScript("OnUpdate", PlayerInRangeUpdate)
   end
 end
 
