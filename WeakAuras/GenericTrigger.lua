@@ -3813,18 +3813,18 @@ do
   local FSPAT = "%s*"..(gsub(gsub(FOREIGN_SERVER_LABEL, "^%s", ""), "[%*()]", "%%%1")).."$"
 
   local function nameplateShow(self)
-    Private.StartProfileSystem("nameplatetrigger")
+    Private.StartProfileSystem("generictrigger watch nameplate")
     local name = gsub(self.nameText:GetText() or "", FSPAT, "")
     visibleNameplates[self] = name
     Private.ScanEvents("NP_SHOW", self, name)
-	Private.StopProfileSystem("nameplatetrigger")
+	Private.StopProfileSystem("generictrigger watch nameplate")
   end
 
   local function nameplateHide(self)
-    Private.StartProfileSystem("nameplatetrigger")
+    Private.StartProfileSystem("generictrigger watch nameplate")
     visibleNameplates[self] = nil
     Private.ScanEvents("NP_HIDE", self, gsub(self.nameText:GetText() or "", FSPAT, ""))
-    Private.StopProfileSystem("nameplatetrigger")
+    Private.StopProfileSystem("generictrigger watch nameplate")
   end
 
   local function findNewPlate(...)
@@ -3846,9 +3846,9 @@ do
     if lastUpdate < 1 then return end
     numChildren = WorldGetNumChildren(WorldFrame)
     if lastChildern ~= numChildren then
-      Private.StartProfileSystem("nameplatetrigger")
+      Private.StartProfileSystem("generictrigger watch nameplate")
       findNewPlate(WorldGetChildren(WorldFrame))
-      Private.StopProfileSystem("nameplatetrigger")
+      Private.StopProfileSystem("generictrigger watch nameplate")
       lastChildern = numChildren
     end
     lastUpdate = 0
