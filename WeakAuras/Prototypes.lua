@@ -1662,6 +1662,9 @@ Private.event_prototypes = {
     end,
     loadFunc = function(trigger)
       AddWatchedUnits(trigger.unit, nil, trigger.use_unitisunit and trigger.unitisunit or nil)
+      if trigger.use_inRange then
+        WeakAuras.WatchForPlayerInRange()
+      end
     end,
     force_events = unitHelperFunctions.UnitChangedForceEvents,
     name = L["Unit Characteristics"],
@@ -1883,7 +1886,7 @@ Private.event_prototypes = {
         enable = function(trigger)
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
         end,
-        init = "UnitInRange(unit)"
+        init = "Private.ExecEnv.UnitInRangeFixed(unit)"
       },
       {
         name = "hostility",
@@ -2317,6 +2320,9 @@ Private.event_prototypes = {
     loadFunc = function(trigger)
       local includePets = trigger.use_includePets == true and trigger.includePets or nil
       AddWatchedUnits(trigger.unit, includePets)
+      if trigger.use_inRange then
+        WeakAuras.WatchForPlayerInRange()
+      end
     end,
     force_events = unitHelperFunctions.UnitChangedForceEventsWithPets,
     name = L["Health"],
@@ -2598,7 +2604,7 @@ Private.event_prototypes = {
         enable = function(trigger)
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
         end,
-        init = "UnitInRange(unit)"
+        init = "Private.ExecEnv.UnitInRangeFixed(unit)"
       },
       {
         name = "nameplateType",
@@ -2688,6 +2694,9 @@ Private.event_prototypes = {
       end
       local includePets = trigger.use_includePets == true and trigger.includePets or nil
       AddWatchedUnits(trigger.unit, includePets)
+      if trigger.use_inRange then
+        WeakAuras.WatchForPlayerInRange()
+      end
     end,
     force_events = unitHelperFunctions.UnitChangedForceEventsWithPets,
     name = L["Power"],
@@ -3070,7 +3079,7 @@ Private.event_prototypes = {
         enable = function(trigger)
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party"
         end,
-        init = "UnitInRange(unit)"
+        init = "Private.ExecEnv.UnitInRangeFixed(unit)"
       },
       {
         name = "nameplateType",
