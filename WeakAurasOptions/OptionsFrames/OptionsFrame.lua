@@ -178,8 +178,12 @@ function OptionsPrivate.CreateFrame()
       OptionsPrivate.Private.personalRessourceDisplayFrame:OptionsClosed()
     end
 
-    if frame.dynamicTextCodesFrame  then
+    if frame.dynamicTextCodesFrame then
       frame.dynamicTextCodesFrame:Hide()
+    end
+
+    if frame.moversizer then
+      frame.moversizer:OptionsClosed()
     end
   end)
 
