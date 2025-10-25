@@ -1049,6 +1049,28 @@ local function clearCache(cache, id, cloneId)
   end
 end
 
+-- Resize queue
+local RunNextFrame = CreateFrame("Frame")
+local q = {}
+RunNextFrame:Hide()
+
+function QueueResize(g)
+  if not g then return end
+  q[#q+1] = g
+  RunNextFrame:Show()
+end
+
+RunNextFrame:SetScript("OnUpdate", function(self)
+  self:Hide()
+  for i = 1, #q do
+    local g = q[i]
+    q[i] = nil
+    if g and g.Resize then
+      g:Resize()
+    end
+  end
+end)
+
 local function modify(parent, region, data)
   Private.FixGroupChildrenOrderForGroup(data)
   region:SetScale(data.scale and data.scale > 0 and data.scale <= 10 and data.scale or 1)
@@ -1528,7 +1550,7 @@ local function modify(parent, region, data)
 
     Private.StopProfileSystem("dynamicgroup")
     Private.StopProfileAura(data.id)
-    self:Resize()
+    QueueResize(self)
   end
 
 
