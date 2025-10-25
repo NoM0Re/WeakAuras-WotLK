@@ -1054,7 +1054,7 @@ local RunNextFrame = CreateFrame("Frame")
 local q = {}
 RunNextFrame:Hide()
 
-function QueueResize(g)
+local function QueueResize(g)
   if not g then return end
   q[#q+1] = g
   RunNextFrame:Show()
