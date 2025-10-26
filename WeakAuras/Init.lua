@@ -22,6 +22,8 @@ if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and G
   flavor = "TBC"
 elseif GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
+elseif GetRealmName() == "Frostmourne" then
+  flavor = "WrathReborn"
 else
   flavor = "Wrath"
 end
@@ -44,7 +46,11 @@ function WeakAuras.IsCorrectVersion()
 end
 
 function WeakAuras.IsWrath()
-  return flavor == "Wrath"
+  return flavor == "Wrath" or flavor == "WrathReborn"
+end
+
+function WeakAuras.IsWrathReborn()
+  return flavor == "WrathReborn"
 end
 
 function WeakAuras.IsTBC()

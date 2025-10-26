@@ -2,8 +2,8 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local Private = select(2, ...)
 
--- Talent Data for normal Wrath Realms
-if not WeakAuras.IsWrath() and WeakAuras.IsWrathReborn() then
+-- Talent Data for Stormforge Wrath Plus Realm
+if not WeakAuras.IsWrathReborn() then
   return
 end
 
@@ -159,7 +159,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_RavenForm", -- [1]
       1, -- [2]
       2, -- [3]
-      19556, -- [4]
+      19552, -- [4]
     }, -- [1]
     {
       "Interface\\Icons\\Spell_Nature_Reincarnation", -- [1]
@@ -171,7 +171,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_SilentHunter", -- [1]
       2, -- [2]
       1, -- [3]
-      35030, -- [4]
+      35029, -- [4]
     }, -- [3]
     {
       "Interface\\Icons\\Ability_Hunter_AspectOfTheMonkey", -- [1]
@@ -335,19 +335,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_FocusedAim", -- [1]
       1, -- [2]
       2, -- [3]
-      53622, -- [4]
+      53620, -- [4]
     }, -- [42]
     {
       "Interface\\Icons\\Ability_SearingArrow", -- [1]
       1, -- [2]
       3, -- [3]
-      19431, -- [4]
+      19426, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Ability_Hunter_ZenArchery", -- [1]
       2, -- [2]
       1, -- [3]
-      34484, -- [4]
+      34482, -- [4]
     }, -- [44]
     {
       "Interface\\Icons\\Ability_Hunter_SniperShot", -- [1]
@@ -359,7 +359,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_PierceDamage", -- [1]
       2, -- [2]
       3, -- [3]
-      19490, -- [4]
+      19485, -- [4]
     }, -- [46]
     {
       "Interface\\Icons\\Ability_Hunter_GoForTheThroat", -- [1]
@@ -383,13 +383,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_RapidKilling", -- [1]
       3, -- [2]
       4, -- [3]
-      34949, -- [4]
+      34948, -- [4]
     }, -- [50]
     {
       "Interface\\Icons\\Ability_Hunter_Quickshot", -- [1]
       4, -- [2]
       2, -- [3]
-      19466, -- [4]
+      19464, -- [4]
     }, -- [51]
     {
       "Interface\\Icons\\Spell_Frost_WizardMark", -- [1]
@@ -413,25 +413,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_UpgradeMoonGlaive", -- [1]
       5, -- [2]
       3, -- [3]
-      24691, -- [4]
+      19461, -- [4]
     }, -- [55]
     {
       "Interface\\Icons\\Ability_Hunter_CombatExperience", -- [1]
       6, -- [2]
       1, -- [3]
-      34476, -- [4]
+      34475, -- [4]
     }, -- [56]
     {
       "Interface\\Icons\\INV_Weapon_Rifle_06", -- [1]
       6, -- [2]
       4, -- [3]
-      19509, -- [4]
+      19507, -- [4]
     }, -- [57]
     {
       "Interface\\Icons\\Ability_Hunter_PiercingShots", -- [1]
       7, -- [2]
       1, -- [3]
-      53238, -- [4]
+      53234, -- [4]
     }, -- [58]
     {
       "Interface\\Icons\\Ability_TrueShot", -- [1]
@@ -449,7 +449,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_MasterMarksman", -- [1]
       8, -- [2]
       2, -- [3]
-      34489, -- [4]
+      34485, -- [4]
     }, -- [61]
     {
       "Interface\\Icons\\Ability_Hunter_RapidRegeneration", -- [1]
@@ -461,7 +461,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_WildQuiver", -- [1]
       9, -- [2]
       1, -- [3]
-      53217, -- [4]
+      53215, -- [4]
     }, -- [63]
     {
       "Interface\\Icons\\Ability_TheBlackArrow", -- [1]
@@ -473,13 +473,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_ImprovedSteadyShot", -- [1]
       9, -- [2]
       3, -- [3]
-      53224, -- [4]
+      53221, -- [4]
     }, -- [65]
     {
       "Interface\\Icons\\Ability_Hunter_Assassinate", -- [1]
       10, -- [2]
       2, -- [3]
-      53246, -- [4]
+      53241, -- [4]
     }, -- [66]
     {
       "Interface\\Icons\\Ability_Hunter_ChimeraShot2", -- [1]
@@ -504,7 +504,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_ImprovedTracking", -- [1]
       1, -- [2]
       1, -- [3]
-      52788, -- [4]
+      52783, -- [4]
     }, -- [81]
     {
       "Interface\\Icons\\Ability_TownWatch", -- [1]
@@ -534,13 +534,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Ensnare", -- [1]
       2, -- [2]
       3, -- [3]
-      63458, -- [4]
+      19376, -- [4]
     }, -- [86]
     {
       "Interface\\Icons\\Ability_Hunter_SurvivalInstincts", -- [1]
       2, -- [2]
       4, -- [3]
-      34496, -- [4]
+      34494, -- [4]
     }, -- [87]
     {
       "Interface\\Icons\\Spell_Shadow_Twilight", -- [1]
@@ -680,7 +680,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "HunterBeastMastery", -- [1]
       "HunterMarksmanship", -- [2]
       "HunterSurvival", -- [3]
@@ -691,7 +691,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Rogue_Ambush", -- [1]
       1, -- [2]
       1, -- [3]
-      12664, -- [4]
+      12282, -- [4]
     }, -- [1]
     {
       "Interface\\Icons\\Ability_Parry", -- [1]
@@ -703,13 +703,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Gouge", -- [1]
       1, -- [2]
       3, -- [3]
-      12658, -- [4]
+      12286, -- [4]
     }, -- [3]
     {
       "Interface\\Icons\\Ability_Warrior_Charge", -- [1]
       2, -- [2]
       1, -- [3]
-      12697, -- [4]
+      12285, -- [4]
     }, -- [4]
     {
       "Interface\\Icons\\Spell_Magic_MageArmor", -- [1]
@@ -721,7 +721,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_EnchantArmor", -- [1]
       2, -- [2]
       3, -- [3]
-      12677, -- [4]
+      12295, -- [4]
     }, -- [6]
     {
       "Interface\\Icons\\INV_Sword_05", -- [1]
@@ -739,19 +739,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_SearingArrow", -- [1]
       3, -- [2]
       3, -- [3]
-      16494, -- [4]
+      16493, -- [4]
     }, -- [9]
     {
       "Interface\\Icons\\Ability_BackStab", -- [1]
       3, -- [2]
       4, -- [3]
-      12867, -- [4]
+      12834, -- [4]
     }, -- [10]
     {
       "Interface\\Icons\\INV_Axe_09", -- [1]
       4, -- [2]
       2, -- [3]
-      12712, -- [4]
+      12163, -- [4]
     }, -- [11]
     {
       "Interface\\Icons\\Ability_Rogue_HungerforBlood", -- [1]
@@ -886,7 +886,7 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_Shoulder_22", -- [1]
       1, -- [2]
       1, -- [3]
-      61222, -- [4]
+      61216, -- [4]
     }, -- [41]
     {
       "Interface\\Icons\\Spell_Nature_Purge", -- [1]
@@ -898,7 +898,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Rogue_Eviscerate", -- [1]
       1, -- [2]
       3, -- [3]
-      12856, -- [4]
+      12320, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Ability_Warrior_WarCry", -- [1]
@@ -910,13 +910,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_StoneClawTotem", -- [1]
       2, -- [2]
       3, -- [3]
-      13001, -- [4]
+      12322, -- [4]
     }, -- [45]
     {
       "Interface\\Icons\\Ability_Warrior_Cleave", -- [1]
       3, -- [2]
       1, -- [3]
-      20496, -- [4]
+      12329, -- [4]
     }, -- [46]
     {
       "Interface\\Icons\\Spell_Shadow_DeathScream", -- [1]
@@ -940,7 +940,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_DualWield", -- [1]
       4, -- [2]
       1, -- [3]
-      23588, -- [4]
+      23584, -- [4]
     }, -- [50]
     {
       "Interface\\Icons\\INV_Sword_48", -- [1]
@@ -952,13 +952,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_UnholyFrenzy", -- [1]
       4, -- [2]
       3, -- [3]
-      13048, -- [4]
+      12317, -- [4]
     }, -- [52]
     {
       "Interface\\Icons\\Ability_Marksmanship", -- [1]
       5, -- [2]
       1, -- [3]
-      29591, -- [4]
+      29590, -- [4]
     }, -- [53]
     {
       "Interface\\Icons\\Spell_Shadow_DeathPact", -- [1]
@@ -982,13 +982,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_GhoulFrenzy", -- [1]
       6, -- [2]
       3, -- [3]
-      12974, -- [4]
+      12319, -- [4]
     }, -- [57]
     {
       "Interface\\Icons\\Ability_Warrior_EndlessRage", -- [1]
       7, -- [2]
       1, -- [3]
-      56924, -- [4]
+      46908, -- [4]
     }, -- [58]
     {
       "Interface\\Icons\\Spell_Nature_BloodLust", -- [1]
@@ -1000,7 +1000,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Whirlwind", -- [1]
       7, -- [2]
       4, -- [3]
-      29776, -- [4]
+      29721, -- [4]
     }, -- [60]
     {
       "Interface\\Icons\\Ability_Warrior_FuriousResolve", -- [1]
@@ -1012,7 +1012,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Racial_Avatar", -- [1]
       8, -- [2]
       4, -- [3]
-      29763, -- [4]
+      29759, -- [4]
     }, -- [62]
     {
       "Interface\\Icons\\Ability_HeroicLeap", -- [1]
@@ -1030,13 +1030,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Warrior_Bloodsurge", -- [1]
       9, -- [2]
       3, -- [3]
-      46915, -- [4]
+      46913, -- [4]
     }, -- [65]
     {
       "Interface\\Icons\\Ability_Warrior_IntensifyRage", -- [1]
       10, -- [2]
       2, -- [3]
-      56932, -- [4]
+      56927, -- [4]
     }, -- [66]
     {
       "Interface\\Icons\\Ability_Warrior_TitansGrip", -- [1]
@@ -1166,60 +1166,65 @@ Private.talentInfo = {
       50720, -- [4]
     }, -- [98]
     {
-      "Interface\\Icons\\Ability_Warrior_FocusedRage", -- [1]
+      "Interface\\Icons\\Ability_Warrior_BloodBath", -- [1]
       7, -- [2]
       3, -- [3]
-      29787, -- [4]
+      81006, -- [4]
     }, -- [99]
+    {
+      "Interface\\Icons\\Ability_Warrior_IntensifyRage", -- [1]
+      7, -- [2]
+      4, -- [3]
+      81011, -- [4]
+    }, -- [100]
     {
       "Interface\\Icons\\INV_Helmet_21", -- [1]
       8, -- [2]
       2, -- [3]
       29140, -- [4]
-    }, -- [100]
+    }, -- [101]
     {
       "Interface\\Icons\\Ability_Warrior_Safeguard", -- [1]
       8, -- [2]
       3, -- [3]
       46945, -- [4]
-    }, -- [101]
+    }, -- [102]
     {
       "Interface\\Icons\\Ability_Warrior_Warbringer", -- [1]
       9, -- [2]
       1, -- [3]
       57499, -- [4]
-    }, -- [102]
+    }, -- [103]
     {
       "Interface\\Icons\\INV_Sword_11", -- [1]
       9, -- [2]
       2, -- [3]
       20243, -- [4]
-    }, -- [103]
+    }, -- [104]
     {
-      "Interface\\Icons\\Ability_Warrior_CriticalBlock", -- [1]
+      "INTERFACE\\Icons\\Warrior_talent_icon_BloodandThunder", -- [1]
       9, -- [2]
       3, -- [3]
-      47294, -- [4]
-    }, -- [104]
+      81009, -- [4]
+    }, -- [105]
     {
       "Interface\\Icons\\Ability_Warrior_SwordandBoard", -- [1]
       10, -- [2]
       2, -- [3]
       46951, -- [4]
-    }, -- [105]
+    }, -- [106]
     {
       "Interface\\Icons\\INV_Shield_31", -- [1]
       10, -- [2]
       3, -- [3]
       58872, -- [4]
-    }, -- [106]
+    }, -- [107]
     {
       "Interface\\Icons\\Ability_Warrior_Shockwave", -- [1]
       11, -- [2]
       2, -- [3]
       46968, -- [4]
-    }, -- [107]
-    nil, -- [108]
+    }, -- [108]
     nil, -- [109]
     nil, -- [110]
     nil, -- [111]
@@ -1232,7 +1237,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "WarriorArms", -- [1]
       "WarriorFury", -- [2]
       "WarriorProtection", -- [3]
@@ -1420,7 +1425,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_GrimWard", -- [1]
       1, -- [2]
       3, -- [3]
-      17489, -- [4]
+      17485, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Spell_Nature_StoneSkinTotem", -- [1]
@@ -1432,7 +1437,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_ThunderBolt", -- [1]
       2, -- [2]
       2, -- [3]
-      16305, -- [4]
+      16255, -- [4]
     }, -- [45]
     {
       "Interface\\Icons\\Spell_Nature_SpiritWolf", -- [1]
@@ -1444,7 +1449,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_LightningShield", -- [1]
       2, -- [2]
       4, -- [3]
-      51881, -- [4]
+      16261, -- [4]
     }, -- [47]
     {
       "Interface\\Icons\\Spell_Fire_FlameTounge", -- [1]
@@ -1593,7 +1598,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_MagicImmunity", -- [1]
       1, -- [2]
       2, -- [3]
-      16229, -- [4]
+      16182, -- [4]
     }, -- [81]
     {
       "Interface\\Icons\\Spell_Nature_MoonGlow", -- [1]
@@ -1617,19 +1622,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Frost_ManaRecharge", -- [1]
       2, -- [2]
       3, -- [3]
-      16217, -- [4]
+      16179, -- [4]
     }, -- [85]
     {
       "Interface\\Icons\\Ability_Shaman_WaterShield", -- [1]
       3, -- [2]
       1, -- [3]
-      16198, -- [4]
+      16180, -- [4]
     }, -- [86]
     {
       "Interface\\Icons\\Spell_Nature_HealingWaveLesser", -- [1]
       3, -- [2]
       2, -- [3]
-      16232, -- [4]
+      16181, -- [4]
     }, -- [87]
     {
       "Interface\\Icons\\Spell_Frost_Frostbolt", -- [1]
@@ -1641,25 +1646,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_UndyingStrength", -- [1]
       3, -- [2]
       4, -- [3]
-      16240, -- [4]
+      16176, -- [4]
     }, -- [89]
     {
       "Interface\\Icons\\Spell_Nature_ManaRegenTotem", -- [1]
       4, -- [2]
       2, -- [3]
-      16206, -- [4]
+      16187, -- [4]
     }, -- [90]
     {
       "Interface\\Icons\\Spell_Nature_Tranquility", -- [1]
       4, -- [2]
       3, -- [3]
-      16221, -- [4]
+      16194, -- [4]
     }, -- [91]
     {
       "Interface\\Icons\\Spell_Nature_HealingWay", -- [1]
       5, -- [2]
       1, -- [3]
-      29202, -- [4]
+      29206, -- [4]
     }, -- [92]
     {
       "Interface\\Icons\\Spell_Nature_RavenForm", -- [1]
@@ -1677,7 +1682,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Frost_WizardMark", -- [1]
       6, -- [2]
       3, -- [3]
-      16213, -- [4]
+      16178, -- [4]
     }, -- [95]
     {
       "Interface\\Icons\\Spell_Nature_NatureGuardian", -- [1]
@@ -1701,25 +1706,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shaman_BlessingOfEternals", -- [1]
       8, -- [2]
       1, -- [3]
-      51555, -- [4]
+      51554, -- [4]
     }, -- [99]
     {
       "Interface\\Icons\\Spell_Nature_HealingWaveGreater", -- [1]
       8, -- [2]
       2, -- [3]
-      30873, -- [4]
+      30872, -- [4]
     }, -- [100]
     {
       "Interface\\Icons\\Spell_Nature_NatureBlessing", -- [1]
       8, -- [2]
       3, -- [3]
-      30869, -- [4]
+      30867, -- [4]
     }, -- [101]
     {
       "Interface\\Icons\\Spell_Shaman_AncestralAwakening", -- [1]
       9, -- [2]
       1, -- [3]
-      51558, -- [4]
+      51556, -- [4]
     }, -- [102]
     {
       "Interface\\Icons\\Spell_Nature_SkinofEarth", -- [1]
@@ -1731,13 +1736,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_SkinofEarth", -- [1]
       9, -- [2]
       3, -- [3]
-      51561, -- [4]
+      51560, -- [4]
     }, -- [104]
     {
       "Interface\\Icons\\Spell_Shaman_TidalWaves", -- [1]
       10, -- [2]
       2, -- [3]
-      51566, -- [4]
+      51562, -- [4]
     }, -- [105]
     {
       "Interface\\Icons\\spell_nature_riptide", -- [1]
@@ -1759,7 +1764,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "ShamanElementalCombat", -- [1]
       "ShamanEnhancement", -- [2]
       "ShamanRestoration", -- [3]
@@ -2316,7 +2321,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "MageArcane", -- [1]
       "MageFire", -- [2]
       "MageFrost", -- [3]
@@ -2333,7 +2338,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_SealOfVengeance", -- [1]
       1, -- [2]
       3, -- [3]
-      52803, -- [4]
+      47586, -- [4]
     }, -- [2]
     {
       "Interface\\Icons\\Spell_Nature_ManaRegenTotem", -- [1]
@@ -2345,13 +2350,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_InnerFire", -- [1]
       2, -- [2]
       2, -- [3]
-      14771, -- [4]
+      14747, -- [4]
     }, -- [4]
     {
       "Interface\\Icons\\Spell_Holy_WordFortitude", -- [1]
       2, -- [2]
       3, -- [3]
-      14767, -- [4]
+      14749, -- [4]
     }, -- [5]
     {
       "Interface\\Icons\\Spell_Nature_Tranquility", -- [1]
@@ -2363,7 +2368,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_Sleep", -- [1]
       3, -- [2]
       1, -- [3]
-      14777, -- [4]
+      14521, -- [4]
     }, -- [7]
     {
       "Interface\\Icons\\Spell_Frost_WindWalkOn", -- [1]
@@ -2375,7 +2380,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_PowerWordShield", -- [1]
       3, -- [2]
       3, -- [3]
-      14769, -- [4]
+      14748, -- [4]
     }, -- [9]
     {
       "Interface\\Icons\\Spell_Holy_Absolution", -- [1]
@@ -2387,7 +2392,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hibernation", -- [1]
       4, -- [2]
       2, -- [3]
-      14781, -- [4]
+      14520, -- [4]
     }, -- [11]
     {
       "Interface\\Icons\\Spell_Shadow_ManaBurn", -- [1]
@@ -2405,7 +2410,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_EnchantArmor", -- [1]
       5, -- [2]
       2, -- [3]
-      18555, -- [4]
+      18551, -- [4]
     }, -- [14]
     {
       "Interface\\Icons\\Spell_Holy_PureOfHeart", -- [1]
@@ -2417,19 +2422,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_FocusedPower", -- [1]
       6, -- [2]
       1, -- [3]
-      33190, -- [4]
+      33186, -- [4]
     }, -- [16]
     {
       "Interface\\Icons\\Spell_Arcane_MindMastery", -- [1]
       6, -- [2]
       3, -- [3]
-      34910, -- [4]
+      34908, -- [4]
     }, -- [17]
     {
       "Interface\\Icons\\Spell_Arcane_FocusedPower", -- [1]
       7, -- [2]
       1, -- [3]
-      45244, -- [4]
+      45234, -- [4]
     }, -- [18]
     {
       "Interface\\Icons\\Spell_Holy_PowerInfusion", -- [1]
@@ -2441,31 +2446,31 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_Chastise", -- [1]
       7, -- [2]
       3, -- [3]
-      63506, -- [4]
+      63504, -- [4]
     }, -- [20]
     {
       "Interface\\Icons\\Spell_Holy_HolyProtection", -- [1]
       8, -- [2]
       1, -- [3]
-      57472, -- [4]
+      57470, -- [4]
     }, -- [21]
     {
       "Interface\\Icons\\Spell_Holy_Rapture", -- [1]
       8, -- [2]
       2, -- [3]
-      47537, -- [4]
+      47535, -- [4]
     }, -- [22]
     {
       "Interface\\Icons\\Spell_Holy_Aspiration", -- [1]
       8, -- [2]
       3, -- [3]
-      47508, -- [4]
+      47507, -- [4]
     }, -- [23]
     {
       "Interface\\Icons\\Spell_Holy_DevineAegis", -- [1]
       9, -- [2]
       1, -- [3]
-      47515, -- [4]
+      47509, -- [4]
     }, -- [24]
     {
       "Interface\\Icons\\Spell_Holy_PainSupression", -- [1]
@@ -2477,13 +2482,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_HopeAndGrace", -- [1]
       9, -- [2]
       3, -- [3]
-      47517, -- [4]
+      47516, -- [4]
     }, -- [26]
     {
       "Interface\\Icons\\Spell_Holy_BorrowedTime", -- [1]
       10, -- [2]
       2, -- [3]
-      52800, -- [4]
+      52795, -- [4]
     }, -- [27]
     {
       "Interface\\Icons\\Spell_Holy_Penance", -- [1]
@@ -2507,19 +2512,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_HealingFocus", -- [1]
       1, -- [2]
       1, -- [3]
-      15012, -- [4]
+      14913, -- [4]
     }, -- [41]
     {
       "Interface\\Icons\\Spell_Holy_Renew", -- [1]
       1, -- [2]
       2, -- [3]
-      17191, -- [4]
+      14908, -- [4]
     }, -- [42]
     {
       "Interface\\Icons\\Spell_Holy_SealOfSalvation", -- [1]
       1, -- [2]
       3, -- [3]
-      15011, -- [4]
+      14889, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Spell_Holy_SpellWarding", -- [1]
@@ -2549,7 +2554,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_LayOnHands", -- [1]
       3, -- [2]
       4, -- [3]
-      15363, -- [4]
+      14892, -- [4]
     }, -- [48]
     {
       "Interface\\Icons\\Spell_Holy_Purify", -- [1]
@@ -2853,7 +2858,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "PriestDiscipline", -- [1]
       "PriestHoly", -- [2]
       "PriestShadow", -- [3]
@@ -3385,7 +3390,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "WarlockCurses", -- [1]
       "WarlockSummoning", -- [2]
       "WarlockDestruction", -- [3]
@@ -3927,7 +3932,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "RogueAssassination", -- [1]
       "RogueCombat", -- [2]
       "RogueSubtlety", -- [3]
@@ -4118,25 +4123,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Hunter_Pet_Hyena", -- [1]
       1, -- [2]
       2, -- [3]
-      16938, -- [4]
+      16934, -- [4]
     }, -- [41]
     {
       "Interface\\Icons\\Ability_Druid_DemoralizingRoar", -- [1]
       1, -- [2]
       3, -- [3]
-      16862, -- [4]
+      16858, -- [4]
     }, -- [42]
     {
       "Interface\\Icons\\Ability_Ambush", -- [1]
       2, -- [2]
       1, -- [3]
-      16949, -- [4]
+      16947, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Ability_Druid_Ravage", -- [1]
       2, -- [2]
       2, -- [3]
-      16999, -- [4]
+      16998, -- [4]
     }, -- [44]
     {
       "Interface\\Icons\\INV_Misc_Pelt_Bear_03", -- [1]
@@ -4148,7 +4153,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_SpiritWolf", -- [1]
       3, -- [2]
       1, -- [3]
-      24866, -- [4]
+      17002, -- [4]
     }, -- [46]
     {
       "Interface\\Icons\\Ability_Druid_TigersRoar", -- [1]
@@ -4160,31 +4165,31 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_Misc_MonsterClaw_04", -- [1]
       3, -- [2]
       3, -- [3]
-      16944, -- [4]
+      16942, -- [4]
     }, -- [48]
     {
       "Interface\\Icons\\Spell_Shadow_VampiricAura", -- [1]
       4, -- [2]
       1, -- [3]
-      16968, -- [4]
+      16966, -- [4]
     }, -- [49]
     {
       "Interface\\Icons\\Ability_Hunter_Pet_Cat", -- [1]
       4, -- [2]
       2, -- [3]
-      16975, -- [4]
+      16972, -- [4]
     }, -- [50]
     {
       "Interface\\Icons\\Ability_Racial_Cannibalize", -- [1]
       4, -- [2]
       3, -- [3]
-      37117, -- [4]
+      37116, -- [4]
     }, -- [51]
     {
       "Interface\\Icons\\Ability_Druid_PrimalPrecision", -- [1]
       4, -- [2]
       4, -- [3]
-      48410, -- [4]
+      48409, -- [4]
     }, -- [52]
     {
       "Interface\\Icons\\Ability_Druid_Bash", -- [1]
@@ -4214,13 +4219,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_BlessingOfAgility", -- [1]
       6, -- [2]
       2, -- [3]
-      24894, -- [4]
+      17003, -- [4]
     }, -- [57]
     {
       "Interface\\Icons\\Ability_Druid_Enrage", -- [1]
       6, -- [2]
       3, -- [3]
-      33856, -- [4]
+      33853, -- [4]
     }, -- [58]
     {
       "Interface\\Icons\\Spell_Nature_UnyeildingStamina", -- [1]
@@ -4250,7 +4255,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Druid_PredatoryInstincts", -- [1]
       8, -- [2]
       3, -- [3]
-      33867, -- [4]
+      33859, -- [4]
     }, -- [63]
     {
       "Interface\\Icons\\Ability_Druid_InfectedWound", -- [1]
@@ -4262,7 +4267,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Druid_KingoftheJungle", -- [1]
       9, -- [2]
       1, -- [3]
-      48495, -- [4]
+      48492, -- [4]
     }, -- [65]
     {
       "Interface\\Icons\\Ability_Druid_Mangle2", -- [1]
@@ -4280,7 +4285,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Druid_PrimalAgression", -- [1]
       10, -- [2]
       2, -- [3]
-      51269, -- [4]
+      48432, -- [4]
     }, -- [68]
     {
       "Interface\\Icons\\Ability_Druid_Rake", -- [1]
@@ -4308,7 +4313,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_Regeneration", -- [1]
       1, -- [2]
       1, -- [3]
-      17051, -- [4]
+      17050, -- [4]
     }, -- [81]
     {
       "Interface\\Icons\\Spell_Nature_HealingWaveGreater", -- [1]
@@ -4320,13 +4325,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_BlessingOfStamina", -- [1]
       1, -- [2]
       3, -- [3]
-      17060, -- [4]
+      17056, -- [4]
     }, -- [83]
     {
       "Interface\\Icons\\Spell_Nature_HealingTouch", -- [1]
       2, -- [2]
       1, -- [3]
-      17073, -- [4]
+      17069, -- [4]
     }, -- [84]
     {
       "Interface\\Icons\\Ability_EyeOfTheOwl", -- [1]
@@ -4338,7 +4343,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Nature_WispSplode", -- [1]
       2, -- [2]
       3, -- [3]
-      16835, -- [4]
+      16833, -- [4]
     }, -- [86]
     {
       "Interface\\Icons\\Spell_Frost_WindWalkOn", -- [1]
@@ -4356,7 +4361,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Druid_MasterShapeshifter", -- [1]
       3, -- [2]
       3, -- [3]
-      48412, -- [4]
+      48411, -- [4]
     }, -- [89]
     {
       "Interface\\Icons\\Spell_Holy_ElunesGrace", -- [1]
@@ -4479,7 +4484,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "DruidBalance", -- [1]
       "DruidFeralCombat", -- [2]
       "DruidRestoration", -- [3]
@@ -4490,19 +4495,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Arcane_Blink", -- [1]
       1, -- [2]
       2, -- [3]
-      20205, -- [4]
+      20208, -- [4]
     }, -- [1]
     {
       "Interface\\Icons\\Ability_ThunderBolt", -- [1]
       1, -- [2]
       3, -- [3]
-      20332, -- [4]
+      20224, -- [4]
     }, -- [2]
     {
       "Interface\\Icons\\Spell_Holy_HolyBolt", -- [1]
       2, -- [2]
       1, -- [3]
-      20237, -- [4]
+      20239, -- [4]
     }, -- [3]
     {
       "Interface\\Icons\\Spell_Nature_Sleep", -- [1]
@@ -4526,13 +4531,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_GreaterHeal", -- [1]
       3, -- [2]
       2, -- [3]
-      20210, -- [4]
+      20215, -- [4]
     }, -- [7]
     {
       "Interface\\Icons\\Spell_Holy_LayOnHands", -- [1]
       3, -- [2]
       3, -- [3]
-      20234, -- [4]
+      20235, -- [4]
     }, -- [8]
     {
       "Interface\\Icons\\Spell_Holy_MindSooth", -- [1]
@@ -4544,7 +4549,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_SealOfWisdom", -- [1]
       4, -- [2]
       3, -- [3]
-      20244, -- [4]
+      20245, -- [4]
     }, -- [10]
     {
       "Interface\\Icons\\Ability_Paladin_BlessedHands", -- [1]
@@ -4568,7 +4573,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_HealingAura", -- [1]
       5, -- [2]
       3, -- [3]
-      20359, -- [4]
+      20361, -- [4]
     }, -- [14]
     {
       "Interface\\Icons\\Spell_Holy_PurifyingPower", -- [1]
@@ -4580,13 +4585,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_Power", -- [1]
       6, -- [2]
       3, -- [3]
-      5923, -- [4]
+      25829, -- [4]
     }, -- [16]
     {
       "Interface\\Icons\\Spell_Holy_LightsGrace", -- [1]
       7, -- [2]
       1, -- [3]
-      31833, -- [4]
+      31836, -- [4]
     }, -- [17]
     {
       "Interface\\Icons\\Spell_Holy_SearingLight", -- [1]
@@ -4610,7 +4615,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_HolyGuidance", -- [1]
       8, -- [2]
       3, -- [3]
-      31837, -- [4]
+      31841, -- [4]
     }, -- [21]
     {
       "Interface\\Icons\\Spell_Holy_DivineIllumination", -- [1]
@@ -4622,19 +4627,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Paladin_JudgementofthePure", -- [1]
       9, -- [2]
       3, -- [3]
-      53671, -- [4]
+      54155, -- [4]
     }, -- [23]
     {
       "Interface\\Icons\\Ability_Paladin_InfusionofLight", -- [1]
       10, -- [2]
       2, -- [3]
-      53569, -- [4]
+      53576, -- [4]
     }, -- [24]
     {
       "Interface\\Icons\\Ability_Paladin_EnlightenedJudgements", -- [1]
       10, -- [2]
       3, -- [3]
-      53556, -- [4]
+      53557, -- [4]
     }, -- [25]
     {
       "Interface\\Icons\\Ability_Paladin_BeaconofLight", -- [1]
@@ -4660,25 +4665,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_BlindingHeal", -- [1]
       1, -- [2]
       2, -- [3]
-      63646, -- [4]
+      63650, -- [4]
     }, -- [41]
     {
       "Interface\\Icons\\Ability_GolemThunderClap", -- [1]
       1, -- [2]
       3, -- [3]
-      20266, -- [4]
+      20262, -- [4]
     }, -- [42]
     {
       "Interface\\Icons\\Spell_Holy_Stoicism", -- [1]
       2, -- [2]
       1, -- [3]
-      31844, -- [4]
+      53519, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Spell_Holy_SealOfProtection", -- [1]
       2, -- [2]
       2, -- [3]
-      20174, -- [4]
+      20175, -- [4]
     }, -- [44]
     {
       "Interface\\Icons\\Spell_Magic_LesserInvisibilty", -- [1]
@@ -4702,13 +4707,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_Devotion", -- [1]
       3, -- [2]
       3, -- [3]
-      20143, -- [4]
+      20146, -- [4]
     }, -- [48]
     {
       "Interface\\Icons\\spell_holy_powerwordbarrier", -- [1]
       4, -- [2]
       1, -- [3]
-      53527, -- [4]
+      53530, -- [4]
     }, -- [49]
     {
       "Interface\\Icons\\Spell_Holy_SealOfMight", -- [1]
@@ -4720,7 +4725,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_DevotionAura", -- [1]
       4, -- [2]
       3, -- [3]
-      20138, -- [4]
+      20139, -- [4]
     }, -- [51]
     {
       "Interface\\Icons\\Spell_Nature_LightningShield", -- [1]
@@ -4836,25 +4841,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Frost_WindWalkOn", -- [1]
       1, -- [2]
       3, -- [3]
-      20105, -- [4]
+      20101, -- [4]
     }, -- [82]
     {
       "Interface\\Icons\\Spell_Holy_RighteousFury", -- [1]
       2, -- [2]
       1, -- [3]
-      25957, -- [4]
+      25956, -- [4]
     }, -- [83]
     {
       "Interface\\Icons\\Spell_Holy_HolySmite", -- [1]
       2, -- [2]
       2, -- [3]
-      20337, -- [4]
+      20335, -- [4]
     }, -- [84]
     {
       "Interface\\Icons\\Spell_Holy_FistOfJustice", -- [1]
       2, -- [2]
       3, -- [3]
-      20045, -- [4]
+      20042, -- [4]
     }, -- [85]
     {
       "Interface\\Icons\\Spell_Holy_Vindication", -- [1]
@@ -4866,7 +4871,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_RetributionAura", -- [1]
       3, -- [2]
       2, -- [3]
-      20121, -- [4]
+      20117, -- [4]
     }, -- [87]
     {
       "Interface\\Icons\\Ability_Warrior_InnerRage", -- [1]
@@ -4878,7 +4883,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_PersuitofJustice", -- [1]
       3, -- [2]
       4, -- [3]
-      26023, -- [4]
+      26022, -- [4]
     }, -- [89]
     {
       "Interface\\Icons\\Spell_Holy_EyeforanEye", -- [1]
@@ -4890,19 +4895,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_HolySmite", -- [1]
       4, -- [2]
       3, -- [3]
-      35397, -- [4]
+      32043, -- [4]
     }, -- [91]
     {
       "Interface\\Icons\\Spell_Holy_Crusade", -- [1]
       4, -- [2]
       4, -- [3]
-      31868, -- [4]
+      31866, -- [4]
     }, -- [92]
     {
       "Interface\\Icons\\INV_Hammer_04", -- [1]
       5, -- [2]
       1, -- [3]
-      20113, -- [4]
+      20111, -- [4]
     }, -- [93]
     {
       "Interface\\Icons\\Spell_Holy_MindVision", -- [1]
@@ -4914,7 +4919,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Racial_Avatar", -- [1]
       6, -- [2]
       2, -- [3]
-      20057, -- [4]
+      20049, -- [4]
     }, -- [95]
     {
       "Interface\\Icons\\Spell_Holy_DivinePurpose", -- [1]
@@ -4926,7 +4931,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Paladin_ArtofWar", -- [1]
       7, -- [2]
       1, -- [3]
-      53488, -- [4]
+      53486, -- [4]
     }, -- [97]
     {
       "Interface\\Icons\\Spell_Holy_PrayerOfHealing", -- [1]
@@ -4938,25 +4943,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Paladin_JudgementoftheWise", -- [1]
       7, -- [2]
       3, -- [3]
-      31878, -- [4]
+      31876, -- [4]
     }, -- [99]
     {
       "Interface\\Icons\\Spell_Holy_Fanaticism", -- [1]
       8, -- [2]
       2, -- [3]
-      31881, -- [4]
+      31879, -- [4]
     }, -- [100]
     {
       "Interface\\Icons\\Ability_Paladin_SanctifiedWrath", -- [1]
       8, -- [2]
       3, -- [3]
-      53376, -- [4]
+      53375, -- [4]
     }, -- [101]
     {
       "Interface\\Icons\\Ability_Paladin_SwiftRetribution", -- [1]
       9, -- [2]
       1, -- [3]
-      53648, -- [4]
+      53379, -- [4]
     }, -- [102]
     {
       "Interface\\Icons\\Spell_Holy_CrusaderStrike", -- [1]
@@ -4968,13 +4973,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Paladin_SheathofLight", -- [1]
       9, -- [2]
       3, -- [3]
-      53503, -- [4]
+      53501, -- [4]
     }, -- [104]
     {
       "Interface\\Icons\\Ability_Paladin_RighteousVengeance", -- [1]
       10, -- [2]
       2, -- [3]
-      53382, -- [4]
+      53380, -- [4]
     }, -- [105]
     {
       "Interface\\Icons\\Ability_Paladin_DivineStorm", -- [1]
@@ -4996,7 +5001,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "PaladinHoly", -- [1]
       "PaladinProtection", -- [2]
       "PaladinCombat", -- [3]
@@ -5019,13 +5024,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_UpgradeMoonGlaive", -- [1]
       1, -- [2]
       3, -- [3]
-      55226, -- [4]
+      49182, -- [4]
     }, -- [3]
     {
       "Interface\\Icons\\INV_Shoulder_36", -- [1]
       2, -- [2]
       1, -- [3]
-      49393, -- [4]
+      48978, -- [4]
     }, -- [4]
     {
       "Interface\\Icons\\Ability_Rogue_BloodyEye", -- [1]
@@ -5037,7 +5042,7 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_Sword_68", -- [1]
       2, -- [2]
       3, -- [3]
-      55108, -- [4]
+      55107, -- [4]
     }, -- [6]
     {
       "Interface\\Icons\\Spell_DeathKnight_RuneTap", -- [1]
@@ -5049,25 +5054,25 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_DeathKnight_DarkConviction", -- [1]
       3, -- [2]
       2, -- [3]
-      49480, -- [4]
+      48987, -- [4]
     }, -- [8]
     {
       "Interface\\Icons\\INV_Sword_62", -- [1]
       3, -- [2]
       3, -- [3]
-      50034, -- [4]
+      49467, -- [4]
     }, -- [9]
     {
       "Interface\\Icons\\Spell_DeathKnight_RuneTap", -- [1]
       4, -- [2]
       1, -- [3]
-      49489, -- [4]
+      48985, -- [4]
     }, -- [10]
     {
       "Interface\\Icons\\Spell_DeathKnight_SpellDeflection", -- [1]
       4, -- [2]
       3, -- [3]
-      49497, -- [4]
+      49145, -- [4]
     }, -- [11]
     {
       "Interface\\Icons\\Spell_DeathKnight_Vendetta", -- [1]
@@ -5079,13 +5084,13 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Deathknight_DeathStrike", -- [1]
       5, -- [2]
       1, -- [3]
-      49395, -- [4]
+      48977, -- [4]
     }, -- [13]
     {
       "Interface\\Icons\\Spell_Misc_WarsongFocus", -- [1]
       5, -- [2]
       3, -- [3]
-      50029, -- [4]
+      49006, -- [4]
     }, -- [14]
     {
       "Interface\\Icons\\Ability_Hunter_RapidKilling", -- [1]
@@ -5103,7 +5108,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Warrior_IntensifyRage", -- [1]
       6, -- [2]
       3, -- [3]
-      53138, -- [4]
+      53137, -- [4]
     }, -- [17]
     {
       "Interface\\Icons\\Spell_Shadow_SoulLeech", -- [1]
@@ -5127,7 +5132,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_DeathKnight_Butcher2", -- [1]
       8, -- [2]
       1, -- [3]
-      62908, -- [4]
+      62905, -- [4]
     }, -- [21]
     {
       "Interface\\Icons\\Spell_Shadow_PainSpike", -- [1]
@@ -5145,7 +5150,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Ability_Creature_Cursed_02", -- [1]
       9, -- [2]
       1, -- [3]
-      50150, -- [4]
+      49189, -- [4]
     }, -- [24]
     {
       "Interface\\Icons\\INV_Weapon_Shortblade_40", -- [1]
@@ -5187,7 +5192,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_DeathKnight_IceTouch", -- [1]
       1, -- [2]
       1, -- [3]
-      51456, -- [4]
+      49175, -- [4]
     }, -- [41]
     {
       "Interface\\Icons\\Spell_Arcane_Arcane01", -- [1]
@@ -5199,7 +5204,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Holy_Devotion", -- [1]
       1, -- [2]
       3, -- [3]
-      49789, -- [4]
+      49042, -- [4]
     }, -- [43]
     {
       "Interface\\Icons\\Spell_Frost_ManaRecharge", -- [1]
@@ -5211,7 +5216,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_DarkRitual", -- [1]
       2, -- [2]
       3, -- [3]
-      49663, -- [4]
+      49140, -- [4]
     }, -- [45]
     {
       "Interface\\Icons\\Ability_DualWield", -- [1]
@@ -5223,7 +5228,7 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Deathknight_IcyTalons", -- [1]
       3, -- [2]
       1, -- [3]
-      50887, -- [4]
+      50880, -- [4]
     }, -- [47]
     {
       "Interface\\Icons\\Spell_Shadow_RaiseDead", -- [1]
@@ -5241,7 +5246,7 @@ Private.talentInfo = {
       "Interface\\Icons\\INV_Sword_122", -- [1]
       4, -- [2]
       2, -- [3]
-      51128, -- [4]
+      51123, -- [4]
     }, -- [50]
     {
       "Interface\\Icons\\Spell_Frost_FrostShock", -- [1]
@@ -5253,19 +5258,19 @@ Private.talentInfo = {
       "Interface\\Icons\\Spell_Shadow_Twilight", -- [1]
       4, -- [2]
       4, -- [3]
-      49657, -- [4]
+      49137, -- [4]
     }, -- [52]
     {
       "Interface\\Icons\\INV_CHEST_MAIL_04", -- [1]
       5, -- [2]
       2, -- [3]
-      51108, -- [4]
+      49186, -- [4]
     }, -- [53]
     {
       "Interface\\Icons\\Spell_Nature_RemoveDisease", -- [1]
       5, -- [2]
       3, -- [3]
-      49791, -- [4]
+      49471, -- [4]
     }, -- [54]
     {
       "Interface\\Icons\\Spell_Shadow_SoulLeech_2", -- [1]
@@ -5563,7 +5568,7 @@ Private.talentInfo = {
     nil, -- [118]
     nil, -- [119]
     nil, -- [120]
-    [121] = {
+    {
       "DeathKnightBlood", -- [1]
       "DeathKnightFrost", -- [2]
       "DeathKnightUnholy", -- [3]
