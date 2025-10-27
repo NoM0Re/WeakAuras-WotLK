@@ -146,7 +146,7 @@ function Private.InitializeEncounterAndZoneLists()
     encounter_list = encounter_list .. "\n"
   end
 
-  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Based on "] .. "https://wago.tools/db2/DungeonEncounter?build=3.4.5.63009\n" .. L["Supports multiple entries, separated by commas\n"]
+  encounter_list = encounter_list:sub(1, -3) .. "\n\n" .. L["Based on "] .. "https://wago.tools/db2/DungeonEncounter?build=3.4.5.63009\n" .. L["Supports multiple entries, separated by commas. Prefix with '-' for negation."]
 end
 
 function Private.get_encounters_list()

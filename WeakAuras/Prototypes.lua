@@ -593,10 +593,11 @@ function WeakAuras.CheckNumericIds(loadids, currentId)
   local startI, endI = string.find(loadids, currentId, searchFrom);
   while (startI) do
     searchFrom = endI + 1; -- start next search from end
-    if (startI == 1 or tonumber(string.sub(loadids, startI - 1, startI - 1)) == nil) then
+    local isNeg = (startI > 1 and string.sub(loadids, startI - 1, startI - 1) == "-")
+    if (isNeg or startI == 1 or tonumber(string.sub(loadids, startI - 1, startI - 1)) == nil) then
       -- Either right at start, or character before is not a number
       if (endI == string.len(loadids) or tonumber(string.sub(loadids, endI + 1, endI + 1)) == nil) then
-        return true;
+        return not isNeg
       end
     end
     startI, endI = string.find(loadids, currentId, searchFrom);
