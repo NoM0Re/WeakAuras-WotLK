@@ -38,15 +38,20 @@ local dbmSupportStates = {
 }
 
 local dbmSupportStatus = dbmSupportStates.UNSUPPORTED
-if (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250312000000) then
-  -- DBM 2025.03.12.000000
-  dbmSupportStatus = dbmSupportStates.LATEST
-elseif (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250209000000) then
-  -- DBM 2025.02.09.000000
-  dbmSupportStatus = dbmSupportStates.COMPATIBLE
-elseif (DBM and type(DBM.ReleaseRevision) == "number" and DBM.ReleaseRevision >= 7005) then
-  -- DBM 7.0.5
-  dbmSupportStatus = dbmSupportStates.LEGACY
+do
+  local site = DBM and GetAddOnMetadata("DBM-Core", "X-Website")
+  if site and site:match("broizter") and site:match("DBM%-Frostmourne") then
+    dbmSupportStatus = dbmSupportStates.LEGACY
+  elseif (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250312000000) then
+    -- DBM 2025.03.12.000000
+    dbmSupportStatus = dbmSupportStates.LATEST
+  elseif (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250209000000) then
+    -- DBM 2025.02.09.000000
+    dbmSupportStatus = dbmSupportStates.COMPATIBLE
+  elseif (DBM and type(DBM.ReleaseRevision) == "number" and DBM.ReleaseRevision >= 7005) then
+    -- DBM 7.0.5
+    dbmSupportStatus = dbmSupportStates.LEGACY
+  end
 end
 
 local barOptions = DBM and type(DBM.ReleaseRevision) == "number" and (
