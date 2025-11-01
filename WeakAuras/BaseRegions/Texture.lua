@@ -118,7 +118,6 @@ function Private.TextureBase.modify(base, options)
   base.mirror = options.mirror
   base.rotation = options.rotation
   base.effectiveRotation = base.rotation
-  base.textureWrapMode = options.textureWrapMode
 
   base.texture:SetDesaturated(options.desaturate)
   base.texture:SetBlendMode(options.blendMode)
