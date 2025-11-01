@@ -730,15 +730,15 @@ local function create(parent)
   region:SetResizable(true);
   region:SetMinResize(1, 1);
 
-  local background = Private.LinearProgressTextureBase.create(region, "BACKGROUND", 0);
+  local background = Private.LinearProgressTextureBase.create(region, "BACKGROUND");
   region.background = background;
 
   -- For horizontal/vertical progress
-  local foreground = Private.LinearProgressTextureBase.create(region, "ARTWORK", 0);
+  local foreground = Private.LinearProgressTextureBase.create(region, "ARTWORK");
   region.foreground = foreground;
 
-  region.foregroundSpinner = Private.CircularProgressTextureBase.create(region, "ARTWORK", 1)
-  region.backgroundSpinner = Private.CircularProgressTextureBase.create(region, "BACKGROUND", 1)
+  region.foregroundSpinner = Private.CircularProgressTextureBase.create(region, "ARTWORK", parent:GetFrameLevel() + 2)
+  region.backgroundSpinner = Private.CircularProgressTextureBase.create(region, "BACKGROUND", parent:GetFrameLevel() + 1)
 
   region.extraTextures = {};
   region.extraSpinners = {};

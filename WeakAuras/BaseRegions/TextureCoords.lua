@@ -122,15 +122,6 @@ local funcs = {
     self.URy = 0
     self.LRx = 1
     self.LRy = 1
-
-    self.ULvx = 0
-    self.ULvy = 0
-    self.LLvx = 0
-    self.LLvy = 0
-    self.URvx = 0
-    self.URvy = 0
-    self.LRvx = 0
-    self.LRvy = 0
   end,
 
   Apply = function(self)

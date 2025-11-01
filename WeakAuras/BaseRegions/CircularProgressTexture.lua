@@ -14,36 +14,42 @@ local funcs = {
     end
   end,
   SetTextureOrAtlas = function(self, texture)
-    for i = 1, 3 do
+    for i = 1, 4 do
       self.textures[i]:SetTexture(texture)
     end
+    self.wedge:SetTexture(texture)
   end,
   SetDesaturated = function(self, desaturate)
-    for i = 1, 3 do
+    for i = 1, 4 do
       self.textures[i]:SetDesaturated(desaturate)
     end
+    self.wedge:SetDesaturated(desaturate)
   end,
   SetBlendMode = function(self, blendMode)
-    for i = 1, 3 do
+    for i = 1, 4 do
       self.textures[i]:SetBlendMode(blendMode)
     end
+    self.wedge:SetBlendMode(blendMode)
   end,
   Show = function(self)
     self.visible = true
-    for i = 1, 3 do
+    for i = 1, 4 do
       self.textures[i]:Show()
     end
+    self.wedge:Show()
   end,
   Hide = function(self)
     self.visible = false
-    for i = 1, 3 do
-      self.textures[i]:Hide()
+    for i = 1, 4 do
+      self.textures[i]:Show()
     end
+    self.wedge:Show()
   end,
   SetColor = function (self, r, g, b, a)
-    for i = 1, 3 do
+    for i = 1, 4 do
       self.textures[i]:SetVertexColor(r, g, b, a)
     end
+    self.wedge:SetVertexColor(r, g, b, a)
   end,
   SetCropX = function(self, crop_x)
     self.crop_x = crop_x
@@ -103,8 +109,8 @@ local funcs = {
 
     if (angle2 - angle1 >= 360) then
       -- SHOW everything
-      self.coords[1]:SetFull()
-      self.coords[1]:Transform(crop_x, crop_y, texRotation, mirror_h, mirror_v)
+      self.coords[1]:SetFull() -- Set to default full coords
+      self.coords[1]:Transform(crop_x, crop_y, texRotation, mirror_h, mirror_v) -- transform to user settings
       self.coords[1]:Show()
 
       self.coords[2]:Hide()
@@ -162,7 +168,7 @@ local funcs = {
   end,
 }
 
-function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
+function Private.CircularProgressTextureBase.create(frame, layer, drawLayer, frameLevel)
   local circularTexture = {}
 
   circularTexture.textures = {}
@@ -170,12 +176,51 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   circularTexture.offset = 0
   circularTexture.visible = true
 
-  for i = 1, 3 do
-    local texture = frame:CreateTexture(nil, layer)
-    texture:SetDrawLayer(layer, drawLayer)
-    texture:SetAllPoints(frame)
-    circularTexture.textures[i] = texture
+  local scrollframe = CreateFrame("ScrollFrame", nil, frame)
+  scrollframe:SetPoint("BOTTOMLEFT", frame, "CENTER")
+  scrollframe:SetPoint("TOPRIGHT")
+  scrollframe:SetFrameLevel(frameLevel);
 
+  local scrollchild = CreateFrame("Frame", nil, scrollframe)
+  scrollframe:SetScrollChild(scrollchild)
+  scrollchild:SetAllPoints(scrollframe)
+  scrollchild:SetFrameLevel(frameLevel);
+
+  local wedge = scrollchild:CreateTexture(nil, layer)
+  wedge:SetPoint("BOTTOMRIGHT", frame, "CENTER")
+
+  -- Top Right
+  local trTexture = frame:CreateTexture(nil, layer)
+  trTexture:SetPoint("BOTTOMLEFT", frame, "CENTER")
+  trTexture:SetPoint("TOPRIGHT")
+  trTexture:SetTexCoord(0.5, 1, 0, 0.5)
+
+  -- Bottom Right
+  local brTexture = frame:CreateTexture(nil, layer)
+  brTexture:SetPoint("TOPLEFT", frame, "CENTER")
+  brTexture:SetPoint("BOTTOMRIGHT")
+  brTexture:SetTexCoord(0.5, 1, 0.5, 1)
+
+  -- Bottom Left
+  local blTexture = frame:CreateTexture(nil, layer)
+  blTexture:SetPoint("TOPRIGHT", frame, "CENTER")
+  blTexture:SetPoint("BOTTOMLEFT")
+  blTexture:SetTexCoord(0, 0.5, 0.5, 1)
+
+  -- Top Left
+  local tlTexture = frame:CreateTexture(nil, layer)
+  tlTexture:SetPoint("BOTTOMRIGHT", frame, "CENTER")
+  tlTexture:SetPoint("TOPLEFT")
+  tlTexture:SetTexCoord(0, 0.5, 0, 0.5)
+
+  -- /4|1\ -- Clockwise texture arrangement
+  -- \3|2/ --
+
+  circularTexture.scrollframe = scrollframe
+  circularTexture.wedge = wedge
+  circularTexture.textures = {trTexture, brTexture, blTexture, tlTexture}
+
+  for i, texture in ipairs(circularTexture.textures) do
     circularTexture.coords[i] = Private.TextureCoords.create(texture)
   end
 
@@ -203,7 +248,7 @@ function Private.CircularProgressTextureBase.modify(circularTexture, options)
   local offset = options.offset
   local frame = circularTexture.parentFrame
   if offset > 0 then
-    for i = 1, 3 do
+    for i = 1, 4 do
       circularTexture.textures[i]:ClearAllPoints()
       circularTexture.textures[i]:SetPoint('TOPRIGHT', frame, offset, offset)
       circularTexture.textures[i]:SetPoint('BOTTOMRIGHT', frame, offset, -offset)
