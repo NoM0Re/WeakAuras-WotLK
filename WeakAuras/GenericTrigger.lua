@@ -3844,7 +3844,7 @@ do
   local nameplateList = {}
   local visibleNameplates = {}
 
-  local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
+  local BORDER = [=[Interface\Tooltips\Nameplate-Border]=]
   local FSPAT = "%s*"..(gsub(gsub(FOREIGN_SERVER_LABEL, "^%s", ""), "[%*()]", "%%%1")).."$"
 
   local function nameplateShow(self)
@@ -3865,8 +3865,8 @@ do
   local function findNewPlate(...)
     for i = lastChildern + 1, numChildren do
       local frame = select(i, ...)
-      local region, _, _, _, _, _, nameText = frame:GetRegions()
-      if (frame.UnitFrame or (region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY)) and not nameplateList[frame] then
+      local _, border, _, _, _, _, nameText = frame:GetRegions()
+      if (frame.UnitFrame or (border and border:GetObjectType() == "Texture" and border:GetTexture() == BORDER)) and not nameplateList[frame] then
         frame.nameText = nameText
         frame:HookScript("OnShow", nameplateShow)
         frame:HookScript("OnHide", nameplateHide)
