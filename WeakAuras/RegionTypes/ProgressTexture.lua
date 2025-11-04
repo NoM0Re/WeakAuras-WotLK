@@ -425,8 +425,6 @@ end
 WeakAuras.createSpinner = createSpinner;
 
 local function create(parent)
-  local font = "GameFontHighlight";
-
   local region = CreateFrame("Frame", nil, parent);
   region.regionType = "progresstexture"
   region:SetMovable(true);
@@ -556,6 +554,7 @@ local function modify(parent, region, data)
 
   region.startAngle = data.startAngle or 0;
   region.endAngle = data.endAngle or 360;
+  region.inverseDirection = data.inverse;
 
   local function orientHorizontal()
     foreground:ClearAllPoints();
