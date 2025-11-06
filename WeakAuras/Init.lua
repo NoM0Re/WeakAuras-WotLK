@@ -22,7 +22,7 @@ if GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and G
   flavor = "TBC"
 elseif GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
-elseif GetRealmName() == "Frostmourne" then
+elseif GetRealmName() == "Frostmourne" and (GetCVar("realmList") or ''):lower():find("stormforge") then
   flavor = "WrathReborn"
 else
   flavor = "Wrath"
