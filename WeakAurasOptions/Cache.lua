@@ -110,20 +110,19 @@ local misses = 0
 local lastId
 print("####")
 while misses < 4000000 do
-   id = id + 1
-   local name = GetSpellInfo(id)
-   local icon = GetSpellTexture(id)
-   if (icon == "Interface\\Icons\\trade_engineering") then -- 136243 is the a gear icon, we can ignore those spells
-      misses = 0
-   elseif name and name ~= "" and icon then
-      if misses > 10000 then
-         print(("holes[%s] = %s"):format(lastId, id - 1))
-      end
-      lastId = id
-      misses = 0
-   else
-      misses = misses + 1
-   end
+  id = id + 1
+  local name, _, icon = GetSpellInfo(id)
+  if (icon and icon:lower() == "interface\\icons\\trade_engineering") then -- 136243 is the a gear icon, we can ignore those spells
+    misses = 0
+  elseif name and name ~= "" and icon then
+    if misses > 10000 then
+      print(("holes[%s] = %s"):format(lastId, id - 1))
+    end
+    lastId = id
+    misses = 0
+  else
+    misses = misses + 1
+  end
 end
 print("lastId", lastId)
 ]]
@@ -214,7 +213,7 @@ function spellCache.Load(data)
     num = num + 1;
   end
 
-  if(num < 39000 or metaData.locale ~= locale or metaData.build ~= build
+  if(num < 16000 or metaData.locale ~= locale or metaData.build ~= build
      or metaData.version ~= version or not metaData.spellCacheStrings)
   then
     metaData.build = build;
