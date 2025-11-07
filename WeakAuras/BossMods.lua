@@ -40,7 +40,7 @@ local dbmSupportStates = {
 local dbmSupportStatus = dbmSupportStates.UNSUPPORTED
 do
   local site = DBM and GetAddOnMetadata("DBM-Core", "X-Website")
-  if site and site:match("broizter") and site:match("DBM%-Frostmourne") then
+  if site and site:match("broizter") and site:match("DBM%-Frostmourne") and type(DBM.Revision) == "number" and DBM.Revision < 20251107134400 then
     dbmSupportStatus = dbmSupportStates.LEGACY
   elseif (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250312000000) then
     -- DBM 2025.03.12.000000
