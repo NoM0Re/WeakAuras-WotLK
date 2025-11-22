@@ -541,8 +541,8 @@ Private.event_prototypes["DBM Timer"] = {
   type = "addons",
   events = {},
   internal_events = {
-    "DBM_TimerStart", "DBM_TimerStop", "DBM_TimerUpdate", "DBM_TimerForce",
-    "DBM_TimerResume", "DBM_TimerPause", "DBM_TimerUpdateIcon"
+    "DBM_TimerStart", "DBM_TimerStop", "DBM_TimerUpdate", "DBM_TimerForce", "DBM_TimerResume", "DBM_TimerPause",
+    "DBM_TimerUpdateIcon"
   },
   force_events = "DBM_TimerForce",
   name = L["DBM Timer"],
@@ -1497,12 +1497,7 @@ Private.event_prototypes["BigWigs Timer"] = {
 Private.category_event_prototype.addons["BigWigs Timer"] = L["BigWigs Timer"]
 
 -- Unified
-if DBM then
-  Private.ExecEnv.BossMods.Generic = Private.ExecEnv.BossMods.DBM
-  Private.ExecEnv.BossMods.DBM.isGeneric = true
-  Private.ExecEnv.BossMods.DBM.isInstalled = true
-end
---[[if BigWigsLoader or not DBM then
+if BigWigsLoader or not DBM then
   Private.ExecEnv.BossMods.Generic = Private.ExecEnv.BossMods.BigWigs
   Private.ExecEnv.BossMods.BigWigs.isGeneric = true
   Private.ExecEnv.BossMods.BigWigs.isInstalled = BigWigsLoader ~= nil
@@ -1510,7 +1505,7 @@ elseif DBM then
   Private.ExecEnv.BossMods.Generic = Private.ExecEnv.BossMods.DBM
   Private.ExecEnv.BossMods.DBM.isGeneric = true
   Private.ExecEnv.BossMods.DBM.isInstalled = true
-end]]
+end
 
 local ActiveBossModText
 if Private.ExecEnv.BossMods.BigWigs.isInstalled then
@@ -1927,46 +1922,3 @@ Private.event_prototypes["Boss Mod Timer"] = {
   automaticrequired = true,
 }
 Private.category_event_prototype.addons["Boss Mod Timer"] = L["Boss Mod Timer"]
-
-
--- Deactivate DBM for users with outdated versions, and always disable BigWigs triggers.
--- DBM triggers are only disabled if the DBM version is older than 7.0.5+.
--- Supported DBM version is "DBM Warmane" with commits from 2025-Feb-09+ and from 2025-Mar-12+.
--- Note: DBM 7.0.5+ is also functional, but some triggers (e.g., Type, Bar, etc.) may not work as expected.
---
--- References:
--- Commit 1: https://github.com/Zidras/DBM-Warmane/commit/5791dac460a07225c5d617d0252a88ce1e210618 (2025-02-09)
--- Commit 2: https://github.com/Zidras/DBM-Warmane/commit/b6804570cab39a1c0412f964d1f2c15a63b96eed (2025-03-12)
--- Download: https://github.com/Zidras/DBM-Warmane/archive/refs/heads/main.zip
-
--- Disable DBM for users with an outdated DBM version
-do
-  if dbmSupportStatus == dbmSupportStates.UNSUPPORTED then
-    local dbm_trigger = {
-      "DBM Stage",
-      "DBM Announce",
-      "DBM Timer",
-      "Boss Mod Stage",
-      "Boss Mod Stage (Event)",
-      "Boss Mod Announce",
-      "Boss Mod Timer"
-    }
-
-    -- Remove all relevant DBM event prototypes
-    for _, event in ipairs(dbm_trigger) do
-      Private.event_prototypes[event] = nil
-    end
-  end
-
-  -- Always disable BigWigs triggers
-  local bigwigs_trigger = {
-    "BigWigs Stage",
-    "BigWigs Message",
-    "BigWigs Timer"
-  }
-
-  -- Remove all relevant BigWigs event prototypes
-  for _, event in ipairs(bigwigs_trigger) do
-    Private.event_prototypes[event] = nil
-  end
-end
