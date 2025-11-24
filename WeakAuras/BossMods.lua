@@ -1497,7 +1497,7 @@ Private.event_prototypes["BigWigs Timer"] = {
 Private.category_event_prototype.addons["BigWigs Timer"] = L["BigWigs Timer"]
 
 -- Unified
-if BigWigsLoader or not DBM then
+if BigWigsLoader or not DBM or dbmSupportStatus == dbmSupportStates.UNSUPPORTED then
   Private.ExecEnv.BossMods.Generic = Private.ExecEnv.BossMods.BigWigs
   Private.ExecEnv.BossMods.BigWigs.isGeneric = true
   Private.ExecEnv.BossMods.BigWigs.isInstalled = BigWigsLoader ~= nil
