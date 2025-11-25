@@ -27,12 +27,10 @@ Private.glow_action_types = {
 
 Private.glow_frame_types = {
   UNITFRAME = L["Unit Frame"],
+  NAMEPLATE = L["Nameplate"],
   FRAMESELECTOR = L["Frame Selector"],
   PARENTFRAME = L["Parent Frame"]
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.glow_frame_types.NAMEPLATE = L["Nameplate"]
-end
 
 Private.circular_group_constant_factor_types = {
   ANGLE = L["Angle and Radius"],

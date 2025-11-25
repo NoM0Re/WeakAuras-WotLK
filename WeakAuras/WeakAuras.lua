@@ -2685,19 +2685,10 @@ local function validateUserConfig(data, options, config)
   end
 end
 
-local function removeNameplateUnitsAndAnchors(data)
-  -- Dynamic Group Anchor
-  if data.useAnchorPerUnit == true and data.anchorPerUnit == "NAMEPLATE" then
-    data.useAnchorPerUnit = false
-    data.anchorPerUnit = "CUSTOM"
-  end
+local function RemoveNameplateUnits(data)
   -- Aura Anchor
   if data.anchorFrameType == "NAMEPLATE" then
     data.anchorFrameType = "SCREEN"
-  end
-  -- Action Glow Anchor
-  if data.actions and data.actions.start and data.actions.start.glow_frame_type == "NAMEPLATE" then
-    data.actions.start.glow_frame_type = "FRAMESELECTOR"
   end
   -- Trigger units
   for _, triggerData in ipairs(data.triggers) do
@@ -2955,8 +2946,8 @@ function WeakAuras.PreAdd(data, snapshot)
     end
   end
   validateUserConfig(data, data.authorOptions, data.config)
-  if not(WeakAuras.IsAwesomeEnabled()) then
-    removeNameplateUnitsAndAnchors(data)
+  if not WeakAuras.IsAwesomeEnabled() then
+    RemoveNameplateUnits(data)
   end
   data.init_started = nil
   data.init_completed = nil
@@ -3586,8 +3577,16 @@ function Private.HandleGlowAction(actions, region)
       glow_frame = WeakAuras.GetUnitFrame(region.state.unit)
       should_glow_frame = true
     elseif actions.glow_frame_type == "NAMEPLATE" and region.state.unit then
-      glow_frame = WeakAuras.GetNamePlateForUnit(region.state.unit)
-      should_glow_frame = true
+      if WeakAuras.IsAwesomeEnabled() then
+        glow_frame = WeakAuras.GetNamePlateForUnit(region.state.unit)
+        should_glow_frame = true
+      else
+        WeakAuras.WatchNamePlates()
+        local nameplate = WeakAuras.GetUnitNameplate(region.state.unit)
+        glow_frame = WeakAuras.GetNamePlateForUnit(nil, nameplate)
+        print(glow_frame, region.state.unit)
+        should_glow_frame = true
+      end
     elseif actions.glow_frame_type == "PARENTFRAME" then
       glow_frame = region:GetParent()
       should_glow_frame = true
@@ -5700,7 +5699,13 @@ local function GetAnchorFrame(data, region, parent)
   if (anchorFrameType == "NAMEPLATE") then
     local unit = region.state and region.state.unit
     if unit then
-      local frame = unit and WeakAuras.GetNamePlateForUnit(unit)
+      local frame
+      if WeakAuras.IsAwesomeEnabled() then
+        frame = unit and WeakAuras.GetNamePlateForUnit(unit)
+      else
+        local nameplate = WeakAuras.GetUnitNameplate(region.state.unit)
+        frame = WeakAuras.GetNamePlateForUnit(nil, nameplate)
+      end
       if frame then return frame end
     end
     if WeakAuras.IsOptionsOpen() then

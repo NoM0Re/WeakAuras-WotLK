@@ -377,13 +377,39 @@ local function staggerCoefficient(alignment, stagger)
 end
 
 local anchorers = {
-  ["NAMEPLATE"] = function(data)
+  ["NAMEPLATE"] = WeakAuras.IsAwesomeEnabled() and -- Awesome WotLK nameplate anchor
+  function(data)
     return function(frames, activeRegions)
       for _, regionData in ipairs(activeRegions) do
         local unit = regionData.region.state and regionData.region.state.unit
         local found
         if unit then
           local frame = WeakAuras.GetNamePlateForUnit(unit)
+          if frame then
+            frames[frame] = frames[frame] or {}
+            tinsert(frames[frame], regionData)
+            found = true
+          end
+        end
+        if not found and WeakAuras.IsOptionsOpen() and regionData.region.state then
+          Private.ensurePRDFrame()
+          Private.personalRessourceDisplayFrame:anchorFrame(regionData.region.state.id, "NAMEPLATE")
+          frames[Private.personalRessourceDisplayFrame] = frames[Private.personalRessourceDisplayFrame] or {}
+          tinsert(frames[Private.personalRessourceDisplayFrame], regionData)
+        end
+      end
+    end, {unit = true }
+  end
+  or -- non Awesome WotLK nameplate anchor
+  function(data)
+    return function(frames, activeRegions)
+      WeakAuras.WatchNamePlates()
+      for _, regionData in ipairs(activeRegions) do
+        local unit = regionData.region.state and regionData.region.state.unit
+        local found
+        if unit then
+          local nameplate = WeakAuras.GetUnitNameplate(unit)
+          local frame = WeakAuras.GetNamePlateForUnit(nil, nameplate)
           if frame then
             frames[frame] = frames[frame] or {}
             tinsert(frames[frame], regionData)

@@ -678,23 +678,21 @@ saveGetUnitFrame = lib.GetUnitFrame
 lib.GetFrame = lib.GetUnitFrame -- compatibility
 
 -- nameplates
-function lib.GetUnitNameplate(unit)
-  if not unit then
+function lib.GetUnitNameplate(unit, nameplateFrame)
+  if not unit and not nameplateFrame then
     return
   end
-  local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
+  local nameplate = not nameplateFrame and C_NamePlate.GetNamePlateForUnit(unit) or nameplateFrame
   if nameplate then
     -- credit to Exality for https://wago.io/explosiveorbs
     if nameplate.UnitFrame and nameplate.UnitFrame.Health then
       -- ElvUI Bunny
       return nameplate.UnitFrame.Health:IsShown() and nameplate.UnitFrame.Health
-          or nameplate.UnitFrame.Name:IsShown() and nameplate.UnitFrame.Name
           or nameplate
 
     elseif nameplate.unitFrame and nameplate.unitFrame.Health then
       -- ElvUI Crum
       return nameplate.unitFrame.Health:IsShown() and nameplate.unitFrame.Health
-          or nameplate.unitFrame.Name and nameplate.unitFrame.Name:IsShown() and nameplate.unitFrame.Name
           or nameplate
 
     elseif nameplate.unitFramePlater and nameplate.unitFramePlater.healthBar then

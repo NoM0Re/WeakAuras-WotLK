@@ -170,16 +170,11 @@ local function createOptions(id, data)
       width = WeakAuras.normalWidth,
       name = L["Group by Frame"],
       order = 1.6,
-      values = function()
-        local v = {
-          ["UNITFRAME"] = L["Unit Frames"],
-          ["CUSTOM"] = L["Custom Frames"]
-        }
-        if WeakAuras.IsAwesomeEnabled() then
-          v["NAMEPLATE"] = L["Nameplates"]
-        end
-        return v
-      end,
+      values = {
+        ["UNITFRAME"] = L["Unit Frames"],
+        ["NAMEPLATE"] = L["Nameplates"],
+        ["CUSTOM"] = L["Custom Frames"],
+      },
       hidden = function() return data.grow == "CUSTOM" end,
       disabled = function() return not data.useAnchorPerUnit end
     },

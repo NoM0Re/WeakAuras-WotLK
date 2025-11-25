@@ -3892,6 +3892,9 @@ do
   local resultNameplates = {}
   function WeakAuras.GetUnitNameplate(name, results)
     if not name or name == "" then return end
+    if UnitExists(name) then
+      name = UnitName(name)
+    end
     results = results or resultNameplates
     wipe(results)
     for frame, nameplateName in pairs(visibleNameplates) do
@@ -3906,8 +3909,8 @@ do
     if not(watchNameplates) then
       watchNameplates = CreateFrame("Frame")
       Private.frames["Watch NamePlates Frames"] = watchNameplates
+      watchNameplates:SetScript("OnUpdate", nameplatesUpdate)
     end
-    watchNameplates:SetScript("OnUpdate", nameplatesUpdate)
   end
 end
 
