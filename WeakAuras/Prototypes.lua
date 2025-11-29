@@ -7876,6 +7876,19 @@ Private.event_prototypes = {
         name = "defensiveStatsHeader",
         display = L["Defensive Stats"],
       },
+
+      {
+        name = "defense",
+        display = L["Defense"],
+        type = "number",
+        init = "UnitDefense('player') + select(2, UnitDefense('player'))",
+        store = true,
+        conditionType = "number",
+        multiEntry = {
+          operator = "and",
+          limit = 2
+        },
+      },
       {
         name = "dodgerating",
         display = L["Dodge Rating"],
