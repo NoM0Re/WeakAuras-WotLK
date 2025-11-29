@@ -16,7 +16,7 @@ local default = function(parentType)
     model_z = 0,
     rotation = 0,
 
-    model_path = "Environments/Stars/NexusRaid_RuneEffects_Nebula.m2",
+    model_path = "Creature/Arthaslichking/arthaslichking.m2",
     bar_model_clip = true
   }
 end
