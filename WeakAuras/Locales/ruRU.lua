@@ -127,6 +127,10 @@ Last upgrade: %s]=] ] = [=[Вы уверены, что хотите запуст
 L["Arena"] = "Арена"
 L["Armor (%)"] = "Броня (%)"
 L["Armor against Target (%)"] = "Броня против текущей цели (%)"
+--[[Translation missing --]]
+L["Armor Peneration Percent"] = "Armor Peneration Percent"
+--[[Translation missing --]]
+L["Armor Peneration Rating"] = "Armor Peneration Rating"
 L["Armor Rating"] = "Показатель брони"
 L["Array"] = "Массив"
 L["Ascending"] = "По возрастанию"
@@ -399,6 +403,8 @@ L["Debuff Type"] = "Тип дебаффа"
 L["Debug Log contains more than 1000 entries"] = "Журнал отладки содержит более 1000 записей."
 L["Debug Logging enabled"] = "Ведение журнала отладки включено"
 L["Debug Logging enabled for '%s'"] = "Ведение журнала отладки включено для индикации %s."
+--[[Translation missing --]]
+L["Defense"] = "Defense"
 L["Defensive Stats"] = "Защитная характеристика"
 L["Deflect"] = "Отклонение"
 L["Delve"] = "Вылазка"
@@ -676,8 +682,8 @@ L["Hybrid"] = "Гибридная"
 L["Icon"] = "Иконка"
 L["Icon Function"] = "Функция иконки"
 L["Icon Function (fallback state)"] = "Функция иконки (резервное состояние)"
-L["ID"] = "ID"
 L["Id"] = "ID"
+L["ID"] = "ID"
 L["If you require additional assistance, please open a ticket on GitHub or visit our Discord at https://discord.gg/weakauras!"] = "Если вам необходима дополнительная помощь, пожалуйста, откройте запрос на GitHub или посетите наш сервер в Discord по адресу https://discord.gg/weakauras."
 L["Ignore Dead"] = "Не учитывать мёртвые цели"
 L["Ignore Disconnected"] = "Не учитывать игроков не в сети"
@@ -798,6 +804,8 @@ L["Loot Specialization"] = "Специализация добычи"
 L["Loot Specialization Id"] = "Идентификатор специализации добычи"
 L["Loot Specialization Name"] = "Название специализации добычи"
 --[[Translation missing --]]
+L["Lord Kazzak"] = "Lord Kazzak"
+--[[Translation missing --]]
 L["Lorewalking"] = "Lorewalking"
 L["Lost"] = "Израсходован"
 L["Low Damage"] = "Незначительный урон"
@@ -832,9 +840,9 @@ L[ [=[Matches stage number of encounter journal.
 Intermissions are .5
 E.g. 1;2;1;2;2.5;3]=] ] = [=[Совпадает с номером фазы в журнале сражения с боссом. Смена фаз нумеруется как x.5
 Например: 1, 2, 1, 2, 2.5, 3.]=]
+L["Max Char "] = "Макс. количество символов"
 --[[Translation missing --]]
 L["Max Char"] = "Max Char"
-L["Max Char "] = "Макс. количество символов"
 L["Max Charges"] = "Макс. количество зарядов"
 L["Max Health"] = "Макс. запас здоровья"
 L["Max Power"] = "Макс. запас энергии"
@@ -1071,8 +1079,10 @@ L["Progress Value"] = "Текущее значение"
 L["Pull"] = "Pull"
 L["Pulse"] = "Пульсация"
 L["PvP Flagged"] = "В режиме PvP"
-L["PvP Talent Selected"] = "PvP талант выбран"
+--[[Translation missing --]]
+L["PvP Mode Active"] = "PvP Mode Active"
 L["PvP Talent selected"] = "PvP талант выбран"
+L["PvP Talent Selected"] = "PvP талант выбран"
 L["Quality Id"] = "ID качества"
 L["Quantity"] = "Количество"
 L["Quantity earned this week"] = "Заработано на этой неделе"

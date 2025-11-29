@@ -795,6 +795,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = [=[La duración de la animación en segundos. La animación de finalización no comienza a reproducirse hasta que la visualización normalmente estaría oculta.
 ]=]
 	L["The group and all direct children will share the same base frame level."] = "El grupo y todos los hijos directos compartirán el mismo nivel de marco base."
+	--[[Translation missing --]]
+	L["The Multi Target mode is less reliable and not recommended."] = "The Multi Target mode is less reliable and not recommended."
+	--[[Translation missing --]]
+	L["The Multi Target mode requires a name or spell id filter"] = "The Multi Target mode requires a name or spell id filter"
 	L["The trigger number is optional. When no trigger number is specified, the trigger selected via dynamic information will be used."] = "El número de disparador es opcional. Cuando no se especifica un número de disparador, se usará el disparador seleccionado a través de información dinámica."
 	L["The type of trigger"] = "El tipo de activador"
 	L["The WeakAuras Options Addon version %s doesn't match the WeakAuras version %s. If you updated the addon while the game was running, try restarting World of Warcraft. Otherwise try reinstalling WeakAuras"] = "La versión del addon WeakAuras Options %s no coincide con la versión de WeakAuras %s. Si actualizaste el addon mientras el juego estaba en ejecución, intenta reiniciar World of Warcraft. De lo contrario, intenta reinstalar WeakAuras."
@@ -866,8 +870,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Url: %s"] = "URL: %s"
 	L["Use Display Info Id"] = "Utilizar ID de información de la visualización"
 	L["Use SetTransform"] = "Utilizar SetTransform"
-	L["Used in auras:"] = "Utilizado en auras:"
 	L["Used in Auras:"] = "Utilizado en auras:"
+	L["Used in auras:"] = "Utilizado en auras:"
 	L["Uses Texture Coordinates to rotate the texture."] = "Utiliza coordenadas de textura para rotar la textura."
 	L["Uses UnitIsVisible() to check if game client has loaded a object for this unit. This distance is around 100 yards. This is polled every second."] = "Utiliza UnitIsVisible() para comprobar si el cliente del juego ha cargado un objeto para esta unidad. Esta distancia es de unos 100 metros. Esto se encuesta cada segundo."
 	L["Value"] = "Valor"

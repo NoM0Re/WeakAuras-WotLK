@@ -143,8 +143,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Modo de anclaje"
 	L["Anchor Point"] = "Punto de anclaje"
 	L["Anchored To"] = "Anclado a"
-	L["and"] = "y"
 	L["And "] = "y"
+	L["and"] = "y"
 	L["and %s"] = "y %s"
 	L["and aligned left"] = "y alineado a la izquierda"
 	L["and aligned right"] = "y alineado a la derecha"
@@ -795,6 +795,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = [=[La duración de la animación en segundos. La animación de finalización no comienza a reproducirse hasta que la visualización normalmente estaría oculta.
 ]=]
 	L["The group and all direct children will share the same base frame level."] = "El grupo y todos los hijos directos compartirán el mismo nivel de marco base."
+	--[[Translation missing --]]
+	L["The Multi Target mode is less reliable and not recommended."] = "The Multi Target mode is less reliable and not recommended."
+	--[[Translation missing --]]
+	L["The Multi Target mode requires a name or spell id filter"] = "The Multi Target mode requires a name or spell id filter"
 	L["The trigger number is optional. When no trigger number is specified, the trigger selected via dynamic information will be used."] = "El número de disparador es opcional. Cuando no se especifica un número de disparador, se usará el disparador seleccionado a través de información dinámica."
 	L["The type of trigger"] = "El tipo de activador"
 	L["The WeakAuras Options Addon version %s doesn't match the WeakAuras version %s. If you updated the addon while the game was running, try restarting World of Warcraft. Otherwise try reinstalling WeakAuras"] = "La versión del addon WeakAuras Options %s no coincide con la versión de WeakAuras %s. Si actualizaste el addon mientras el juego estaba en ejecución, intenta reiniciar World of Warcraft. De lo contrario, intenta reinstalar WeakAuras."

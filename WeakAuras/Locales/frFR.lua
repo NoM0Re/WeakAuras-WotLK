@@ -129,6 +129,10 @@ Last upgrade: %s]=] ] = "Êtes-vous sûr de vouloir exécuter l'outil de répara
 L["Arena"] = "Arène"
 L["Armor (%)"] = "Armure (%)"
 L["Armor against Target (%)"] = "Armure contre Cible (%)"
+--[[Translation missing --]]
+L["Armor Peneration Percent"] = "Armor Peneration Percent"
+--[[Translation missing --]]
+L["Armor Peneration Rating"] = "Armor Peneration Rating"
 L["Armor Rating"] = "Categorie d'armure"
 L["Array"] = "Tableau"
 L["Ascending"] = "Croissant"
@@ -484,6 +488,8 @@ L["Debug Log contains more than 1000 entries"] = "Debug Log contains more than 1
 L["Debug Logging enabled"] = "Debug Logging enabled"
 --[[Translation missing --]]
 L["Debug Logging enabled for '%s'"] = "Debug Logging enabled for '%s'"
+--[[Translation missing --]]
+L["Defense"] = "Defense"
 --[[Translation missing --]]
 L["Defensive Stats"] = "Defensive Stats"
 L["Deflect"] = "Déviation"
@@ -1058,6 +1064,8 @@ L["Loot Specialization Id"] = "Loot Specialization Id"
 --[[Translation missing --]]
 L["Loot Specialization Name"] = "Loot Specialization Name"
 --[[Translation missing --]]
+L["Lord Kazzak"] = "Lord Kazzak"
+--[[Translation missing --]]
 L["Lorewalking"] = "Lorewalking"
 L["Lost"] = "Perdu"
 L["Low Damage"] = "Dégâts faibles"
@@ -1436,8 +1444,10 @@ L["Pull"] = "Pull"
 L["Pulse"] = "Pulsation"
 L["PvP Flagged"] = "JcJ activé"
 --[[Translation missing --]]
-L["PvP Talent Selected"] = "PvP Talent Selected"
+L["PvP Mode Active"] = "PvP Mode Active"
 L["PvP Talent selected"] = "Talent JcJ sélectionné"
+--[[Translation missing --]]
+L["PvP Talent Selected"] = "PvP Talent Selected"
 --[[Translation missing --]]
 L["Quality Id"] = "Quality Id"
 --[[Translation missing --]]
@@ -1838,8 +1848,8 @@ L["Talent |cFFFF0000Not|r Known"] = "Talent |cFFFF0000Not|r Known"
 L["Talent |cFFFF0000Not|r Selected"] = "Talent |cFFFF0000Not|r Selected"
 --[[Translation missing --]]
 L["Talent Known"] = "Talent Known"
-L["Talent selected"] = "Talent sélectionné"
 L["Talent Selected"] = "Talent sélectionné"
+L["Talent selected"] = "Talent sélectionné"
 L["Talent Specialization"] = "Spécialisation"
 L["Tanking And Highest"] = "Tank et le plus haut"
 L["Tanking But Not Highest"] = "Tank mais pas le plus haut"

@@ -147,8 +147,8 @@ Enable this setting if you want this timer to be hidden, or when using a WeakAur
 	L["Anchor Mode"] = "Mode d’ancrage"
 	L["Anchor Point"] = "Point d'ancrage"
 	L["Anchored To"] = "Ancré à"
-	L["and"] = "et"
 	L["And "] = "Et"
+	L["and"] = "et"
 	L["and %s"] = "et %s"
 	L["and aligned left"] = "et aligné à gauche"
 	L["and aligned right"] = "et aligné à droite"
@@ -1074,6 +1074,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = "La durée de l'animation en secondes. L'animation de fin ne commence qu'après le moment où l'affichage est normalement caché."
 	--[[Translation missing --]]
 	L["The group and all direct children will share the same base frame level."] = "The group and all direct children will share the same base frame level."
+	--[[Translation missing --]]
+	L["The Multi Target mode is less reliable and not recommended."] = "The Multi Target mode is less reliable and not recommended."
+	--[[Translation missing --]]
+	L["The Multi Target mode requires a name or spell id filter"] = "The Multi Target mode requires a name or spell id filter"
 	--[[Translation missing --]]
 	L["The trigger number is optional. When no trigger number is specified, the trigger selected via dynamic information will be used."] = "The trigger number is optional. When no trigger number is specified, the trigger selected via dynamic information will be used."
 	L["The type of trigger"] = "Le type de déclencheur"
