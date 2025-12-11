@@ -5247,8 +5247,11 @@ Private.event_prototypes = {
     force_events = "PLAYER_TALENT_UPDATE",
     name = L["Talent Known"],
     init = function(trigger)
-      local inverse = trigger.use_inverse
       local ret = {}
+      table.insert(ret, [[
+        local active = true
+        local activeName, activeIcon, _
+      ]])
       if (trigger.use_talent) then
         -- Single selection
         local index = trigger.talent and trigger.talent.single;
@@ -5257,7 +5260,7 @@ Private.event_prototypes = {
         table.insert(ret, ([[
           local tier = %s;
           local column = %s;
-          local active = false
+          active = false
           local name, icon, _, _, rank = GetTalentInfo(tier, column)
           if rank and rank > 0 then
             active = true;
@@ -5265,17 +5268,8 @@ Private.event_prototypes = {
             activeIcon = icon;
           end
         ]]):format(tier or 0, column or 0))
-        if (inverse) then
-          table.insert(ret, [[
-            active = not (active);
-          ]])
-        end
       elseif (trigger.use_talent == false) then
         if (trigger.talent.multi) then
-          table.insert(ret, [[
-            local active = true
-            local activeIcon, activeName, _
-          ]])
           table.insert(ret, [[
             local tier
             local column
@@ -5284,22 +5278,15 @@ Private.event_prototypes = {
             local tier = index and ceil(index / MAX_NUM_TALENTS)
             local column = index and ((index - 1) % MAX_NUM_TALENTS + 1)
             table.insert(ret, ([[
-              if (not active) then
-                tier = %s
-                column = %s
-                local name, icon, _, _, rank = GetTalentInfo(tier, column)
-                if rank > 0 then
-                  active = true;
-                  activeName = name;
-                  activeIcon = icon;
-                end
+              tier = %s
+              column = %s
+              local shouldBeActive = %s
+              local rank
+              activeName, activeIcon, _, _, rank = GetTalentInfo(tier, column)
+              if ((rank and rank > 0) ~= shouldBeActive) then
+                active = false
               end
-            ]]):format(tier, column))
-          end
-          if (inverse) then
-            table.insert(ret, [[
-              active = not (active);
-            ]])
+            ]]):format(tier, column, value and "true" or "false"))
           end
         end
       end
@@ -5310,20 +5297,17 @@ Private.event_prototypes = {
         name = "talent",
         display = L["Talent"],
         type = "multiselect",
-        values = function(trigger)
+        values = function()
           local class = select(2, UnitClass("player"));
-          if Private.talent_types_specific and Private.talent_types_specific[class] then
-            return Private.talent_types_specific[class];
-          end
+          return Private.talentInfo[class]
         end,
+        multiUseControlWhenFalse = true,
+        multiAll = true,
+        multiNoSingle = true,
+        multiTristate = true, -- values can be true/false/nil
+        control = "WeakAurasMiniTalent",
         test = "active",
-        reloadOptions = true,
-      },
-      {
-        name = "inverse",
-        display = L["Inverse"],
-        type = "toggle",
-        test = "true",
+        reloadOptions = true
       },
       {
         hidden = true,

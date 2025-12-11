@@ -1207,7 +1207,6 @@ function HandleEvent(frame, event, arg1, arg2, ...)
   end
   if (event == "PLAYER_ENTERING_WORLD") then
     timer:ScheduleTimer(function()
-      Private.CreateTalentCache()
       WeakAuras.WatchForMounts()
       HandleEvent(frame, "WA_DELAYED_PLAYER_ENTERING_WORLD");
       Private.ScanForLoads(nil, "WA_DELAYED_PLAYER_ENTERING_WORLD")
