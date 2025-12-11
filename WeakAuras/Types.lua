@@ -1576,8 +1576,12 @@ function Private.ExecEnv.GetTotalCountCurrencies(currencyID)
 end
 
 local function InitializeCurrencies()
-  if Private.discovered_currencies and next(Private.discovered_currencies) then
-    return
+  if Private.discovered_currencies then
+    for key in pairs(Private.discovered_currencies) do
+      if key ~= "member" then
+        return
+      end
+    end
   end
   Private.discovered_currencies = {}
   Private.discovered_currencies_sorted = {}
