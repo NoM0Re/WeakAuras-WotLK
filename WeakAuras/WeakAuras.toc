@@ -39,6 +39,7 @@ Features.lua
 TimeMachine.lua
 Types_ClassicPlus.lua
 Types_TBC.lua
+Types_WrathReborn.lua
 Types_Wrath.lua
 Types.lua
 Prototypes.lua
