@@ -453,7 +453,7 @@ StaticPopupDialogs["WEAKAURAS_CONFIRM_DELETE"] = {
   showAlert = 1,
   whileDead = 1,
   timeout = 0,
-  preferredindex = STATICPOPUP_NUMDIALOGS,
+  preferredindex = 4,
 }
 
 function OptionsPrivate.IsWagoUpdateIgnored(auraId)
