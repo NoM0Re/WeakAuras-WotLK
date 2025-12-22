@@ -402,7 +402,7 @@ function OptionsPrivate.AddTriggerMetaFunctions(options, data, triggernum)
           showAlert = 1,
           whileDead = 1,
           timeout = 0,
-          preferredindex = STATICPOPUP_NUMDIALOGS,
+          preferredindex = 4,
         }
         triggerDeleteDialogOpen = true
         StaticPopup_Show("WEAKAURAS_CONFIRM_TRIGGER_DELETE")

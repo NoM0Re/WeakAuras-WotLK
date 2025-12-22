@@ -127,7 +127,6 @@ globals = {
 	"SlashCmdList",
 	"WA_SearchBoxTemplate_OnTextChanged",
 	"SmoothStatusBarMixin",
-	"STATICPOPUP_NUMDIALOGS",
 	"StaticPopup_Show",
 	"StaticPopupDialogs",
 	"TableHasAnyEntries",
