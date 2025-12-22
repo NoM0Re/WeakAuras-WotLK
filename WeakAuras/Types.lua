@@ -3867,6 +3867,9 @@ do
       }
     },
   }
+  if WeakAuras.IsClassicPlusOrTBC() then
+    classData.DEATHKNIGHT = nil
+  end
   -- Creates the options layout. Due to CUSTOM_CLASS_COLORS, it needs to be created dynamically.
   local function createSpecString(class, specID)
     local data = classData[class]
@@ -3878,10 +3881,11 @@ do
   end
 
   Private.spec_types_all = {}
-  Private.spec = {}
+  Private.specid_to_class = {}
   for class, data in pairs(classData) do
     for specID in pairs(data.specs) do
       Private.spec_types_all[specID] = createSpecString(class, specID)
+      Private.specid_to_class[specID] = class
     end
   end
   wipe(classData)

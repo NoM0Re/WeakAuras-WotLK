@@ -895,7 +895,11 @@ end
 
 local function valuesForTalentFunction(trigger)
   return function()
-    local single_class = Private.checkForSingleLoadCondition(trigger, "class")
+    local single_class =
+      Private.specid_to_class[
+        Private.checkForSingleLoadCondition(trigger, "class_and_spec") or ""
+      ]
+      or Private.checkForSingleLoadCondition(trigger, "class")
     if not single_class then
       single_class = select(2, UnitClass("player"));
     end
@@ -1030,19 +1034,19 @@ Private.load_prototype = {
       type = "description",
     },
     {
-      name = "class",
-      display = L["Player Class"],
-      type = "multiselect",
-      values = "class_types",
-      init = "arg"
-    },
-    {
       name = "class_and_spec",
       display = L["Class and Specialization"],
       type = "multiselect",
       values = "spec_types_all",
       test = "WeakAuras.CheckClassSpec(%s)",
       events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
+    },
+    {
+      name = "class",
+      display = L["Player Class"],
+      type = "multiselect",
+      values = "class_types",
+      init = "arg"
     },
     {
       name = "talent",
@@ -1061,10 +1065,13 @@ Private.load_prototype = {
       orConjunctionGroup = "talent",
       multiUseControlWhenFalse = true,
       enable = function(trigger)
-        return (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
+        return ( Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+            or Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
       end,
       hidden = function(trigger)
-        return not (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
+        return not (
+            Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+            or Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
       end,
     },
     {
@@ -1085,12 +1092,14 @@ Private.load_prototype = {
       multiUseControlWhenFalse = true,
       enable = function(trigger)
         return (trigger.use_talent ~= nil or trigger.use_talent2 ~= nil) and (
-          (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
+          Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+          or Private.checkForSingleLoadCondition(trigger, "class") ~= nil
         )
       end,
       hidden = function(trigger)
         return not((trigger.use_talent ~= nil or trigger.use_talent2 ~= nil) and (
-          (Private.checkForSingleLoadCondition(trigger, "class") ~= nil))
+          Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+          or Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
         )
       end,
     },
@@ -1112,12 +1121,14 @@ Private.load_prototype = {
       multiUseControlWhenFalse = true,
       enable = function(trigger)
         return ((trigger.use_talent ~= nil and trigger.use_talent2 ~= nil) or trigger.use_talent3 ~= nil) and (
-          (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
+          Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+          or Private.checkForSingleLoadCondition(trigger, "class") ~= nil
         )
       end,
       hidden = function(trigger)
         return not(((trigger.use_talent ~= nil and trigger.use_talent2 ~= nil) or trigger.use_talent3 ~= nil) and (
-          (Private.checkForSingleLoadCondition(trigger, "class") ~= nil)
+          Private.checkForSingleLoadCondition(trigger, "class_and_spec") ~= nil
+          or Private.checkForSingleLoadCondition(trigger, "class") ~= nil
         ))
       end
     },
