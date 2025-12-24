@@ -214,7 +214,7 @@ local function Constructor()
 	msgframe:SetBackdrop(ControlBackdrop)
 	msgframe:SetBackdropColor(0,0,0)
 	msgframe:SetFrameStrata("FULLSCREEN_DIALOG")
-	msgframe:SetFrameLevel(1000)
+	msgframe:SetFrameLevel(125)
 	msgframe:SetToplevel(true)
 
 	local msg = msgframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")

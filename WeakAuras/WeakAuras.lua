@@ -4132,6 +4132,7 @@ end
 
 Private.frameLevels = {};
 local function SetFrameLevel(id, frameLevel)
+  frameLevel = math.min(120, frameLevel)
   if (Private.frameLevels[id] == frameLevel) then
     return;
   end
