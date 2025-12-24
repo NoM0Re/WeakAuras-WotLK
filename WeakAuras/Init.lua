@@ -18,9 +18,7 @@ local isAwesomeEnabled = C_VoiceChat and C_VoiceChat.SpeakText and 2 -- TTS avai
 local isDBMRegistered = (DBM and type(DBM.Revision) == "number" and DBM.Revision >= 20250929200404) and true or false
 
 local flavor
-if time() < time{year=2025, month=12, day=22, hour=9, min=30} and (GetRealmName() == "Onyxia" or (GetRealmName() == "Blackrock [PvP only]" and GetExpansionLevel() == 1)) then
-  flavor = "TBC"
-elseif GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
+if GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
 elseif GetRealmName() == "Frostmourne" and (GetCVar("realmList") or ''):lower():find("stormforge") then
   flavor = "WrathReborn"
@@ -53,16 +51,8 @@ function WeakAuras.IsWrathReborn()
   return flavor == "WrathReborn"
 end
 
-function WeakAuras.IsTBC()
-  return flavor == "TBC"
-end
-
 function WeakAuras.IsClassicPlus()
   return flavor == "ClassicPlus"
-end
-
-function WeakAuras.IsClassicPlusOrTBC()
-  return WeakAuras.IsClassicPlus() or WeakAuras.IsTBC()
 end
 
 WeakAuras.prettyPrint = function(...)

@@ -1195,7 +1195,7 @@ WeakAuras.class_types = {}
 for i, class in ipairs(CLASS_SORT_ORDER) do
   WeakAuras.class_types[class] = WrapTextInColorCode(LOCALIZED_CLASS_NAMES_MALE[class], WA_GetClassColor(class))
 end
-if WeakAuras.IsClassicPlusOrTBC() then
+if WeakAuras.IsClassicPlus() then
   WeakAuras.class_types["DEATHKNIGHT"] = nil
 end
 
@@ -3867,7 +3867,7 @@ do
       }
     },
   }
-  if WeakAuras.IsClassicPlusOrTBC() then
+  if WeakAuras.IsClassicPlus() then
     classData.DEATHKNIGHT = nil
   end
   -- Creates the options layout. Due to CUSTOM_CLASS_COLORS, it needs to be created dynamically.
