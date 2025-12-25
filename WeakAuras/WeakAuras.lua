@@ -1240,7 +1240,7 @@ end
 local WeakAurasFrame = CreateFrame("Frame", "WeakAurasFrame", UIParent);
 Private.frames["WeakAuras Main Frame"] = WeakAurasFrame;
 WeakAurasFrame:SetAllPoints(UIParent);
-WeakAurasFrame:SetFrameStrata("BACKGROUND");
+WeakAurasFrame:SetFrameLevel(0)
 
 local loadedFrame = CreateFrame("Frame");
 Private.frames["Addon Initialization Handler"] = loadedFrame;
@@ -4130,56 +4130,55 @@ function Private.ValueToPath(data, path, value)
   end
 end
 
-Private.frameLevels = {};
+Private.frameLevels = {}
 local function SetFrameLevel(id, frameLevel)
   frameLevel = math.min(120, frameLevel)
-  if (Private.frameLevels[id] == frameLevel) then
-    return;
+  if Private.frameLevels[id] == frameLevel then
+    return
   end
-  if (Private.regions[id] and Private.regions[id].region) then
+  if Private.regions[id] and Private.regions[id].region then
     Private.ApplyFrameLevel(Private.regions[id].region, frameLevel)
   end
-  if (clones[id]) then
-    for i,v in pairs(clones[id]) do
+  if clones[id] then
+    for _, v in pairs(clones[id]) do
       Private.ApplyFrameLevel(v, frameLevel)
     end
   end
-  Private.frameLevels[id] = frameLevel;
+  Private.frameLevels[id] = frameLevel
 end
 
-local function FixGroupChildrenOrderImpl(data, frameLevel)
+-- DepthBasedFrameLevels:
+-- Root Group (0)
+-- ├─ Aura (4)
+-- ├─ Child Group (4)
+-- │  ├─ Aura (8)
+-- │  └─ Aura (8)
+-- Root Aura (0)
+local function ApplyDepthBasedFrameLevels(data, depth)
+  local frameLevel = depth * 4
   SetFrameLevel(data.id, frameLevel)
-  local offset
-  if data.sharedFrameLevel then
-    offset = 0
-  else
-    offset = 4
+
+  if not data.controlledChildren then
+    return
   end
+
   for _, childId in ipairs(data.controlledChildren) do
     local childData = WeakAuras.GetData(childId)
-    if childData.regionType ~= "group" and childData.regionType ~= "dynamicgroup" then
-      frameLevel = frameLevel + offset
-      SetFrameLevel(childId, frameLevel)
-    else
-      frameLevel = frameLevel + offset
-      local endFrameLevel = FixGroupChildrenOrderImpl(childData, frameLevel)
-      if not data.sharedFrameLevel then
-        frameLevel = endFrameLevel
-      end
+    if childData then
+      ApplyDepthBasedFrameLevels(childData, depth + 1)
     end
   end
-  return frameLevel
 end
 
 function Private.FixGroupChildrenOrderForGroup(data)
   if data.parent then
     return
   end
-  FixGroupChildrenOrderImpl(data, 0)
+  ApplyDepthBasedFrameLevels(data, 0)
 end
 
 local function GetFrameLevelFor(id)
-  return Private.frameLevels[id] or 5;
+  return Private.frameLevels[id] or 5
 end
 
 function Private.ApplyFrameLevel(region, frameLevel)

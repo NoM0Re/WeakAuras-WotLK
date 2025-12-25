@@ -41,7 +41,8 @@ local default = {
   centerType = "LR",
   gridWidth = 5,
   rowSpace = 1,
-  columnSpace = 1
+  columnSpace = 1,
+  sharedFrameLevel = true, -- true to ensure identical behavior on newer clients
 }
 
 Private.regionPrototype.AddAlphaToDefault(default);

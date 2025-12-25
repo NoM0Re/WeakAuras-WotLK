@@ -563,12 +563,11 @@ local function createOptions(id, data)
       name = L["Flat Framelevels"],
       desc = L["The group and all direct children will share the same base frame level."],
       order = 30,
-      set = function(info, v)
-        data.sharedFrameLevel = v
-        WeakAuras.Add(data)
-        for parent in OptionsPrivate.Private.TraverseParents(data) do
-          WeakAuras.Add(parent)
-        end
+      get = function()
+        return true
+      end,
+      set = function()
+        -- Frame levels are flattened by default and cannot be changed on this version
       end
     },
     endHeader = {

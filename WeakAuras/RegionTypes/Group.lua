@@ -21,6 +21,7 @@ local default = {
   borderSize = 2,
   borderBackdrop = "Blizzard Tooltip",
   scale = 1,
+  sharedFrameLevel = true, -- true to ensure identical behavior on newer clients
 };
 
 Private.regionPrototype.AddAlphaToDefault(default);
