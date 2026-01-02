@@ -573,9 +573,29 @@ do
 				self:SetPropagateKeyboardInput(true)
 			end
 		end)
-
+		-- Background (Retail - Center slice (DialogBorderOpaqueTemplate))
+		local bg = CreateFrame("Frame", nil, frame)
+		bg:SetAllPoints(frame)
+		bg:SetFrameLevel(frame:GetFrameLevel() - 2)
+		bg:SetBackdrop({
+			bgFile = "Interface\\Buttons\\WHITE8x8",
+		})
+		bg:SetBackdropColor(0, 0, 0, 1)
+		bg:SetPoint("TOPLEFT", frame, 10, -11)
+		bg:SetPoint("BOTTOMRIGHT", frame, -11, 10)
+		frame.bg = bg
+		-- Border (Retail - NineSlice border pieces (DialogBorderOpaqueTemplate))
 		local border = CreateFrame("Frame", nil, frame)
 		border:SetAllPoints(frame)
+		border:SetFrameLevel(frame:GetFrameLevel() - 1)
+		border:SetBackdrop({
+			edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+			edgeSize = 32,
+			insets = { left = 11, right = 12, top = 12, bottom = 11 },
+		})
+		border:SetBackdropBorderColor(1, 1, 1, 1)
+		frame.border = border
+
 		frame.realSetFrameStrata = frame.SetFrameStrata
 		frame.realSetFrameLevel = frame.SetFrameLevel
 		frame.SetFrameStrata = function() end -- frame:SetFixedFrameStrata(true)
