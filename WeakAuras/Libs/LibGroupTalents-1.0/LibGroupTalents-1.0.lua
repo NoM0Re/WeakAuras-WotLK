@@ -1,6 +1,6 @@
 --[[
 Name: LibGroupTalents-1.0
-Revision: $Rev: 55 $
+Revision: $Rev: 56 $
 Author: Zek
 Documentation: http://wowace.com/wiki/LibGroupTalents-1.0
 SVN: svn://svn.wowace.com/wow/libgrouptalents-1-0/mainline/trunk
@@ -66,7 +66,7 @@ Events:
 
 local TalentQuery = LibStub("LibTalentQuery-1.0")
 
-local MAJOR, MINOR = "LibGroupTalents-1.0", tonumber(("$Rev: 55 $"):match("(%d+)"))
+local MAJOR, MINOR = "LibGroupTalents-1.0", tonumber(("$Rev: 56 $"):match("(%d+)"))
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -305,8 +305,11 @@ end
 
 -- UNIT_AURA
 function lib:UNIT_AURA(unit)
+	if not unit then
+		return
+	end
 	local guid = UnitGUID(unit)
-	if (not UnitIsVisible(unit) or (self.wasOffline and self.wasOffline[guid])) then
+	if (not UnitIsVisible(unit) or (self.wasOffline and self.wasOffline[guid or ""])) then
 		if (not self.outOfSight) then
 			self.outOfSight = {}
 		end
