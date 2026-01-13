@@ -20,7 +20,7 @@ local isDBMRegistered = (DBM and type(DBM.Revision) == "number" and DBM.Revision
 local flavor
 if GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
-elseif GetRealmName() == "Frostmourne" and (GetCVar("realmList") or ''):lower():find("stormforge") then
+elseif GetRealmName():find("Frostmourne", 1, true) and ((GetCVar("realmList") or ""):lower():find("stormforge", 1, true)) then
   flavor = "WrathReborn"
 else
   flavor = "Wrath"
