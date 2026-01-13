@@ -908,6 +908,10 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["We thank"] = "我們感謝"
 	L["WeakAuras %s on WoW %s"] = "WeakAuras %s 在 WoW %s"
 	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras 建議使用法術ID而不是名稱。法術ID會自動本地化。"
+	--[[Translation missing --]]
+	L[ [=[WeakAuras will not support Midnight. On release of the prepatch, WeakAuras will be disabled.
+Read more on our Patreon page https://patreon.com/WeakAuras]=] ] = [=[WeakAuras will not support Midnight. On release of the prepatch, WeakAuras will be disabled.
+Read more on our Patreon page https://patreon.com/WeakAuras]=]
 	L["What do you want to do?"] = "你想要怎麼做?"
 	L["Whole Area"] = "整個區域"
 	L["wrapping"] = "自動換行"

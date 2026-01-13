@@ -23,10 +23,8 @@ local UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
   = UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
 local SendChatMessage, UnitInBattleground
   = SendChatMessage, UnitInBattleground
-local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop
-  = GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop
-local GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS, MAX_BOSS_FRAMES
-  = GetNumTalentTabs, GetNumTalents, MAX_NUM_TALENTS or 40, MAX_BOSS_FRAMES or 5
+local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES
+  = GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES or 5
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
   = CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
 local debugstack, wipe, GetSpellInfo = debugstack, wipe, GetSpellInfo
@@ -42,7 +40,7 @@ LibStub("AceTimer-3.0"):Embed(WeakAurasTimers)
 
 WeakAuras.LGT = LibStub("LibGroupTalents-1.0") or {
   GetUnitTalentSpec = function(_) end,
-  GetUnitRole = function(_) end
+  GetUnitRole = function(_) end,
 }
 
 Private.maxTimerDuration = 604800; -- A week, in seconds

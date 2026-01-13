@@ -4,50 +4,48 @@ local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
 OptionsPrivate.changelog = {
-  versionString = '5.20.7',
-  dateString = '2025-11-27',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.6...5.20.7',
+  versionString = '5.21.0',
+  dateString = '2026-01-12',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.20.7...5.21.0',
   highlightText = [==[
-- Basic support for Wrath Titan (thanks WoW CN community)
-- Support for new Masque version
-- Various bug fixes]==],  commitText = [==[Copilot (1):
+- TBC Anniversary support
+- Fixes for Titan realms
+- Improvements for Masque support
+- Deprecation warning for Midnight]==],  commitText = [==[InfusOnWoW (2):
 
-- Fix allstates:Get to return false instead of nil
-
-InfusOnWoW (6):
-
-- Masque Support: Support new masque version
-- Profiling: Add an inherit font
-- BT Multi Target mode: add warnings on it, and if it's missing a filter
-- Update Discord List
-- Fix regression in Abbreviate numbers on retail
+- Add a warning to the WeakAuras window about Midnight (#6126)
 - Update Discord List
 
 NoM0Re (6):
 
-- Titan: Replace encounter data with phase 1 raids & bosses
-- Titan: remove neutral faction group
-- Titan: fix repair dialog text assignment
-- Glyph Load: Only show in Mists of Pandaria
-- Remove atlas file from Wrath Titan Reforge
-- Add Wrath Titan Reforged support
+- TBC Anniversary support
+- Retail: TOC Bump
+- Mists: TOC Bump
+- Titan: remove unused talent_types_specific
+- MiniTalent: fix closing the widget after selecting a talent
+- Titan: Raid Launch Fixes
 
-Stanzilla (4):
+Stanzilla (2):
 
 - Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
-- Update WeakAurasModelPaths from wago.tools
+- Update Discord List
 
-dependabot[bot] (2):
+StormFX (1):
 
-- Bump actions/checkout from 5 to 6
-- Bump actions/upload-artifact from 4 to 5
+- Fix Masque glow support. (Closes #6098)
 
-mrbuds (2):
+dependabot[bot] (5):
 
-- Remove atlas files
-- Model's Icon set to sword guy on classic, fixes #6075
+- Bump actions/upload-artifact from 5 to 6
+- Bump peter-evans/create-pull-request from 7 to 8
+- Bump leafo/gh-actions-luarocks from 5 to 6
+- Bump cbrgm/mastodon-github-action from 2.1.19 to 2.1.22
+- Bump peter-evans/create-pull-request from 6 to 7
+
+github-actions[bot] (2):
+
+- Update WeakAurasModelPaths from wago.tools (#6130)
+- Update WeakAurasModelPaths from wago.tools (#6121)
 
 ]==]
 }

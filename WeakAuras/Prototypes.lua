@@ -11,7 +11,7 @@ local ceil = ceil
 -- WoW APIs
 local GetTalentInfo = GetTalentInfo
 local UnitClass = UnitClass
-local GetSpellInfo, GetItemInfo, GetItemCount, GetItemIcon = GetSpellInfo, GetItemInfo, GetItemCount, GetItemIcon
+local GetSpellInfo, GetItemInfo, GetItemIcon = GetSpellInfo, GetItemInfo, GetItemIcon
 local GetShapeshiftFormInfo, GetShapeshiftForm = GetShapeshiftFormInfo, GetShapeshiftForm
 local GetRuneCooldown, UnitCastingInfo, UnitChannelInfo = GetRuneCooldown, UnitCastingInfo, UnitChannelInfo
 local UnitDetailedThreatSituation = UnitDetailedThreatSituation
@@ -84,6 +84,9 @@ function WeakAuras.UnitDetailedThreatSituation(unit1, unit2)
     return aggro, status, threatpct, rawthreatpct, threatvalue
   end
 end
+
+WeakAuras.UnitCastingInfo = UnitCastingInfo
+WeakAuras.UnitChannelInfo = UnitChannelInfo
 
 local constants = {
   nameRealmFilterDesc = L[" Filter formats: 'Name', 'Name-Realm', '-Realm'. \n\nSupports multiple entries, separated by commas\nCan use \\ to escape -."],
@@ -572,7 +575,7 @@ function WeakAuras.CheckTalentByIndex(index, extraOption)
     else
       -- Talent doesn't exist; ignore it
       -- Should be cleared if missing, but struc doesn't exist yet
-      return true
+      return extraOption ~= 5
     end
   end
   local result = rank and rank > 0
@@ -1150,7 +1153,7 @@ Private.load_prototype = {
       display = L["Spell Known"],
       type = "spell",
       test = "WeakAuras.IsSpellKnownForLoad(%s, %s)",
-      events = {"SPELLS_CHANGED", "UNIT_PET"},
+      events = {"SPELLS_CHANGED", "UNIT_PET", "PLAYER_TALENT_UPDATE"},
       showExactOption = true
     },
     {
@@ -1158,7 +1161,7 @@ Private.load_prototype = {
       display = WeakAuras.newFeatureString .. L["|cFFFF0000Not|r Spell Known"],
       type = "spell",
       test = "not WeakAuras.IsSpellKnownForLoad(%s, %s)",
-      events = {"SPELLS_CHANGED", "UNIT_PET"},
+      events = {"SPELLS_CHANGED", "UNIT_PET", "PLAYER_TALENT_UPDATE"},
       showExactOption = true
     },
     {
@@ -8000,6 +8003,10 @@ Private.event_prototypes = {
       if trigger.use_pvpflagged ~= nil or trigger.use_afk ~= nil then
         tinsert(events, "PLAYER_FLAGS_CHANGED")
       end
+      if trigger.use_pvpflagged ~= nil then
+        tinsert(events, "UNIT_FACTION")
+        tinsert(events, "ZONE_CHANGED")
+      end
       if trigger.use_alive ~= nil then
         tinsert(events, "PLAYER_DEAD")
         tinsert(events, "PLAYER_ALIVE")
@@ -8091,7 +8098,7 @@ Private.event_prototypes = {
         name = "pvpflagged",
         display = L["PvP Flagged"],
         type = "tristate",
-        init = "UnitIsPVP('player')",
+        init = "UnitIsPVP('player') or UnitIsPVPFreeForAll('player')",
       },
       {
         name = "alive",
