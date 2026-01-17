@@ -21,8 +21,8 @@ local UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
   = UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
 local UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
   = UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
-local SendChatMessage, UnitInBattleground
-  = SendChatMessage, UnitInBattleground
+local SendChatMessage, UnitInBattleground, GetZoneText
+  = SendChatMessage, UnitInBattleground, GetZoneText
 local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES
   = GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES or 5
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
@@ -2511,6 +2511,55 @@ function Private.AddMany(tbl, takeSnapshots)
     end
     coroutine.yield(1000, "addmany reload dynamic group");
   end
+end
+
+do
+  local function FixGroupChildren()
+    for id, data in pairs(Private.regions) do
+      if data
+      and data.regionType == "dynamicgroup"
+      and data.region
+      and data.region.ReloadControlledChildren
+      then
+        data.region:ReloadControlledChildren()
+      end
+    end
+  end
+
+  -- Fix GroupChildren on real login (super safe mode)
+  local f = CreateFrame("Frame")
+  f.elapsed = 0
+  f.done = false
+
+  f:RegisterEvent("PLAYER_ENTERING_WORLD")
+  f:SetScript("OnEvent", function(self)
+    if self.done then
+      return
+    end
+
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+
+    self:SetScript("OnUpdate", function(self, elapsed)
+      if self.done then
+        return
+      end
+
+      self.elapsed = self.elapsed + elapsed
+
+      if GetZoneText() ~= "" then
+        self.done = true
+        self:SetScript("OnUpdate", nil)
+        FixGroupChildren()
+        return
+      end
+
+      if self.elapsed > 30 then
+        self.done = true
+        self:SetScript("OnUpdate", nil)
+        FixGroupChildren()
+      end
+    end)
+  end)
 end
 
 local function customOptionIsValid(option)
