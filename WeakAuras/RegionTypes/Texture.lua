@@ -11,6 +11,7 @@ local default = {
   height = 200,
   color = {1, 1, 1, 1},
   blendMode = "BLEND",
+  textureWrapMode = "CLAMPTOBLACKADDITIVE",
   rotation = 0,
   mirror = false,
   rotate = false,

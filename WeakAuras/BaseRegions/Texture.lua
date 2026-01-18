@@ -99,18 +99,35 @@ local funcs = {
   end
 }
 
+local function setDesaturated(self, desaturated, ...)
+  self.isDesaturated = desaturated and 1 or 0
+  return self._SetDesaturated(self, desaturated, ...)
+end
+
+local function setTexture(self, ...)
+  local apply = self._SetTexture(self, ...)
+  if self.isDesaturated ~= nil then
+    self._SetDesaturated(self, self.isDesaturated == 1)
+  end
+  return apply
+end
+
 function Private.TextureBase.create(frame)
-    local base = {}
+  local base = {}
 
-    for funcName, func in pairs(funcs) do
-      base[funcName] = func
-    end
+  for funcName, func in pairs(funcs) do
+    base[funcName] = func
+  end
 
-    local texture = frame:CreateTexture()
+  local texture = frame:CreateTexture()
+  texture._SetDesaturated = texture.SetDesaturated
+  texture._SetTexture     = texture.SetTexture
+  texture.SetDesaturated = setDesaturated
+  texture.SetTexture     = setTexture
 
-    base.texture = texture
+  base.texture = texture
 
-    return base
+  return base
 end
 
 function Private.TextureBase.modify(base, options)
