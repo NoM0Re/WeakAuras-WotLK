@@ -1,5 +1,5 @@
 local MAJOR_VERSION = "LibGetFrame-1.0"
-local MINOR_VERSION = 63
+local MINOR_VERSION = 69
 if not LibStub then
   error(MAJOR_VERSION .. " requires LibStub.")
 end
@@ -8,19 +8,58 @@ if not lib then
   return
 end
 
-lib.timer = lib.timer or LibStub("AceTimer-3.0")
-if not lib.timer then
-  error(MAJOR_VERSION .. " requires AceTimer-3.0.")
-end
-
 lib.callbacks = lib.callbacks or LibStub("CallbackHandler-1.0"):New(lib)
 local callbacks = lib.callbacks
 
 local GetPlayerInfoByGUID, UnitExists, UnitIsUnit, SecureButton_GetUnit, IsAddOnLoaded  =
   GetPlayerInfoByGUID, UnitExists, UnitIsUnit, SecureButton_GetUnit, IsAddOnLoaded
-local tinsert, CopyTable, wipe = tinsert, CopyTable, wipe
+local tinsert, CopyTable, max, wipe = tinsert, CopyTable, math.max, wipe
 
-function lib.Mixin(object, ...)
+-- C_Timer mimik
+local C_Timer
+do
+  local Timer = {}
+  C_Timer = Timer
+
+  local timers = {}
+  local timerCount = 0
+
+  local frame = CreateFrame("Frame")
+  frame:Hide()
+
+  local function OnUpdate(self, elapsed)
+    for i = timerCount, 1, -1 do
+      local t = timers[i]
+      t.remaining = t.remaining - elapsed
+      if t.remaining <= 0 then
+        timers[i] = timers[timerCount]
+        timers[timerCount] = nil
+        timerCount = timerCount - 1
+
+        local cb = t.callback
+        t.callback = nil
+        cb()
+      end
+    end
+
+    if timerCount == 0 then
+      self:Hide()
+    end
+  end
+
+  function C_Timer.After(delay, callback)
+    timerCount = timerCount + 1
+    timers[timerCount] = {
+      remaining = max(0.01, delay),
+      callback  = callback,
+    }
+
+    frame:Show()
+  end
+  frame:SetScript("OnUpdate", OnUpdate)
+end
+
+local function Mixin(object, ...)
 	for i = 1, select("#", ...) do
 		local mixin = select(i, ...);
 		for k, v in pairs(mixin) do
@@ -57,25 +96,35 @@ local defaultFramePriorities = {
   "^LUFHeaderraid", -- luf
   "^AshToAshUnit%d+Unit%d+", -- AshToAsh
   "^Cell", -- Cell
+  "^XPerl_Raid_Grp", -- xperl
   -- party frames
   "^AleaUI_GroupHeader", -- Alea
-  "^SUFHeaderparty", -- suf
-  "^LUFHeaderparty", -- luf
+  "^SUFHeaderparty", --suf
+  "^LUFHeaderparty", --luf
   "^ElvUF_PartyGroup", -- elv
   "^oUF_.-Party", -- generic oUF
   "^PitBull4_Groups_Party", -- pitbull4
+  "^XPerl_party%d", -- xperl
   "^CompactRaid", -- blizz
   "^CompactParty", -- blizz
   "^PartyFrame", -- blizz
   "^PartyMemberFrame", -- blizz
+    -- boss frames
+  "^ElvUF_Boss%d$", -- elv
+  "^SUFHeaderbossUnitButton%d$", -- suf
+  "^LUFHeaderbossUnitButton%d$", -- luf
+  "^Boss%dTargetFrame$", -- blizz
+  "^UUF_Boss%d$", -- unhalted
   -- player frame
-  "^InvenUnitFrames_Player",
-  "^SUFUnitplayer",
-  "^LUFUnitplayer",
-  "^PitBull4_Frames_Player",
-  "^ElvUF_Player",
-  "^oUF_.-Player",
-  "^PlayerFrame",
+  "^InvenUnitFrames_Player$",
+  "^SUFUnitplayer$",
+  "^LUFUnitplayer$",
+  "^PitBull4_Frames_Player$",
+  "^ElvUF_Player$",
+  "^oUF_.-Player$",
+  "^XPerl_Player$",
+  "^UUF_Player$",
+  "^PlayerFrame$",
 }
 local getDefaultFramePriorities = function()
   return CopyTable(defaultFramePriorities)
@@ -83,50 +132,54 @@ end
 lib.getDefaultFramePriorities = getDefaultFramePriorities
 
 local defaultPlayerFrames = {
-  "^InvenUnitFrames_Player",
-  "SUFUnitplayer",
-  "LUFUnitplayer",
-  "PitBull4_Frames_Player",
-  "ElvUF_Player",
-  "oUF_.-Player",
-  "oUF_PlayerPlate",
-  "PlayerFrame",
+  "^InvenUnitFrames_Player$",
+  "^SUFUnitplayer$",
+  "^LUFUnitplayer$",
+  "^PitBull4_Frames_Player$",
+  "^ElvUF_Player$",
+  "^oUF_.-Player$",
+  "^oUF_PlayerPlate$",
+  "^XPerl_Player$",
+  "^UUF_Player$",
+  "^PlayerFrame$",
 }
 local getDefaultPlayerFrames = function()
   return CopyTable(defaultPlayerFrames)
 end
 lib.getDefaultPlayerFrames = getDefaultPlayerFrames
-
 local defaultTargetFrames = {
-  "^InvenUnitFrames_Target",
-  "SUFUnittarget",
-  "LUFUnittarget",
-  "PitBull4_Frames_Target",
-  "ElvUF_Target",
-  "oUF_.-Target",
-  "TargetFrame",
-  "^hbExtra_HealUnit",
+  "^InvenUnitFrames_Target$",
+  "^SUFUnittarget$",
+  "^LUFUnittarget$",
+  "^PitBull4_Frames_Target$",
+  "^ElvUF_Target$",
+  "^oUF_.-Target$",
+  "^TargetFrame$",
+  "^hbExtra_HealUnit$",
+  "^UUF_Target$",
+  "^XPerl_Target$"
 }
 local getDefaultTargetFrames = function()
   return CopyTable(defaultTargetFrames)
 end
 lib.getDefaultTargetFrames = getDefaultTargetFrames
-
 local defaultTargettargetFrames = {
-  "^InvenUnitFrames_TargetTarget",
-  "SUFUnittargetarget",
-  "LUFUnittargetarget",
-  "PitBull4_Frames_Target's target",
-  "ElvUF_TargetTarget",
-  "oUF_.-TargetTarget",
-  "oUF_ToT",
-  "TargetTargetFrame",
+  "^InvenUnitFrames_TargetTarget$",
+  "^SUFUnittargettarget$",
+  "^LUFUnittargettarget$",
+  "^PitBull4_Frames_Target's target$",
+  "^ElvUF_TargetTarget$",
+  "^oUF_.-TargetTarget$",
+  "^oUF_ToT$",
+  "^UUF_TargetTarget$",
+  "^TargetTargetFrame$",
+  "^XPerl_TargetTarget$",
+  "^TargetFrameToT$"
 }
 local getDefaultTargettargetFrames = function()
   return CopyTable(defaultTargettargetFrames)
 end
 lib.getDefaultTargettargetFrames = getDefaultTargettargetFrames
-
 local defaultPartyFrames = {
   "^InvenUnitFrames_Party%d",
   "^AleaUI_GroupHeader",
@@ -135,6 +188,7 @@ local defaultPartyFrames = {
   "^ElvUF_PartyGroup",
   "^oUF_.-Party",
   "^PitBull4_Groups_Party",
+  "^XPerl_party%d",
   "^PartyFrame",
   "^CompactParty",
   "^PartyMemberFrame",
@@ -143,27 +197,28 @@ local getDefaultPartyFrames = function()
   return CopyTable(defaultPartyFrames)
 end
 lib.getDefaultPartyFrames = getDefaultPartyFrames
-
 local defaultPartyTargetFrames = {
   "SUFChildpartytarget%d",
+  "XPerl_party%dtargetFrame"
 }
 local getDefaultPartyTargetFrames = function()
   return CopyTable(defaultPartyTargetFrames)
 end
 lib.getDefaultPartyTargetFrames = getDefaultPartyTargetFrames
-
 local defaultFocusFrames = {
-  "^InvenUnitFrames_Focus",
-  "ElvUF_FocusTarget",
-  "LUFUnitfocus",
-  "FocusFrame",
-  "^hbExtra_HealUnit",
+  "^InvenUnitFrames_Focus$",
+  "^ElvUF_FocusTarget$",
+  "^SUFUnitfocus$",
+  "^LUFUnitfocus$",
+  "^FocusFrame$",
+  "^hbExtra_HealUnit$",
+  "^UUF_Focus$",
+  "^XPerl_Focus$"
 }
 local getDefaultFocusFrames = function()
   return CopyTable(defaultFocusFrames)
 end
 lib.getDefaultFocusFrames = getDefaultFocusFrames
-
 local defaultRaidFrames = {
   "^Vd",
   "^HealBot_HealUnit",
@@ -181,6 +236,7 @@ local defaultRaidFrames = {
   "^LimeGroup",
   "^SUFHeaderraid",
   "^LUFHeaderraid",
+  "^XPerl_Raid_Grp",
   "^CompactRaid",
   "^RaidPullout",
 }
@@ -188,6 +244,28 @@ local getDefaultRaidFrames = function()
   return CopyTable(defaultRaidFrames)
 end
 lib.getDefaultRaidFrames = getDefaultRaidFrames
+local defaultBossFrames = {
+  "^ElvUF_Boss%d$",
+  "^SUFHeaderbossUnitButton%d$",
+  "^LUFHeaderbossUnitButton%d$",
+  "^UUF_Boss%d$",
+  "^Boss%dTargetFrame$",
+}
+local getDefaultBossFrames = function()
+  return CopyTable(defaultBossFrames)
+end
+lib.getDefaultBossFrames = getDefaultBossFrames
+
+local copyTableCache = {}
+
+local function CopyTableCached(src)
+  wipe(copyTableCache)
+  for i = 1, #src do
+    copyTableCache[i] = src[i]
+  end
+  return copyTableCache
+end
+
 --
 local CacheMonitorMixin = {}
 function CacheMonitorMixin:Init(makeDiff)
@@ -201,36 +279,18 @@ function CacheMonitorMixin:Init(makeDiff)
   end
 end
 -- fill cache, added, updated
-function CacheMonitorMixin:Add(key, ...)
-  local args = select("#", ...)
-  if args > 1 then
-    if self.makeDiff then
-      if type(self.data[key]) == "table" then
-        for i = 1, args do
-          local arg = select(i, ...)
-          if self.data[key][i] ~= arg then
-            self.updated[key] = self.data[key]
-            break
-          end
-        end
-      else
+function CacheMonitorMixin:Add(key, value)
+  if self.makeDiff then
+    local old = self.data[key]
+    if old ~= value then
+      if old == nil then
         self.added[key] = true
+      else
+        self.updated[key] = old
       end
     end
-    self.cache[key] = {...}
-  else
-    local value = ...
-    if self.makeDiff then
-      if self.data[key] ~= value then
-        if self.data[key] == nil then
-          self.added[key] = true
-        else
-          self.updated[key] = self.data[key]
-        end
-      end
-    end
-    self.cache[key] = value
   end
+  self.cache[key] = value
 end
 function CacheMonitorMixin:CalcRemoved()
   if not self.makeDiff then return end
@@ -251,11 +311,11 @@ function CacheMonitorMixin:Reset()
     wipe(self.added)
   end
 end
---
+
 local FrameToFrameName = {}   -- frame adress => frame name
 local FrameToUnit = {}        -- frame adress => unitToken
-lib.Mixin(FrameToFrameName, CacheMonitorMixin)
-lib.Mixin(FrameToUnit, CacheMonitorMixin)
+Mixin(FrameToFrameName, CacheMonitorMixin)
+Mixin(FrameToUnit, CacheMonitorMixin)
 FrameToFrameName:Init()
 FrameToUnit:Init(true)
 
@@ -330,11 +390,13 @@ local function recurseGetName(frame)
   end
   local parent = frame.GetParent and frame:GetParent()
   if parent then
-    local parentKey
-    for key, child in pairs(parent) do
-      if child == frame then
-        parentKey = key
-        break
+    local parentKey = frame.GetParentKey and frame:GetParentKey()
+    if not parentKey then
+      for key, child in pairs(parent) do
+        if child == frame then
+          parentKey = key
+          break
+        end
       end
     end
     if parentKey then
@@ -347,6 +409,8 @@ end
 --  cancelaura = true
 --}
 
+local frameNameCache = setmetatable({}, { __mode = "k" })
+
 local function ScanFrames(depth, frame, ...)
   coroutine.yield()
   if not frame then
@@ -358,11 +422,15 @@ local function ScanFrames(depth, frame, ...)
       ScanFrames(depth + 1, frame:GetChildren())
     end
     if frameType == "Button" then
-      local typeAttribute = frame:GetAttribute("type")
+      --local typeAttribute = frame:GetAttribute("type")
       --if not notAUnitFrameTypeAttribute[typeAttribute] then
         local unit = SecureButton_GetUnit(frame)
         if unit and frame:IsVisible() then
-          local name = recurseGetName(frame)
+          local name = frameNameCache[frame]
+          if not name then
+            name = recurseGetName(frame)
+            frameNameCache[frame] = name
+          end
           if name then
             FrameToFrameName:Add(frame, name)
             FrameToUnit:Add(frame, unit)
@@ -434,6 +502,7 @@ coroutineFrame:SetScript("OnUpdate", function()
     else
       status = "ready"
     end
+    wipe(frameNameCache)
   end
 end)
 
@@ -443,9 +512,9 @@ local function ScanForUnitFrames(noDelay)
       doScanForUnitFrames()
     else
       status = "scan_delay"
-      lib.timer:ScheduleTimer(function()
+      C_Timer.After(1, function()
         doScanForUnitFrames()
-      end, 1)
+      end)
     end
   elseif status == "scanning" then
     status = "scan_queued"
@@ -513,6 +582,7 @@ local defaultOptions = {
   ignorePartyTargetFrame = true,
   ignoreFocusFrame = true,
   ignoreRaidFrame = false,
+  ignoreBossFrame = false,
   playerFrames = defaultPlayerFrames,
   targetFrames = defaultTargetFrames,
   targettargetFrames = defaultTargettargetFrames,
@@ -520,6 +590,7 @@ local defaultOptions = {
   partyTargetFrames = defaultPartyTargetFrames,
   focusFrames = defaultFocusFrames,
   raidFrames = defaultRaidFrames,
+  bossFrames = defaultBossFrames,
   ignoreFrames = {
     "PitBull4_Frames_Target's target's target",
     "ElvUF_PartyGroup%dUnitButton%dTarget",
@@ -603,25 +674,29 @@ function lib.GetUnitFrame(target, opt)
   if type(GetFramesCacheListener) ~= "table" then
     Init(true)
   end
-  opt = opt or {}
+  local defaultOpt
+  if not opt then
+    opt = {}
+    defaultOpt = true
+  end
   setmetatable(opt, { __index = defaultOptions })
 
   if not target then
     return
   end
 
-  local ignoredFrames = CopyTable(opt.ignoreFrames)
+  local ignoredFrames = CopyTableCached(opt.ignoreFrames)
   if opt.ignorePlayerFrame then
     for _, v in pairs(opt.playerFrames) do
       tinsert(ignoredFrames, v)
     end
   end
-  if opt.ignoreTargetFrame then
+  if opt.ignoreTargetFrame and not (defaultOpt and target == "target") then
     for _, v in pairs(opt.targetFrames) do
       tinsert(ignoredFrames, v)
     end
   end
-  if opt.ignoreTargettargetFrame then
+  if opt.ignoreTargettargetFrame and not (defaultOpt and target == "targettarget") then
     for _, v in pairs(opt.targettargetFrames) do
       tinsert(ignoredFrames, v)
     end
@@ -636,13 +711,18 @@ function lib.GetUnitFrame(target, opt)
       tinsert(ignoredFrames, v)
     end
   end
-  if opt.ignoreFocusFrame then
+  if opt.ignoreFocusFrame and not (defaultOpt and target == "focus") then
     for _, v in pairs(opt.focusFrames) do
       tinsert(ignoredFrames, v)
     end
   end
   if opt.ignoreRaidFrame then
     for _, v in pairs(opt.raidFrames) do
+      tinsert(ignoredFrames, v)
+    end
+  end
+  if opt.ignoreBossFrame then
+    for _, v in pairs(opt.bossFrames) do
       tinsert(ignoredFrames, v)
     end
   end

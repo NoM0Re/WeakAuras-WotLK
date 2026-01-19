@@ -2,6 +2,5 @@
 ..\FrameXML\UI.xsd">
   <Script file = "LibStub\LibStub.lua"/>
   <Include file ="CallbackHandler-1.0\CallbackHandler-1.0.xml"/>
-  <Include file = "AceTimer-3.0\AceTimer-3.0.xml"/>
   <Script file = "LibGetFrame-1.0.lua"/>
 </Ui>
