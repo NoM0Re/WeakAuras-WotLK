@@ -935,7 +935,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["WeakAuras %s on WoW %s"] = "WeakAuras %s (WoW %s)"
 	L["WeakAuras recommends using spell ids instead of names. Spell ids are automatically localized."] = "WeakAuras는 주문 이름 대신 주문 ID 사용을 권장합니다. 주문 ID는 언어에 맞게 자동 번역됩니다."
 	L[ [=[WeakAuras will not support Midnight. On release of the prepatch, WeakAuras will be disabled.
-Read more on our Patreon page https://patreon.com/WeakAuras]=] ] = "WeakAuras는 Midnight을 지원하지 않습니다. 사전 패치가 출시되면 WeakAuras는 비활성화됩니다. 자세한 내용은 Patreon 페이지(https://patreon.com/WeakAuras)를 참조하세요."
+Read more on our Patreon page https://patreon.com/WeakAuras]=] ] = "WeakAuras는 한밤 확장팩을 지원하지 않을 것입니다. 사전 패치 출시부터 WeakAuras는 비활성화됩니다. 자세한 내용은 저희 Patreon 페이지(https://patreon.com/WeakAuras)를 읽어보시기 바랍니다"
 	L["What do you want to do?"] = "무엇을 할까요?"
 	L["Whole Area"] = "전체 구역"
 	L["wrapping"] = "줄바꿈"
