@@ -2653,16 +2653,16 @@ Private.event_prototypes = {
 
       if trigger.powertype == 4 then
         local _, class = UnitClass("player")
-        AddUnitEventForEvents(result, unit, "UNIT_COMBO_POINTS")
-        AddUnitEventForEvents(result, unit, "UNIT_TARGET")
+        result.events = result.events or {}
+        tinsert(result.events, "UNIT_COMBO_POINTS")
+        AddUnitEventForEvents(result, 'player', "UNIT_TARGET")
+        AddUnitEventForEvents(result, 'vehicle', "UNIT_TARGET")
         if class == "DRUID" then
           AddUnitEventForEvents(result, unit, "UNIT_MODEL_CHANGED")
         end
       -- For units not in multiUnitUnits, add FRAME_UPDATE to ensure smooth power updates
       elseif unit and not Private.multiUnitUnits[unit] then
-        if not result.events then
-          result.events = {}
-        end
+        result.events = result.events or {}
         tinsert(result.events, "FRAME_UPDATE")
       else
         AddUnitEventForPowerEvents(result, unit, powerType)

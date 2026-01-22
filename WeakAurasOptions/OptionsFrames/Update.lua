@@ -247,8 +247,10 @@ local function DebugPrintDiff(diff, id, uid)
 end
 
 local function Diff(ours, theirs)
-  local ignored = WeakAuras.Mixin({}, OptionsPrivate.Private.internal_fields,
-                                  OptionsPrivate.Private.non_transmissable_fields)
+  local ignored = WeakAuras.Mixin({},
+    OptionsPrivate.Private.internal_fields,
+    OptionsPrivate.Private.non_transmissable_fields
+  )
 
   -- generates a diff which WeakAuras.Update can use
   local debug = false
