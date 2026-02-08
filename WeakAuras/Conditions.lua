@@ -211,10 +211,10 @@ end
 
 function Private.ExecEnv.CallCustomConditionTest(uid, testFunctionNumber, ...)
   local ok, result = pcall(Private.ExecEnv.conditionHelpers[uid].customTestFunctions[testFunctionNumber], ...)
-  if not ok then
-    Private.GetErrorHandlerUid(uid, L["Condition Custom Test"])
-  elseif (ok) then
+  if (ok) then
     return result
+  else
+    Private.GetErrorHandlerUid(uid, L["Condition Custom Test"])
   end
 end
 

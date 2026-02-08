@@ -439,6 +439,10 @@ L["Do Not Disturb"] = "勿擾"
 L["Dodge"] = "閃躲"
 L["Dodge (%)"] = "閃躲 (%)"
 L["Dodge Rating"] = "閃躲分數"
+--[[Translation missing --]]
+L["Doom Lord Kazzak"] = "Doom Lord Kazzak"
+--[[Translation missing --]]
+L["Doomwalker"] = "Doomwalker"
 L["Down"] = "下"
 L["Down, then Centered Horizontal"] = "向下，然後居中水平"
 L["Down, then Left"] = "先下後左"
@@ -469,6 +473,8 @@ L["Edge of Madness"] = "瘋狂之緣"
 L["Effective Spell Id"] = "有效法術 ID"
 L["Elide"] = "符合寬度"
 L["Elite"] = "精英"
+--[[Translation missing --]]
+L["Emalon the Storm Watcher"] = "Emalon the Storm Watcher"
 L["Emote"] = "表情動作"
 L["Empower Cast End"] = "聚能施法結束"
 L["Empower Cast Interrupt"] = "聚能施法中斷"
@@ -795,6 +801,8 @@ L["Keep Inside"] = "保持在內"
 L["Kel'Thuzad"] = "克爾蘇加德"
 --[[Translation missing --]]
 L["Kil'jaeden"] = "Kil'jaeden"
+--[[Translation missing --]]
+L["Koralon the Flame Watcher"] = "Koralon the Flame Watcher"
 L["Kurinnaxx"] = "庫林納克斯"
 --[[Translation missing --]]
 L["Lady Vashj"] = "Lady Vashj"
@@ -1520,6 +1528,8 @@ L["Top"] = "上"
 L["Top Left"] = "左上"
 L["Top Right"] = "右上"
 L["Top to Bottom"] = "上到下"
+--[[Translation missing --]]
+L["Toravon the Ice Watcher"] = "Toravon the Ice Watcher"
 L["Torghast"] = "托迦司"
 L["Total Duration"] = "總共持續時間"
 L["Total Earned in this Season"] = "賽季總共獲得"

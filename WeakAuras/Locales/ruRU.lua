@@ -466,6 +466,10 @@ L["Do Not Disturb"] = "Не беспокоить (DND)"
 L["Dodge"] = "Уклонение"
 L["Dodge (%)"] = "Уклонение (%)"
 L["Dodge Rating"] = "Показатель уклонения"
+--[[Translation missing --]]
+L["Doom Lord Kazzak"] = "Doom Lord Kazzak"
+--[[Translation missing --]]
+L["Doomwalker"] = "Doomwalker"
 L["Down"] = "Вниз"
 L["Down, then Centered Horizontal"] = "Вниз > По горизонтали по центру"
 L["Down, then Left"] = "Вниз > Слева"
@@ -498,6 +502,8 @@ L["Edge of Madness"] = "Грань Безумия"
 L["Effective Spell Id"] = "Effective Spell Id"
 L["Elide"] = "Опускать слова"
 L["Elite"] = "Элитный"
+--[[Translation missing --]]
+L["Emalon the Storm Watcher"] = "Emalon the Storm Watcher"
 L["Emote"] = "Эмоция"
 L["Empower Cast End"] = "Усиление завершено"
 L["Empower Cast Interrupt"] = "Усиление прервано"
@@ -833,6 +839,8 @@ L["Keep Inside"] = "Только внутри"
 L["Kel'Thuzad"] = "Кел'Тузад"
 --[[Translation missing --]]
 L["Kil'jaeden"] = "Kil'jaeden"
+--[[Translation missing --]]
+L["Koralon the Flame Watcher"] = "Koralon the Flame Watcher"
 L["Kurinnaxx"] = "Куриннакс"
 --[[Translation missing --]]
 L["Lady Vashj"] = "Lady Vashj"
@@ -1567,6 +1575,8 @@ L["Top"] = "Сверху"
 L["Top Left"] = "Сверху слева"
 L["Top Right"] = "Сверху справа"
 L["Top to Bottom"] = "Сверху вниз"
+--[[Translation missing --]]
+L["Toravon the Ice Watcher"] = "Toravon the Ice Watcher"
 L["Torghast"] = "Торгаст"
 L["Total Duration"] = "Общее время"
 L["Total Earned in this Season"] = "Заработано в этом сезоне"

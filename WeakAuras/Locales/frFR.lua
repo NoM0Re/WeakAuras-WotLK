@@ -565,6 +565,10 @@ L["Do Not Disturb"] = "Do Not Disturb"
 L["Dodge"] = "Esquive"
 L["Dodge (%)"] = "Esquive (%)"
 L["Dodge Rating"] = "Pourcentage Esquive"
+--[[Translation missing --]]
+L["Doom Lord Kazzak"] = "Doom Lord Kazzak"
+--[[Translation missing --]]
+L["Doomwalker"] = "Doomwalker"
 L["Down"] = "Bas"
 --[[Translation missing --]]
 L["Down, then Centered Horizontal"] = "Down, then Centered Horizontal"
@@ -608,6 +612,8 @@ L["Effective Spell Id"] = "Effective Spell Id"
 L["Elide"] = "Elider"
 --[[Translation missing --]]
 L["Elite"] = "Elite"
+--[[Translation missing --]]
+L["Emalon the Storm Watcher"] = "Emalon the Storm Watcher"
 L["Emote"] = "Emote"
 --[[Translation missing --]]
 L["Empower Cast End"] = "Empower Cast End"
@@ -1076,6 +1082,8 @@ L["Keep Inside"] = "Garder à l'Intérieur"
 L["Kel'Thuzad"] = "Kel'Thuzad"
 --[[Translation missing --]]
 L["Kil'jaeden"] = "Kil'jaeden"
+--[[Translation missing --]]
+L["Koralon the Flame Watcher"] = "Koralon the Flame Watcher"
 --[[Translation missing --]]
 L["Kurinnaxx"] = "Kurinnaxx"
 --[[Translation missing --]]
@@ -2087,6 +2095,8 @@ L["Top"] = "Haut"
 L["Top Left"] = "Haut Gauche"
 L["Top Right"] = "Haut Droite"
 L["Top to Bottom"] = "Haut en Bas"
+--[[Translation missing --]]
+L["Toravon the Ice Watcher"] = "Toravon the Ice Watcher"
 --[[Translation missing --]]
 L["Torghast"] = "Torghast"
 L["Total Duration"] = "Duration Totale"
