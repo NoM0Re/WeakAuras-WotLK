@@ -1617,7 +1617,7 @@ function OptionsPrivate.CreateFrame()
   local left, right, top, bottom = w/2,-w/2, 0, h-25
   frame:SetClampRectInsets(left, right, top, bottom)
 
-  -- Add warning about Midnight support ending, to notify users about possible coming changes
+  --[[ Add warning about Midnight support ending, to notify users about possible coming changes
   local midnightWarning = CreateFrame("Frame", nil, frame)
   midnightWarning:SetBackdrop({
     bgFile = "Interface\\Addons\\WeakAuras\\Media\\Textures\\Square_FullWhite.tga",
@@ -1650,7 +1650,7 @@ function OptionsPrivate.CreateFrame()
     midnightWarning:Hide()
   end)
 
-  fade:Play()
+  fade:Play()]]
 
   return frame
 end
