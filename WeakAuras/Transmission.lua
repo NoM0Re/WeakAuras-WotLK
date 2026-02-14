@@ -541,7 +541,8 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     return nil, "Invalid import data."
   end
 
-  local highestVersion = data.internalVersion or 0
+  -- Let people install auras that are newer than their version of WeakAuras, even tho it is bad
+  --[[local highestVersion = data.internalVersion or 0
   if children then
     for _, child in ipairs(children) do
       highestVersion = max(highestVersion, child.internalVersion or 0)
@@ -551,7 +552,7 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     -- Do not run PreAdd but still show Import Window
     tooltipLoading = nil;
     return ImportNow(data, children, target, linkedAuras, nil, callbackFunc)
-  end
+  end]]
 
   if version < 2000 then
     if children then

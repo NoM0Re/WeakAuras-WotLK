@@ -62,7 +62,7 @@ local function ConstructImportExport(frame)
         elseif(mode == "table") then
           displayStr = OptionsPrivate.Private.DataToString(id, true);
         end
-        input.editBox:SetMaxBytes(nil); -- Dragonflight doesn't accept nil
+        --input.editBox:SetMaxBytes(nil); Dragonflight doesn't accept nil
         input.editBox:SetScript("OnEscapePressed", function()
           group:Close();
         end);
