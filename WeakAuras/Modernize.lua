@@ -1,4 +1,7 @@
-if not WeakAuras.IsLibsOK() then return end
+if not WeakAuras.IsLibsOK() then
+  return
+end
+
 local AddonName = ...
 local Private = select(2, ...)
 local L = WeakAuras.L
@@ -177,6 +180,14 @@ function Private.Modernize(data, oldSnapshot)
       if version and tonumber(version) then
         data.version = tonumber(version)
       end
+    end
+  end
+
+  -- Version 12 was introduced February 2019 in BfA
+  if data.internalVersion < 12 then
+    if data.cooldownTextEnabled ~= nil then
+      data.cooldownTextDisabled = not data.cooldownTextEnabled
+      data.cooldownTextEnabled = nil
     end
   end
 
@@ -867,6 +878,10 @@ function Private.Modernize(data, oldSnapshot)
             replacements[triggerId] = {}
             replacements[triggerId]["use_name"] = "use_namerealm"
             replacements[triggerId]["name"] = "namerealm"
+          elseif event == "Alternate Power" then
+            replacements[triggerId] = {}
+            replacements[triggerId]["use_unitname"] = "use_namerealm"
+            replacements[triggerId]["unitname"] = "namerealm"
           elseif event == "Cast" then
             replacements[triggerId] = {}
             replacements[triggerId]["use_sourceName"] = "use_sourceNameRealm"
@@ -934,8 +949,59 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  if data.internalVersion < 35 then
+    if data.regionType == "texture" then
+      data.textureWrapMode = "CLAMP"
+    end
+  end
+
   if data.internalVersion < 36 then
     data.ignoreOptionsEventErrors = true
+  end
+
+  if data.internalVersion < 37 then
+    for triggerId, triggerData in ipairs(data.triggers) do
+      if triggerData.trigger.type == "aura2" then
+        local group_role = triggerData.trigger.group_role
+        if group_role then
+          triggerData.trigger.group_role = {}
+          triggerData.trigger.group_role[group_role] = true
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 38 then
+    for triggerId, triggerData in ipairs(data.triggers) do
+      if triggerData.trigger.type == "status" then
+        if triggerData.trigger.event == "Item Type Equipped" then
+          if triggerData.trigger.itemTypeName then
+            if triggerData.trigger.itemTypeName.single then
+              triggerData.trigger.itemTypeName.single = triggerData.trigger.itemTypeName.single + 2 * 256
+            end
+            if triggerData.trigger.itemTypeName.multi then
+              local converted = {}
+              for v in pairs(triggerData.trigger.itemTypeName.multi) do
+                converted[v + 512] = true
+              end
+              triggerData.trigger.itemTypeName.multi = converted
+            end
+          end
+        end
+      end
+    end
+    if data.load.itemtypeequipped then
+      if data.load.itemtypeequipped.single then
+        data.load.itemtypeequipped.single = data.load.itemtypeequipped.single + 2 * 256
+      end
+      if data.load.itemtypeequipped.multi then
+        local converted = {}
+        for v in pairs(data.load.itemtypeequipped.multi) do
+          converted[v + 512] = true
+        end
+        data.load.itemtypeequipped.multi = converted
+      end
+    end
   end
 
   if data.internalVersion < 39 then
@@ -967,7 +1033,9 @@ function Private.Modernize(data, oldSnapshot)
       ["Unit Characteristics"] = "unit",
       ["Cooldown Progress (Spell)"] = "spell",
       ["Power"] = "unit",
+      ["PvP Talent Selected"] = "unit",
       ["Combat Log"] = "combatlog",
+      ["Item Set"] = "item",
       ["Health"] = "unit",
       ["Cooldown Progress (Item)"] = "item",
       ["Conditions"] = "unit",
@@ -984,9 +1052,12 @@ function Private.Modernize(data, oldSnapshot)
       ["Cast"] = "unit",
       ["Item Count"] = "item",
       ["BigWigs Timer"] = "addons",
+      ["Spell Activation Overlay"] = "spell",
       ["DBM Timer"] = "addons",
       ["Item Type Equipped"] = "item",
+      ["Alternate Power"] = "unit",
       ["Item Equipped"] = "item",
+      ["Item Bonus Id Equipped"] = "item",
       ["DBM Announce"] = "addons",
       ["Swing Timer"] = "unit",
       ["Totem"] = "spell",
@@ -1084,7 +1155,88 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 49 then
+  if data.internalVersion < 45 then
+    for triggerId, triggerData in ipairs(data.triggers) do
+      local trigger = triggerData.trigger
+      if trigger.type == "unit" and trigger.event == "Conditions" then
+        if trigger.use_instance_size then
+          -- Single Selection
+          if trigger.instance_size.single then
+            if trigger.instance_size.single == "arena" then
+              trigger.use_instance_size = false
+              trigger.instance_size.multi = {
+                arena = true,
+                ratedarena = true,
+              }
+            elseif trigger.instance_size.single == "pvp" then
+              trigger.use_instance_size = false
+              trigger.instance_size.multi = {
+                pvp = true,
+                ratedpvp = true,
+              }
+            end
+          end
+        elseif trigger.use_instance_size == false then
+          -- Multi selection
+          if trigger.instance_size.multi then
+            if trigger.instance_size.multi.arena then
+              trigger.instance_size.multi.ratedarena = true
+            end
+            if trigger.instance_size.multi.pvp then
+              trigger.instance_size.multi.ratedpvp = true
+            end
+          end
+        end
+      end
+    end
+
+    if data.load.use_size == true then
+      if data.load.size.single == "arena" then
+        data.load.use_size = false
+        data.load.size.multi = {
+          arena = true,
+          ratedarena = true,
+        }
+      elseif data.load.size.single == "pvp" then
+        data.load.use_size = false
+        data.load.size.multi = {
+          pvp = true,
+          ratedpvp = true,
+        }
+      end
+    elseif data.load.use_size == false then
+      if data.load.size.multi then
+        if data.load.size.multi.arena then
+          data.load.size.multi.ratedarena = true
+        end
+        if data.load.size.multi.pvp then
+          data.load.size.multi.ratedpvp = true
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 46 then
+    if data.conditions then
+      for conditionIndex, condition in ipairs(data.conditions) do
+        if condition.check then
+          local triggernum = condition.check.trigger
+          if triggernum then
+            local trigger = data.triggers[triggernum]
+            if trigger and trigger.trigger and trigger.trigger.event == "Power" then
+              if condition.check.variable == "chargedComboPoint" then
+                condition.check.variable = "chargedComboPoint1"
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  local isFromFork = data.internalVersion == 67 -- WA 4.1.2 skipped Modernization, redo it here if needed
+
+  if data.internalVersion < 49 or isFromFork then
     if not data.regionType:match("group") then
       data.subRegions = data.subRegions or {}
       -- rename aurabar_bar into subforeground, and subbarmodel into submodel
@@ -1125,7 +1277,7 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion == 49 then
+  if data.internalVersion == 49 or isFromFork then
     -- Version 49 was a dud and contained a broken validation. Try to salvage the data, as
     -- best as we can.
     local broken = false
@@ -1159,8 +1311,8 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 51 then
-    for _, triggerData in ipairs(data.triggers) do
+  if data.internalVersion < 51 or isFromFork then
+    for triggerId, triggerData in ipairs(data.triggers) do
       if triggerData.trigger.event == "Threat Situation" then
         triggerData.trigger.unit = triggerData.trigger.threatUnit
         triggerData.trigger.use_unit = triggerData.trigger.use_threatUnit
@@ -1170,7 +1322,7 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 52 then
+  if data.internalVersion < 52 or isFromFork then
     local function matchTarget(input)
       return input == "target" or input == "'target'" or input == '"target"' or input == "%t" or input == "'%t'" or input == '"%t"'
     end
@@ -1199,7 +1351,7 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 53 then
+  if data.internalVersion < 53 or isFromFork then
     local function ReplaceIn(text, table, prefix)
       local seenSymbols = {}
       Private.ParseTextStr(text, function(symbol)
@@ -1244,8 +1396,8 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 54 then
-    for _, triggerData in ipairs(data.triggers) do
+  if data.internalVersion < 54 or isFromFork then
+    for triggerId, triggerData in ipairs(data.triggers) do
       if triggerData.trigger.type == "aura" then
         triggerData.trigger.type = "unit"
         triggerData.trigger.event = "Conditions"
@@ -1254,9 +1406,9 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  -- Internal version 55 contained a incorrect Modernize (data.forceEvents = nil) reused to
-  -- migrate deathRune to isDeathRune & migrate use_inverse to use_genericShowOn
-  if data.internalVersion < 55 then
+  if data.internalVersion < 55 or isFromFork then
+    data.forceEvents = true
+
     for _, triggerData in ipairs(data.triggers) do
         if triggerData.trigger.event == "Death Knight Rune" then
             -- migrate deathRune to isDeathRune
@@ -1275,18 +1427,41 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 55 then
-    data.forceEvents = true
-  end
-
   -- Internal version 55 contained a incorrect Modernize
-  if data.internalVersion < 56 then
+  if data.internalVersion < 56 or isFromFork then
     data.information.forceEvents = data.forceEvents
     data.forceEvents = nil
   end
 
+  if data.internalVersion < 60 or isFromFork then
+    -- convert texture rotation
+    if data.regionType == "texture" then
+      if data.rotate then
+        -- Full Rotate is enabled
+        data.legacyZoomOut = true
+      else
+        -- Discrete Rotation
+        data.rotation = data.discrete_rotation
+      end
+      data.discrete_rotation = nil
+    end
+  end
+
+  if data.internalVersion < 61 or isFromFork then
+    -- convert texture rotation
+    if data.regionType == "texture" then
+      if data.legacyZoomOut then
+        data.rotate = true
+      else
+        data.rotate = false
+        data.discrete_rotation = data.rotation
+      end
+      data.legacyZoomOut = nil
+    end
+  end
+
   -- version 62 became 64 to fix a broken modernize
-  if data.internalVersion < 64 then
+  if data.internalVersion < 64 or isFromFork then
     if data.regionType == "dynamicgroup" then
       if data.sort == "custom" and type(data.sortOn) ~= "string" or data.sortOn == "" then
         data.sortOn = "changed"
@@ -1297,7 +1472,7 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 65 then
+  if data.internalVersion < 65 or isFromFork then
     for triggerId, triggerData in ipairs(data.triggers) do
       if triggerData.trigger.type == "item"
       and triggerData.trigger.event == "Item Count"
@@ -1315,10 +1490,9 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  -- used to migrate Character Stats tables again, but not for cast trigger and used one down below for reverse migration between Version 49 to Version 65
-  local isFromFork = data.internalVersion == 67
-
   if isFromFork or data.internalVersion < 67 or data.internalVersion > WeakAuras.InternalVersion() then
+    -- Fork needs migration to fix triggers,
+    -- Auras that are higher than the internal version from WeakAuras are also migrated to ensure WeakAuras does not break entirely
     local castMigrationNeeded = (not isFromFork) or data.internalVersion < 67
 
     do
@@ -1350,6 +1524,12 @@ function Private.Modernize(data, oldSnapshot)
           "deficit_operator",
           "maxhealth",
           "maxhealth_operator",
+          "absorb",
+          "absorb_operator",
+          "healabsorb",
+          "healabsorb_operator",
+          "healprediction",
+          "healprediction_operator",
         },
         ["Power"] = {
           "power",
@@ -1362,6 +1542,8 @@ function Private.Modernize(data, oldSnapshot)
           "maxpower_operator",
         },
         ["Character Stats"] = {
+          "mainstat",
+          "mainstat_operator",
           "strength",
           "strength_operator",
           "agility",
@@ -1372,8 +1554,8 @@ function Private.Modernize(data, oldSnapshot)
           "intellect_operator",
           "spirit",
           "spirit_operator",
-          "attackpower",
-          "attackpower_operator",
+          "stamina",
+          "stamina_operator",
           "spellpower",
           "spellpower_operator",
           "rangedattackpower",
@@ -1390,6 +1572,8 @@ function Private.Modernize(data, oldSnapshot)
           "hasterating_operator",
           "hastepercent",
           "hastepercent_operator",
+          "meleehastepercent",
+          "meleehastepercent_operator",
           "expertiserating",
           "expertiserating_operator",
           "expertisebonus",
@@ -1404,10 +1588,20 @@ function Private.Modernize(data, oldSnapshot)
           "resiliencerating_operator",
           "resiliencepercent",
           "resiliencepercent_operator",
-          "expertisebonus",
-          "expertisebonus_operator",
-          "expertiserating",
-          "expertiserating_operator",
+          "spellpenpercent",
+          "spellpenpercent_operator",
+          "masteryrating",
+          "masteryrating_operator",
+          "masterypercent",
+          "masterypercent_operator",
+          "versatilityrating",
+          "versatilityrating_operator",
+          "versatilitypercent",
+          "versatilitypercent_operator",
+          "attackpower",
+          "attackpower_operator",
+          "resistanceholy",
+          "resistanceholy_operator",
           "resistancefire",
           "resistancefire_operator",
           "resistancenature",
@@ -1418,8 +1612,22 @@ function Private.Modernize(data, oldSnapshot)
           "resistanceshadow_operator",
           "resistancearcane",
           "resistancearcane_operator",
+          "leechrating",
+          "leechrating_operator",
+          "leechpercent",
+          "leechpercent_operator",
+          "movespeedrating",
+          "movespeedrating_operator",
           "movespeedpercent",
           "movespeedpercent_operator",
+          "runspeedpercent",
+          "runspeedpercent_operator",
+          "avoidancerating",
+          "avoidancerating_operator",
+          "avoidancepercent",
+          "avoidancepercent_operator",
+          "defense",
+          "defense_operator",
           "dodgerating",
           "dodgerating_operator",
           "dodgepercent",
@@ -1430,12 +1638,20 @@ function Private.Modernize(data, oldSnapshot)
           "parrypercent_operator",
           "blockpercent",
           "blockpercent_operator",
+          "blocktargetpercent",
+          "blocktargetpercent_operator",
           "blockvalue",
           "blockvalue_operator",
+          "staggerpercent",
+          "staggerpercent_operator",
+          "staggertargetpercent",
+          "staggertargetpercent_operator",
           "armorrating",
           "armorrating_operator",
           "armorpercent",
           "armorpercent_operator",
+          "armortargetpercent",
+          "armortargetpercent_operator",
         },
         ["Threat Situation"] = {
           "threatpct",
@@ -1498,225 +1714,12 @@ function Private.Modernize(data, oldSnapshot)
     end
     do
       local loadFields = {
-        "level", "itemequiped"
+        "level", "effectiveLevel", "itemequiped"
       }
 
       for _, field in ipairs(loadFields) do
         migrateToTable(data.load, field)
         migrateToTable(data.load, field .. "_operator")
-      end
-    end
-  end
-
-  if isFromFork and data.internalVersion < 67.1 then -- WA 4.1.2 Fork reverse modernizer, applies modernizations between Version 49 to Version 65
-    -- Version < 49
-    if not data.regionType:match("group") then
-      data.subRegions = data.subRegions or {}
-      -- rename aurabar_bar into subforeground, and subbarmodel into submodel
-      for index, subRegionData in ipairs(data.subRegions) do
-        if subRegionData.type == "aurabar_bar" then
-          subRegionData.type = "subforeground"
-        elseif subRegionData.type == "subbarmodel" then
-          subRegionData.type = "submodel"
-        end
-        if subRegionData.bar_model_visible ~= nil then
-          subRegionData.model_visible = subRegionData.bar_model_visible
-          subRegionData.bar_model_visible = nil
-        end
-        if subRegionData.bar_model_alpha ~= nil then
-          subRegionData.model_alpha = subRegionData.bar_model_alpha
-          subRegionData.bar_model_alpha = nil
-        end
-      end
-      -- rename conditions for bar_model_visible and bar_model_alpha
-      if data.conditions then
-        for conditionIndex, condition in ipairs(data.conditions) do
-          if type(condition.changes) == "table" then
-            for changeIndex, change in ipairs(condition.changes) do
-              if change.property then
-                local prefix, property = change.property:match("(sub%.%d+%.)(.*)")
-                if prefix and property then
-                  if property == "bar_model_visible" then
-                    change.property = prefix .. "model_visible"
-                  elseif property == "bar_model_alpha" then
-                    change.property = prefix .. "model_alpha"
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-
-    -- Version == 49
-    -- Version 49 was a dud and contained a broken validation. Try to salvage the data, as
-    -- best as we can.
-    local broken = false
-    local properties = {}
-    Private.GetSubRegionProperties(data, properties)
-    if data.conditions then
-      for conditionIndex, condition in ipairs(data.conditions) do
-        if type(condition.changes) == "table" then
-          for changeIndex, change in ipairs(condition.changes) do
-            if change.property then
-              if not properties[change.property] then
-                -- The property does not exist, so maybe it's one that was accidentally not moved
-                local subRegionIndex, property = change.property:match("^sub%.(%d+)%.(.*)")
-                if subRegionIndex and property then
-                  broken = true
-                  for _, offset in ipairs({ -1, 1 }) do
-                    local newProperty = "sub." .. subRegionIndex + offset .. "." .. property
-                    if properties[newProperty] then
-                      change.property = newProperty
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    if broken then
-      WeakAuras.prettyPrint(L["Trying to repair broken conditions in %s likely caused by a WeakAuras bug."]:format(data.id))
-    end
-
-    -- Version < 49
-    for _, triggerData in ipairs(data.triggers) do
-      if triggerData.trigger.event == "Threat Situation" then
-        triggerData.trigger.unit = triggerData.trigger.threatUnit
-        triggerData.trigger.use_unit = triggerData.trigger.use_threatUnit
-        triggerData.trigger.threatUnit = nil
-        triggerData.trigger.use_threatUnit = nil
-      end
-    end
-
-    -- Version < 52
-    local function matchTarget(input)
-      return input == "target" or input == "'target'" or input == "\"target\"" or input == "%t" or input == "'%t'" or input == "\"%t\""
-    end
-
-    if data.conditions then
-      for _, condition in ipairs(data.conditions) do
-        for changeIndex, change in ipairs(condition.changes) do
-          if change.property == "chat" and change.value then
-            if matchTarget(change.value.message_dest) then
-              change.value.message_dest = "target"
-              change.value.message_dest_isunit = true
-            end
-          end
-        end
-      end
-    end
-
-    if data.actions.start.do_message and data.actions.start.message_type == "WHISPER" and matchTarget(data.actions.start.message_dest) then
-      data.actions.start.message_dest = "target"
-      data.actions.start.message_dest_isunit = true
-    end
-
-    if data.actions.finish.do_message and data.actions.finish.message_type == "WHISPER" and matchTarget(data.actions.finish.message_dest) then
-      data.actions.finish.message_dest = "target"
-      data.actions.finish.message_dest_isunit = true
-    end
-
-    -- Version < 53
-    local function ReplaceIn(text, table, prefix)
-      local seenSymbols = {}
-      Private.ParseTextStr(text, function(symbol)
-        if not seenSymbols[symbol] then
-          if table[prefix .. symbol .. "_format"] == "timed"
-              and table[prefix .. symbol .. "_time_format"] == 0
-          then
-            table[prefix .. symbol .. "_time_legacy_floor"] = true
-          end
-        end
-        seenSymbols[symbol] = symbol
-      end)
-    end
-
-    if data.regionType == "text" then
-      ReplaceIn(data.displayText, data, "displayText_format_")
-    end
-
-    if data.subRegions then
-      for index, subRegionData in ipairs(data.subRegions) do
-        if subRegionData.type == "subtext" then
-          ReplaceIn(subRegionData.text_text, subRegionData, "text_text_format_")
-        end
-      end
-    end
-
-    if data.actions then
-      if data.actions.start then
-        ReplaceIn(data.actions.start.message, data.actions.start, "message_format_")
-      end
-      if data.actions.finish then
-        ReplaceIn(data.actions.finish.message, data.actions.finish, "message_format_")
-      end
-    end
-
-    if data.conditions then
-      for conditionIndex, condition in ipairs(data.conditions) do
-        for changeIndex, change in ipairs(condition.changes) do
-          if change.property == "chat" and change.value then
-            ReplaceIn(change.value.message, change.value, "message_format_")
-          end
-        end
-      end
-    end
-
-    -- Version < 54
-    for _, triggerData in ipairs(data.triggers) do
-      if triggerData.trigger.type == "aura" then
-        triggerData.trigger.type = "unit"
-        triggerData.trigger.event = "Conditions"
-        triggerData.trigger.use_alwaystrue = false
-      end
-    end
-
-    -- Internal version 55 contained a incorrect Modernize (data.forceEvents = nil) reused to
-    -- migrate deathRune to isDeathRune & migrate use_inverse to use_genericShowOn
-    -- Version < 55
-    for _, triggerData in ipairs(data.triggers) do
-        if triggerData.trigger.event == "Death Knight Rune" then
-            -- migrate deathRune to isDeathRune
-            if triggerData.trigger.use_deathRune then
-                triggerData.trigger.use_isDeathRune = triggerData.trigger.use_deathRune
-            end
-            triggerData.trigger.use_deathRune = nil
-            -- migrate use_inverse to use_genericShowOn
-            if not (triggerData.trigger.use_genericShowOn or triggerData.trigger.genericShowOn) then
-                triggerData.trigger.use_genericShowOn = true
-                triggerData.trigger.genericShowOn = triggerData.trigger.use_inverse and "showOnCooldown"
-                                                    or "showAlways"
-            end
-            triggerData.trigger.use_inverse = nil
-        end
-    end
-
-    -- Internal version 55 contained a incorrect Modernize
-    -- Version < 56
-    data.information.forceEvents = data.forceEvents
-    data.forceEvents = nil
-
-    -- Version < 64
-    if data.regionType == "dynamicgroup" then
-      if data.sort == "custom" and type(data.sortOn) ~= "string" or data.sortOn == "" then
-        data.sortOn = "changed"
-      end
-      if data.grow == "CUSTOM" and type(data.growOn) ~= "string" then
-        data.growOn = "changed"
-      end
-    end
-
-    -- Version < 65
-    for triggerId, triggerData in ipairs(data.triggers) do
-      if triggerData.trigger.type == "item"
-      and triggerData.trigger.event == "Item Count"
-      and type(triggerData.trigger.itemName) == "number"
-      then
-        triggerData.trigger.use_exact_itemName = true
       end
     end
   end
@@ -1784,6 +1787,17 @@ function Private.Modernize(data, oldSnapshot)
           if type(change.property) == "string" then
             change.property = string.gsub(change.property, "(sub.%d.tick_placement)(%d)", "%1s.%2")
           end
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 74 then
+    for _, triggerData in ipairs(data.triggers) do
+      local t = triggerData.trigger
+      if t.type == "spell" and t.event == "Cooldown Progress (Spell)" then
+        if t.use_exact_spellName then
+          t.use_ignoreoverride = true
         end
       end
     end
@@ -1857,6 +1871,9 @@ function Private.Modernize(data, oldSnapshot)
         "percenthealth",
         "deficit",
         "maxhealth",
+        "absorb",
+        "healabsorb",
+        "healprediction",
       },
       ["Faction Reputation"] = {
         "value",
@@ -1873,6 +1890,7 @@ function Private.Modernize(data, oldSnapshot)
         "threatvalue",
       },
       ["Character Stats"] = {
+        "mainstat",
         "strength",
         "agility",
         "stamina",
@@ -2082,6 +2100,22 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  if data.internalVersion < 83 then
+    local propertyRenames = {
+      cooldownText = "cooldownTextDisabled",
+    }
+
+    if data.conditions then
+      for conditionIndex, condition in ipairs(data.conditions) do
+        for changeIndex, change in ipairs(condition.changes) do
+          if propertyRenames[change.property] then
+            change.property = propertyRenames[change.property]
+          end
+        end
+      end
+    end
+  end
+
   if data.internalVersion < 83.25 then
     -- Due to a Localisation issue and a bad implementation clear out all class/spec triggers that contain strings
     local function replaceSpecData(data, field, bt2)
@@ -2145,7 +2179,6 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 85 then
-    -- Migrate raidMarkIndex and old Combo Points triggers and Happiness
     if data.triggers then
       local eventTypes = {
         ["Unit Characteristics"] = true,
@@ -2154,7 +2187,7 @@ function Private.Modernize(data, oldSnapshot)
         ["Alternate Power"] = true,
         ["Cast"] = true
       }
-      for triggerNum, triggerData in ipairs(data.triggers) do
+      for triggerNum, triggerData in ipairs(data.triggers) do -- compare: do not replace with unused var
         local trigger = triggerData.trigger
         if trigger and trigger.type == "unit" then
           -- Migrate raidMarkIndex
@@ -2169,6 +2202,7 @@ function Private.Modernize(data, oldSnapshot)
               trigger.use_raidMarkIndex = nil
             end
           end
+          -- Migrate old Combo Points triggers and Happiness
           -- Modernize Happiness
           if trigger.event == "Power" and trigger.powertype == 4 then
             trigger.powertype = 27
