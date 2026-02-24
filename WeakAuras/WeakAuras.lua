@@ -21,8 +21,8 @@ local UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
   = UnitIsPVPFreeForAll, UnitIsPVP, UnitOnTaxi, IsMounted
 local UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
   = UnitInVehicle, UnitHasVehicleUI, UnitIsUnit, UnitIsDeadOrGhost
-local SendChatMessage, UnitInBattleground
-  = SendChatMessage, UnitInBattleground
+local SendChatMessage, UnitInBattleground, GetZoneText
+  = SendChatMessage, UnitInBattleground, GetZoneText
 local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES
   = GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS_FRAMES or 5
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
@@ -2511,6 +2511,37 @@ function Private.AddMany(tbl, takeSnapshots)
     end
     coroutine.yield(1000, "addmany reload dynamic group");
   end
+end
+
+do
+  local function FixGroupChildren()
+    for _, data in pairs(Private.regions) do
+      if data
+      and data.regionType == "dynamicgroup"
+      and data.region
+      and data.region.ReloadControlledChildren
+      then
+        data.region:ReloadControlledChildren()
+      end
+    end
+  end
+
+  local f = CreateFrame("Frame")
+  local elapsed = 0
+
+  f:RegisterEvent("PLAYER_ENTERING_WORLD")
+  f:SetScript("OnEvent", function(self)
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+
+    self:SetScript("OnUpdate", function(self, elaps)
+      elapsed = elapsed + elaps
+
+      if GetZoneText() ~= "" or elapsed > 30 then
+        self:SetScript("OnUpdate", nil)
+        FixGroupChildren()
+      end
+    end)
+  end)
 end
 
 local function customOptionIsValid(option)
