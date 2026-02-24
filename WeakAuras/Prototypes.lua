@@ -2799,16 +2799,21 @@ Private.event_prototypes = {
         store = true
       },
       {
+        name = "note",
+        type = "description",
+        display = "",
+        text = function()
+          return L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."]
+        end,
+        enable = function(trigger)
+          return trigger.use_powertype and trigger.powertype == 4
+        end,
+      },
+      {
         name = "powertype",
         display = L["Power Type"],
         type = "select",
-        values = function(trigger)
-          if trigger and trigger.unit ~= "player" then
-            return Private.power_types
-          else
-            return Private.power_types_player
-          end
-        end,
+        values = "power_types",
         init = "powerTypeToCheck",
         test = "true",
         store = true,
