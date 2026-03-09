@@ -88,11 +88,10 @@ function OptionsPrivate.StartFrameChooser(data, path)
             frameChooserBox:Show();
           end
 
-          if(focusName ~= oldFocusName) then
-            OptionsPrivate.Private.ValueToPath(data, path, focusName);
-            oldFocusName = focusName;
-            WeakAuras.FillOptions()
-          end
+if focusName and focusName ~= oldFocusName then
+  OptionsPrivate.Private.ValueToPath(data, path, focusName);
+  oldFocusName = focusName;
+end
           oldFocus = focus;
         end
       end
@@ -111,4 +110,5 @@ function OptionsPrivate.StopFrameChooser(data)
   end
   ResetCursor();
   WeakAuras.Add(data);
+  WeakAuras.FillOptions()
 end
