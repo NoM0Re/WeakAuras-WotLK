@@ -6,6 +6,8 @@ local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
+local tIndexOf = Private.tIndexOf
+
 local default = {
   controlledChildren = {},
   border = false,

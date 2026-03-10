@@ -1,8 +1,14 @@
 if not WeakAuras.IsLibsOK() then return end
 
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
+
 local Type, Version = "WeakAurasTwoColumnDropdown", 6
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
+
+-- WoW APIs
+local tIndexOf = OptionsPrivate.tIndexOf
 
 local secondLevelMt = {} -- Tag for our tables
 local function CreateSecondLevelTable()

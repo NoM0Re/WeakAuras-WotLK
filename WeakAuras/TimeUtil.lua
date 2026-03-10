@@ -7,6 +7,7 @@ local L = WeakAuras.L
 
 -- Lua APIs
 local time, format, floor = time, format, floor
+local ipairs_reverse = Private.ipairs_reverse
 
 -- WoW APIs
 local GetLocale = GetLocale

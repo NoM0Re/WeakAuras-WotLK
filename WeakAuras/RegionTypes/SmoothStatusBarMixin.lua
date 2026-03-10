@@ -3,6 +3,8 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local Private = select(2, ...)
 
+local FrameDeltaLerp = Private.FrameDeltaLerp
+
 -- This is a more or less 1:1 copy of SmoothStatusBarMixin except that it
 -- doesn't clamp the targetValue in ProcessSmoothStatusBars, because that's incorrect for us
 local g_updatingBars = {};

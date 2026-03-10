@@ -53,6 +53,9 @@ local Private = select(2, ...)
 local tinsert, tconcat, wipe = table.insert, table.concat, wipe
 local tostring, pairs, type = tostring, pairs, type
 local error = error
+local ipairs_reverse = Private.ipairs_reverse
+
+local IsInRaid = Private.IsInRaid
 
 local WeakAuras = WeakAuras;
 local L = WeakAuras.L;

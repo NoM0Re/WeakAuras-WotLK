@@ -9,7 +9,9 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local wipe = wipe
 local GetNumShapeshiftForms, GetShapeshiftFormInfo = GetNumShapeshiftForms, GetShapeshiftFormInfo
-local WrapTextInColorCode = WrapTextInColorCode
+local WrapTextInColorCode = Private.WrapTextInColorCode
+local Round = Private.Round
+local tCompare = Private.tCompare
 
 local function WA_GetClassColor(classFilename)
   local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[classFilename]

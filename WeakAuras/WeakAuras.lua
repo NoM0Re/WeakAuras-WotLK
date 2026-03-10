@@ -5,14 +5,15 @@ local internalVersion = 87
 
 -- Lua APIs
 local insert = table.insert
+local ipairs_reverse = Private.ipairs_reverse
 
 -- WoW APIs
 local IsAddOnLoaded, LoadAddOn
   = IsAddOnLoaded, LoadAddOn
 local UnitName, GetRealmName, GetGuildInfo, UnitRace, UnitFactionGroup, UnitClass
   = UnitName, GetRealmName, GetGuildInfo, UnitRace, UnitFactionGroup, UnitClass
-local IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
-  = IsInRaid, UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
+local UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
+  = UnitIsPartyLeader, UnitIsRaidOfficer, GetRaidRosterInfo, UnitInRaid, UnitInParty
 local InCombatLockdown, UnitAffectingCombat, GetInstanceInfo, IsInInstance
   = InCombatLockdown, UnitAffectingCombat, GetInstanceInfo, IsInInstance
 local GetCurrentMapAreaID, GetRealZoneText, GetSubZoneText, SetMapToCurrentZone
@@ -28,6 +29,9 @@ local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
   = CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
 local debugstack, wipe, GetSpellInfo = debugstack, wipe, GetSpellInfo
+local IsInRaid, IsInGroup = Private.IsInRaid, Private.IsInGroup
+local GetNumGroupMembers = Private.GetNumGroupMembers
+local Round, MergeTable = Private.Round, Private.MergeTable
 
 local ADDON_NAME = "WeakAuras"
 local WeakAuras = WeakAuras

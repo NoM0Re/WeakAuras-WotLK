@@ -6,6 +6,8 @@ local tinsert, tremove = table.insert, table.remove
 local select, pairs, type, unpack = select, pairs, type, unpack
 local error = error
 
+local tIndexOf = OptionsPrivate.tIndexOf
+
 local Type, Version = "WeakAurasDisplayButton", 60
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end

@@ -5,6 +5,10 @@ local Private = select(2, ...)
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
+local IsInRaid = Private.IsInRaid
+local GetNumSubgroupMembers = Private.GetNumSubgroupMembers
+local GetNumGroupMembers = Private.GetNumGroupMembers
+
 local LibSerialize = LibStub("LibSerialize")
 local LibDeflate = LibStub:GetLibrary("LibDeflate")
 

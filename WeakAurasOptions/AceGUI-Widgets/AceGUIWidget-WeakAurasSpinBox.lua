@@ -3,6 +3,9 @@ Spin Box Widget
 -------------------------------------------------------------------------------]]
 if not WeakAuras.IsLibsOK() then return end
 
+local AddonName = ...
+local OptionsPrivate = select(2, ...)
+
 local Type, Version = "WeakAurasSpinBox", 5
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
@@ -16,6 +19,7 @@ local tonumber, pairs = tonumber, pairs
 -- WoW APIs
 local PlaySound = PlaySound
 local CreateFrame, UIParent = CreateFrame, UIParent
+local Clamp = OptionsPrivate.Clamp
 
 local progressLeftOffset = -3
 local progressExtraWidth = -0

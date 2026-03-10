@@ -12,6 +12,8 @@ local _G = _G
 -- WoW APIs
 local InCombatLockdown = InCombatLockdown
 local CreateFrame, IsAddOnLoaded, LoadAddOn = CreateFrame, IsAddOnLoaded, LoadAddOn
+local tIndexOf = OptionsPrivate.tIndexOf
+local tAppendAll = OptionsPrivate.tAppendAll
 
 local AceGUI = LibStub("AceGUI-3.0")
 

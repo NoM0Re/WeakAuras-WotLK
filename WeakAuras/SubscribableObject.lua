@@ -5,6 +5,10 @@ local Private = select(2, ...)
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
+-- WoW APIs
+local TableHasAnyEntries = Private.TableHasAnyEntries
+local tIndexOf = Private.tIndexOf
+
 local SubscribableObject =
 {
   events = {},

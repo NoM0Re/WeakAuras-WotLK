@@ -16,6 +16,7 @@ local GetShapeshiftFormInfo, GetShapeshiftForm = GetShapeshiftFormInfo, GetShape
 local GetRuneCooldown, UnitCastingInfo, UnitChannelInfo = GetRuneCooldown, UnitCastingInfo, UnitChannelInfo
 local UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 40
+local Round = Private.Round
 
 local WeakAuras = WeakAuras
 local L = WeakAuras.L

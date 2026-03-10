@@ -19,6 +19,8 @@
 embeds.xml
 locales.xml
 
+Compatibility.lua
+
 VersionCheck.lua
 ForAllIndentsAndPurposes.lua
 

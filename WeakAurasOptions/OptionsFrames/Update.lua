@@ -7,6 +7,12 @@ local AceGUI = LibStub("AceGUI-3.0")
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
+-- Lua APIs
+local ipairs_reverse = OptionsPrivate.ipairs_reverse
+
+-- WoW APIs
+local tIndexOf = OptionsPrivate.tIndexOf
+
 -- Scam Check
 local function notEmptyString(str)
   return str and str ~= "" and string.find(str, "%S")

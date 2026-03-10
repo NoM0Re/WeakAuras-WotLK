@@ -498,6 +498,14 @@ do -- function Archivist:Archive(data)
 	end
 end
 
+local function tInvert(tbl)
+  local inverted = {}
+  for k, v in pairs(tbl) do
+    inverted[v] = k
+  end
+  return inverted
+end
+
 do -- function Archivist:DeArchive(encoded)
 	local escape2unused = {
 		["\\"] = "\001",

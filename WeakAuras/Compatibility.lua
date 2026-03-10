@@ -1,47 +1,31 @@
+local AddonName = ...
+local Private = select(2, ...)
+
 local ipairs = ipairs
 local pairs = pairs
 local ceil, floor = math.ceil, math.floor
-local tRemove = table.remove
 local tInsert = table.insert
+local next = next
 
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 
-function noop() end
+local TARGET_FRAME_PER_SEC = 60.0
 
-function ipairs_reverse(table)
-  local function Enumerator(table, index)
+local function noop() end
+
+local function ipairs_reverse(tbl)
+  local function Enumerator(tbl, index)
     index = index - 1
-    local value = table[index]
+    local value = tbl[index]
     if value ~= nil then
       return index, value
     end
   end
-  return Enumerator, table, #table + 1
+  return Enumerator, tbl, #tbl + 1
 end
 
-function tDeleteItem(tbl, item)
-  local size = #tbl
-  local index = size
-  while index > 0 do
-    if item == tbl[index] then
-      tRemove(tbl, index)
-    end
-    index = index - 1
-  end
-  return size - #tbl
-end
-
-function tContains(tbl, item)
-  for k, v in pairs(tbl) do
-    if item == v then
-      return true
-    end
-  end
-  return false
-end
-
-function tInvert(tbl)
+local function tInvert(tbl)
   local inverted = {}
   for k, v in pairs(tbl) do
     inverted[v] = k
@@ -49,14 +33,14 @@ function tInvert(tbl)
   return inverted
 end
 
-function Round(value)
+local function Round(value)
   if value < 0.0 then
     return ceil(value - 0.5)
   end
   return floor(value + 0.5)
 end
 
-function tIndexOf(tbl, item)
+local function tIndexOf(tbl, item)
   for i, v in ipairs(tbl) do
     if item == v then
       return i
@@ -64,23 +48,23 @@ function tIndexOf(tbl, item)
   end
 end
 
-function TableHasAnyEntries(tbl)
+local function TableHasAnyEntries(tbl)
   return next(tbl) ~= nil
 end
 
-function tAppendAll(table, addedArray)
+local function tAppendAll(tbl, addedArray)
   for i, element in ipairs(addedArray) do
-    tInsert(table, element)
+    tInsert(tbl, element)
   end
 end
 
-function MergeTable(destination, source)
+local function MergeTable(destination, source)
   for k, v in pairs(source) do
     destination[k] = v
   end
 end
 
-function tCompare(lhsTable, rhsTable, depth)
+local function tCompare(lhsTable, rhsTable, depth)
   depth = depth or 1
   for key, value in pairs(lhsTable) do
     if type(value) == "table" then
@@ -98,7 +82,7 @@ function tCompare(lhsTable, rhsTable, depth)
     end
   end
 
-  for key, value in pairs(rhsTable) do
+  for key in pairs(rhsTable) do
     if lhsTable[key] == nil then
       return false
     end
@@ -107,38 +91,27 @@ function tCompare(lhsTable, rhsTable, depth)
   return true
 end
 
-function IsInGroup()
+local function IsInGroup()
   return GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0
 end
 
-function IsInRaid()
+local function IsInRaid()
   return GetNumRaidMembers() > 0
 end
 
-function GetNumSubgroupMembers()
+local function GetNumSubgroupMembers()
   return GetNumPartyMembers()
 end
 
-function GetNumGroupMembers()
+local function GetNumGroupMembers()
   return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
 end
 
-RAID_CLASS_COLORS.HUNTER.colorStr = "ffabd473"
-RAID_CLASS_COLORS.WARLOCK.colorStr = "ff8788ee"
-RAID_CLASS_COLORS.PRIEST.colorStr = "ffffffff"
-RAID_CLASS_COLORS.PALADIN.colorStr = "fff58cba"
-RAID_CLASS_COLORS.MAGE.colorStr = "ff3fc7eb"
-RAID_CLASS_COLORS.ROGUE.colorStr = "fffff569"
-RAID_CLASS_COLORS.DRUID.colorStr = "ffff7d0a"
-RAID_CLASS_COLORS.SHAMAN.colorStr = "ff0070de"
-RAID_CLASS_COLORS.WARRIOR.colorStr = "ffc79c6e"
-RAID_CLASS_COLORS.DEATHKNIGHT.colorStr = "ffc41f3b"
-
-function WrapTextInColorCode(text, colorHexString)
+local function WrapTextInColorCode(text, colorHexString)
   return ("|c%s%s|r"):format(colorHexString, text)
 end
 
-function CreateTextureMarkup(file, fileWidth, fileHeight, width, height, left, right, top, bottom, xOffset, yOffset)
+local function CreateTextureMarkup(file, fileWidth, fileHeight, width, height, left, right, top, bottom, xOffset, yOffset)
   return ("|T%s:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d|t"):format(
     file,
     height,
@@ -154,7 +127,7 @@ function CreateTextureMarkup(file, fileWidth, fileHeight, width, height, left, r
   )
 end
 
-function Clamp(value, min, max)
+local function Clamp(value, min, max)
   if value > max then
     return max
   elseif value < min then
@@ -163,20 +136,63 @@ function Clamp(value, min, max)
   return value
 end
 
--- This section is mostly used by Private.SmoothStatusBarMixin
-function Lerp(startValue, endValue, amount)
+local function Lerp(startValue, endValue, amount)
   return (1 - amount) * startValue + amount * endValue
 end
 
-function Saturate(value)
+local function Saturate(value)
   return Clamp(value, 0, 1)
 end
 
-local TARGET_FRAME_PER_SEC = 60.0
-function DeltaLerp(startValue, endValue, amount, timeSec)
+local function DeltaLerp(startValue, endValue, amount, timeSec)
   return Lerp(startValue, endValue, Saturate(amount * timeSec * TARGET_FRAME_PER_SEC))
 end
 
-function FrameDeltaLerp(startValue, endValue, amount, elapsed)
+local function FrameDeltaLerp(startValue, endValue, amount, elapsed)
   return DeltaLerp(startValue, endValue, amount, elapsed)
+end
+
+RAID_CLASS_COLORS.HUNTER.colorStr = "ffabd473"
+RAID_CLASS_COLORS.WARLOCK.colorStr = "ff8788ee"
+RAID_CLASS_COLORS.PRIEST.colorStr = "ffffffff"
+RAID_CLASS_COLORS.PALADIN.colorStr = "fff58cba"
+RAID_CLASS_COLORS.MAGE.colorStr = "ff3fc7eb"
+RAID_CLASS_COLORS.ROGUE.colorStr = "fffff569"
+RAID_CLASS_COLORS.DRUID.colorStr = "ffff7d0a"
+RAID_CLASS_COLORS.SHAMAN.colorStr = "ff0070de"
+RAID_CLASS_COLORS.WARRIOR.colorStr = "ffc79c6e"
+RAID_CLASS_COLORS.DEATHKNIGHT.colorStr = "ffc41f3b"
+
+-- Export into Private namespace and if does not exist into global namespace
+do
+  local functions = {
+    noop = noop,
+    ipairs_reverse = ipairs_reverse,
+    tInvert = tInvert,
+    Round = Round,
+    tIndexOf = tIndexOf,
+    TableHasAnyEntries = TableHasAnyEntries,
+    tAppendAll = tAppendAll,
+    MergeTable = MergeTable,
+    tCompare = tCompare,
+    IsInGroup = IsInGroup,
+    IsInRaid = IsInRaid,
+    GetNumSubgroupMembers = GetNumSubgroupMembers,
+    GetNumGroupMembers = GetNumGroupMembers,
+    WrapTextInColorCode = WrapTextInColorCode,
+    CreateTextureMarkup = CreateTextureMarkup,
+    Clamp = Clamp,
+    Lerp = Lerp,
+    Saturate = Saturate,
+    DeltaLerp = DeltaLerp,
+    FrameDeltaLerp = FrameDeltaLerp,
+  }
+
+  local _G = _G
+  for name, func in pairs(functions) do
+    Private[name] = func
+    if not _G[name] then
+      _G[name] = func
+    end
+  end
 end
