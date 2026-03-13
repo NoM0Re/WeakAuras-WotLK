@@ -58,6 +58,7 @@ BossMods.lua
 TSUHelpers.lua
 AuraWarnings.lua
 AuraEnvironment.lua
+AuraEnvironmentWrappedSystems.lua
 DebugLog.lua
 
 # Region support

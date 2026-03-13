@@ -7,7 +7,7 @@ local L = WeakAuras.L;
 local function createOptions(parentData, data, index, subIndex)
   local areaAnchors = {}
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(parentData) do
-    WeakAuras.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
+    OptionsPrivate.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
   end
   local options = {
     __title = L["Border %s"]:format(subIndex),

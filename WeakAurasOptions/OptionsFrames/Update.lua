@@ -253,7 +253,7 @@ local function DebugPrintDiff(diff, id, uid)
 end
 
 local function Diff(ours, theirs)
-  local ignored = WeakAuras.Mixin({},
+  local ignored = OptionsPrivate.CreateFromMixins(
     OptionsPrivate.Private.internal_fields,
     OptionsPrivate.Private.non_transmissable_fields
   )

@@ -10,6 +10,7 @@ Repository store type. This is a meta-archive of sorts.
 --]]
 
 local Archivist = select(2, ...).Archivist
+local Mixin = select(2, ...).Mixin
 
 local subStoreMethods = {
   Validate = function(self)
@@ -63,7 +64,7 @@ local storeMethods = {
   Set = function(self, id, data)
     if data ~= nil and type(id) == "string" then
       if not self.stores[id] then
-        self.stores[id] = WeakAuras.Mixin({}, subStoreMethods)
+        self.stores[id] = Mixin({}, subStoreMethods)
       end
       self.stores[id]:Set(data)
       return self.stores[id]
@@ -93,16 +94,16 @@ local prototype = {
     if type(store.stores) ~= "table" then
       store.stores = {}
     end
-    WeakAuras.Mixin(store, storeMethods)
+    Mixin(store, storeMethods)
     store:Validate()
     return store, store
   end,
   Update = nil, -- This is the initial version! No need for Update yet.
   Open = function(self, image)
     local store = image
-    WeakAuras.Mixin(store, storeMethods)
+    Mixin(store, storeMethods)
     for _, subStore in pairs(store.stores) do
-      WeakAuras.Mixin(subStore, subStoreMethods)
+      Mixin(subStore, subStoreMethods)
     end
     store:Validate()
     return store

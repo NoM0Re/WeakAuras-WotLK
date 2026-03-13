@@ -139,17 +139,17 @@ Private.unit_realm_name_types = {
 }
 
 local timeFormatter = {}
-WeakAuras.Mixin(timeFormatter, SecondsFormatterMixin)
-timeFormatter:Init(0, SecondsFormatter.Abbreviation.OneLetter)
+Private.Mixin(timeFormatter, Private.SecondsFormatterMixin)
+timeFormatter:Init(0, Private.SecondsFormatter.Abbreviation.OneLetter)
 
 -- The default time formatter adds a space between the value and the unit
 -- While there is a API to strip it, that API does not work on all locales, e.g. german
 -- Thus, copy the interval descriptions, strip the whitespace from them
 -- and hack the timeFormatter to use our interval descriptions
 local timeFormatIntervalDescriptionFixed = {}
-timeFormatIntervalDescriptionFixed = CopyTable(SecondsFormatter.IntervalDescription)
+timeFormatIntervalDescriptionFixed = CopyTable(Private.SecondsFormatter.IntervalDescription)
 for i, interval in ipairs(timeFormatIntervalDescriptionFixed) do
-  interval.formatString = CopyTable(SecondsFormatter.IntervalDescription[i].formatString)
+  interval.formatString = CopyTable(Private.SecondsFormatter.IntervalDescription[i].formatString)
   for j, formatString in ipairs(interval.formatString) do
     interval.formatString[j] = formatString:gsub(" ", "")
   end
@@ -166,15 +166,15 @@ end
 local simpleFormatters = {
   AbbreviateNumbers = function(value)
     if type(value) == "string" then value = tonumber(value) end
-    return (type(value) == "number") and AbbreviateNumbers(value) or value
+    return (type(value) == "number") and Private.AbbreviateNumbers(value) or value
   end,
   AbbreviateLargeNumbers = function(value)
     if type(value) == "string" then value = tonumber(value) end
-    return (type(value) == "number") and AbbreviateLargeNumbers(Round(value)) or value
+    return (type(value) == "number") and Private.AbbreviateLargeNumbers(Round(value)) or value
   end,
   BreakUpLargeNumbers = function(value)
     if type(value) == "string" then value = tonumber(value) end
-    return (type(value) == "number") and BreakUpLargeNumbers(value) or value
+    return (type(value) == "number") and Private.BreakUpLargeNumbers(value) or value
   end,
   floor = function(value)
     if type(value) == "string" then value = tonumber(value) end
@@ -1121,7 +1121,7 @@ local target_unit_types = {
   focus = L["Focus"],
 }
 
-Private.unit_types = WeakAuras.Mixin({
+Private.unit_types = Private.Mixin({
   player = L["Player"],
   group = L["Group"],
   member = L["Specific Unit"],
@@ -1129,7 +1129,7 @@ Private.unit_types = WeakAuras.Mixin({
   multi = L["Multi-target"]
 }, target_unit_types)
 
-Private.unit_types_bufftrigger_2 = WeakAuras.Mixin({
+Private.unit_types_bufftrigger_2 = Private.Mixin({
   player = L["Player"],
   group = L["Smart Group"],
   raid = L["Raid"],
@@ -1144,18 +1144,18 @@ if WeakAuras.IsAwesomeEnabled() then
   Private.unit_types_bufftrigger_2.nameplate = L["Nameplate"]
 end
 
-Private.actual_unit_types = WeakAuras.Mixin({
+Private.actual_unit_types = Private.Mixin({
   player = L["Player"],
   pet = L["Pet"],
 }, target_unit_types)
 
-Private.actual_unit_types_with_specific = WeakAuras.Mixin({
+Private.actual_unit_types_with_specific = Private.Mixin({
   player = L["Player"],
   pet = L["Pet"],
   member = L["Specific Unit"]
 }, target_unit_types)
 
-Private.actual_unit_types_cast = WeakAuras.Mixin({
+Private.actual_unit_types_cast = Private.Mixin({
   player = L["Player"],
   group = L["Smart Group"],
   party = L["Party"],
@@ -1171,7 +1171,7 @@ end
 
 Private.actual_unit_types_cast_tooltip = L["• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.\n• |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.\n|cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.\n• |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.\n• |cffffff00Smart Group|r adjusts to your current group type, matching just the \"player\" when solo, \"party\" units (including \"player\") in a party or \"raid\" units in a raid.\n\n|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura."]
 
-Private.threat_unit_types = WeakAuras.Mixin({
+Private.threat_unit_types = Private.Mixin({
   boss = L["Boss"],
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
@@ -1180,7 +1180,7 @@ if WeakAuras.IsAwesomeEnabled() then
   Private.threat_unit_types.nameplate = L["Nameplate"]
 end
 
-Private.unit_types_range_check = WeakAuras.Mixin({
+Private.unit_types_range_check = Private.Mixin({
   pet = L["Pet"],
   member = L["Specific Unit"]
 }, target_unit_types)

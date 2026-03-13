@@ -3,10 +3,27 @@ local OptionsPrivate = select(2, ...)
 
 local ipairs = ipairs
 local pairs = pairs
-local ceil, floor = math.ceil, math.floor
+local select = select
+local ceil = math.ceil
+local floor = math.floor
+local min = math.min
+local max = math.max
 local tInsert = table.insert
-local min, max = math.min, math.max
 local unpack = unpack
+
+local function Mixin(object, ...)
+  for i = 1, select("#", ...) do
+    local mixin = select(i, ...)
+    for k, v in pairs(mixin) do
+      object[k] = v
+    end
+  end
+  return object
+end
+
+local function CreateFromMixins(...)
+  return Mixin({}, ...)
+end
 
 local function ipairs_reverse(tbl)
   local function Enumerator(tbl, index)
@@ -18,7 +35,6 @@ local function ipairs_reverse(tbl)
   end
   return Enumerator, tbl, #tbl + 1
 end
-
 
 local function Round(value)
   if value < 0.0 then
@@ -52,7 +68,9 @@ end
 
 -- Export into OptionsPrivate namespace
 do
-  local functions = {
+  local exports = {
+    Mixin = Mixin,
+    CreateFromMixins = CreateFromMixins,
     ipairs_reverse = ipairs_reverse,
     Round = Round,
     tIndexOf = tIndexOf,
@@ -60,9 +78,8 @@ do
     Clamp = Clamp,
   }
 
-  local _G = _G
-  for name, func in pairs(functions) do
-    OptionsPrivate[name] = func
+  for name, value in pairs(exports) do
+    OptionsPrivate[name] = value
   end
 end
 

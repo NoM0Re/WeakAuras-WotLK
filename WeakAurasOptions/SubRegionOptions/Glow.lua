@@ -8,7 +8,7 @@ local indentWidth = 0.15
 local function createOptions(parentData, data, index, subIndex)
   local areaAnchors = {}
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(parentData) do
-    WeakAuras.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
+    OptionsPrivate.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
   end
 
   local hiddenGlowExtra = function()

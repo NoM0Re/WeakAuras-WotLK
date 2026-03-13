@@ -532,20 +532,20 @@ local function GetGenericTriggerOptions(data, triggernum)
   }
 
   if (triggerType == "custom") then
-    WeakAuras.Mixin(options, GetCustomTriggerOptions(data, triggernum));
+    OptionsPrivate.Mixin(options, GetCustomTriggerOptions(data, triggernum));
   elseif (OptionsPrivate.Private.category_event_prototype[triggerType]) then
     local prototypeOptions;
     local trigger = data.triggers[triggernum].trigger
     if(OptionsPrivate.Private.event_prototypes[trigger.event]) then
       prototypeOptions = OptionsPrivate.ConstructOptions(OptionsPrivate.Private.event_prototypes[trigger.event], data, 10, triggernum);
       if (trigger.event == "Combat Log") then
-        WeakAuras.Mixin(prototypeOptions, combatLogOptions);
+        OptionsPrivate.Mixin(prototypeOptions, combatLogOptions);
       end
     else
       print("|cFF8800FFWeakAuras|r: No prototype for", trigger.event);
     end
     if (prototypeOptions) then
-      WeakAuras.Mixin(options, prototypeOptions);
+      OptionsPrivate.Mixin(options, prototypeOptions);
     end
   end
 

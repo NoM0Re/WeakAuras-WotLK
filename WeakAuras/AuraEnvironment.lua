@@ -196,7 +196,9 @@ local blockedTables = {
   ChatFrame1 = true,
   WeakAurasSaved = true,
   WeakAurasOptions = true,
-  WeakAurasOptionsSaved = true
+  WeakAurasOptionsSaved = true,
+  ItemRackUser = true,
+  ItemRackEvents = true
 }
 
 local aura_environments = {}
@@ -529,9 +531,23 @@ local overridden = {
   ActionButton_HideOverlayGlow = WeakAuras.HideOverlayGlow,
   WeakAuras = FakeWeakAuras
 }
+for k, v in pairs(Private.AuraEnvOverrides) do
+  overridden[k] = v
+end
+
+-- WORKAROUND API which return Mixin'd values need those mixin "rawgettable" in caller's fenv #5071
+local mixins = {}
+if ColorMixin then mixins["ColorMixin"] = ColorMixin end
+if Vector2DMixin then mixins["Vector2DMixin"] = Vector2DMixin end
+if Vector3DMixin then mixins["Vector3DMixin"] = Vector3DMixin end
+if ItemLocationMixin then mixins["ItemLocationMixin"] = ItemLocationMixin end
+if ItemTransmogInfoMixin then mixins["ItemTransmogInfoMixin"] = ItemTransmogInfoMixin end
+if TransmogPendingInfoMixin then mixins["TransmogPendingInfoMixin"] = TransmogPendingInfoMixin end
+if TransmogLocationMixin then mixins["TransmogLocationMixin"] = TransmogLocationMixin end
+if PlayerLocationMixin then mixins["PlayerLocationMixin"] = PlayerLocationMixin end
 
 local env_getglobal_custom
-local exec_env_custom = setmetatable({},
+local exec_env_custom = setmetatable(CopyTable(mixins),
 {
   __index = function(t, k)
     if k == "_G" then
@@ -542,6 +558,10 @@ local exec_env_custom = setmetatable({},
       return current_aura_env
     elseif k == "DebugPrint" then
       return DebugPrint
+    elseif k == "C_Timer" then
+      return current_aura_env and Private.AuraEnvironmentWrappedSystem.Get("C_Timer",
+                                      current_aura_env.id, current_aura_env.cloneId)
+                              or C_Timer
     elseif blockedFunctions[k] then
       blocked(k)
       return function(_) end
@@ -592,7 +612,7 @@ local PrivateForBuiltIn = {
 }
 
 local env_getglobal_builtin
-local exec_env_builtin = setmetatable({},
+local exec_env_builtin = setmetatable(CopyTable(mixins),
 {
   __index = function(t, k)
     if k == "_G" then

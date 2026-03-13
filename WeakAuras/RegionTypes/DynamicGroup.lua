@@ -90,7 +90,7 @@ local controlPointFunctions = {
 
 local function createControlPoint(self)
   local controlPoint = CreateFrame("Frame", nil, self.parent)
-  WeakAuras.Mixin(controlPoint, controlPointFunctions)
+  Private.Mixin(controlPoint, controlPointFunctions)
 
   controlPoint:SetWidth(16)
   controlPoint:SetHeight(16)

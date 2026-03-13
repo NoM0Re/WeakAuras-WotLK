@@ -3,9 +3,13 @@ local Private = select(2, ...)
 
 local ipairs = ipairs
 local pairs = pairs
-local ceil, floor = math.ceil, math.floor
-local tInsert = table.insert
 local next = next
+local select = select
+local unpack = unpack
+local type = type
+local ceil = math.ceil
+local floor = math.floor
+local tInsert = table.insert
 
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
@@ -13,6 +17,16 @@ local GetNumRaidMembers = GetNumRaidMembers
 local TARGET_FRAME_PER_SEC = 60.0
 
 local function noop() end
+
+local function SafePack(...)
+  local tbl = { ... }
+  tbl.n = select("#", ...)
+  return tbl
+end
+
+local function SafeUnpack(tbl, startIndex)
+  return unpack(tbl, startIndex or 1, tbl.n)
+end
 
 local function ipairs_reverse(tbl)
   local function Enumerator(tbl, index)
@@ -25,19 +39,32 @@ local function ipairs_reverse(tbl)
   return Enumerator, tbl, #tbl + 1
 end
 
+local function Mixin(object, ...)
+  for i = 1, select("#", ...) do
+    local mixin = select(i, ...)
+    for k, v in pairs(mixin) do
+      object[k] = v
+    end
+  end
+  return object
+end
+
+local function CreateFromMixins(...)
+  return Mixin({}, ...)
+end
+
+local function MergeTable(destination, source)
+  for k, v in pairs(source) do
+    destination[k] = v
+  end
+end
+
 local function tInvert(tbl)
   local inverted = {}
   for k, v in pairs(tbl) do
     inverted[v] = k
   end
   return inverted
-end
-
-local function Round(value)
-  if value < 0.0 then
-    return ceil(value - 0.5)
-  end
-  return floor(value + 0.5)
 end
 
 local function tIndexOf(tbl, item)
@@ -55,12 +82,6 @@ end
 local function tAppendAll(tbl, addedArray)
   for i, element in ipairs(addedArray) do
     tInsert(tbl, element)
-  end
-end
-
-local function MergeTable(destination, source)
-  for k, v in pairs(source) do
-    destination[k] = v
   end
 end
 
@@ -89,6 +110,13 @@ local function tCompare(lhsTable, rhsTable, depth)
   end
 
   return true
+end
+
+local function Round(value)
+  if value < 0.0 then
+    return ceil(value - 0.5)
+  end
+  return floor(value + 0.5)
 end
 
 local function IsInGroup()
@@ -152,21 +180,11 @@ local function FrameDeltaLerp(startValue, endValue, amount, elapsed)
   return DeltaLerp(startValue, endValue, amount, elapsed)
 end
 
-RAID_CLASS_COLORS.HUNTER.colorStr = "ffabd473"
-RAID_CLASS_COLORS.WARLOCK.colorStr = "ff8788ee"
-RAID_CLASS_COLORS.PRIEST.colorStr = "ffffffff"
-RAID_CLASS_COLORS.PALADIN.colorStr = "fff58cba"
-RAID_CLASS_COLORS.MAGE.colorStr = "ff3fc7eb"
-RAID_CLASS_COLORS.ROGUE.colorStr = "fffff569"
-RAID_CLASS_COLORS.DRUID.colorStr = "ffff7d0a"
-RAID_CLASS_COLORS.SHAMAN.colorStr = "ff0070de"
-RAID_CLASS_COLORS.WARRIOR.colorStr = "ffc79c6e"
-RAID_CLASS_COLORS.DEATHKNIGHT.colorStr = "ffc41f3b"
-
--- Export into Private namespace and if does not exist into global namespace
 do
-  local functions = {
+  local exports = {
     noop = noop,
+    Mixin = Mixin,
+    CreateFromMixins = CreateFromMixins,
     ipairs_reverse = ipairs_reverse,
     tInvert = tInvert,
     Round = Round,
@@ -175,6 +193,8 @@ do
     tAppendAll = tAppendAll,
     MergeTable = MergeTable,
     tCompare = tCompare,
+    SafePack = SafePack,
+    SafeUnpack = SafeUnpack,
     IsInGroup = IsInGroup,
     IsInRaid = IsInRaid,
     GetNumSubgroupMembers = GetNumSubgroupMembers,
@@ -189,10 +209,23 @@ do
   }
 
   local _G = _G
-  for name, func in pairs(functions) do
-    Private[name] = func
+  for name, value in pairs(exports) do
+    Private[name] = value
+    Private.AuraEnvOverrides = Private.AuraEnvOverrides or {}
+    Private.AuraEnvOverrides[name] = value
     if not _G[name] then
-      _G[name] = func
+      _G[name] = value
     end
   end
 end
+
+RAID_CLASS_COLORS.HUNTER.colorStr = "ffabd473"
+RAID_CLASS_COLORS.WARLOCK.colorStr = "ff8788ee"
+RAID_CLASS_COLORS.PRIEST.colorStr = "ffffffff"
+RAID_CLASS_COLORS.PALADIN.colorStr = "fff58cba"
+RAID_CLASS_COLORS.MAGE.colorStr = "ff3fc7eb"
+RAID_CLASS_COLORS.ROGUE.colorStr = "fffff569"
+RAID_CLASS_COLORS.DRUID.colorStr = "ffff7d0a"
+RAID_CLASS_COLORS.SHAMAN.colorStr = "ff0070de"
+RAID_CLASS_COLORS.WARRIOR.colorStr = "ffc79c6e"
+RAID_CLASS_COLORS.DEATHKNIGHT.colorStr = "ffc41f3b"
