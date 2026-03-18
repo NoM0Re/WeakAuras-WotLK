@@ -6,7 +6,7 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local OptionsPrivate = select(2, ...)
 
-local Type, Version = "WeakAurasSpinBox", 5
+local Type, Version = "WeakAurasSpinBox", 6
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then
   return
@@ -22,7 +22,7 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 local Clamp = OptionsPrivate.Clamp
 
 local progressLeftOffset = -3
-local progressExtraWidth = -0
+local progressExtraWidth = 0
 local progressTopOffset = -2
 local progressBottomOffset = 2
 
@@ -40,13 +40,13 @@ end
 
 local function UpdateButtons(self)
   local value = self:GetValue() or 0
-
+  --   self.leftbutton:SetEnabled(value > self.min)
   if value > self.min then
     self.leftbutton:Enable()
   else
     self.leftbutton:Disable()
   end
-
+  -- self.rightbutton:SetEnabled(value < self.max)
   if value < self.max then
     self.rightbutton:Enable()
   else
@@ -71,13 +71,10 @@ end
 local function UpdateHandleColor(self)
   if self.progressBarHandle.mouseDown then
     self.progressBarHandleTexture:SetVertexColor(0.6, 0.6, 0, 1)
-    --self.progressBarHandleTexture:SetColorTexture(0.6, 0.6, 0, 1)
   elseif MouseIsOver(self.progressBarHandle) then
     self.progressBarHandleTexture:SetVertexColor(0.8, 0.8, 0, 1)
-    --self.progressBarHandleTexture:SetColorTexture(0.8, 0.8, 0, 1)
   else
     self.progressBarHandleTexture:SetVertexColor(0.4, 0.4, 0, 1)
-    --self.progressBarHandleTexture:SetColorTexture(0.4, 0.4, 0, 1)
   end
 end
 
@@ -171,7 +168,9 @@ local function ProgressBarHandle_OnUpdate(frame, elapsed)
       local delta =  p * (frame.obj.max - frame.obj.min)
       local step = frame.obj.step
       local v = frame.originalValue + delta
-      v = v - v % step
+      if step and step > 0 then
+        v = v - v % step
+      end
       v = Clamp(v, frame.obj.min, frame.obj.max)
       frame.obj:SetValue(v, false)
       frame.timeElapsed = 0
@@ -284,7 +283,6 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
   local widgetName = ("%s%d"):format(Type, AceGUI:GetNextWidgetNum(Type))
-
   local frame = CreateFrame("Frame", widgetName, UIParent)
   frame:SetScript("OnEnter", Frame_OnEnter)
 
