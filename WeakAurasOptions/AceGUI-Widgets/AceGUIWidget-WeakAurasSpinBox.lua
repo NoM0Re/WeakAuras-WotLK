@@ -168,9 +168,7 @@ local function ProgressBarHandle_OnUpdate(frame, elapsed)
       local delta =  p * (frame.obj.max - frame.obj.min)
       local step = frame.obj.step
       local v = frame.originalValue + delta
-      if step and step > 0 then
-        v = v - v % step
-      end
+      v = v - v % step
       v = Clamp(v, frame.obj.min, frame.obj.max)
       frame.obj:SetValue(v, false)
       frame.timeElapsed = 0
