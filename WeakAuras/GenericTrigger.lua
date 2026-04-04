@@ -2243,12 +2243,14 @@ do
   local itemCdExps = {};
   local itemCdHandles = {};
   local itemCdEnabled = {};
+  local itemSpellIdToItemId = {}
 
   local itemSlots = {};
   local itemSlotsCdDurs = {};
   local itemSlotsCdExps = {};
   local itemSlotsCdHandles = {};
   local itemSlotsEnable = {};
+  local itemSlotsSpellIdToSlot = {}
 
   local runes = {};
   local runeCdDurs = {};
@@ -2928,121 +2930,136 @@ do
 
   function Private.CheckItemCooldowns()
     for id, _ in pairs(items) do
-      local startTime, duration, enabled = GetItemCooldown(id);
-      if (duration == 0) then
-        enabled = 1;
-      end
-      if (enabled == 0) then
-        startTime, duration = 0, 0
-      end
+      Private.CheckItemCooldown(id)
+    end
+  end
 
-      local itemCdEnabledChanged = (itemCdEnabled[id] ~= enabled);
-      itemCdEnabled[id] = enabled;
-      startTime = startTime or 0;
-      duration = duration or 0;
-      local time = GetTime();
+  function Private.CheckItemCooldown(id)
+    local startTime, duration, enabled = GetItemCooldown(id);
+    -- TODO: In 10.2.6 the apis return values changed from 1,0 for enabled to true, false
+    -- We should adjust once its on all versions
+    if enabled == false then
+      enabled = 0
+    elseif enabled == true then
+      enabled = 1
+    end
+    if (duration == 0) then
+      enabled = 1;
+    end
+    if (enabled == 0) then
+      startTime, duration = 0, 0
+    end
 
-      -- We check against 1.5 and gcdDuration, as apparently the durations might not match exactly.
-      -- But there shouldn't be any trinket with a actual cd of less than 1.5 anyway
-      if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
-        -- On non-GCD cooldown
-        local endTime = startTime + duration;
+    local itemCdEnabledChanged = (itemCdEnabled[id] ~= enabled);
+    itemCdEnabled[id] = enabled;
+    startTime = startTime or 0;
+    duration = duration or 0;
+    local time = GetTime();
 
-        if not(itemCdExps[id]) then
-          -- New cooldown
-          itemCdDurs[id] = duration;
-          itemCdExps[id] = endTime;
-          itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
-          if not WeakAuras.IsPaused() then
-            Private.ScanEventsByID("ITEM_COOLDOWN_STARTED", id)
-          end
-          itemCdEnabledChanged = false;
-        elseif(itemCdExps[id] ~= endTime) then
-          -- Cooldown is now different
-          if(itemCdHandles[id]) then
-            timer:CancelTimer(itemCdHandles[id]);
-          end
-          itemCdDurs[id] = duration;
-          itemCdExps[id] = endTime;
-          itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
-          if not WeakAuras.IsPaused() then
-            Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id)
-          end
-          itemCdEnabledChanged = false;
+    -- We check against 1.5 and gcdDuration, as apparently the durations might not match exactly.
+    -- But there shouldn't be any trinket with a actual cd of less than 1.5 anyway
+    if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
+      -- On non-GCD cooldown
+      local endTime = startTime + duration;
+
+      if not(itemCdExps[id]) then
+        -- New cooldown
+        itemCdDurs[id] = duration;
+        itemCdExps[id] = endTime;
+        itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
+        if not WeakAuras.IsPaused() then
+          Private.ScanEventsByID("ITEM_COOLDOWN_STARTED", id)
         end
-      elseif(duration > 0) then
-      -- GCD, do nothing
-      else
-        if(itemCdExps[id]) then
-          -- Somehow CheckCooldownReady caught the item cooldown before the timer callback
-          -- This shouldn't happen, but if it does, no problem
-          if(itemCdHandles[id]) then
-            timer:CancelTimer(itemCdHandles[id]);
-          end
-          ItemCooldownFinished(id);
-          itemCdEnabledChanged = false;
+        itemCdEnabledChanged = false;
+      elseif(itemCdExps[id] ~= endTime) then
+        -- Cooldown is now different
+        if(itemCdHandles[id]) then
+          timer:CancelTimer(itemCdHandles[id]);
         end
+        itemCdDurs[id] = duration;
+        itemCdExps[id] = endTime;
+        itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
+        if not WeakAuras.IsPaused() then
+          Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id)
+        end
+        itemCdEnabledChanged = false;
       end
-      if (itemCdEnabledChanged and not WeakAuras.IsPaused()) then
-        Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id);
+    elseif(duration > 0) then
+    -- GCD, do nothing
+    else
+      if(itemCdExps[id]) then
+        -- Somehow CheckCooldownReady caught the item cooldown before the timer callback
+        -- This shouldn't happen, but if it does, no problem
+        if(itemCdHandles[id]) then
+          timer:CancelTimer(itemCdHandles[id]);
+        end
+        ItemCooldownFinished(id);
+        itemCdEnabledChanged = false;
       end
+    end
+    if (itemCdEnabledChanged and not WeakAuras.IsPaused()) then
+      Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id);
     end
   end
 
   function Private.CheckItemSlotCooldowns()
     for id, itemId in pairs(itemSlots) do
-      local startTime, duration, enable = GetInventoryItemCooldown("player", id);
-      itemSlotsEnable[id] = enable;
-      startTime = startTime or 0;
-      duration = duration or 0;
-      local time = GetTime();
+      Private.CheckItemSlotCooldown(id, itemId)
+    end
+  end
 
-      -- We check against 1.5 and gcdDuration, as apparently the durations might not match exactly.
-      -- But there shouldn't be any trinket with a actual cd of less than 1.5 anyway
-      if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
-        -- On non-GCD cooldown
-        local endTime = startTime + duration;
+  function Private.CheckItemSlotCooldown(id, itemId)
+    local startTime, duration, enable = GetInventoryItemCooldown("player", id);
+    itemSlotsEnable[id] = enable;
+    startTime = startTime or 0;
+    duration = duration or 0;
+    local time = GetTime();
 
-        if not(itemSlotsCdExps[id]) then
-          -- New cooldown
-          itemSlotsCdDurs[id] = duration;
-          itemSlotsCdExps[id] = endTime;
-          itemSlotsCdHandles[id] = timer:ScheduleTimer(ItemSlotCooldownFinished, endTime - time, id);
-          if not WeakAuras.IsPaused() then
-            Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_STARTED", id)
-          end
-        elseif(itemSlotsCdExps[id] ~= endTime) then
-          -- Cooldown is now different
-          if(itemSlotsCdHandles[id]) then
-            timer:CancelTimer(itemSlotsCdHandles[id]);
-          end
-          itemSlotsCdDurs[id] = duration;
-          itemSlotsCdExps[id] = endTime;
-          itemSlotsCdHandles[id] = timer:ScheduleTimer(ItemSlotCooldownFinished, endTime - time, id);
-          if not WeakAuras.IsPaused() then
-            Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_CHANGED", id)
-          end
-        end
-      elseif(duration > 0) then
-      -- GCD, do nothing
-      else
-        if(itemSlotsCdExps[id]) then
-          -- Somehow CheckCooldownReady caught the item cooldown before the timer callback
-          -- This shouldn't happen, but if it does, no problem
-          if(itemSlotsCdHandles[id]) then
-            timer:CancelTimer(itemSlotsCdHandles[id]);
-          end
-          ItemSlotCooldownFinished(id);
-        end
-      end
+    -- We check against 1.5 and gcdDuration, as apparently the durations might not match exactly.
+    -- But there shouldn't be any trinket with a actual cd of less than 1.5 anyway
+    if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
+      -- On non-GCD cooldown
+      local endTime = startTime + duration;
 
-      local newItemId = GetInventoryItemID("player", id);
-      if (itemId ~= newItemId) then
+      if not(itemSlotsCdExps[id]) then
+        -- New cooldown
+        itemSlotsCdDurs[id] = duration;
+        itemSlotsCdExps[id] = endTime;
+        itemSlotsCdHandles[id] = timer:ScheduleTimer(ItemSlotCooldownFinished, endTime - time, id);
         if not WeakAuras.IsPaused() then
-          Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_ITEM_CHANGED", id)
+          Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_STARTED", id)
         end
-        itemSlots[id] = newItemId or 0;
+      elseif(itemSlotsCdExps[id] ~= endTime) then
+        -- Cooldown is now different
+        if(itemSlotsCdHandles[id]) then
+          timer:CancelTimer(itemSlotsCdHandles[id]);
+        end
+        itemSlotsCdDurs[id] = duration;
+        itemSlotsCdExps[id] = endTime;
+        itemSlotsCdHandles[id] = timer:ScheduleTimer(ItemSlotCooldownFinished, endTime - time, id);
+        if not WeakAuras.IsPaused() then
+          Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_CHANGED", id)
+        end
       end
+    elseif(duration > 0) then
+    -- GCD, do nothing
+    else
+      if(itemSlotsCdExps[id]) then
+        -- Somehow CheckCooldownReady caught the item cooldown before the timer callback
+        -- This shouldn't happen, but if it does, no problem
+        if(itemSlotsCdHandles[id]) then
+          timer:CancelTimer(itemSlotsCdHandles[id]);
+        end
+        ItemSlotCooldownFinished(id);
+      end
+    end
+
+    local newItemId = GetInventoryItemID("player", id);
+    if (itemId ~= newItemId) then
+      if not WeakAuras.IsPaused() then
+        Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_ITEM_CHANGED", id)
+      end
+      itemSlots[id] = newItemId or 0;
     end
   end
 
@@ -3101,6 +3118,11 @@ do
 
     if not(items[id]) then
       items[id] = true;
+      itemCdDurs[id] = 0
+      itemCdExps[id] = 0
+      itemCdEnabled[id] = 1
+      -- TODO: In 10.2.6 the apis return values changed from 1,0 for enabled to true, false
+      -- We should adjust once its on all versions
       local startTime, duration, enabled = GetItemCooldown(id);
       if (duration == 0) then
         enabled = 1;
@@ -3130,8 +3152,13 @@ do
 
     if not(itemSlots[id]) then
       itemSlots[id] = GetInventoryItemID("player", id);
+      itemSlotsCdDurs[id] = 0
+      itemSlotsCdExps[id] = 0
+      itemSlotsEnable[id] = 1
+
       local startTime, duration, enable = GetInventoryItemCooldown("player", id);
       itemSlotsEnable[id] = enable;
+
       if(duration > 0 and duration > 1.5 and duration ~= WeakAuras.gcdDuration()) then
         local time = GetTime();
         local endTime = startTime + duration;
