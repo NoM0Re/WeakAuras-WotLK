@@ -2260,6 +2260,20 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 86 then
+    if data.subRegions then
+      for index, subRegionData in ipairs(data.subRegions) do
+        if subRegionData.type == "submodel" then
+          subRegionData.bar_model_attach = subRegionData.bar_model_clip
+          subRegionData.bar_model_clip = nil
+          if subRegionData.bar_model_attach then
+            subRegionData.bar_model_stretch = true
+          end
+        end
+      end
+    end
+  end
+
+  if data.internalVersion < 87 then
     if data.conditions then
       for conditionIndex, condition in ipairs(data.conditions) do
         for changeIndex, change in ipairs(condition.changes) do
@@ -2271,7 +2285,7 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
-  if data.internalVersion < 87 then
+  if data.internalVersion < 88 then
     for _, triggerData in ipairs(data.triggers) do
       local trigger = triggerData.trigger
       if trigger and trigger.event == "Talent Known" and trigger.talent then
@@ -2289,6 +2303,10 @@ function Private.Modernize(data, oldSnapshot)
         trigger.use_inverse = nil
       end
     end
+  end
+
+  if data.internalVersion < 89 then
+    data.information.showNilIsFalse = true
   end
 
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())

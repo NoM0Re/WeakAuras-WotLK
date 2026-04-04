@@ -1054,6 +1054,7 @@ function Private.regionPrototype.AddExpandFunction(data, region, cloneId, parent
       end
 
       region:UpdateTick()
+      Private.StopAutoHideTimer(id, cloneId)
     end
     function region:Expand()
       if (region.toShow) then
@@ -1111,6 +1112,7 @@ function Private.regionPrototype.AddExpandFunction(data, region, cloneId, parent
       end
 
       region:UpdateTick()
+      Private.StopAutoHideTimer(id, cloneId)
     end
     function region:Expand()
       if data.anchorFrameType == "SELECTFRAME"

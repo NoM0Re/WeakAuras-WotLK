@@ -268,7 +268,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
       remainingProperty = progressSource[7]
     end
 
-    local stateCheck = "state[" .. trigger .. "] and state[" .. trigger .. "].show and ";
+    local stateCheck = "state[" .. trigger .. "] and ";
     local stateVariableCheck = string.format("state[" .. trigger .. "][%q]", variable) .. "~= nil and ";
 
     local preambleString
@@ -860,7 +860,6 @@ local dynamicConditionsFrame = nil;
 
 local globalConditionAllState = {
   [""] = {
-    show = true;
   }
 };
 

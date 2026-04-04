@@ -3,20 +3,11 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local Private = select(2, ...)
 
-local function fixMissingFields(state)
-  if type(state) ~= "table" then return end
-  -- set show
-  if state.show == nil then
-    state.show = true
-  end
-end
-
 local remove = function(states, key)
   local changed = false
   local state = states[key]
   if state then
-    state.show = false
-    state.changed = true
+    states[key] = nil
     states:SetChanged(true)
     changed = true
   end
@@ -25,9 +16,8 @@ end
 
 local removeAll = function(states)
   local changed = false
-  for _, state in pairs(states) do
-    state.show = false
-    state.changed = true
+  for cloneId in pairs(states) do
+    states[cloneId] = nil
     changed = true
   end
   if changed then
@@ -79,7 +69,6 @@ local replaceOrUpdate = function(states, key, newState, replace)
   local changed = false
   local state = states[key]
   if state then
-    fixMissingFields(newState)
     changed = recurseReplaceOrUpdate(state, newState, true, replace)
     if changed then
       state.changed = true
@@ -93,7 +82,6 @@ local create = function(states, key, newState)
   states[key] = newState
   states[key].changed = true
   states:SetChanged(true)
-  fixMissingFields(states[key])
   return true
 end
 

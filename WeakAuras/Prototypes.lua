@@ -3176,7 +3176,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and state.show and ((state.sourceGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
+          return state and ((state.sourceGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
         end
       },
       {
@@ -3223,7 +3223,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlags(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlags(state.sourceFlags, needle)  == (op == "==")
           end
         end
@@ -3236,7 +3236,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsReaction(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlagsReaction(state.sourceFlags, needle)  == (op == "==")
           end
         end
@@ -3249,7 +3249,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsObjectType(sourceFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlagsObjectType(state.sourceFlags, needle) == (op == "==")
           end
         end
@@ -3285,7 +3285,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and state.show and ((state.destGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
+          return state and ((state.destGUID or '') == (UnitGUID(needle) or '')) == (op == "==")
         end
       },
       {
@@ -3340,7 +3340,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlags(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlags(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -3356,7 +3356,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsReaction(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlagsReaction(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -3372,7 +3372,7 @@ Private.event_prototypes = {
         test = "Private.ExecEnv.CheckCombatLogFlagsObjectType(destFlags, %q)",
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          if state and state.show then
+          if state then
             return Private.ExecEnv.CheckCombatLogFlagsObjectType(state.destFlags, needle) == (op == "==")
           end
         end,
@@ -4063,7 +4063,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (state.paused or (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime())) == (needle == 1)
+          return state and (state.paused or (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime())) == (needle == 1)
         end,
       },
       {
@@ -4079,7 +4079,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-        return state and state.show and
+        return state and
           ((IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
@@ -4094,7 +4094,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-        return state and state.show and
+        return state and
           ((select(2, IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname)) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
@@ -4109,7 +4109,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (UnitExists('target') and state.spellname and WeakAuras.IsSpellInRange(state.spellname, 'target') == needle)
+          return state and (UnitExists('target') and state.spellname and WeakAuras.IsSpellInRange(state.spellname, 'target') == needle)
         end,
         conditionEvents = AddTargetConditionEvents({
           "WA_SPELL_RANGECHECK",
@@ -4263,7 +4263,7 @@ Private.event_prototypes = {
         conditionType = "select",
         conditionValues = "charges_change_condition_type";
         conditionTest = function(state, needle)
-          return state and state.show and state.direction and Private.ExecEnv.CheckChargesDirection(state.direction, needle)
+          return state and state.direction and Private.ExecEnv.CheckChargesDirection(state.direction, needle)
         end,
       },
       {
@@ -4425,7 +4425,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime() or state.enabled == 0) == (needle == 1)
+          return state and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime() or state.enabled == 0) == (needle == 1)
         end,
       },
       {
@@ -4689,7 +4689,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1);
+          return state and (not state.gcdCooldown and state.expirationTime and state.expirationTime > GetTime()) == (needle == 1);
         end,
       },
       {
@@ -5218,7 +5218,7 @@ Private.event_prototypes = {
         test = "true",
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (UnitExists('target') and state.spellName and WeakAuras.IsSpellInRange(state.spellName, 'target') == needle)
+          return state and (UnitExists('target') and state.spellName and WeakAuras.IsSpellInRange(state.spellName, 'target') == needle)
         end,
         conditionEvents = AddTargetConditionEvents({
           "WA_SPELL_RANGECHECK",
@@ -5447,17 +5447,19 @@ Private.event_prototypes = {
             end
             active = checkActive(remainingTime);
           end
-          states[""] = states[""] or {}
-          local state = states[""];
-          state.show = active;
-          state.changed = true;
-          if (active) then
+
+          if active then
+            states[""] = states[""] or {}
+            local state = states[""];
+            state.changed = true;
             state.name = totemName;
             state.totemName = totemName;
             state.progressType = "timed";
             state.duration = duration;
             state.expirationTime = startTime and (startTime + duration);
             state.icon = icon;
+          else
+            states[""] = nil
           end
         elseif inverse then -- inverse without a specific slot
           local found = false;
@@ -5471,14 +5473,17 @@ Private.event_prototypes = {
             end
           end
           local cloneId = "";
-          states[cloneId] = states[cloneId] or {};
-          local state = states[cloneId];
-          state.show = not found;
-          state.changed = true;
-          state.name = triggerTotemName;
-          state.totemName = triggerTotemName;
-          if (triggerTotemName) then
-            state.icon = select(3, GetSpellInfo(triggerTotemName));
+          if not found then
+            states[cloneId] = states[cloneId] or {};
+            local state = states[cloneId];
+            state.changed = true;
+            state.name = triggerTotemName;
+            state.totemName = triggerTotemName;
+            if (triggerTotemName) then
+              state.icon = Private.ExecEnv.GetSpellIcon(triggerTotemName)
+            end
+          else
+            states[cloneId] = nil
           end
         else -- check all slots
           for i = 1, 4 do
@@ -5500,17 +5505,18 @@ Private.event_prototypes = {
             end
 
             local cloneId = clone and tostring(i) or "";
-            states[cloneId] = states[cloneId] or {};
-            local state = states[cloneId];
-            state.show = active;
-            state.changed = true;
-            if (active) then
+            if active then
+              states[cloneId] = states[cloneId] or {};
+              local state = states[cloneId];
+              state.changed = true;
               state.name = totemName;
               state.totemName = totemName;
               state.progressType = "timed";
               state.duration = duration;
               state.expirationTime = startTime and (startTime + duration);
               state.icon = icon;
+            else
+              states[cloneId] = nil
             end
             if (active and not clone) then
               break;
@@ -5962,7 +5968,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and state.enchanted == (needle == 1)
+          return state and state.enchanted == (needle == 1)
         end,
       },
       {
@@ -6155,7 +6161,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "select",
         conditionTest = function(state, needle, op)
-          return state and state.show and (UnitIsUnit(needle, state.unit or '') == (op == "=="))
+          return state and (UnitIsUnit(needle, state.unit or '') == (op == "=="))
         end
       },
       { -- castGUID
@@ -6456,7 +6462,7 @@ Private.event_prototypes = {
         display = L["On Cooldown"],
         conditionType = "bool",
         conditionTest = function(state, needle)
-          return state and state.show and (state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
+          return state and (state.expirationTime and state.expirationTime > GetTime()) == (needle == 1)
         end,
         enable = function(trigger) return trigger.use_rune end
       },
@@ -7295,7 +7301,7 @@ Private.event_prototypes = {
         values = "actual_unit_types_with_specific",
         conditionType = "unit",
         conditionTest = function(state, unit, op)
-          return state and state.show and state.unit and (UnitIsUnit(state.sourceUnit, unit) == (op == "=="))
+          return state and state.unit and (UnitIsUnit(state.sourceUnit, unit) == (op == "=="))
         end,
         store = true,
         hidden = true,
@@ -7345,7 +7351,7 @@ Private.event_prototypes = {
         values = "actual_unit_types_with_specific",
         conditionType = "unit",
         conditionTest = function(state, unit, op)
-          return state and state.show and state.destUnit and (UnitIsUnit(state.destUnit, unit) == (op == "=="))
+          return state and state.destUnit and (UnitIsUnit(state.destUnit, unit) == (op == "=="))
         end,
         store = true,
         enable = function(trigger) return not trigger.use_inverse end,
@@ -8092,7 +8098,7 @@ Private.event_prototypes = {
         name = "alwaystrue",
         display = L["Always active trigger"],
         type = "tristate",
-        init = "true"
+        init = "true",
       },
       {
         name = "incombat",
@@ -8458,7 +8464,7 @@ Private.event_prototypes = {
         test = "triggerResult",
         conditionType = "number",
         conditionTest = function(state, needle, needle2)
-          return state and state.show and WeakAuras.CheckRange(state.unit, needle, needle2);
+          return state and WeakAuras.CheckRange(state.unit, needle, needle2);
         end,
         noProgressSource = true
       },

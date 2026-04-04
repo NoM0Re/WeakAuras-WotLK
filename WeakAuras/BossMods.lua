@@ -69,7 +69,6 @@ Private.ExecEnv.BossMods.DBM = {
     extendTimer = extendTimer or 0
     states[timerId] = states[timerId] or {}
     local state = states[timerId]
-    state.show = true
     state.changed = true
     state.icon = bar.icon
     state.message = bar.message
@@ -586,10 +585,9 @@ Private.event_prototypes["DBM Timer"] = {
               changed = true
             else
               local state = states[cloneId]
-              if state and state.show then
-                state.show = false
-                state.changed = true
-                changed = true
+              if state then
+                statest[cloneId] = nil
+                  changed = true
               end
             end
             if not bar.paused then
@@ -626,8 +624,7 @@ Private.event_prototypes["DBM Timer"] = {
           elseif event == "DBM_TimerStop" and state then
             local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
             if state.extend == 0 or bar_remainingTime <= 0 then
-              state.show = false
-              state.changed = true
+              states[cloneId] = nil
               return true
             end
           elseif event == "DBM_TimerUpdate" or event == "DBM_TimerUpdateIcon" then
@@ -640,8 +637,7 @@ Private.event_prototypes["DBM Timer"] = {
                 if state then
                   local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
                   if state.extend == 0 or bar_remainingTime <= 0 then
-                    state.show = false
-                    state.changed = true
+                    states[timerId] = nil
                     changed = true
                   end
                 end
@@ -650,9 +646,8 @@ Private.event_prototypes["DBM Timer"] = {
             return changed
           elseif event == "DBM_TimerForce" then
             local changed
-            for _, state in pairs(states) do
-              state.show = false
-              state.changed = true
+            for cloneId, state in pairs(states) do
+              states[cloneId] = nil
               changed = true
             end
             for timerId, bar in pairs(Private.ExecEnv.BossMods.DBM:GetAllTimers()) do
@@ -674,17 +669,16 @@ Private.event_prototypes["DBM Timer"] = {
           local bar = Private.ExecEnv.BossMods.DBM:GetTimer(triggerText, triggerTextOperator, triggerSpellId, extendTimer, counter, triggerId, triggerDbmType, isBarEnabled)
           if bar then
             if extendTimer == 0
-              or not (state and state.show)
-              or (state and state.show and state.expirationTime > (bar.expirationTime + extendTimer))
+              or not state
+              or (state and state.expirationTime > (bar.expirationTime + extendTimer))
             then
               return copyOrSchedule(bar, cloneId)
             end
           else
-            if state and state.show then
+            if state then
               local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
               if state.extend == 0 or bar_remainingTime <= 0 then
-                state.show = false
-                state.changed = true
+                states[cloneId] = nil
                 return true
               end
             end
@@ -798,7 +792,6 @@ Private.ExecEnv.BossMods.BigWigs = {
     extendTimer = extendTimer or 0
     states[timerId] = states[timerId] or {}
     local state = states[timerId]
-    state.show = true
     state.changed = true
     state.addon = bar.addon
     state.spellId = bar.spellId
@@ -1300,9 +1293,8 @@ Private.event_prototypes["BigWigs Timer"] = {
               changed = true
             else
               local state = states[cloneId]
-              if state and state.show then
-                state.show = false
-                state.changed = true
+              if state then
+                states[cloneId] = nil
                 changed = true
               end
             end
@@ -1340,8 +1332,7 @@ Private.event_prototypes["BigWigs Timer"] = {
           elseif event == "BigWigs_StopBar" and state then
             local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
             if state.extend == 0 or bar_remainingTime <= 0 then
-              state.show = false
-              state.changed = true
+              states[cloneId] = nil
               return true
             end
           elseif event == "BigWigs_Timer_Update" then
@@ -1354,9 +1345,8 @@ Private.event_prototypes["BigWigs Timer"] = {
             return changed
           elseif event == "BigWigs_Timer_Force" then
             local changed
-            for _, state in pairs(states) do
-              state.show = false
-              state.changed = true
+            for cloneId, state in pairs(states) do
+              states[cloneId] = nil
               changed = true
             end
             for timerId, bar in pairs(Private.ExecEnv.BossMods.BigWigs:GetAllTimers()) do
@@ -1378,17 +1368,16 @@ Private.event_prototypes["BigWigs Timer"] = {
           local bar = Private.ExecEnv.BossMods.BigWigs:GetTimer(triggerText, triggerTextOperator, triggerSpellId, extendTimer, counter, triggerCast, triggerIsCooldown, isBarEnabled)
           if bar then
             if extendTimer == 0
-              or not (state and state.show)
-              or (state and state.show and state.expirationTime > (bar.expirationTime + extendTimer))
+              or not state
+              or (state and state.expirationTime > (bar.expirationTime + extendTimer))
             then
               return copyOrSchedule(bar, cloneId)
             end
           else
-            if state and state.show then
+            if state then
               local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
               if state.extend == 0 or bar_remainingTime <= 0 then
-                state.show = false
-                state.changed = true
+                states[cloneId] = nil
                 return true
               end
             end
@@ -1722,9 +1711,8 @@ Private.event_prototypes["Boss Mod Timer"] = {
               changed = true
             else
               local state = states[cloneId]
-              if state and state.show then
-                state.show = false
-                state.changed = true
+              if state then
+                states[cloneId] = nil
                 changed = true
               end
             end
@@ -1762,8 +1750,7 @@ Private.event_prototypes["Boss Mod Timer"] = {
           elseif event == "BossMod_TimerStop" and state then
             local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
             if state.extend == 0 or bar_remainingTime <= 0 then
-              state.show = false
-              state.changed = true
+              states[cloneId] = nil
               return true
             end
           elseif event == "BossMod_TimerUpdate" or event == "BossMod_TimerUpdateIcon" then
@@ -1776,8 +1763,7 @@ Private.event_prototypes["Boss Mod Timer"] = {
                 if state then
                   local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
                   if state.extend == 0 or bar_remainingTime <= 0 then
-                    state.show = false
-                    state.changed = true
+                    states[timeId] = nil
                     changed = true
                   end
                 end
@@ -1786,9 +1772,8 @@ Private.event_prototypes["Boss Mod Timer"] = {
             return changed
           elseif event == "BossMod_TimerForce" then
             local changed
-            for _, state in pairs(states) do
-              state.show = false
-              state.changed = true
+            for cloneId, state in pairs(states) do
+              states[cloneId] = nil
               changed = true
             end
             for timerId, bar in pairs(Private.ExecEnv.BossMods.Generic:GetAllTimers()) do
@@ -1810,17 +1795,16 @@ Private.event_prototypes["Boss Mod Timer"] = {
           local bar = Private.ExecEnv.BossMods.Generic:GetTimerGeneric(triggerText, triggerTextOperator, triggerSpellId, extendTimer, counter, isBarEnabled, isPullTimer, isBreakTimer, isTimer)
           if bar then
             if extendTimer == 0
-              or not (state and state.show)
-              or (state and state.show and state.expirationTime > (bar.expirationTime + extendTimer))
+              or not state
+              or (state and state.expirationTime > (bar.expirationTime + extendTimer))
             then
               return copyOrSchedule(bar, cloneId)
             end
           else
-            if state and state.show then
+            if state then
               local bar_remainingTime = state.expirationTime - GetTime() + (state.extend or 0)
               if state.extend == 0 or bar_remainingTime <= 0 then
-                state.show = false
-                state.changed = true
+                states[cloneId] = nil
                 return true
               end
             end
