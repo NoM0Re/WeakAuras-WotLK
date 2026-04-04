@@ -113,6 +113,7 @@ function OptionsPrivate.GetInformationOptions(data)
             end
             for child in OptionsPrivate.Private.TraverseAll(auraData) do
               child.ignoreWagoUpdate = ignoreUpdate
+              WeakAuras.Add(child)
               OptionsPrivate.ClearOptions(child.id)
             end
             WeakAuras.ClearAndUpdateOptions(data.id)
