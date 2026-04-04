@@ -863,6 +863,8 @@ L["Main Character"] = "主要角色"
 L["Main Stat"] = "主屬性"
 L["Majordomo Executus"] = "管理者埃克索圖斯"
 L["Malformed WeakAuras link"] = "格式錯誤的 WeakAuras 連結"
+--[[Translation missing --]]
+L["Malygos"] = "Malygos"
 L["Manual"] = "手動"
 L["Manual Icon"] = "手動圖示"
 L["Manual Rotation"] = "手動旋轉"
@@ -1253,6 +1255,8 @@ L["Rune Count - Blood"] = "符文計數 - 血魄"
 L["Rune Count - Frost"] = "符文計數 - 冰霜"
 L["Rune Count - Unholy"] = "符文計數 - 穢邪"
 L["Sapphiron"] = "薩菲隆"
+--[[Translation missing --]]
+L["Sartharion"] = "Sartharion"
 L["Say"] = "說"
 L["Scale"] = "縮放大小"
 L["Scarlet Enclave"] = "血色領區"
@@ -1285,6 +1289,8 @@ L["Shade of Akama"] = "Shade of Akama"
 L["Shade of Aran"] = "Shade of Aran"
 L["Shadow Resistance"] = "暗影抗性"
 L["Shadowlands"] = "暗影之境"
+--[[Translation missing --]]
+L["Shadron"] = "Shadron"
 L["Shake"] = "震動"
 L["Shazzrah"] = "沙斯拉爾"
 L["Shift-Click to resume addon execution."] = "Shift-左鍵 恢復執行插件。"
@@ -1448,6 +1454,8 @@ L["Targeted"] = "當前目標"
 --[[Translation missing --]]
 L["Tempest Keep"] = "Tempest Keep"
 --[[Translation missing --]]
+L["Tenebron"] = "Tenebron"
+--[[Translation missing --]]
 L["Terestian Illhoof"] = "Terestian Illhoof"
 --[[Translation missing --]]
 L["Teron Gorefiend"] = "Teron Gorefiend"
@@ -1471,12 +1479,16 @@ L["The Battle for Mount Hyjal"] = "The Battle for Mount Hyjal"
 --[[Translation missing --]]
 L["The Curator"] = "The Curator"
 L["The effective level differs from the level in e.g. Time Walking dungeons."] = "真實等級和等級 (例如: 時光漫遊的) 不同。"
+--[[Translation missing --]]
+L["The Eye of Eternity"] = "The Eye of Eternity"
 L["The Four Horsemen"] = "四騎士"
 L["The 'ID' value can be found in the BigWigs options of a specific spell"] = "此 'ID' 值可以在 BigWigs 選項的特殊法術中找到"
 --[[Translation missing --]]
 L["The Illidari Council"] = "The Illidari Council"
 --[[Translation missing --]]
 L["The Lurker Below"] = "The Lurker Below"
+--[[Translation missing --]]
+L["The Obsidian Sanctum"] = "The Obsidian Sanctum"
 L["The Prophet Skeram"] = "預言者斯克拉姆"
 --[[Translation missing --]]
 L["The Sunwell Plateau"] = "The Sunwell Plateau"
@@ -1491,6 +1503,8 @@ L["Third Value of Tooltip Text"] = "浮動提示資訊文字中的第三個值"
 L["This aura calls GetData a lot, which is a slow function."] = "這個提醒效果大量呼叫了一個很慢的功能 GetData。"
 L["This aura has caused a Lua error."] = "這個提醒效果造成了 Lua 錯誤。"
 L["This aura is saving %s KB of data"] = "這個提醒效果儲存了 %s KB 的資料"
+--[[Translation missing --]]
+L["This aura is setting show to nil. This is deprecated and the behavior will change in the future."] = "This aura is setting show to nil. This is deprecated and the behavior will change in the future."
 L["This aura plays a sound via a condition."] = "這個提醒效果會透過判斷條件播放聲音。"
 L["This aura plays a sound via an action."] = "這個提醒效果會透過動作播放聲音。"
 L["This aura plays a Text To Speech via a condition."] = "此光環透過條件播放文字轉語音。"
@@ -1608,6 +1622,8 @@ L["Vault of Archavon"] = "亞夏梵穹殿"
 L["Versatility (%)"] = "臨機應變 (%)"
 L["Versatility Rating"] = "臨機應變分數"
 L["Vertical"] = "垂直"
+--[[Translation missing --]]
+L["Vesperon"] = "Vesperon"
 L["Viscidus"] = "維希度斯"
 L["Visibility"] = "顯示"
 L["Visions of N'Zoth"] = "恩若司的幻象"

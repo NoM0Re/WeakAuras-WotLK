@@ -469,6 +469,7 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["Hawk"] = "Hawk"
 	L["Help"] = "Help"
 	L["Hide After"] = "Hide After"
+	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
 	L["Hide Background"] = "Hide Background"
 	L["Hide Glows applied by this aura"] = "Hide Glows applied by this aura"
 	L["Hide on"] = "Hide on"

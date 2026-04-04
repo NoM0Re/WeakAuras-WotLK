@@ -1172,6 +1172,8 @@ L["Main Stat"] = "Caractéristique principale"
 L["Majordomo Executus"] = "Majordomo Executus"
 L["Malformed WeakAuras link"] = "Lien WeakAuras mal formé"
 --[[Translation missing --]]
+L["Malygos"] = "Malygos"
+--[[Translation missing --]]
 L["Manual"] = "Manual"
 --[[Translation missing --]]
 L["Manual Icon"] = "Manual Icon"
@@ -1561,7 +1563,6 @@ L["Queued Action"] = "Queued Action"
 L["Radius"] = "Rayon"
 --[[Translation missing --]]
 L["Rage Winterchill"] = "Rage Winterchill"
---[[Translation missing --]]
 L["Ragnaros"] = "Ragnaros"
 L["Raid"] = "Raid "
 L["Raid (Heroic)"] = "Raid (Héroïque)"
@@ -1685,6 +1686,8 @@ L["Rune Count - Frost"] = "Rune Count - Frost"
 L["Rune Count - Unholy"] = "Rune Count - Unholy"
 --[[Translation missing --]]
 L["Sapphiron"] = "Sapphiron"
+--[[Translation missing --]]
+L["Sartharion"] = "Sartharion"
 L["Say"] = "Dire"
 L["Scale"] = "Échelle"
 --[[Translation missing --]]
@@ -1733,6 +1736,8 @@ L["Shade of Aran"] = "Shade of Aran"
 L["Shadow Resistance"] = "Résistance à l'ombre"
 --[[Translation missing --]]
 L["Shadowlands"] = "Shadowlands"
+--[[Translation missing --]]
+L["Shadron"] = "Shadron"
 L["Shake"] = "Secouer"
 --[[Translation missing --]]
 L["Shazzrah"] = "Shazzrah"
@@ -1972,6 +1977,8 @@ L["Targeted"] = "Ciblé"
 --[[Translation missing --]]
 L["Tempest Keep"] = "Tempest Keep"
 --[[Translation missing --]]
+L["Tenebron"] = "Tenebron"
+--[[Translation missing --]]
 L["Terestian Illhoof"] = "Terestian Illhoof"
 --[[Translation missing --]]
 L["Teron Gorefiend"] = "Teron Gorefiend"
@@ -2010,6 +2017,8 @@ L["The Battle for Mount Hyjal"] = "The Battle for Mount Hyjal"
 L["The Curator"] = "The Curator"
 L["The effective level differs from the level in e.g. Time Walking dungeons."] = "Le niveau effectif diffère du niveau dans les donjons des Marcheurs du temps, par exemple."
 --[[Translation missing --]]
+L["The Eye of Eternity"] = "The Eye of Eternity"
+--[[Translation missing --]]
 L["The Four Horsemen"] = "The Four Horsemen"
 --[[Translation missing --]]
 L["The 'ID' value can be found in the BigWigs options of a specific spell"] = "The 'ID' value can be found in the BigWigs options of a specific spell"
@@ -2017,6 +2026,8 @@ L["The 'ID' value can be found in the BigWigs options of a specific spell"] = "T
 L["The Illidari Council"] = "The Illidari Council"
 --[[Translation missing --]]
 L["The Lurker Below"] = "The Lurker Below"
+--[[Translation missing --]]
+L["The Obsidian Sanctum"] = "The Obsidian Sanctum"
 --[[Translation missing --]]
 L["The Prophet Skeram"] = "The Prophet Skeram"
 --[[Translation missing --]]
@@ -2039,6 +2050,8 @@ L["This aura calls GetData a lot, which is a slow function."] = "This aura calls
 L["This aura has caused a Lua error."] = "This aura has caused a Lua error."
 --[[Translation missing --]]
 L["This aura is saving %s KB of data"] = "This aura is saving %s KB of data"
+--[[Translation missing --]]
+L["This aura is setting show to nil. This is deprecated and the behavior will change in the future."] = "This aura is setting show to nil. This is deprecated and the behavior will change in the future."
 --[[Translation missing --]]
 L["This aura plays a sound via a condition."] = "This aura plays a sound via a condition."
 --[[Translation missing --]]
@@ -2212,6 +2225,8 @@ L["Vault of Archavon"] = "Vault of Archavon"
 L["Versatility (%)"] = "Polyvalence (%)"
 L["Versatility Rating"] = "Score de Polyvalence"
 L["Vertical"] = "Verticale"
+--[[Translation missing --]]
+L["Vesperon"] = "Vesperon"
 L["Viscidus"] = "Viscidus"
 L["Visibility"] = "Visibilité"
 L["Visions of N'Zoth"] = "Visions de N'Zoth"
@@ -2296,7 +2311,6 @@ L["Zone Name"] = "Nom de la zone"
 L["Zoom"] = "Zoom"
 --[[Translation missing --]]
 L["Zoom Animation"] = "Zoom Animation"
---[[Translation missing --]]
 L["Zul'Aman"] = "Zul'Aman"
 L["Zul'Gurub"] = "Zul'Gurub"
 

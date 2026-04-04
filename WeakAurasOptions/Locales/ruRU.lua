@@ -466,6 +466,8 @@ Bleed classification via LibDispel]=] ] = "Фильтровать только �
 	L["Help"] = "Справка"
 	--[[Translation missing --]]
 	L["Hide After"] = "Hide After"
+	--[[Translation missing --]]
+	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
 	L["Hide Background"] = "Скрыть задний план"
 	L["Hide Glows applied by this aura"] = "Скрыть свечения, применённые этой индикацией"
 	L["Hide on"] = "Скрыть на"

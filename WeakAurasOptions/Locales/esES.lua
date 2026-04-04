@@ -434,6 +434,8 @@ Con |cFF00CC00>= 0|r se activará siempre.]=]
 	L["Hawk"] = "Halcón"
 	L["Help"] = "Ayuda"
 	L["Hide After"] = "Ocultar después"
+	--[[Translation missing --]]
+	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
 	L["Hide Background"] = "Ocultar fondo"
 	L["Hide Glows applied by this aura"] = "Ocultar resplandor aplicado por esta aura"
 	L["Hide on"] = "Ocultar en"

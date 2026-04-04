@@ -449,6 +449,8 @@ Bleed classification via LibDispel]=] ] = "只過濾被 LibDispel 分類為流�
 	L["Hawk"] = "老鷹"
 	L["Help"] = "說明"
 	L["Hide After"] = "隱藏之後的"
+	--[[Translation missing --]]
+	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
 	L["Hide Background"] = "隱藏背景"
 	L["Hide Glows applied by this aura"] = "隱藏這個提醒效果所套用的發光效果"
 	L["Hide on"] = "隱藏"

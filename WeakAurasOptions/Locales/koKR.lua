@@ -86,7 +86,7 @@ local L = WeakAuras.L
 	L["|cFFFF0000default|r texture"] = "|cFFFF0000기본|r 텍스처"
 	L["|cFFFF0000desaturated|r "] = "|cFFFF0000흑백|r"
 	L["|cFFFF0000Note:|r The unit '%s' is not a trackable unit."] = "|cFFFF0000참고:|r '%s' 유닛은 추적할 수 없습니다."
-	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000참고:|r '%s' 유닛은 액션 전투 관련 cvar의 활성화를 필요로 합니다."
+	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000참고:|r '%s' 유닛은 액션 대상 지정 관련 cvar의 활성화를 필요로 합니다."
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"] = "|cFFffcc00고정:|r |cFFFF0000%s|r|1을;를; 프레임의 |cFFFF0000%s|r에 고정"
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00고정:|r |cFFFF0000%s|r|1을;를; 프레임의 |cFFFF0000%s|r에 |cFFFF0000%s/%s|r 위치 조정을 해서 고정"
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"] = "|cFFffcc00고정:|r 프레임의 |cFFFF0000%s|r에 고정됨"
@@ -473,6 +473,8 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 	L["Hawk"] = "매"
 	L["Help"] = "도움말"
 	L["Hide After"] = "이후 숨기기"
+	--[[Translation missing --]]
+	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
 	L["Hide Background"] = "배경 숨기기"
 	L["Hide Glows applied by this aura"] = "이 위크오라를 통해 적용된 반짝임 효과 숨김"
 	L["Hide on"] = "숨기기"
