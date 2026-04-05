@@ -2243,14 +2243,12 @@ do
   local itemCdExps = {};
   local itemCdHandles = {};
   local itemCdEnabled = {};
-  local itemSpellIdToItemId = {}
 
   local itemSlots = {};
   local itemSlotsCdDurs = {};
   local itemSlotsCdExps = {};
   local itemSlotsCdHandles = {};
   local itemSlotsEnable = {};
-  local itemSlotsSpellIdToSlot = {}
 
   local runes = {};
   local runeCdDurs = {};
