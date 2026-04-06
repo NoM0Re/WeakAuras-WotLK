@@ -2699,7 +2699,7 @@ do
         if event == "SPELL_UPDATE_COOLDOWN" then
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil
         end
-        Private.CheckCooldownReady();
+        Private.CheckCooldownReady()
       elseif(event == "SPELLS_CHANGED") then
         SpellDetails:CheckSpellKnown()
         Private.CheckCooldownReady()
