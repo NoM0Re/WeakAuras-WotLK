@@ -4394,7 +4394,7 @@ function WeakAuras.GetTriggerStateForTrigger(id, triggernum)
     return Private.GetGlobalConditionState();
   end
   if triggerState[id][triggernum] == nil then
-    triggerState[id][triggernum] = setmetatable({}, Private.allstatesMetatable)
+    triggerState[id][triggernum] = Private.GetNewAllStates(WeakAuras.GetData(id))
   end
   return triggerState[id][triggernum];
 end
@@ -4764,7 +4764,7 @@ function Private.UpdatedTriggerState(id)
 
   local changed = false;
   for triggernum = 1, triggerState[id].numTriggers do
-    triggerState[id][triggernum] = triggerState[id][triggernum] or setmetatable({}, Private.allstatesMetatable)
+    triggerState[id][triggernum] = triggerState[id][triggernum] or Private.GetNewAllStates(WeakAuras.GetData(id))
 
     local anyStateShown = false;
 

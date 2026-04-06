@@ -3,6 +3,14 @@ if not WeakAuras.IsLibsOK() then return end
 local AddonName = ...
 local Private = select(2, ...)
 
+local function fixMissingFields(state)
+  if type(state) ~= "table" then return end
+  -- set show
+  if state.show == nil then
+    state.show = true
+  end
+end
+
 local remove = function(states, key)
   local changed = false
   local state = states[key]
@@ -136,3 +144,30 @@ Private.allstatesMetatable = {
     SetChanged = setChanged,
   }
 }
+
+local function addFixMissingFields(func)
+  return function(states, key, ...)
+    local changed = func(states, key, ...)
+    fixMissingFields(states[key])
+    return changed
+  end
+end
+
+Private.allstatesMetatableLegacy = {
+  __index = {
+    Update = addFixMissingFields(createOrUpdate),
+    Replace = addFixMissingFields(createOrReplace),
+    Remove = remove,
+    RemoveAll = removeAll,
+    Get = get,
+    IsChanged = isChanged,
+    SetChanged = setChanged,
+  }
+}
+
+Private.GetNewAllStates = function(data)
+  if data.information.showNilIsFalse then
+    return setmetatable({}, Private.allstatesMetatableLegacy)
+  end
+  return setmetatable({}, Private.allstatesMetatable)
+end
