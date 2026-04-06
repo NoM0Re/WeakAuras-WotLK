@@ -824,8 +824,7 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
           end
         end
       elseif (data.statesParameter == "one") then
-        allStates[""] = allStates[""] or {};
-        local state = allStates[""];
+        local state = allStates[""] or {}
         if data.untriggerFunc then
           local ok, returnValue = pcall(data.untriggerFunc, state, event, arg1, arg2, ...);
           if not ok then
