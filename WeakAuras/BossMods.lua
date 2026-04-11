@@ -586,7 +586,7 @@ Private.event_prototypes["DBM Timer"] = {
             else
               local state = states[cloneId]
               if state then
-                statest[cloneId] = nil
+                states[cloneId] = nil
                   changed = true
               end
             end
