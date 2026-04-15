@@ -3991,25 +3991,27 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
 end)
 
+-- If DBM is available, map its pull/kill/wipe callbacks to Blizzard encounter
+-- events (ENCOUNTER_START/END) and fire them for triggers and custom code.
 if WeakAuras.IsDBMRegistered() then
-  local encounterMapping = {
+  local map = {
     DBM_Pull = { "ENCOUNTER_START" },
     DBM_Kill = { "ENCOUNTER_END", 1 },
     DBM_Wipe = { "ENCOUNTER_END", 0 }
   }
 
   function Private.DBMEncounterEvents(event, mod, ...)
-    local encounterID  = (type(mod) == "table" and mod.encounterId) or 0
+    local encounterID = (type(mod) == "table" and mod.encounterId) or 0
     local encounterName = (type(mod) == "table" and mod.combatInfo and mod.combatInfo.name) or ""
     local difficultyID, groupSize = DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
-    local eventName, success = unpack(encounterMapping[event])
+    local eventName, success = map[event][1], map[event][2]
 
     Private.ScanForLoads(nil, eventName, encounterID, encounterName, difficultyID, groupSize, success)
     WeakAuras.ScanEvents(event, mod, ...)
     WeakAuras.ScanEvents(eventName, encounterID, encounterName, difficultyID, groupSize, success)
   end
 
-  for event in pairs(encounterMapping) do
+  for event in pairs(map) do
     DBM:RegisterCallback(event, Private.DBMEncounterEvents)
   end
 end
