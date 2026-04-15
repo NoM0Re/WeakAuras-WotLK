@@ -473,8 +473,7 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 	L["Hawk"] = "매"
 	L["Help"] = "도움말"
 	L["Hide After"] = "이후 숨기기"
-	--[[Translation missing --]]
-	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
+	L["Hide auras on setting show to nil in custom triggers"] = "사용자 정의 활성 조건에 show 설정값이 nil 일때 위크오라 숨김"
 	L["Hide Background"] = "배경 숨기기"
 	L["Hide Glows applied by this aura"] = "이 위크오라를 통해 적용된 반짝임 효과 숨김"
 	L["Hide on"] = "숨기기"
