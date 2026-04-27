@@ -5,7 +5,7 @@ local locale = GAME_LOCALE or GetLocale()
 -- This File adds Custom Localization for
 -- Specializations, Creature Types, Creature Families, TimeUtils and BossNames
 if (locale == "enUS" or locale == "enGB") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Requires Deadly Boss Mods (DBM) to detect encounters."
@@ -195,7 +195,7 @@ if (locale == "enUS" or locale == "enGB") then
   end
 
 elseif (locale == "deDE") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Hinweis: Combopunkte funktionieren nur für Spieler oder Fahrzeug. Die Auswahl von 'Spieler' prüft auch das Fahrzeug."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Hinweis: Combopunkte funktionieren nur für Spieler oder Fahrzeug. Die Auswahl von Spieler berücksichtigt auch das Fahrzeug."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Begegnungsauslöser erfordert, dass Deadly Boss Mods (DBM) installiert und auf dem neuesten Stand ist.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Begegnungs-Ladeoptionen erfordern, dass Deadly Boss Mods (DBM) installiert und auf dem neuesten Stand ist.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Erfordert Deadly Boss Mods (DBM), um Begegnungen zu erkennen."
@@ -386,7 +386,7 @@ elseif (locale == "deDE") then
   end
 
 elseif (locale == "esES") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Nota: Los puntos de combo solo funcionan para el jugador o el vehículo. Seleccionar 'jugador' también comprueba el vehículo."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Nota: Los puntos de combo solo funcionan para jugador o vehículo. Seleccionar jugador también incluye el vehículo."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000El disparador del encuentro requiere que Deadly Boss Mods (DBM) esté instalado y actualizado.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Las opciones de carga del encuentro requieren que Deadly Boss Mods (DBM) esté instalado y actualizado.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Requiere Deadly Boss Mods (DBM) para detectar encuentros."
@@ -576,7 +576,7 @@ elseif (locale == "esES") then
   end
 
 elseif (locale == "esMX") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Nota: Los puntos de combo solo funcionan para el jugador o el vehículo. Seleccionar 'jugador' también verifica el vehículo."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Nota: Los puntos de combo solo funcionan para jugador o vehículo. Seleccionar jugador también incluye el vehículo."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000El disparador del encuentro requiere que Deadly Boss Mods (DBM) esté instalado y actualizado.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Las opciones de carga del encuentro requieren que Deadly Boss Mods (DBM) esté instalado y actualizado.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Requiere Deadly Boss Mods (DBM) para detectar encuentros."
@@ -766,7 +766,7 @@ elseif (locale == "esMX") then
   end
 
 elseif (locale == "frFR") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Note : Les points de combo ne fonctionnent que pour le joueur ou le véhicule. Sélectionner « joueur » vérifie aussi le véhicule."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Remarque : les points de combo ne sont disponibles que pour le joueur ou le véhicule. Sélectionner joueur inclut également le véhicule."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Le déclencheur de rencontre nécessite que Deadly Boss Mods (DBM) soit installé et à jour.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Les options de chargement de la rencontre nécessitent que Deadly Boss Mods (DBM) soit installé et à jour.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Nécessite Deadly Boss Mods (DBM) pour détecter les rencontres."
@@ -957,7 +957,7 @@ elseif (locale == "frFR") then
   end
 
 elseif (locale == "itIT") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Nota: I punti combo funzionano solo per il giocatore o il veicolo. Selezionando 'giocatore' viene controllato anche il veicolo."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Nota: i punti combo sono disponibili solo per il giocatore o il veicolo. Selezionando giocatore viene considerato anche il veicolo."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Il trigger dell’incontro richiede che Deadly Boss Mods (DBM) sia installato e aggiornato.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Le opzioni di caricamento dell’incontro richiedono che Deadly Boss Mods (DBM) sia installato e aggiornato.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Richiede Deadly Boss Mods (DBM) per rilevare gli incontri."
@@ -1152,7 +1152,7 @@ elseif (locale == "itIT") then
   end
 
 elseif (locale == "koKR") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "참고: 연계 점수는 플레이어 또는 탈것에서만 작동합니다. '플레이어'를 선택하면 탈것도 함께 확인합니다."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "참고: 콤보 포인트는 플레이어 또는 탈것에서만 작동합니다. 플레이어를 선택하면 탈것에도 적용됩니다."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000보스전 트리거를 사용하려면 Deadly Boss Mods (DBM)이 설치되어 최신 상태여야 합니다.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000보스전 로드 옵션을 사용하려면 Deadly Boss Mods (DBM)이 설치되어 최신 상태여야 합니다.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "보스전을 감지하려면 Deadly Boss Mods (DBM)이 필요합니다."
@@ -1342,7 +1342,7 @@ elseif (locale == "koKR") then
   end
 
 elseif (locale == "ptBR") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Nota: Pontos de combo funcionam apenas para jogador ou veículo. Selecionar 'jogador' também verifica o veículo."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Nota: Pontos de combo funcionam apenas para jogador ou veículo. Selecionar jogador também inclui o veículo."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000O gatilho de encontro requer que Deadly Boss Mods (DBM) esteja instalado e atualizado.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000As opções de carregamento do encontro requerem que Deadly Boss Mods (DBM) esteja instalado e atualizado.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Requer Deadly Boss Mods (DBM) para detectar encontros."
@@ -1535,7 +1535,7 @@ elseif (locale == "ptBR") then
   end
 
 elseif (locale == "ruRU") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "Примечание: Очки серии работают только для игрока или транспорта. Выбор «игрок» также проверяет транспорт."
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "Примечание: серии приемов работают только для игрока или транспорта. Выбор игрока также учитывает транспорт."
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Триггер сражения с боссом требует, чтобы Deadly Boss Mods (DBM) был установлен и обновлён.|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000Параметры загрузки сражения с боссом требуют, чтобы Deadly Boss Mods (DBM) был установлен и обновлён.|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "Для обнаружения сражений с боссами требуется Deadly Boss Mods (DBM)."
@@ -1725,7 +1725,7 @@ elseif (locale == "ruRU") then
   end
 
 elseif (locale == "zhCN") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "注意：连击点数仅对玩家或载具生效。选择“玩家”也会同时检测载具。"
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "注意：连击点仅对玩家或载具生效。选择玩家时也会同时应用于载具。"
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000首领战斗触发器需要已安装并更新到最新的 Deadly Boss Mods (DBM)。|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000首领战斗加载选项需要已安装并更新到最新的 Deadly Boss Mods (DBM)。|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "检测首领战斗需要 Deadly Boss Mods (DBM)。"
@@ -1915,7 +1915,7 @@ elseif (locale == "zhCN") then
   end
 
 elseif (locale == "zhTW") then
-  L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."] = "注意：連擊點數僅對玩家或載具生效。選擇「玩家」也會同時檢查載具。"
+  L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."] = "注意：連擊點僅對玩家或載具生效。選擇玩家時也會同時套用於載具。"
   L["|cFFFF0000Encounter Trigger requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000首領戰觸發需要安裝並更新到最新版本的 Deadly Boss Mods (DBM)。|r"
   L["|cFFFF0000Encounter load options requires Deadly Boss Mods (DBM) to be installed and up to date.|r"] = "|cFFFF0000首領戰載入選項需要安裝並更新到最新版本的 Deadly Boss Mods (DBM)。|r"
   L["Requires Deadly Boss Mods (DBM) to detect encounters."] = "偵測首領戰需要 Deadly Boss Mods (DBM)。"

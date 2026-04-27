@@ -2804,7 +2804,7 @@ Private.event_prototypes = {
         type = "description",
         display = "",
         text = function()
-          return L["Note: Combo Points only work for player or vehicle. Selecting 'player' also checks vehicle."]
+          return L["Note: Combo Points only work for player or vehicle. Selecting player also checks vehicle."]
         end,
         enable = function(trigger)
           return trigger.use_powertype and trigger.powertype == 4
