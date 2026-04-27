@@ -4,6 +4,7 @@ local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L
 
+--- Creates the options for one aura
 function OptionsPrivate.GetInformationOptions(data)
   local isGroup = data.controlledChildren and true or false
   local isTmpGroup = type(data.id) == "table"
@@ -141,9 +142,14 @@ function OptionsPrivate.GetInformationOptions(data)
         return data.desc
       end,
       set = function(info, v)
-        data.desc = v
-        WeakAuras.Add(data)
-        WeakAuras.ClearAndUpdateOptions(data.id)
+        OptionsPrivate.Private.TimeMachine:StartTransaction()
+        OptionsPrivate.Private.TimeMachine:Append({
+          uid = data.uid,
+          actionType = "set",
+          path = {"desc"},
+          payload = v
+        })
+        OptionsPrivate.Private.TimeMachine:Commit()
       end
     }
     order = order + 1
@@ -266,19 +272,28 @@ function OptionsPrivate.GetInformationOptions(data)
         end,
         set = function(info, v)
           if propertyData.onParent then
-            data.information[property] = v
-            WeakAuras.Add(data)
-            OptionsPrivate.ClearOptions(data.id)
+            OptionsPrivate.Private.TimeMachine:StartTransaction()
+            OptionsPrivate.Private.TimeMachine:Append({
+              uid = data.uid,
+              actionType = "set",
+              path = {"information", property},
+              payload = v
+            })
+            OptionsPrivate.Private.TimeMachine:Commit()
           else
+            OptionsPrivate.Private.TimeMachine:StartTransaction()
             for child in OptionsPrivate.Private.TraverseLeafsOrAura(data) do
               if not propertyData.regionType or propertyData.regionType == child.regionType then
-                child.information[property] = v
-                WeakAuras.Add(child)
-                OptionsPrivate.ClearOptions(child.id)
+                OptionsPrivate.Private.TimeMachine:Append({
+                  uid = child.uid,
+                  actionType = "set",
+                  path = {"information", property},
+                  payload = v
+                })
               end
             end
+            OptionsPrivate.Private.TimeMachine:Commit()
           end
-          WeakAuras.ClearAndUpdateOptions(data.id)
         end,
         desc = same[property] and "" or mergedDesc[property],
         order = order
@@ -380,17 +395,26 @@ function OptionsPrivate.GetInformationOptions(data)
     end,
     set = function(info, v)
       if isGroup and not isTmpGroup then
-        data.information.debugLog = v
-        WeakAuras.Add(data)
+        OptionsPrivate.Private.TimeMachine:StartTransaction()
+        OptionsPrivate.Private.TimeMachine:Append({
+          uid = data.uid,
+          actionType = "set",
+          path = {"information", "debugLog"},
+          payload = v
+        })
+        OptionsPrivate.Private.TimeMachine:Commit()
       else
+        OptionsPrivate.Private.TimeMachine:StartTransaction()
         for child in OptionsPrivate.Private.TraverseLeafsOrAura(data) do
-          child.information.debugLog = v
-          WeakAuras.Add(child)
-          OptionsPrivate.ClearOptions(child.id)
+          OptionsPrivate.Private.TimeMachine:Append({
+            uid = child.uid,
+            actionType = "set",
+            path = {"information", "debugLog"},
+            payload = v
+          })
         end
-      end
-
-      WeakAuras.ClearAndUpdateOptions(data.id)
+        OptionsPrivate.Private.TimeMachine:Commit()
+        end
     end
   }
   order = order + 1

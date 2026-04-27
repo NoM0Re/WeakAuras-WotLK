@@ -65,9 +65,17 @@ end, true)
 
 TimeMachine:RegisterEffect("options_cu", function(uid, data)
   if WeakAuras.IsOptionsOpen() then
-    WeakAuras.ClearAndUpdateOptions(data.id, true)
+    WeakAuras.ClearOptions(data.id)
   end
 end, true)
+
+TimeMachine.sub:AddSubscriber("Step", {
+  Step = function()
+    if WeakAuras.IsOptionsOpen() then
+      WeakAuras.ClearAndUpdateOptions()
+    end
+  end
+  })
 
 function TimeMachine:RegisterAction(actionType, actor, inverter, autoEffects)
   if self.actions[actionType] then
