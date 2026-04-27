@@ -3112,6 +3112,12 @@ Private.bool_types = {
   [1] = L["True"]
 }
 
+Private.aurabar_tooltip_areas = {
+  ICON = L["Icon"],
+  BAR = L["Bar"],
+  ALL = L["Bar and Icon"]
+}
+
 Private.update_categories = {
   {
     name = "anchor",
