@@ -1276,6 +1276,7 @@ loadedFrame:SetScript("OnEvent", function(self, event, ...)
       db.features = db.features or {}
       db.migrationCutoff = db.migrationCutoff or 730
       db.historyCutoff = db.historyCutoff or 730
+      db.lastLoaded = {}
 
       Private.SyncParentChildRelationships();
       local isFirstUIDValidation = db.dbVersion == nil or db.dbVersion < 26;
@@ -1383,8 +1384,20 @@ function WeakAuras.Toggle()
   end
 end
 
-function Private.SquelchingActions()
-  return squelch_actions;
+function Private.SquelchingActions(uid)
+  if squelch_actions then
+    return true
+  end
+
+  local data = Private.GetDataByUID(uid)
+  if data.information.squelchOnLoad then
+    local lastLoaded = db.lastLoaded[uid]
+    if lastLoaded and GetTime() - lastLoaded < 0.5 then
+      return true
+    end
+  end
+
+  return false
 end
 
 function Private.PauseAllDynamicGroups()
@@ -1825,8 +1838,11 @@ function Private.Resume()
 end
 
 function Private.LoadDisplays(toLoad, ...)
+  local currentTime = GetTime()
   for id in pairs(toLoad) do
-    local uid = WeakAuras.GetData(id).uid
+    local data = WeakAuras.GetData(id)
+    local uid = data.uid
+    db.lastLoaded[uid] = currentTime
     Private.RegisterForGlobalConditions(uid);
     triggerState[id].triggers = {};
     triggerState[id].activationTime = {}
@@ -1997,6 +2013,7 @@ function WeakAuras.Delete(data)
   end
 
   db.displays[id] = nil;
+  db.lastLoaded[uid] = nil
 
   Private.DeleteAuraEnvironment(id)
   triggerState[id] = nil;
@@ -3235,6 +3252,7 @@ function Private.SetRegion(data, cloneId)
         end
       end
       region.id = id;
+      region.uid = data.uid
       region.cloneId = cloneId or "";
       Private.validate(data, regionTypes[regionType].default);
 
@@ -3395,7 +3413,7 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
     DEFAULT_CHAT_FRAME:AddMessage(message, r or 1, g or 1, b or 1);
   elseif message_type == "TTS" then
     if WeakAuras.IsAwesomeEnabled() == 2 then
-      if not Private.SquelchingActions() then
+      if not Private.SquelchingActions(region.uid) then
         pcall(function()
         local voice = C_TTSSettings and C_TTSSettings.GetSpeechVoiceID()
         if not voice then return end
