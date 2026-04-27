@@ -164,7 +164,7 @@ local function SoundPlayHelper(self)
     return;
   end
 
-  if (WeakAuras.IsOptionsOpen() or Private.SquelchingActions()) then
+  if (WeakAuras.IsOptionsOpen() or Private.SquelchingActions(self.uid)) then
     Private.StopProfileSystem("sound");
     return;
   end
