@@ -605,6 +605,8 @@ local function modify(parent, region, data)
   cooldown:Hide()
   if(data.cooldown) then
     function region:UpdateValue()
+      cooldown.expirationTime = nil
+      cooldown.duration = nil
       cooldown.value = self.value
       cooldown.total = self.total
       if (self.value >= 0 and self.value <= self.total) then
@@ -617,6 +619,8 @@ local function modify(parent, region, data)
     end
 
     function region:UpdateTime()
+      cooldown.value = nil
+      cooldown.total = nil
       if self.paused then
         cooldown:Pause()
       else
