@@ -347,7 +347,7 @@ local function CreateTestForCondition(data, input, allConditionsTemplate, usedSt
         check = stateCheck .. stateVariableCheck .. "state[" .. trigger .. "]".. string.format("[%q]", variable)
                 .. op .. "'" .. value .. "'";
       end
-    elseif (cType == "range" and value and op and input.type and input.op_range and input.range) then
+    elseif (cType == "range" and value and op and input.type and (input.type ~= "enemies" or WeakAuras.IsAwesomeEnabled()) and input.op_range and input.range) then
       local fn
       if input.type == "group" then
         fn = [[

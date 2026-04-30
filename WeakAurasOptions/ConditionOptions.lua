@@ -2132,7 +2132,7 @@ local function addControlsForIfLine(args, order, data, conditionVariable, totalA
         order = order,
         values = {
           group = L["Group player(s) found"],
-          enemies = L["Enemy nameplate(s) found"]
+          enemies = WeakAuras.IsAwesomeEnabled() and L["Enemy nameplate(s) found"] or nil
         },
         get = function()
           return check.type
