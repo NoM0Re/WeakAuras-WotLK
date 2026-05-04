@@ -4,6 +4,6 @@
 ## Notes: Textures for Stop Motion
 ## X-Category: Interface Enhancements
 ## DefaultState: Enabled
-## Dependencies: WeakAuras, WeakAurasOptions
+## Dependencies: WeakAuras
 
 StopMotionTextures.lua
