@@ -10,7 +10,7 @@
 ## Globe-Main: WeakAuras
 ## DefaultState: Enabled
 ## LoadOnDemand: 1
-## Dependencies: WeakAuras
+## Dependencies: WeakAuras, WeakAurasOptions
 
 locales.xml
 
