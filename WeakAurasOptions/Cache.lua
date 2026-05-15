@@ -24,9 +24,9 @@ function spellCache.Build()
     error("spellCache has not been loaded. Call WeakAuras.spellCache.Load(...) first.")
   end
 
-  if not metaData.needsRebuild then
-    return
-  end
+  --if not metaData.needsRebuild then
+  --  return
+  --end
 
   --[[
   local holes
@@ -38,6 +38,17 @@ function spellCache.Build()
     holes[285224] = 301088
     holes[301101] = 324269
     holes[474742] = 1213143
+  elseif WeakAuras.IsTBC() then
+    holes = {}
+    holes[81748] = 158262
+    holes[158263] = 186402
+    holes[186403] = 219002
+    holes[219004] = 243805
+    holes[243806] = 261127
+    holes[262591] = 281624
+    holes[308395] = 324269
+    holes[385807] = 1244001
+    holes[1244002] = 1265708
   elseif WeakAuras.IsCataClassic() then
     holes = {}
     holes[121820] = 158262
@@ -47,7 +58,23 @@ function spellCache.Build()
     holes[243806] = 261127
     holes[262591] = 281624
     holes[301101] = 324269
-  end]]
+  elseif WeakAuras.IsMists() then
+    holes = {}
+    holes[171557] = 186402
+    holes[186403] = 219002
+    holes[219004] = 243805
+    holes[243819] = 261127
+    holes[262591] = 281624
+    holes[301101] = 324269
+    holes[473745] = 1214175
+  elseif WeakAuras.IsRetail() then
+    holes = {}
+    holes[474771] = 556604
+    holes[556606] = 936050
+    holes[936051] = 1049295
+    holes[1049296] = 1213133
+  end
+  ]]
   wipe(cache)
   local co = coroutine.create(function()
     metaData.rebuilding = true
@@ -58,7 +85,11 @@ function spellCache.Build()
       id = id + 1
       local name, _, icon = GetSpellInfo(id)
 
-      if (icon and icon:lower() == "interface\\icons\\trade_engineering") then -- 136243 is the a gear icon, we can ignore those spells
+      if icon then -- convert to fileId
+        icon = WeakAuras.ArtTextureIDs[WeakAuras.NormalizeTexture(icon)]
+      end
+
+      if(icon == 136243) then -- 136243 is the a gear icon, we can ignore those spells
         misses = 0;
       elseif name and name ~= "" and icon then
         cache[name] = cache[name] or {}
@@ -69,14 +100,14 @@ function spellCache.Build()
           cache[name].spells = cache[name].spells .. "," .. id .. "=" .. icon
         end
         misses = 0
-        --[[
-        if holes and holes[id] then
-          id = holes[id]
-        end
-        ]]
       else
         misses = misses + 1
       end
+      --[[
+      if holes and holes[id] then
+        id = holes[id]
+      end
+      ]]
       coroutine.yield(0.01, "spells")
     end
 
@@ -84,6 +115,9 @@ function spellCache.Build()
       local total = GetCategoryNumAchievements(category, true)
       for i = 1, total do
         local id,name,_,_,_,_,_,_,_,iconID = GetAchievementInfo(category, i)
+        if iconID then -- convert to fileId
+          iconID = WeakAuras.ArtTextureIDs[WeakAuras.NormalizeTexture(iconID)]
+        end
         if name and iconID then
           cache[name] = cache[name] or {}
           if not cache[name].achievements or cache[name].achievements == "" then
@@ -112,7 +146,7 @@ print("####")
 while misses < 4000000 do
   id = id + 1
   local name, _, icon = GetSpellInfo(id)
-  if (icon and icon:lower() == "interface\\icons\\trade_engineering") then -- 136243 is the a gear icon, we can ignore those spells
+  if icon == 136243 then -- 136243 is the a gear icon, we can ignore those spells
     misses = 0
   elseif name and name ~= "" and icon then
     if misses > 10000 then
@@ -140,11 +174,11 @@ function spellCache.GetIcon(name)
     local bestMatch = nil
     if (icons) then
       if (icons.spells) then
-        for spell, icon in icons.spells:gmatch("(%d+)=([%w_\\-]+),?") do
+        for spell, icon in icons.spells:gmatch("(%d+)=(%d+)") do
           local spellId = tonumber(spell)
 
           if not bestMatch or (spellId and spellId ~= 0 and IsSpellKnown(spellId)) then
-            bestMatch = icon
+            bestMatch = tonumber(icon)
           end
         end
       end
@@ -163,11 +197,10 @@ function spellCache.GetSpellsMatching(name)
   if cache[name] then
     if cache[name].spells then
       local result = {}
-      for spell, icon in cache[name].spells:gmatch("(%d+)=([%w_\\-]+),?") do
+      for spell, icon in cache[name].spells:gmatch("(%d+)=(%d+)") do
         local spellId = tonumber(spell)
-        if spellId then
+        local iconId = tonumber(icon)
           result[spellId] = icon
-        end
       end
       return result
     end

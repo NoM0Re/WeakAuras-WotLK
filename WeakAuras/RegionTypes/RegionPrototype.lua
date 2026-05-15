@@ -1172,12 +1172,15 @@ function Private.regionPrototype.AddExpandFunction(data, region, cloneId, parent
 end
 
 function Private.SetTextureOrSpellTexture(texture, path)
-  local spellID = tonumber(path)
-  if spellID then
-    return texture:SetTexture(select(3, GetSpellInfo(spellID)) or spellID)
-  else
-    return texture:SetTexture(path)
+  -- ArtTextureID
+  local artTextureID = tonumber(path)
+  if artTextureID then
+    local texturePath = WeakAuras.ArtTexturePaths[artTextureID]
+    if texturePath then
+      return texture:SetTexture(texturePath)
+    end
   end
+  return texture:SetTexture(path)
 end
 
 do

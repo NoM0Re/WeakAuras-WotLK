@@ -30,7 +30,7 @@ local methods = {
     self.texture:SetTexture();
   end,
   ["SetTexture"] = function(self, texturePath, name)
-    self.texture:SetTexture(texturePath);
+    self.texture:SetTexture(WeakAuras.ArtTextureIDs[texturePath] or texturePath);
     self.texture.path = texturePath;
     self.texture.name = name;
     self.texture:SetSize(120, 120);

@@ -24,6 +24,7 @@ Pools.lua
 # External code + initialization
 embeds.xml
 Init.lua
+ArtTextureID.lua
 Templates.lua
 locales.xml
 TimeUtil.lua

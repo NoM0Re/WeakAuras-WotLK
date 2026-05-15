@@ -37,7 +37,7 @@ local methods = {
   end,
   ["SetTexture"] = function(self, texturePath)
     self.texture.path = texturePath;
-    local success = self.texture:SetTexture(texturePath);
+    local success = self.texture:SetTexture(WeakAuras.ArtTexturePaths[texturePath] or texturePath);
     if not(success) then
       self.texture:SetTexture("Interface\\BUTTONS\\UI-Quickslot-Depress.blp");
     end
