@@ -317,9 +317,7 @@ local funcs = {
 
   --- @type fun(self: LinearProgressTextureInstance, texture: number|string, textureWrapMode: WrapMode)
   SetTextureOrAtlas = function(self, texture, textureWrapMode)
-    -- WotLK backport: atlas/wrap texture APIs used by Retail WeakAuras do not
-    -- exist on 3.3.5a. Keep the upstream method boundary, render with the old
-    -- Texture:SetTexture backend.
+    -- !! FIX ME LATER
     self.texture:SetTexture(texture)
   end,
 
@@ -351,6 +349,9 @@ function Private.LinearProgressTextureBase.create(frame, layer, drawLayer)
   linearTexture.parentFrame = frame
   linearTexture.startProgress = 0
   linearTexture.endProgress = 1
+  linearTexture.width = 0
+  linearTexture.height = 0
+  linearTexture.offset = 0
 
   local texture = frame:CreateTexture(nil, layer)
   -- texture:SetSnapToPixelGrid(false)

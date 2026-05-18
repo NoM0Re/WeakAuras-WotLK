@@ -185,12 +185,6 @@ local funcs = {
 
   --- @type fun(self: TextureCoords)
   Apply = function(self)
-    -- Upstream applies the stored vertex offsets here:
-    --   texture:SetVertexOffset(vertex, vx, vy)
-    -- WotLK/3.3.5a does not have that API. The progress modules still keep
-    -- MoveCorner/SetAngle/Transform intact so their code path matches upstream,
-    -- while this backend applies the visible axis-aligned bounds with classic
-    -- SetPoint/SetWidth/SetHeight and then applies the texture coordinates.
     if self.width and self.height then
       local left = math.min(self.ULgx or 0, self.LLgx or 0, self.URgx or 1, self.LRgx or 1)
       local right = math.max(self.ULgx or 0, self.LLgx or 0, self.URgx or 1, self.LRgx or 1)
