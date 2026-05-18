@@ -1461,7 +1461,16 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   -- version 62 became 64 to fix a broken modernize
-  if data.internalVersion < 64 or isFromFork then
+
+  if data.internalVersion < 63 then
+    if data.regionType == "texture" then
+      if not data.rotate then
+        data.rotation = data.discrete_rotation
+      end
+    end
+  end
+
+  if data.internalVersion < 64 then
     if data.regionType == "dynamicgroup" then
       if data.sort == "custom" and type(data.sortOn) ~= "string" or data.sortOn == "" then
         data.sortOn = "changed"
@@ -2307,6 +2316,12 @@ function Private.Modernize(data, oldSnapshot)
 
   if data.internalVersion < 89 then
     data.information.showNilIsFalse = true
+  end
+
+  if data.internalVersion < 90 then
+    if data.regionType == "aurabar" then
+      data.toolTipArea = "ICON"
+    end
   end
 
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
