@@ -204,8 +204,8 @@ local funcs = {
     end
     local mirror_v = self.mirror_v or false
 
-    local width = self.width * (self.scalex or 1) + 2 * self.offset
-    local height = self.height * (self.scaley or 1) + 2 * self.offset
+    local width = (self.width or 0) * (self.scalex or 1) + 2 * (self.offset or 0)
+    local height = (self.height or 0) * (self.scaley or 1) + 2 * (self.offset or 0)
 
     if width == 0 or height == 0 then
       return
@@ -299,6 +299,8 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   circularTexture.visible = true
   circularTexture.angle1 = 0
   circularTexture.angle2 = 0
+  circularTexture.width = 0
+  circularTexture.height = 0
 
   -- WotLK backport: create the old four fixed quadrants plus a clipped wedge.
   -- Upstream creates three full-frame textures and deforms them with vertex

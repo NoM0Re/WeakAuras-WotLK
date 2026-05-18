@@ -4,6 +4,8 @@ local AddonName = ...
 ---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
+local Mixin = OptionsPrivate.Mixin
+
 local L = WeakAuras.L;
 
 local function createOptions(parentData, data, index, subIndex)
