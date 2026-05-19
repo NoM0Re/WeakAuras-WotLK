@@ -683,8 +683,10 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     backgroundSpinner:SetHeight(30)
     foregroundSpinner:SetWidth(30)
     foregroundSpinner:SetHeight(30)
-    backgroundSpinner:SetProgress(startAngle, endAngle);
-    foregroundSpinner:SetProgress(startAngle, endAngle);
+    backgroundSpinner:SetClockwise(clockwise);
+    foregroundSpinner:SetClockwise(clockwise);
+    backgroundSpinner:SetProgress(startAngle, endAngle, 1);
+    foregroundSpinner:SetProgress(startAngle, endAngle, 1);
 
     function region:SetValue(progress)
       region.progress = progress;
@@ -697,17 +699,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
         progress = 1;
       end
 
-      if (not clockwise) then
-        progress = 1 - progress;
-      end
-
-      local pAngle = (endAngle - startAngle) * progress + startAngle;
-
-      if (clockwise) then
-        foregroundSpinner:SetProgress(startAngle, pAngle);
-      else
-        foregroundSpinner:SetProgress(pAngle, endAngle);
-      end
+      foregroundSpinner:SetProgress(startAngle, endAngle, progress);
     end
   end
 

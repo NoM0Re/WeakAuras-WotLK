@@ -206,8 +206,7 @@ local CircularSetValueFunctions = {
       progress = 1;
     end
 
-    local pAngle = (endAngle - startAngle) * progress + startAngle;
-    self.foregroundSpinner:SetProgress(startAngle, pAngle);
+    self.foregroundSpinner:SetProgress(startAngle, endAngle, progress);
   end,
   ["ANTICLOCKWISE"] = function(self, progress)
     local startAngle = self.startAngle;
@@ -222,10 +221,7 @@ local CircularSetValueFunctions = {
     if (progress > 1) then
       progress = 1;
     end
-    progress = 1 - progress;
-
-    local pAngle = (endAngle - startAngle) * progress + startAngle;
-    self.foregroundSpinner:SetProgress(pAngle, endAngle);
+    self.foregroundSpinner:SetProgress(startAngle, endAngle, progress);
   end
 }
 
@@ -474,8 +470,8 @@ local funcs = {
       for _, extraSpinner in ipairs(self.extraSpinners) do
         extraSpinner:SetClockwise(clockwise)
       end
-      self.foregroundSpinner:UpdateTextures()
-      self.backgroundSpinner:UpdateTextures()
+      self.backgroundSpinner:SetProgress(self.startAngle, self.endAngle, 1)
+      self.foregroundSpinner:SetProgress(self.startAngle, self.endAngle, self.progress or 0)
       self.SetValueOnTexture = CircularSetValueFunctions[self.orientation]
       self.ApplyAdditionalProgress = ApplyAdditionalProgressCircular
     else
@@ -582,7 +578,7 @@ local funcs = {
   SetCropY = function(self, y)
     self.crop_y = 1 + y
     self:ForAllSpinners(self.foregroundSpinner.SetCropY, self.crop_y)
-    self:ForAllLinears(self.foreground.SetCropX, self.crop_x)
+    self:ForAllLinears(self.foreground.SetCropY, self.crop_y)
   end,
   UpdateEffectiveRotation = function(self)
     self.effectiveTexRotation = self.texAnimationRotation or self.texRotation
@@ -691,7 +687,7 @@ local funcs = {
   SetRegionHeight = function(self, height)
     self.height = height
     self:ForAllSpinners(self.foregroundSpinner.SetHeight, height)
-    self:ForAllSpinners(self.foreground.SetHeight, height)
+    self:ForAllLinears(self.foreground.SetHeight, height)
     self:Scale(self.scalex, self.scaley)
   end,
   Scale = function(self, scalex, scaley)

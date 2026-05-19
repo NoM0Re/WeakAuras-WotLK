@@ -18,6 +18,7 @@ local default = function(parentType)
     circularTextureStartAngle = 0,
     circularTextureEndAngle = 360,
     circularTextureClockwise = true,
+    circularTextureInverse = false,
     circularTextureCrop_x = 0.41,
     circularTextureCrop_y = 0.41,
     circularTextureRotation = 0, -- Uses tex coord rotation, called "legacy rotation" in the ui and texRotation in code everywhere else
@@ -63,6 +64,11 @@ local properties = {
     setter = "SetClockwise",
     type = "bool",
   },
+  circularTextureInverse = {
+    display = L["Inverse"],
+    setter = "SetInverse",
+    type = "bool",
+  },
   circularTextureAuraRotation = {
     display = L["Rotation"],
     setter = "SetAuraRotation",
@@ -102,7 +108,7 @@ local properties = {
 --- @field startAngle number
 --- @field endAngle number
 --- @field visible boolean
---- @field ProgressToAngles fun(self: CircularProgressSubElement, progress: number): number, number
+--- @field ProgressToAngles fun(self: CircularProgressSubElement, progress: number): number, number, number
 --- @field FrameTick fun(self: CircularProgressSubElement)?
 
 --- @class CircularProgressTextureInstance
@@ -166,32 +172,40 @@ local funcs = {
 
   --- @type fun(self: CircularProgressSubElement, startAngle: number, endAngle: number)
   SetAngles = function(self, startAngle, endAngle)
-    self.startAngle = startAngle
-    self.endAngle = endAngle
+    self.startAngle = (startAngle or 0) % 360
+    self.endAngle = (endAngle or 360) % 360
+    if self.endAngle <= self.startAngle then
+      self.endAngle = self.endAngle + 360
+    end
+    self.circularTexture:SetProgress(self.startAngle, self.endAngle, self.lastProgress or 0)
   end,
 
-  --- @type fun(self: CircularProgressSubElement, progress: number): number, number
+  --- @type fun(self: CircularProgressSubElement, progress: number): number, number, number
   ProgressToAnglesClockwise = function(self, progress)
     progress = Clamp(progress, 0, 1)
-    local pAngle = (self.endAngle - self.startAngle) * progress + self.startAngle
-    return self.startAngle, pAngle
+    return self.startAngle, self.endAngle, progress
   end,
 
-  --- @type fun(self: CircularProgressSubElement, progress: number): number, number
+  --- @type fun(self: CircularProgressSubElement, progress: number): number, number, number
   ProgressToAnglesAntiClockwise = function(self, progress)
     progress = Clamp(progress, 0, 1)
-    progress = 1 - progress
-    local pAngle = (self.endAngle - self.startAngle) * progress + self.startAngle
-    return pAngle, self.endAngle
+    return self.startAngle, self.endAngle, progress
   end,
 
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetClockwise = function(self, b)
+    self.circularTexture:SetClockwise(b)
     if b then
       self.ProgressToAngles = self.ProgressToAnglesClockwise
     else
       self.ProgressToAngles = self.ProgressToAnglesAntiClockwise
     end
+    self:UpdateFrame()
+  end,
+
+  --- @type fun(self: CircularProgressSubElement, b: boolean)
+  SetInverse = function(self, b)
+    self.inverse = b
     self:UpdateFrame()
   end,
 
@@ -201,10 +215,18 @@ local funcs = {
       local progressData = self.progressData
       if progressData.progressType == "static" then
         local progress = progressData.total ~= 0 and progressData.value / progressData.total or 0
+        if self.inverse then
+          progress = 1 - progress
+        end
+        self.lastProgress = Clamp(progress, 0, 1)
         self.circularTexture:SetProgress(self:ProgressToAngles(progress))
       elseif progressData.progressType == "timed" then
         local remaining = progressData.paused and progressData.remaining or progressData.expirationTime - GetTime()
         local progress = remaining / progressData.duration
+        if self.inverse then
+          progress = 1 - progress
+        end
+        self.lastProgress = Clamp(progress, 0, 1)
         self.circularTexture:SetProgress(self:ProgressToAngles(progress))
       end
     end
@@ -284,11 +306,12 @@ local function modify(parent, region, parentData, data, first)
   region.FrameTick = nil
   parent.subRegionEvents:AddSubscriber("Update", region)
 
-  region:SetVisible(data.circularTextureVisible)
   region:SetAngles(data.circularTextureStartAngle or 0, data.circularTextureEndAngle or 360)
   region:SetClockwise(data.circularTextureClockwise)
+  region:SetInverse(data.circularTextureInverse)
   region:SetColor(data.circularTextureColor[1], data.circularTextureColor[2],
                   data.circularTextureColor[3], data.circularTextureColor[4])
+  region:SetVisible(data.circularTextureVisible)
 end
 
 local function supports(regionType)

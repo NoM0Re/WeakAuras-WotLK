@@ -21,6 +21,7 @@ Private.CircularProgressTextureBase = {}
 --- @field textures Texture[]
 --- @field angle1 number
 --- @field angle2 number
+--- @field progress number
 --- @field offset number
 --- @field width number
 --- @field height number
@@ -245,10 +246,12 @@ local funcs = {
 
     local clockwise = self.clockwise ~= false
     local startAngle = angle1 % 360
-    local pAngle = angle2
-    if (pAngle <= startAngle) then
-      pAngle = pAngle + 360
+    local endAngle = angle2
+    if (endAngle <= startAngle) then
+      endAngle = endAngle + 360
     end
+
+    local pAngle = (endAngle - startAngle) * (self.progress or 1) + startAngle
 
     for i = 1, 4 do
       local quadrantAngle2 = clockwise and i * 90 or (5 - i) * 90
@@ -295,10 +298,11 @@ local funcs = {
     end
     animRotate(self.wedge, -degree, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
   end,
-  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number)
-  SetProgress = function (self, angle1, angle2)
+  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number, progress: number?)
+  SetProgress = function (self, angle1, angle2, progress)
     self.angle1 = angle1
     self.angle2 = angle2
+    self.progress = progress or 1
     self:UpdateTextures()
   end,
 }
@@ -313,6 +317,7 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   circularTexture.visible = true
   circularTexture.angle1 = 0
   circularTexture.angle2 = 0
+  circularTexture.progress = 0
   circularTexture.width = 0
   circularTexture.height = 0
   circularTexture.clockwise = true
