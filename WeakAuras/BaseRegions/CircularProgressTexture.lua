@@ -21,7 +21,7 @@ Private.CircularProgressTextureBase = {}
 --- @field textures Texture[]
 --- @field angle1 number
 --- @field angle2 number
---- @field progress number
+--- @field progress number -- ?? Do i need it?
 --- @field offset number
 --- @field width number
 --- @field height number
@@ -44,7 +44,7 @@ Private.CircularProgressTextureBase = {}
 --- @field offset number
 
 local function ApplyTransform(x, y, self)
-  return Private.TextureCoords.TransformPoint(x, y, self.crop_x or 1, self.crop_y or 1, self.texRotation or 0,
+  return Private.TextureCoords.TransformPoint(x, y, self.crop_x, self.crop_y, self.texRotation,
                                               self.mirror_h, self.mirror_v, 0, 0)
 end
 
@@ -115,7 +115,7 @@ local funcs = {
   --- @type fun(self: CircularProgressTextureInstance, texture: number|string)
   SetTextureOrAtlas = function(self, texture)
     for i = 1, 4 do
-      -- WotLK backport: no atlas/wrap texture API here.
+      -- !! FIX ME
       self.textures[i]:SetTexture(texture)
     end
     self.wedge:SetTexture(texture)
@@ -193,6 +193,7 @@ local funcs = {
     self.scalex, self.scaley = scalex, scaley
   end,
   --- @type fun(self: CircularProgressTextureInstance, clockwise: boolean)
+  -- ?? do i need it?
   SetClockwise = function(self, clockwise)
     self.clockwise = clockwise
     self:UpdateTextures()
@@ -211,8 +212,8 @@ local funcs = {
     end
     local mirror_v = self.mirror_v or false
 
-    local width = (self.width or 0) * (self.scalex or 1) + 2 * (self.offset or 0)
-    local height = (self.height or 0) * (self.scaley or 1) + 2 * (self.offset or 0)
+    local width = self.width * (self.scalex or 1) + 2 * self.offset
+    local height = self.height * (self.scaley or 1) + 2 * self.offset
 
     if width == 0 or height == 0 then
       return
@@ -225,16 +226,11 @@ local funcs = {
       return
     end
 
-    -- WotLK backport: Upstream splits the arc into up to three arbitrary
+    -- WotLK backport: Retail splits the arc into up to three arbitrary
     -- TextureCoords objects and relies on Texture:SetVertexOffset to deform
     -- their geometry. That API does not exist on 3.3.5a, so the code path above
     -- is kept intact until the render backend boundary and then redirected into
     -- the old four-quadrant spinner + clipped wedge implementation.
-    self.crop_x = crop_x
-    self.crop_y = crop_y
-    self.texRotation = texRotation
-    self.mirror_h = mirror_h
-    self.mirror_v = mirror_v
 
     if (angle1 == angle2) then
       for i = 1, 4 do
