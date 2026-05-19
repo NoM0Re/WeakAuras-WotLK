@@ -32,6 +32,7 @@ Private.LinearProgressTextureBase = {}
 --- @field slantMode SlantMode
 --- @field slantFirst boolean
 --- @field horizontal boolean?
+--- @field orientation LinearProgressTextureOrientation
 --- @field ApplyProgressToCoord fun(self: LinearProgressTextureInstance, startProgress: number, endProgress: number)
 --- @field startProgress number
 --- @field endProgress number
@@ -61,6 +62,52 @@ local orientationToAnchorPoint = {
   ["VERTICAL"] = "BOTTOM",
   ["VERTICAL_INVERSE"] = "TOP"
 }
+
+local function ApplyGeometry(self, startProgress, endProgress)
+  local width = self.renderWidth or self.width or 0
+  local height = self.renderHeight or self.height or 0
+  local offset = self.offset or 0
+
+  if width == 0 or height == 0 then
+    return
+  end
+
+  local left, right, top, bottom = 0, 1, 0, 1
+
+  if self.orientation == "HORIZONTAL_INVERSE" then
+    left = 1 - endProgress
+    right = 1 - startProgress
+  elseif self.orientation == "VERTICAL" then
+    top = 1 - endProgress
+    bottom = 1 - startProgress
+  elseif self.orientation == "VERTICAL_INVERSE" then
+    top = startProgress
+    bottom = endProgress
+  else
+    left = startProgress
+    right = endProgress
+  end
+
+  if right < left then
+    left, right = right, left
+  end
+  if bottom < top then
+    top, bottom = bottom, top
+  end
+
+  left = Clamp(left, 0, 1)
+  right = Clamp(right, 0, 1)
+  top = Clamp(top, 0, 1)
+  bottom = Clamp(bottom, 0, 1)
+
+  local fullWidth = width + 2 * offset
+  local fullHeight = height + 2 * offset
+
+  self.texture:ClearAllPoints()
+  self.texture:SetPoint("TOPLEFT", self.parentFrame, "TOPLEFT", -offset + left * fullWidth, offset - top * fullHeight)
+  self.texture:SetWidth(math.max((right - left) * fullWidth, 0.0001))
+  self.texture:SetHeight(math.max((bottom - top) * fullHeight, 0.0001))
+end
 
 
 --- @class LinearProgressTextureInstance
@@ -188,6 +235,7 @@ local funcs = {
 
   --- @type fun(self: LinearProgressTextureInstance, orientation: LinearProgressTextureOrientation, slanted: boolean, slant: number, slantFirst: number, slantMode: SlantMode)
   SetOrientation = function(self, orientation, compress, slanted, slant, slantFirst, slantMode)
+    self.orientation = orientation
     self.ApplyProgressToCoord = slanted and self.ApplyProgressToCoordFunctionsSlanted[orientation]
                                 or self.ApplyProgressToCoordFunctions[orientation]
     self.compress = compress
@@ -221,8 +269,8 @@ local funcs = {
       local progress = self.parentFrame.progress or 1
       local horScale = self.horizontal and progress or 1
       local verScale = self.horizontal and 1 or progress
-      self:SetWidth(self.width * horScale)
-      self:SetHeight(self.height * verScale)
+      self.renderWidth = self.width * horScale
+      self.renderHeight = self.height * verScale
 
       if (progress > 0.1) then
         startProgress = startProgress / progress
@@ -230,7 +278,12 @@ local funcs = {
       else
         startProgress, endProgress = 0, 0
       end
+    else
+      self.renderWidth = nil
+      self.renderHeight = nil
     end
+    self.renderStartProgress = startProgress
+    self.renderEndProgress = endProgress
     self:UpdateTextures()
   end,
 
@@ -268,8 +321,10 @@ local funcs = {
     if not self.visible or not self.ApplyProgressToCoord then
       return
     end
+    local startProgress = self.renderStartProgress or self.startProgress
+    local endProgress = self.renderEndProgress or self.endProgress
     self.coord:SetFull()
-    self:ApplyProgressToCoord(self.startProgress, self.endProgress)
+    self:ApplyProgressToCoord(startProgress, endProgress)
     local crop_x = self.crop_x or 1
     local crop_y = self.crop_y or 1
     local texRotation = self.texRotation or 0
@@ -281,6 +336,7 @@ local funcs = {
     local user_x = self.user_x
     local user_y = self.user_y
 
+    ApplyGeometry(self, startProgress, endProgress)
     self.coord:Transform(crop_x, crop_y, texRotation, mirror_h, mirror_v, user_x, user_y)
     self.coord:Apply()
   end,
@@ -349,6 +405,7 @@ function Private.LinearProgressTextureBase.create(frame, layer, drawLayer)
   linearTexture.parentFrame = frame
   linearTexture.startProgress = 0
   linearTexture.endProgress = 1
+  linearTexture.orientation = "HORIZONTAL"
   linearTexture.width = 0
   linearTexture.height = 0
   linearTexture.offset = 0

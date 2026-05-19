@@ -185,19 +185,6 @@ local funcs = {
 
   --- @type fun(self: TextureCoords)
   Apply = function(self)
-    if self.width and self.height then
-      local left = math.min(self.ULgx or 0, self.LLgx or 0, self.URgx or 1, self.LRgx or 1)
-      local right = math.max(self.ULgx or 0, self.LLgx or 0, self.URgx or 1, self.LRgx or 1)
-      local top = math.min(self.ULgy or 0, self.LLgy or 1, self.URgy or 0, self.LRgy or 1)
-      local bottom = math.max(self.ULgy or 0, self.LLgy or 1, self.URgy or 0, self.LRgy or 1)
-      local parent = self.texture:GetParent()
-      if parent then
-        self.texture:ClearAllPoints()
-        self.texture:SetPoint("TOPLEFT", parent, "TOPLEFT", left * self.width, -top * self.height)
-        self.texture:SetWidth(math.max((right - left) * self.width, 0.0001))
-        self.texture:SetHeight(math.max((bottom - top) * self.height, 0.0001))
-      end
-    end
     self.texture:SetTexCoord(self.ULx, self.ULy, self.LLx, self.LLy, self.URx, self.URy, self.LRx, self.LRy)
   end,
   --- @type fun(self: TextureCoords, width: number, height: number, angle1: number, angle2: number)
