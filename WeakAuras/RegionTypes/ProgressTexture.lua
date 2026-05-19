@@ -280,6 +280,7 @@ local function ensureExtraSpinners(region, count)
     })
 
     extraSpinner:SetScale(region.scalex, region.scaley)
+    extraSpinner:SetClockwise(region.orientation == "CLOCKWISE")
 
     region.extraSpinners[i] = extraSpinner
   end
@@ -466,6 +467,12 @@ local funcs = {
 
       for i = 1, #self.extraTextures do
         self.extraTextures[i]:Hide()
+      end
+      local clockwise = self.orientation == "CLOCKWISE"
+      self.foregroundSpinner:SetClockwise(clockwise)
+      self.backgroundSpinner:SetClockwise(clockwise)
+      for _, extraSpinner in ipairs(self.extraSpinners) do
+        extraSpinner:SetClockwise(clockwise)
       end
       self.foregroundSpinner:UpdateTextures()
       self.backgroundSpinner:UpdateTextures()

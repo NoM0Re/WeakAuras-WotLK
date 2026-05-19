@@ -24,6 +24,7 @@ Private.CircularProgressTextureBase = {}
 --- @field offset number
 --- @field width number
 --- @field height number
+--- @field clockwise boolean
 --- @field coords TextureCoords[]
 --- @field scrollframe ScrollFrame Backport-only: clips the moving wedge for the active quadrant.
 --- @field wedge Texture Backport-only: old 3.3.5a spinner wedge replacing Retail vertex offsets.
@@ -190,6 +191,11 @@ local funcs = {
   SetScale = function(self, scalex, scaley)
     self.scalex, self.scaley = scalex, scaley
   end,
+  --- @type fun(self: CircularProgressTextureInstance, clockwise: boolean)
+  SetClockwise = function(self, clockwise)
+    self.clockwise = clockwise
+    self:UpdateTextures()
+  end,
   --- @type fun(self: CircularProgressTextureInstance)
   UpdateTextures = function(self)
     if not self.visible then
@@ -237,17 +243,18 @@ local funcs = {
       return
     end
 
+    local clockwise = self.clockwise ~= false
     local startAngle = angle1 % 360
-    local endAngle = angle2
-    if (endAngle <= startAngle) then
-      endAngle = endAngle + 360
+    local pAngle = angle2
+    if (pAngle <= startAngle) then
+      pAngle = pAngle + 360
     end
 
     for i = 1, 4 do
-      local quadrantAngle2 = i * 90
+      local quadrantAngle2 = clockwise and i * 90 or (5 - i) * 90
       local quadrantAngle1 = quadrantAngle2 - 90
 
-      if betweenAngles(startAngle, endAngle, quadrantAngle1, quadrantAngle2) then
+      if betweenAngles(startAngle, pAngle, quadrantAngle1, quadrantAngle2) then
         self.textures[i]:Show()
       else
         self.textures[i]:Hide()
@@ -255,7 +262,10 @@ local funcs = {
     end
 
     -- Move scrollframe/wedge to the proper quadrant
-    local quadrant = floor(endAngle % 360 / 90) + 1
+    local quadrant = floor(pAngle % 360 / 90) + 1
+    if not clockwise then
+      quadrant = 5 - quadrant
+    end
     self.scrollframe:Hide()
     self.scrollframe:SetAllPoints(self.textures[quadrant])
     self.scrollframe:Show()
@@ -279,7 +289,11 @@ local funcs = {
     local scaleWedge = 1 / 1.4142 * math.max(crop_x, crop_y)
     self.wedge:SetWidth(width * scaleWedge)
     self.wedge:SetHeight(height * scaleWedge)
-    animRotate(self.wedge, -endAngle, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
+    local degree = pAngle
+    if not clockwise then
+      degree = -degree + 90
+    end
+    animRotate(self.wedge, -degree, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
   end,
   --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number)
   SetProgress = function (self, angle1, angle2)
@@ -301,6 +315,7 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   circularTexture.angle2 = 0
   circularTexture.width = 0
   circularTexture.height = 0
+  circularTexture.clockwise = true
 
   -- WotLK backport: create the old four fixed quadrants plus a clipped wedge.
   -- Upstream creates three full-frame textures and deforms them with vertex
