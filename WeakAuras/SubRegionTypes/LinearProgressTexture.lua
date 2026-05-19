@@ -16,6 +16,7 @@ local default = function(parentType)
     linearTextureBlendMode = "BLEND",
     linearTextureOrientation = "HORIZONTAL",
     linearTextureWrapMode = "CLAMPTOBLACKADDITIVE",
+    linearTextureInverse = false,
     linearTextureUser_x = 0,
     linearTextureUser_y = 0,
     linearTextureCrop_x = 0.41,
@@ -52,6 +53,11 @@ local properties = {
     display = L["Color"],
     setter = "SetColor",
     type = "color"
+  },
+  linearTextureInverse = {
+    display = L["Inverse"],
+    setter = "SetInverse",
+    type = "bool",
   },
   linearTextureAuraRotation = {
     display = L["Rotation"],
@@ -126,6 +132,12 @@ local funcs = {
     self.linearTexture:SetMirror(b)
   end,
 
+  --- @type fun(self: LinearProgressSubElement, b: boolean)
+  SetInverse = function(self, b)
+    self.inverse = b
+    self:UpdateFrame()
+  end,
+
   --- @type fun(self: LinearProgressSubElement, cropX: number)
   SetCropX = function(self, cropX)
     self.linearTexture:SetCropX(1 + cropX)
@@ -155,10 +167,16 @@ local funcs = {
       local progressData = self.progressData
       if progressData.progressType == "static" then
         local progress = progressData.total ~= 0 and progressData.value / progressData.total or 0
+        if self.inverse then
+          progress = 1 - progress
+        end
         self.linearTexture:SetValue(0, progress)
       elseif progressData.progressType == "timed" then
         local remaining = progressData.paused and progressData.remaining or progressData.expirationTime - GetTime()
         local progress = remaining / progressData.duration
+        if self.inverse then
+          progress = 1 - progress
+        end
         self.linearTexture:SetValue(0, progress)
       end
     end
@@ -244,9 +262,10 @@ local function modify(parent, region, parentData, data, first)
   region.FrameTick = nil
   parent.subRegionEvents:AddSubscriber("Update", region)
 
-  region:SetVisible(data.linearTextureVisible)
+  region:SetInverse(data.linearTextureInverse)
   region:SetColor(data.linearTextureColor[1], data.linearTextureColor[2],
                   data.linearTextureColor[3], data.linearTextureColor[4])
+  region:SetVisible(data.linearTextureVisible)
 end
 
 local function supports(regionType)
