@@ -1,5 +1,4 @@
 if not WeakAuras.IsLibsOK() then return end
-
 ---@type string
 local AddonName = ...
 ---@class Private
@@ -18,18 +17,20 @@ local default = function(parentType)
     circularTextureStartAngle = 0,
     circularTextureEndAngle = 360,
     circularTextureClockwise = true,
-    circularTextureInverse = false,
+
     circularTextureCrop_x = 0.41,
     circularTextureCrop_y = 0.41,
     circularTextureRotation = 0, -- Uses tex coord rotation, called "legacy rotation" in the ui and texRotation in code everywhere else
     circularTextureAuraRotation = 0, -- Uses texture:SetRotation
     circularTextureMirror = false,
+
     anchor_mode = "area",
     self_point = "CENTER",
     anchor_point = "CENTER",
     width = 32,
     height = 32,
     scale = 1,
+
     progressSource = {-2, ""},
   }
 
@@ -54,6 +55,11 @@ local properties = {
     setter = "SetDesaturated",
     type = "bool",
   },
+  circularTextureInverse = {
+    display = L["Inverse"],
+    setter = "SetInverse",
+    type = "bool",
+  },
   circularTextureColor = {
     display = L["Color"],
     setter = "SetColor",
@@ -62,11 +68,6 @@ local properties = {
   circularTextureClockwise = {
     display = L["Clockwise"],
     setter = "SetClockwise",
-    type = "bool",
-  },
-  circularTextureInverse = {
-    display = L["Inverse"],
-    setter = "SetInverse",
     type = "bool",
   },
   circularTextureAuraRotation = {
@@ -117,12 +118,10 @@ local funcs = {
   SetDesaturated = function(self, b)
     self.circularTexture:SetDesaturated(b)
   end,
-
   --- @type fun(self: CircularProgressSubElement, ...: any)
   SetColor = function(self, ...)
     self.circularTexture:SetColor(...)
   end,
-
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetVisible = function(self, b)
     self.visible = b
@@ -134,32 +133,28 @@ local funcs = {
     end
     self:UpdateFrameTick()
   end,
-
   --- @type fun(self: CircularProgressSubElement, radians: number)
   SetAuraRotation = function(self, degrees)
     self.circularTexture:SetAuraRotation(degrees / 180 * math.pi)
   end,
-
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetMirror = function(self, b)
     self.circularTexture:SetMirror(b)
   end,
-
   --- @type fun(self: CircularProgressSubElement, cropX: number)
   SetCropX = function(self, cropX)
     self.circularTexture:SetCropX(1 + cropX)
   end,
-
   --- @type fun(self: CircularProgressSubElement, cropY: number)
   SetCropY = function(self, cropY)
     self.circularTexture:SetCropY(1 + cropY)
   end,
-
   --- @type fun(self: CircularProgressSubElement)
   UpdateFrameTick = function(self)
     if self.visible and self.progressData.progressType == "timed" and not self.progressData.paused then
       if not self.FrameTick then
         self.FrameTick = self.UpdateFrame
+
         self.parent.subRegionEvents:AddSubscriber("FrameTick", self)
       end
     else
@@ -169,7 +164,6 @@ local funcs = {
       end
     end
   end,
-
   --- @type fun(self: CircularProgressSubElement, startAngle: number, endAngle: number)
   SetAngles = function(self, startAngle, endAngle)
     self.startAngle = (startAngle or 0) % 360
@@ -202,19 +196,15 @@ local funcs = {
     end
     self:UpdateFrame()
   end,
-
-  --- @type fun(self: CircularProgressSubElement, b: boolean)
-  SetInverse = function(self, b)
-    self.inverse = b
-    self:UpdateFrame()
-  end,
-
   --- @type fun(self: CircularProgressSubElement)
   UpdateFrame = function(self)
     if self.visible then
       local progressData = self.progressData
       if progressData.progressType == "static" then
-        local progress = progressData.total ~= 0 and progressData.value / progressData.total or 0
+        local progress = 0
+        if progressData.total ~= 0 then
+          progress = progressData.value / progressData.total
+        end
         if self.inverse then
           progress = 1 - progress
         end
@@ -231,23 +221,26 @@ local funcs = {
       end
     end
   end,
-
   Update = function(self, state, states)
-    Private.UpdateProgressFrom(self.progressData, self.progressSource, {}, state, states, self.parent)
+    Private.UpdateProgressFrom(self.progressData, self.progressSource, self, state, states, self.parent)
     self:UpdateFrame()
     self:UpdateFrameTick()
   end,
-
   OnSizeChanged = function(self)
     local w, h = self:GetSize()
     self.circularTexture:SetWidth(w)
     self.circularTexture:SetHeight(h)
     self.circularTexture:UpdateTextures()
   end,
+  SetInverse = function(self, inverse)
+    self.inverse = inverse
+    self:UpdateFrame()
+  end
 }
 
 local function create()
   local region = CreateFrame("Frame", nil, UIParent)
+  -- region:SetFlattensRenderLayers(true)
 
   for k, v in pairs(funcs) do
     region[k] = v
@@ -281,37 +274,40 @@ local function modify(parent, region, parentData, data, first)
     region:SetSize(data.width or 0, data.height or 0)
   end
 
+
   region.Anchor = function()
     region:ClearAllPoints()
     parent:AnchorSubRegion(region, data.anchor_mode, arg1, arg2, data.xOffset, data.yOffset)
     region:OnSizeChanged()
   end
 
+  region.inverse = data.circularTextureInverse
+
   Private.CircularProgressTextureBase.modify(region.circularTexture, {
-    crop_x = 1 + (data.circularTextureCrop_x or 0),
-    crop_y = 1 + (data.circularTextureCrop_y or 0),
-    texRotation = data.circularTextureRotation or 0,
-    auraRotation = (data.circularTextureAuraRotation or 0) / 180 * math.pi,
+    crop_x = 1 + data.circularTextureCrop_x,
+    crop_y = 1 + data.circularTextureCrop_y,
+    texRotation = data.circularTextureRotation,
+    auraRotation = data.circularTextureAuraRotation / 180 * math.pi,
     mirror = data.circularTextureMirror,
     desaturated = data.circularTextureDesaturate,
     blendMode = data.circularTextureBlendMode,
     texture = data.circularTextureTexture,
+    -- width and height will be set via the anchoring function
     width = 0,
     height = 0,
     offset = 0
   })
 
-  region.progressSource = Private.AddProgressSourceMetaData(parentData, data.progressSource or data.progressSources or {-2, ""})
+  Private.regionPrototype.AddMinMaxProgressSource(true, region, parentData, data)
 
   region.FrameTick = nil
   parent.subRegionEvents:AddSubscriber("Update", region)
 
-  region:SetAngles(data.circularTextureStartAngle or 0, data.circularTextureEndAngle or 360)
+  region:SetVisible(data.circularTextureVisible)
+  region:SetAngles(data.circularTextureStartAngle, data.circularTextureEndAngle)
   region:SetClockwise(data.circularTextureClockwise)
-  region:SetInverse(data.circularTextureInverse)
   region:SetColor(data.circularTextureColor[1], data.circularTextureColor[2],
                   data.circularTextureColor[3], data.circularTextureColor[4])
-  region:SetVisible(data.circularTextureVisible)
 end
 
 local function supports(regionType)
@@ -320,6 +316,7 @@ local function supports(regionType)
          or regionType == "icon"
          or regionType == "aurabar"
          or regionType == "text"
+         or regionType == "empty"
 end
 
 WeakAuras.RegisterSubRegionType("subcirculartexture", L["Circular Texture"], supports, create, modify, onAcquire, onRelease,
