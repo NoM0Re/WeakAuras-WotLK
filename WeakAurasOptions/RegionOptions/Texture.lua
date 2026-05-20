@@ -74,6 +74,14 @@ local function createOptions(id, data)
       name = L["Mirror"],
       order = 6
     },
+    textureWrapMode = {
+      type = "select",
+      width = WeakAuras.normalWidth,
+      name = L["Texture Wrap"],
+      order = 7,
+      values = OptionsPrivate.Private.texture_wrap_types,
+      enable = function() return false end -- textureWrapMode is not supported on 3.3.5
+    },
     rotate = {
       type = "toggle",
       width = WeakAuras.normalWidth,

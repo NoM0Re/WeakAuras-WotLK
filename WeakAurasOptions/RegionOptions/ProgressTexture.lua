@@ -270,15 +270,14 @@ local function createOptions(id, data)
       desc = L["Animates progress changes"],
       order = 55.1
     },
-    --[[
     textureWrapMode = {
       type = "select",
       width = WeakAuras.normalWidth,
       name = L["Texture Wrap"],
       order = 55.2,
-      values = OptionsPrivate.Private.texture_wrap_types
+      values = OptionsPrivate.Private.texture_wrap_types,
+      enable = function() return false end -- textureWrapMode is not supported on 3.3.5
     },
-    ]]
     slanted = {
       type = "toggle",
       width = WeakAuras.normalWidth,
