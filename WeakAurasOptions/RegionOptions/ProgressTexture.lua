@@ -547,20 +547,20 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   foregroundSpinner:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
 
   local function orientHorizontal()
-    background:SetOrientation("HORIZONTAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
-    foreground:SetOrientation("HORIZONTAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
-  end
-  local function orientHorizontalInverse()
     background:SetOrientation("HORIZONTAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
     foreground:SetOrientation("HORIZONTAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
-  local function orientVertical()
-    background:SetOrientation("VERTICAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
-    foreground:SetOrientation("VERTICAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
+  local function orientHorizontalInverse()
+    background:SetOrientation("HORIZONTAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("HORIZONTAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
-  local function orientVerticalInverse()
+  local function orientVertical()
     background:SetOrientation("VERTICAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
     foreground:SetOrientation("VERTICAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
+  end
+  local function orientVerticalInverse()
+    background:SetOrientation("VERTICAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("VERTICAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
 
   local function orientCircular(clockwise)
