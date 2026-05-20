@@ -63,15 +63,14 @@ local function createOptions(parentData, data, index, subIndex)
       order = 4,
       values = OptionsPrivate.Private.orientation_types
     },
-    --[[
     linearTextureWrapMode = {
       type = "select",
       width = WeakAuras.normalWidth,
       name = L["Texture Wrap"],
       order = 5,
-      values = OptionsPrivate.Private.texture_wrap_types
+      values = OptionsPrivate.Private.texture_wrap_types,
+      enable = function() return false end -- textureWrapMode is not supported on 3.3.5
     },
-    ]]
     linearTextureInverse = {
       type = "toggle",
       width = WeakAuras.normalWidth,

@@ -1254,6 +1254,13 @@ Private.blend_types = {
   BLEND = L["Opaque"]
 }
 
+Private.texture_wrap_types = {
+  CLAMP = L["Clamp"],
+  MIRROR = L["Mirror"],
+  REPEAT = L["Repeat"],
+  CLAMPTOBLACKADDITIVE = L["No Extend"]
+}
+
 Private.slant_mode = {
   INSIDE = L["Keep Inside"],
   EXTEND = L["Extend Outside"]
