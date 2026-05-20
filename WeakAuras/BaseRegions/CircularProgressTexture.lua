@@ -21,6 +21,7 @@ Private.CircularProgressTextureBase = {}
 --- @field textures Texture[]
 --- @field angle1 number
 --- @field angle2 number
+--- @field progress number
 --- @field offset number
 --- @field width number
 --- @field height number
