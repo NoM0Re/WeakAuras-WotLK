@@ -17,6 +17,7 @@ local default = function(parentType)
     circularTextureStartAngle = 0,
     circularTextureEndAngle = 360,
     circularTextureClockwise = true,
+    circularTextureInverse = false,
 
     circularTextureCrop_x = 0.41,
     circularTextureCrop_y = 0.41,
@@ -159,8 +160,8 @@ local funcs = {
       end
     else
       if self.FrameTick then
-      self.FrameTick = nil
-      self.parent.subRegionEvents:RemoveSubscriber("FrameTick", self)
+        self.FrameTick = nil
+        self.parent.subRegionEvents:RemoveSubscriber("FrameTick", self)
       end
     end
   end,

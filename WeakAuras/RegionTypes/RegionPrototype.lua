@@ -1171,12 +1171,12 @@ function Private.regionPrototype.AddExpandFunction(data, region, cloneId, parent
   end
 end
 
-function Private.SetTextureOrSpellTexture(texture, path)
+function Private.SetTextureOrAtlas(texture, path, wrapModeH, wrapModeV)
   local spellID = tonumber(path)
   if spellID then
-    return texture:SetTexture(select(3, GetSpellInfo(spellID)) or spellID)
+    return texture:SetTexture(select(3, GetSpellInfo(spellID)) or spellID, wrapModeH, wrapModeV)
   else
-    return texture:SetTexture(path)
+    return texture:SetTexture(path, wrapModeH, wrapModeV)
   end
 end
 

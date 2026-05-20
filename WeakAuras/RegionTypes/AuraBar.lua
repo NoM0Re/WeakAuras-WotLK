@@ -1036,7 +1036,7 @@ local funcs = {
     end
 
     iconPath = iconPath or self.displayIcon or "Interface\\Icons\\INV_Misc_QuestionMark"
-    Private.SetTextureOrSpellTexture(self.icon, iconPath)
+    Private.SetTextureOrAtlas(self.icon, iconPath)
   end,
   SetOverlayColor = function(self, id, r, g, b, a)
     self.bar:SetAdditionalBarColor(id, { r, g, b, a});

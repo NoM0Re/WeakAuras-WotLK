@@ -373,8 +373,7 @@ local funcs = {
 
   --- @type fun(self: LinearProgressTextureInstance, texture: number|string, textureWrapMode: WrapMode)
   SetTextureOrAtlas = function(self, texture, textureWrapMode)
-    -- !! FIX ME LATER
-    self.texture:SetTexture(texture)
+    Private.SetTextureOrAtlas(self.texture, texture, textureWrapMode, textureWrapMode)
   end,
 
   --- @type fun(self: LinearProgressTextureInstance, desaturated: boolean)
