@@ -472,8 +472,8 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   region:ClearAllPoints();
   region:SetPoint("CENTER", borderframe, "CENTER");
 
-  local crop_x = 1 + (data.crop_x or 0)
-  local crop_y = 1 + (data.crop_y or 0)
+  local crop_x = 1 + (data.crop_x or 0.41)
+  local crop_y = 1 + (data.crop_y or 0.41)
   local user_x = -1 * (data.user_x or 0)
   local user_y = data.user_y or 0
   local auraRotationRadians = (data.auraRotation or 0) / 180 * math.pi
@@ -577,8 +577,13 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     foregroundSpinner:SetHeight(30)
     backgroundSpinner:SetClockwise(clockwise);
     foregroundSpinner:SetClockwise(clockwise);
-    backgroundSpinner:SetProgress(startAngle, endAngle);
-    foregroundSpinner:SetProgress(startAngle, endAngle);
+    if (clockwise) then
+      backgroundSpinner:SetProgress(startAngle, endAngle);
+      foregroundSpinner:SetProgress(startAngle, endAngle);
+    else
+      backgroundSpinner:SetProgress(startAngle, endAngle, 1);
+      foregroundSpinner:SetProgress(startAngle, endAngle, 1);
+    end
 
     function region:SetValue(progress)
       region.progress = progress;
@@ -591,16 +596,12 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
         progress = 1;
       end
 
-      if (not clockwise) then
-        progress = 1 - progress;
-      end
-
       local pAngle = (endAngle - startAngle) * progress + startAngle;
 
       if (clockwise) then
         foregroundSpinner:SetProgress(startAngle, pAngle);
       else
-        foregroundSpinner:SetProgress(pAngle, endAngle);
+        foregroundSpinner:SetProgress(startAngle, endAngle, progress);
       end
     end
   end

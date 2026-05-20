@@ -248,7 +248,12 @@ local funcs = {
       endAngle = endAngle + 360
     end
 
-    local pAngle = endAngle
+    local pAngle
+    if self.progress then
+      pAngle = (endAngle - startAngle) * self.progress + startAngle
+    else
+      pAngle = endAngle
+    end
 
     for i = 1, 4 do
       local quadrantAngle2 = clockwise and i * 90 or (5 - i) * 90
@@ -295,10 +300,11 @@ local funcs = {
     end
     animRotate(self.wedge, -degree, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
   end,
-  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number)
-  SetProgress = function (self, angle1, angle2)
+  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number, progress: number?)
+  SetProgress = function (self, angle1, angle2, progress)
     self.angle1 = angle1
     self.angle2 = angle2
+    self.progress = progress
     self:UpdateTextures()
   end,
 }

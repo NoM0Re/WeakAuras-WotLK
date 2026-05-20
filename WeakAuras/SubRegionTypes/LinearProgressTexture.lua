@@ -1,5 +1,4 @@
 if not WeakAuras.IsLibsOK() then return end
-
 ---@type string
 local AddonName = ...
 ---@class Private
@@ -16,24 +15,31 @@ local default = function(parentType)
     linearTextureBlendMode = "BLEND",
     linearTextureOrientation = "HORIZONTAL",
     linearTextureWrapMode = "CLAMPTOBLACKADDITIVE",
-    linearTextureInverse = false,
+
     linearTextureUser_x = 0,
     linearTextureUser_y = 0,
     linearTextureCrop_x = 0.41,
     linearTextureCrop_y = 0.41,
-    linearTextureRotation = 0,
-    linearTextureAuraRotation = 0,
+    linearTextureRotation = 0, -- Uses tex coord rotation, called "legacy rotation" in the ui and texRotation in code everywhere else
+    linearTextureAuraRotation = 0, -- Uses texture:SetRotation
     linearTextureMirror = false,
+
     anchor_mode = "area",
     self_point = "CENTER",
     anchor_point = "CENTER",
     width = 32,
     height = 32,
     scale = 1,
+
     progressSource = {-2, ""},
   }
 
-  defaults.anchor_area = parentType == "aurabar" and "bar" or "ALL"
+  if parentType == "aurabar" then
+    defaults.anchor_area = "bar"
+  else
+    defaults.anchor_area = "ALL"
+  end
+
   return defaults
 end
 
@@ -49,15 +55,15 @@ local properties = {
     setter = "SetDesaturated",
     type = "bool",
   },
-  linearTextureColor = {
-    display = L["Color"],
-    setter = "SetColor",
-    type = "color"
-  },
   linearTextureInverse = {
     display = L["Inverse"],
     setter = "SetInverse",
     type = "bool",
+  },
+  linearTextureColor = {
+    display = L["Color"],
+    setter = "SetColor",
+    type = "color"
   },
   linearTextureAuraRotation = {
     display = L["Rotation"],
@@ -104,12 +110,10 @@ local funcs = {
   SetDesaturated = function(self, b)
     self.linearTexture:SetDesaturated(b)
   end,
-
   --- @type fun(self: LinearProgressSubElement, ...: any)
   SetColor = function(self, ...)
     self.linearTexture:SetColor(...)
   end,
-
   --- @type fun(self: LinearProgressSubElement, b: boolean)
   SetVisible = function(self, b)
     self.visible = b
@@ -121,46 +125,37 @@ local funcs = {
     end
     self:UpdateFrameTick()
   end,
-
   --- @type fun(self: LinearProgressSubElement, radians: number)
   SetAuraRotation = function(self, degrees)
     self.linearTexture:SetAuraRotation(degrees / 180 * math.pi)
   end,
-
   --- @type fun(self: LinearProgressSubElement, b: boolean)
   SetMirror = function(self, b)
     self.linearTexture:SetMirror(b)
   end,
-
-  --- @type fun(self: LinearProgressSubElement, b: boolean)
-  SetInverse = function(self, b)
-    self.inverse = b
-    self:UpdateFrame()
-  end,
-
   --- @type fun(self: LinearProgressSubElement, cropX: number)
   SetCropX = function(self, cropX)
     self.linearTexture:SetCropX(1 + cropX)
   end,
-
   --- @type fun(self: LinearProgressSubElement, cropY: number)
   SetCropY = function(self, cropY)
     self.linearTexture:SetCropY(1 + cropY)
   end,
-
   --- @type fun(self: LinearProgressSubElement)
   UpdateFrameTick = function(self)
     if self.visible and self.progressData.progressType == "timed" and not self.progressData.paused then
       if not self.FrameTick then
         self.FrameTick = self.UpdateFrame
+
         self.parent.subRegionEvents:AddSubscriber("FrameTick", self)
       end
-    elseif self.FrameTick then
+    else
+      if self.FrameTick then
       self.FrameTick = nil
       self.parent.subRegionEvents:RemoveSubscriber("FrameTick", self)
+      end
     end
   end,
-
   --- @type fun(self: LinearProgressSubElement)
   UpdateFrame = function(self)
     if self.visible then
@@ -181,23 +176,26 @@ local funcs = {
       end
     end
   end,
-
   Update = function(self, state, states)
-    Private.UpdateProgressFrom(self.progressData, self.progressSource, {}, state, states, self.parent)
+    Private.UpdateProgressFrom(self.progressData, self.progressSource, self, state, states, self.parent)
     self:UpdateFrame()
     self:UpdateFrameTick()
   end,
-
   OnSizeChanged = function(self)
     local w, h = self:GetSize()
     self.linearTexture:SetWidth(w)
     self.linearTexture:SetHeight(h)
     self.linearTexture:UpdateTextures()
   end,
+  SetInverse = function(self, inverse)
+    self.inverse = inverse
+    self:UpdateFrame()
+  end
 }
 
 local function create()
   local region = CreateFrame("Frame", nil, UIParent)
+  --region:SetFlattensRenderLayers(true)
 
   for k, v in pairs(funcs) do
     region[k] = v
@@ -231,6 +229,8 @@ local function modify(parent, region, parentData, data, first)
     region:SetSize(data.width or 0, data.height or 0)
   end
 
+  region.inverse = data.linearTextureInverse
+
   region.Anchor = function()
     region:ClearAllPoints()
     parent:AnchorSubRegion(region, data.anchor_mode, arg1, arg2, data.xOffset, data.yOffset)
@@ -242,22 +242,23 @@ local function modify(parent, region, parentData, data, first)
   Private.LinearProgressTextureBase.modify(region.linearTexture, {
     user_x = -1 * (data.linearTextureUser_x or 0),
     user_y = data.linearTextureUser_y or 0,
-    crop_x = 1 + (data.linearTextureCrop_x or 0),
-    crop_y = 1 + (data.linearTextureCrop_y or 0),
-    texRotation = data.linearTextureRotation or 0,
-    auraRotation = (data.linearTextureAuraRotation or 0) / 180 * math.pi,
+    crop_x = 1 + data.linearTextureCrop_x,
+    crop_y = 1 + data.linearTextureCrop_y,
+    texRotation = data.linearTextureRotation,
+    auraRotation = data.linearTextureAuraRotation / 180 * math.pi,
     mirror = data.linearTextureMirror,
     desaturated = data.linearTextureDesaturate,
     blendMode = data.linearTextureBlendMode,
     texture = data.linearTextureTexture,
     textureWrapMode = data.linearTextureWrapMode,
+    -- width and height will be set via the anchoring function
     width = 0,
     height = 0,
     offset = 0
   })
 
-  region.linearTexture:SetOrientation(data.linearTextureOrientation or "HORIZONTAL", false, false, 0, false, nil)
-  region.progressSource = Private.AddProgressSourceMetaData(parentData, data.progressSource or data.progressSources or {-2, ""})
+  region.linearTexture:SetOrientation(data.linearTextureOrientation, false, false, 0, false, nil)
+  Private.regionPrototype.AddMinMaxProgressSource(true, region, parentData, data)
 
   region.FrameTick = nil
   parent.subRegionEvents:AddSubscriber("Update", region)
@@ -274,6 +275,7 @@ local function supports(regionType)
          or regionType == "icon"
          or regionType == "aurabar"
          or regionType == "text"
+         or regionType == "empty"
 end
 
 WeakAuras.RegisterSubRegionType("sublineartexture", L["Linear Texture"], supports, create, modify, onAcquire, onRelease,

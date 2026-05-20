@@ -179,9 +179,7 @@ local funcs = {
   --- @type fun(self: CircularProgressSubElement, progress: number): number, number
   ProgressToAnglesAntiClockwise = function(self, progress)
     progress = Clamp(progress, 0, 1)
-    progress = 1 - progress
-    local pAngle = (self.endAngle - self.startAngle) * progress + self.startAngle
-    return pAngle, self.endAngle
+    return self.startAngle, self.endAngle, progress
   end,
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetClockwise = function(self, b)
