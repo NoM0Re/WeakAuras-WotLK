@@ -114,10 +114,9 @@ local funcs = {
   --- @type fun(self: CircularProgressTextureInstance, texture: number|string)
   SetTextureOrAtlas = function(self, texture)
     for i = 1, 4 do
-      -- !! FIX ME
-      self.textures[i]:SetTexture(texture)
+      Private.SetTextureOrAtlas(self.textures[i], texture, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
     end
-    self.wedge:SetTexture(texture)
+    Private.SetTextureOrAtlas(self.wedge, texture, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
   end,
   --- @type fun(self: CircularProgressTextureInstance, desaturated: boolean)
   SetDesaturated = function(self, desaturate)
@@ -394,9 +393,17 @@ function Private.CircularProgressTextureBase.modify(circularTexture, options)
   local offset = options.offset
   local frame = circularTexture.parentFrame
   if offset > 0 then
+    circularTexture.textures[1]:ClearAllPoints()
+    circularTexture.textures[1]:SetPoint("BOTTOMLEFT", frame, "CENTER")
     circularTexture.textures[1]:SetPoint("TOPRIGHT", frame, offset, offset)
+    circularTexture.textures[2]:ClearAllPoints()
+    circularTexture.textures[2]:SetPoint("TOPLEFT", frame, "CENTER")
     circularTexture.textures[2]:SetPoint("BOTTOMRIGHT", frame, offset, -offset)
+    circularTexture.textures[3]:ClearAllPoints()
+    circularTexture.textures[3]:SetPoint("TOPRIGHT", frame, "CENTER")
     circularTexture.textures[3]:SetPoint("BOTTOMLEFT", frame, -offset, -offset)
+    circularTexture.textures[4]:ClearAllPoints()
+    circularTexture.textures[4]:SetPoint("BOTTOMRIGHT", frame, "CENTER")
     circularTexture.textures[4]:SetPoint("TOPLEFT", frame, -offset, offset)
   else
     circularTexture.textures[1]:ClearAllPoints()
