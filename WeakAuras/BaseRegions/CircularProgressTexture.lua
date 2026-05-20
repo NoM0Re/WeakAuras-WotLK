@@ -43,8 +43,8 @@ Private.CircularProgressTextureBase = {}
 --- @field height number
 --- @field offset number
 
-local function ApplyTransform(x, y, self)
-  return Private.TextureCoords.TransformPoint(x, y, self.crop_x or 1, self.crop_y or 1, self.texRotation or 0,
+local function ApplyTransform(x, y, self, texRotation)
+  return Private.TextureCoords.TransformPoint(x, y, self.crop_x or 1, self.crop_y or 1, texRotation,
                                               self.mirror_h, self.mirror_v, 0, 0)
 end
 
@@ -106,9 +106,6 @@ end
 local funcs = {
   --- @type fun(self: CircularProgressTextureInstance, radians: number)
   SetAuraRotation = function (self, radians)
-    -- WotLK backport: for circular progress the old spinner already rotates the
-    -- active wedge. Store the aura rotation and fold it into that path instead
-    -- of calling Retail texture rotation on three full-size masks.
     self.auraRotation = radians or 0
     self:UpdateTextures()
   end,
@@ -204,7 +201,7 @@ local funcs = {
     end
     local crop_x = self.crop_x or 1
     local crop_y = self.crop_y or 1
-    local texRotation = self.texRotation or 0
+    local texRotation = ((self.texRotation or 0) + (self.auraRotation or 0) / math.pi * 180) % 360
     local mirror_h = self.mirror_h or false
     if self.mirror then
       mirror_h = not mirror_h
@@ -276,16 +273,16 @@ local funcs = {
     self.scrollframe:SetAllPoints(self.textures[quadrant])
     self.scrollframe:Show()
 
-    local ULx, ULy = ApplyTransform(0, 0, self)
-    local LLx, LLy = ApplyTransform(0, 1, self)
-    local URx, URy = ApplyTransform(1, 0, self)
-    local LRx, LRy = ApplyTransform(1, 1, self)
+    local ULx, ULy = ApplyTransform(0, 0, self, texRotation)
+    local LLx, LLy = ApplyTransform(0, 1, self, texRotation)
+    local URx, URy = ApplyTransform(1, 0, self, texRotation)
+    local LRx, LRy = ApplyTransform(1, 1, self, texRotation)
 
-    local Lx, Ly = ApplyTransform(0, 0.5, self)
-    local Tx, Ty = ApplyTransform(0.5, 0, self)
-    local Bx, By = ApplyTransform(0.5, 1, self)
-    local Rx, Ry = ApplyTransform(1, 0.5, self)
-    local Cx, Cy = ApplyTransform(0.5, 0.5, self)
+    local Lx, Ly = ApplyTransform(0, 0.5, self, texRotation)
+    local Tx, Ty = ApplyTransform(0.5, 0, self, texRotation)
+    local Bx, By = ApplyTransform(0.5, 1, self, texRotation)
+    local Rx, Ry = ApplyTransform(1, 0.5, self, texRotation)
+    local Cx, Cy = ApplyTransform(0.5, 0.5, self, texRotation)
 
     self.textures[1]:SetTexCoord(Tx, Ty, Cx, Cy, URx, URy, Rx, Ry)
     self.textures[2]:SetTexCoord(Cx, Cy, Bx, By, Rx, Ry, LRx, LRy)
@@ -299,7 +296,7 @@ local funcs = {
     if not clockwise then
       degree = -degree + 90
     end
-    animRotate(self.wedge, -degree, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
+    animRotate(self.wedge, -degree, "BOTTOMRIGHT", texRotation, width / height)
   end,
   --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number, progress: number?)
   SetProgress = function (self, angle1, angle2, progress)

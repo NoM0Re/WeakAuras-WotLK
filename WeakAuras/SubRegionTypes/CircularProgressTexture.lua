@@ -22,7 +22,7 @@ local default = function(parentType)
     circularTextureCrop_x = 0.41,
     circularTextureCrop_y = 0.41,
     circularTextureRotation = 0, -- Uses tex coord rotation, called "legacy rotation" in the ui and texRotation in code everywhere else
-    circularTextureAuraRotation = 0, -- Uses texture:SetRotation
+    circularTextureAuraRotation = 0, -- Uses texture:SetRotation Backport: applied additively with texture coordinate rotation
     circularTextureMirror = false,
 
     anchor_mode = "area",
