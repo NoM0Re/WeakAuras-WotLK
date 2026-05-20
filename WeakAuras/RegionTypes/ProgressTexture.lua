@@ -206,7 +206,8 @@ local CircularSetValueFunctions = {
       progress = 1;
     end
 
-    self.foregroundSpinner:SetProgress(startAngle, endAngle, progress);
+    local pAngle = (endAngle - startAngle) * progress + startAngle;
+    self.foregroundSpinner:SetProgress(startAngle, pAngle);
   end,
   ["ANTICLOCKWISE"] = function(self, progress)
     local startAngle = self.startAngle;
@@ -222,7 +223,9 @@ local CircularSetValueFunctions = {
       progress = 1;
     end
     progress = 1 - progress;
-    self.foregroundSpinner:SetProgress(startAngle, endAngle, progress);
+
+    local pAngle = (endAngle - startAngle) * progress + startAngle;
+    self.foregroundSpinner:SetProgress(pAngle, endAngle);
   end
 }
 
@@ -471,8 +474,7 @@ local funcs = {
       for _, extraSpinner in ipairs(self.extraSpinners) do
         extraSpinner:SetClockwise(clockwise)
       end
-      self.backgroundSpinner:SetProgress(self.startAngle, self.endAngle, 1)
-      self.foregroundSpinner:SetProgress(self.startAngle, self.endAngle, self.progress or 0)
+      self.backgroundSpinner:SetProgress(self.startAngle, self.endAngle)
       self.SetValueOnTexture = CircularSetValueFunctions[self.orientation]
       self.ApplyAdditionalProgress = ApplyAdditionalProgressCircular
     else

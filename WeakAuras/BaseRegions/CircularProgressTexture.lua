@@ -21,7 +21,6 @@ Private.CircularProgressTextureBase = {}
 --- @field textures Texture[]
 --- @field angle1 number
 --- @field angle2 number
---- @field progress number -- ?? Do i need it?
 --- @field offset number
 --- @field width number
 --- @field height number
@@ -44,7 +43,7 @@ Private.CircularProgressTextureBase = {}
 --- @field offset number
 
 local function ApplyTransform(x, y, self)
-  return Private.TextureCoords.TransformPoint(x, y, self.crop_x, self.crop_y, self.texRotation,
+  return Private.TextureCoords.TransformPoint(x, y, self.crop_x or 1, self.crop_y or 1, self.texRotation or 0,
                                               self.mirror_h, self.mirror_v, 0, 0)
 end
 
@@ -212,8 +211,8 @@ local funcs = {
     end
     local mirror_v = self.mirror_v or false
 
-    local width = self.width * (self.scalex or 1) + 2 * self.offset
-    local height = self.height * (self.scaley or 1) + 2 * self.offset
+    local width = (self.width or 0) * (self.scalex or 1) + 2 * (self.offset or 0)
+    local height = (self.height or 0) * (self.scaley or 1) + 2 * (self.offset or 0)
 
     if width == 0 or height == 0 then
       return
@@ -236,9 +235,12 @@ local funcs = {
       for i = 1, 4 do
         self.textures[i]:Hide()
       end
+      self.scrollframe:Hide()
       self.wedge:Hide()
       return
     end
+
+    self.wedge:Show()
 
     local clockwise = self.clockwise ~= false
     local startAngle = angle1 % 360
@@ -247,7 +249,7 @@ local funcs = {
       endAngle = endAngle + 360
     end
 
-    local pAngle = (endAngle - startAngle) * (self.progress or 1) + startAngle
+    local pAngle = endAngle
 
     for i = 1, 4 do
       local quadrantAngle2 = clockwise and i * 90 or (5 - i) * 90
@@ -294,11 +296,10 @@ local funcs = {
     end
     animRotate(self.wedge, -degree, "BOTTOMRIGHT", self.auraRotation or 0, width / height)
   end,
-  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number, progress: number?)
-  SetProgress = function (self, angle1, angle2, progress)
+  --- @type fun(self: CircularProgressTextureInstance, angle1: number, angle2: number)
+  SetProgress = function (self, angle1, angle2)
     self.angle1 = angle1
     self.angle2 = angle2
-    self.progress = progress or 1
     self:UpdateTextures()
   end,
 }
@@ -311,11 +312,6 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   circularTexture.coords = {}
   circularTexture.offset = 0
   circularTexture.visible = true
-  circularTexture.angle1 = 0
-  circularTexture.angle2 = 0
-  circularTexture.progress = 0
-  circularTexture.width = 0
-  circularTexture.height = 0
   circularTexture.clockwise = true
 
   -- WotLK backport: create the old four fixed quadrants plus a clipped wedge.
@@ -402,6 +398,19 @@ function Private.CircularProgressTextureBase.modify(circularTexture, options)
     circularTexture.textures[2]:SetPoint("BOTTOMRIGHT", frame, offset, -offset)
     circularTexture.textures[3]:SetPoint("BOTTOMLEFT", frame, -offset, -offset)
     circularTexture.textures[4]:SetPoint("TOPLEFT", frame, -offset, offset)
+  else
+    circularTexture.textures[1]:ClearAllPoints()
+    circularTexture.textures[1]:SetPoint("BOTTOMLEFT", frame, "CENTER")
+    circularTexture.textures[1]:SetPoint("TOPRIGHT")
+    circularTexture.textures[2]:ClearAllPoints()
+    circularTexture.textures[2]:SetPoint("TOPLEFT", frame, "CENTER")
+    circularTexture.textures[2]:SetPoint("BOTTOMRIGHT")
+    circularTexture.textures[3]:ClearAllPoints()
+    circularTexture.textures[3]:SetPoint("TOPRIGHT", frame, "CENTER")
+    circularTexture.textures[3]:SetPoint("BOTTOMLEFT")
+    circularTexture.textures[4]:ClearAllPoints()
+    circularTexture.textures[4]:SetPoint("BOTTOMRIGHT", frame, "CENTER")
+    circularTexture.textures[4]:SetPoint("TOPLEFT")
   end
 
   circularTexture:UpdateTextures()
