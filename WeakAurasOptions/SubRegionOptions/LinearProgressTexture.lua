@@ -45,8 +45,11 @@ local function createOptions(parentData, data, index, subIndex)
         OptionsPrivate.OpenTexturePicker(parentData, paths, {
           texture = "linearTextureTexture",
           color = "linearTextureColor",
+          texRotation = "linearTextureRotation",
+          auraRotation = "linearTextureAuraRotation",
+          mirror = "linearTextureMirror",
           blendMode = "linearTextureBlendMode"
-        }, OptionsPrivate.Private.texture_types, nil)
+        }, OptionsPrivate.Private.texture_types, nil, true)
       end,
       imageWidth = 24,
       imageHeight = 24,

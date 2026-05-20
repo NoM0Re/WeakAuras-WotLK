@@ -441,13 +441,8 @@ local function createThumbnail()
   region:SetWidth(32);
   region:SetHeight(32);
 
-  local background = region:CreateTexture(nil, "BACKGROUND");
-  borderframe.background = background;
-
-  local foreground = region:CreateTexture(nil, "ARTWORK");
-  borderframe.foreground = foreground;
-
-
+  borderframe.background = OptionsPrivate.Private.LinearProgressTextureBase.create(region, "BACKGROUND", 0)
+  borderframe.foreground = OptionsPrivate.Private.LinearProgressTextureBase.create(region, "ARTWORK", 0)
   borderframe.backgroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "BACKGROUND", 1)
   borderframe.foregroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "ARTWORK", 1)
 
@@ -464,16 +459,12 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     scale = size/data.height;
     region:SetWidth(scale * data.width);
     region:SetHeight(size);
-    foreground:SetWidth(scale * data.width);
-    foreground:SetHeight(size);
     region.width = scale * data.width;
     region.height = size;
   else
     scale = size/data.width;
     region:SetWidth(size);
     region:SetHeight(scale * data.height);
-    foreground:SetWidth(size);
-    foreground:SetHeight(scale * data.height);
     region.width = size;
     region.height = scale * data.height;
   end
@@ -481,194 +472,95 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   region:ClearAllPoints();
   region:SetPoint("CENTER", borderframe, "CENTER");
 
-  background:SetTexture(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
-  background:SetDesaturated(data.desaturateBackground)
-  background:SetVertexColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
-  background:SetBlendMode(data.blendMode);
+  local crop_x = 1 + (data.crop_x or 0)
+  local crop_y = 1 + (data.crop_y or 0)
+  local user_x = -1 * (data.user_x or 0)
+  local user_y = data.user_y or 0
+  local auraRotationRadians = (data.auraRotation or 0) / 180 * math.pi
+  local texRotation = data.rotation or 0
+  local textureWrapMode = data.textureWrapMode or "CLAMPTOBLACKADDITIVE"
 
-  backgroundSpinner:SetTextureOrAtlas(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
-  backgroundSpinner:SetDesaturated(data.desaturateBackground)
-  backgroundSpinner:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
-  backgroundSpinner:SetBlendMode(data.blendMode);
+  OptionsPrivate.Private.LinearProgressTextureBase.modify(background, {
+    offset = 0,
+    texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
+    textureWrapMode = textureWrapMode,
+    desaturated = data.desaturateBackground,
+    blendMode = data.blendMode,
+    auraRotation = auraRotationRadians,
+    crop_x = crop_x,
+    crop_y = crop_y,
+    user_x = user_x,
+    user_y = user_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    width = region.width,
+    height = region.height
+  })
+  background:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4])
 
-  foreground:SetTexture(data.foregroundTexture);
-  foreground:SetVertexColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4]);
-  foreground:SetBlendMode(data.blendMode);
+  OptionsPrivate.Private.LinearProgressTextureBase.modify(foreground, {
+    offset = 0,
+    texture = data.foregroundTexture,
+    textureWrapMode = textureWrapMode,
+    desaturated = data.desaturateForeground,
+    blendMode = data.blendMode,
+    auraRotation = auraRotationRadians,
+    crop_x = crop_x,
+    crop_y = crop_y,
+    user_x = user_x,
+    user_y = user_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    width = region.width,
+    height = region.height
+  })
+  foreground:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
 
-  foregroundSpinner:SetTextureOrAtlas(data.foregroundTexture);
-  foregroundSpinner:SetDesaturated(data.desaturateForeground);
+  OptionsPrivate.Private.CircularProgressTextureBase.modify(backgroundSpinner, {
+    crop_x = crop_x,
+    crop_y = crop_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
+    blendMode = data.blendMode,
+    desaturated = data.desaturateBackground,
+    auraRotation = auraRotationRadians,
+    width = region.width,
+    height = region.height,
+    offset = data.backgroundOffset or 0
+  })
+  backgroundSpinner:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4])
+
+  OptionsPrivate.Private.CircularProgressTextureBase.modify(foregroundSpinner, {
+    crop_x = crop_x,
+    crop_y = crop_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    texture = data.foregroundTexture,
+    blendMode = data.blendMode,
+    desaturated = data.desaturateForeground,
+    auraRotation = auraRotationRadians,
+    width = region.width,
+    height = region.height,
+    offset = 0
+  })
   foregroundSpinner:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
-  foregroundSpinner:SetBlendMode(data.blendMode);
-
-  background:ClearAllPoints();
-  foreground:ClearAllPoints();
-  background:SetPoint("BOTTOMLEFT", region, "BOTTOMLEFT");
-  background:SetPoint("TOPRIGHT", region, "TOPRIGHT");
-
-  region.mirror_h = data.mirror;
-  region.scale_x = 1 + (data.crop_x or 0.41);
-  region.scale_y = 1 + (data.crop_y or 0.41);
-  region.texRotation = data.rotation or 0
-  region.auraRotation = data.auraRotation or 0
-  region.cos_rotation = cos(region.texRotation)
-  region.sin_rotation = sin(region.texRotation)
-  region.user_x = -1 * (data.user_x or 0);
-  region.user_y = data.user_y or 0;
-  region.aspect = 1;
 
   local function orientHorizontal()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("LEFT", region, "LEFT");
-    region.orientation = "HORIZONTAL_INVERSE";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(progress, 0, region)
-        local URx_, URy_ = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(progress, 1, region)
-        local LRx_, LRy_ = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx , URy , LRx , LRy );
-        foreground:SetWidth(region:GetWidth() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx_, URy_, LRx_, LRy_);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    end
+    background:SetOrientation("HORIZONTAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("HORIZONTAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientHorizontalInverse()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("RIGHT", region, "RIGHT");
-    region.orientation = "HORIZONTAL";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(1-progress, 0, region)
-        local ULx_, ULy_ = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(1-progress, 1, region)
-        local LLx_, LLy_ = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx , ULy , LLx , LLy , URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx_, ULy_, LLx_, LLy_, URx, URy, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    end
+    background:SetOrientation("HORIZONTAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("HORIZONTAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientVertical()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("BOTTOM", region, "BOTTOM");
-    region.orientation = "VERTICAL_INVERSE";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 1-progress, region)
-        local ULx_, ULy_ = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 1-progress, region)
-        local URx_, URy_ = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx_, ULy_, LLx, LLy, URx_, URy_, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    end
+    background:SetOrientation("VERTICAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("VERTICAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientVerticalInverse()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("TOP", region, "TOP");
-    region.orientation = "VERTICAL";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, progress, region)
-        local LLx_, LLy_ = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, progress, region)
-        local LRx_, LRy_ = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        foreground:SetRotation(region.auraRotation / 180 * math.pi)
-        background:SetTexCoord(ULx, ULy, LLx_, LLy_, URx, URy, LRx_, LRy_);
-        background:SetRotation(region.auraRotation / 180 * math.pi)
-      end
-    end
+    background:SetOrientation("VERTICAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("VERTICAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
 
   local function orientCircular(clockwise)
@@ -685,8 +577,8 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     foregroundSpinner:SetHeight(30)
     backgroundSpinner:SetClockwise(clockwise);
     foregroundSpinner:SetClockwise(clockwise);
-    backgroundSpinner:SetProgress(startAngle, endAngle, 1);
-    foregroundSpinner:SetProgress(startAngle, endAngle, 1);
+    backgroundSpinner:SetProgress(startAngle, endAngle);
+    foregroundSpinner:SetProgress(startAngle, endAngle);
 
     function region:SetValue(progress)
       region.progress = progress;
@@ -699,7 +591,17 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
         progress = 1;
       end
 
-      foregroundSpinner:SetProgress(startAngle, endAngle, progress);
+      if (not clockwise) then
+        progress = 1 - progress;
+      end
+
+      local pAngle = (endAngle - startAngle) * progress + startAngle;
+
+      if (clockwise) then
+        foregroundSpinner:SetProgress(startAngle, pAngle);
+      else
+        foregroundSpinner:SetProgress(pAngle, endAngle);
+      end
     end
   end
 
@@ -715,6 +617,12 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     background:Show();
     foregroundSpinner:Hide();
     backgroundSpinner:Hide();
+    function region:SetValue(progress)
+      region.progress = progress;
+      progress = max(0, min(1, progress or 0));
+      background:SetValue(0, 1);
+      foreground:SetValue(0, progress);
+    end
   end
 
   if(data.orientation == "HORIZONTAL_INVERSE") then
