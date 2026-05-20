@@ -366,66 +366,6 @@ local function createOptions(id, data)
   };
 end
 
--- Credit to CommanderSirow for taking the time to properly craft the ApplyTransform function
--- to the enhance the abilities of Progress Textures.
-
--- NOTES:
---  Most SetValue() changes are quite equal (among compress/non-compress)
---  (There is no GUI button for mirror_v, but mirror_h)
---  New/Used variables
---   region.user_x (0) - User defined center x-shift [-1, 1]
---   region.user_y (0) - User defined center y-shift [-1, 1]
---   region.mirror_v (false) - Mirroring along x-axis [bool]
---   region.mirror_h (false) - Mirroring along y-axis [bool]
---   region.cos_rotation (1) - cos(ANGLE), precalculated cos-function for given ANGLE [-1, 1]
---   region.sin_rotation (0) - sin(ANGLE), precalculated cos-function for given ANGLE [-1, 1]
---   region.scale (1.0) - user defined scaling [1, INF]
---   region.full_rotation (false) - Allow full rotation [bool]
-
-
-local function ApplyTransform(x, y, region)
-  -- 1) Translate texture-coords to user-defined center
-  x = x - 0.5
-  y = y - 0.5
-
-  -- 2) Shrink texture by 1/sqrt(2)
-  x = x * 1.4142
-  y = y * 1.4142
-
-  -- 3) Scale texture by user-defined amount
-  x = x / region.scale_x
-  y = y / region.scale_y
-
-  -- 4) Apply mirroring if defined
-  if region.mirror_h then
-    x = -x
-  end
-  if region.mirror_v then
-    y = -y
-  end
-
-  -- 5) Rotate texture by user-defined value
-  x, y = region.cos_rotation * x - region.sin_rotation * y, region.sin_rotation * x + region.cos_rotation * y
-
-  -- 6) Translate texture-coords back to (0,0)
-  x = x + 0.5 + region.user_x
-  y = y + 0.5 + region.user_y
-
-  -- Return results
-  return x, y
-end
-
-local function Transform(tx, x, y, angle, aspect) -- Translates texture to x, y and rotates about its center
-  local c, s = cos(angle), sin(angle)
-  y = y / aspect
-  local oy = 0.5 / aspect
-  local ULx, ULy = 0.5 + (x - 0.5) * c - (y - oy) * s, (oy + (y - oy) * c + (x - 0.5) * s) * aspect
-  local LLx, LLy = 0.5 + (x - 0.5) * c - (y + oy) * s, (oy + (y + oy) * c + (x - 0.5) * s) * aspect
-  local URx, URy = 0.5 + (x + 0.5) * c - (y - oy) * s, (oy + (y - oy) * c + (x + 0.5) * s) * aspect
-  local LRx, LRy = 0.5 + (x + 0.5) * c - (y + oy) * s, (oy + (y + oy) * c + (x + 0.5) * s) * aspect
-  tx:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy)
-end
-
 local function createThumbnail()
   local borderframe = CreateFrame("Frame", nil, UIParent);
   borderframe:SetWidth(32);
