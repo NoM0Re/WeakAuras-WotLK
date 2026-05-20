@@ -222,10 +222,7 @@ local CircularSetValueFunctions = {
     if (progress > 1) then
       progress = 1;
     end
-    progress = 1 - progress;
-
-    local pAngle = (endAngle - startAngle) * progress + startAngle;
-    self.foregroundSpinner:SetProgress(pAngle, endAngle);
+    self.foregroundSpinner:SetProgress(startAngle, endAngle, progress);
   end
 }
 
