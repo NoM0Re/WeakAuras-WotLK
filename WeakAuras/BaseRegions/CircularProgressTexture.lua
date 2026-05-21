@@ -201,7 +201,7 @@ local funcs = {
     end
     local crop_x = self.crop_x or 1
     local crop_y = self.crop_y or 1
-    local texRotation = ((self.texRotation or 0) + (self.auraRotation or 0) / math.pi * 180) % 360
+    local texRotation = (self.texRotation or 0) + (self.auraRotation or 0)
     local mirror_h = self.mirror_h or false
     if self.mirror then
       mirror_h = not mirror_h

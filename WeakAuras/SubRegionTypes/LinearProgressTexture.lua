@@ -126,8 +126,8 @@ local funcs = {
     self:UpdateFrameTick()
   end,
   --- @type fun(self: LinearProgressSubElement, radians: number)
-  SetAuraRotation = function(self, degrees)
-    self.linearTexture:SetAuraRotation(degrees / 180 * math.pi)
+  SetAuraRotation = function(self, radians)
+    self.linearTexture:SetAuraRotation(radians)
   end,
   --- @type fun(self: LinearProgressSubElement, b: boolean)
   SetMirror = function(self, b)
@@ -245,7 +245,7 @@ local function modify(parent, region, parentData, data, first)
     crop_x = 1 + data.linearTextureCrop_x,
     crop_y = 1 + data.linearTextureCrop_y,
     texRotation = data.linearTextureRotation,
-    auraRotation = data.linearTextureAuraRotation / 180 * math.pi,
+    auraRotation = data.linearTextureAuraRotation,
     mirror = data.linearTextureMirror,
     desaturated = data.linearTextureDesaturate,
     blendMode = data.linearTextureBlendMode,

@@ -69,7 +69,7 @@ local function createOptions(parentData, data, index, subIndex)
       name = L["Texture Wrap"],
       order = 5,
       values = OptionsPrivate.Private.texture_wrap_types,
-      enable = function() return false end -- textureWrapMode is not supported on 3.3.5
+      disabled = function() return true end
     },
     linearTextureInverse = {
       type = "toggle",

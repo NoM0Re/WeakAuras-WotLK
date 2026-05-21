@@ -233,7 +233,7 @@ local function hideExtraTextures(extraTextures, from)
 end
 
 local function ensureExtraTextures(region, count)
-  local auraRotationRadians = region.auraRotation / 180 * math.pi
+  local auraRotationRadians = region.auraRotation
   for i = #region.extraTextures + 1, count do
     local extraTexture = Private.LinearProgressTextureBase.create(region, "ARTWORK", min(i, 7));
     Private.LinearProgressTextureBase.modify(extraTexture, {
@@ -259,7 +259,7 @@ local function ensureExtraTextures(region, count)
 end
 
 local function ensureExtraSpinners(region, count)
-  local auraRotationRadians = region.auraRotation / 180 * math.pi
+  local auraRotationRadians = region.auraRotation
   for i = #region.extraSpinners + 1, count do
     local extraSpinner = Private.CircularProgressTextureBase.create(region, "OVERLAY", min(i, 7))
     Private.CircularProgressTextureBase.modify(extraSpinner, {
@@ -539,7 +539,7 @@ local funcs = {
   end,
   SetAuraRotation = function(self, auraRotation)
     self.auraRotation = auraRotation
-    local auraRotationRadians = self.auraRotation / 180 * math.pi
+    local auraRotationRadians = self.auraRotation
     self:ForAllSpinners(self.foregroundSpinner.SetAuraRotation, auraRotationRadians)
 
     self.background:SetAuraRotation(auraRotationRadians)
@@ -836,7 +836,7 @@ local function modify(parent, region, data)
 
   region.FrameTick = nil
 
-  local auraRotationRadians = region.auraRotation / 180 * math.pi
+  local auraRotationRadians = region.auraRotation
 
   region.currentTexture = data.foregroundTexture
 

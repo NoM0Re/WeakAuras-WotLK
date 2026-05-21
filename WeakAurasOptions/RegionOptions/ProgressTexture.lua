@@ -276,7 +276,7 @@ local function createOptions(id, data)
       name = L["Texture Wrap"],
       order = 55.2,
       values = OptionsPrivate.Private.texture_wrap_types,
-      enable = function() return false end -- textureWrapMode is not supported on 3.3.5
+      disabled = function() return true end
     },
     slanted = {
       type = "toggle",
