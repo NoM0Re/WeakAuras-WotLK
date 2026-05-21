@@ -233,14 +233,14 @@ local function hideExtraTextures(extraTextures, from)
 end
 
 local function ensureExtraTextures(region, count)
-  local auraRotationRadians = region.auraRotation
+  local auraRotation = region.auraRotation
   for i = #region.extraTextures + 1, count do
     local extraTexture = Private.LinearProgressTextureBase.create(region, "ARTWORK", min(i, 7));
     Private.LinearProgressTextureBase.modify(extraTexture, {
       offset = 0,
       blendMode = region.foreground:GetBlendMode(),
       desaturated = false,
-      auraRotation = auraRotationRadians,
+      auraRotation = auraRotation,
       texture = region.currentTexture,
       textureWrapMode = region.textureWrapMode,
       crop_x = region.crop_x,
@@ -259,7 +259,7 @@ local function ensureExtraTextures(region, count)
 end
 
 local function ensureExtraSpinners(region, count)
-  local auraRotationRadians = region.auraRotation
+  local auraRotation = region.auraRotation
   for i = #region.extraSpinners + 1, count do
     local extraSpinner = Private.CircularProgressTextureBase.create(region, "OVERLAY", min(i, 7))
     Private.CircularProgressTextureBase.modify(extraSpinner, {
@@ -270,7 +270,7 @@ local function ensureExtraSpinners(region, count)
       texture = region.currentTexture,
       blendMode = region.foreground:GetBlendMode(),
       desaturated = false,
-      auraRotation = auraRotationRadians,
+      auraRotation = auraRotation,
       width = region.width,
       height = region.height,
       offset = 0
@@ -539,13 +539,13 @@ local funcs = {
   end,
   SetAuraRotation = function(self, auraRotation)
     self.auraRotation = auraRotation
-    local auraRotationRadians = self.auraRotation
-    self:ForAllSpinners(self.foregroundSpinner.SetAuraRotation, auraRotationRadians)
+    local auraRotation = self.auraRotation
+    self:ForAllSpinners(self.foregroundSpinner.SetAuraRotation, auraRotation)
 
-    self.background:SetAuraRotation(auraRotationRadians)
-    self.foreground:SetAuraRotation(auraRotationRadians)
+    self.background:SetAuraRotation(auraRotation)
+    self.foreground:SetAuraRotation(auraRotation)
     for _, extraTexture in ipairs(self.extraTextures) do
-      extraTexture:SetAuraRotation(auraRotationRadians)
+      extraTexture:SetAuraRotation(auraRotation)
     end
   end,
   DoPosition = function(self)
@@ -836,7 +836,7 @@ local function modify(parent, region, data)
 
   region.FrameTick = nil
 
-  local auraRotationRadians = region.auraRotation
+  local auraRotation = region.auraRotation
 
   region.currentTexture = data.foregroundTexture
 
@@ -846,7 +846,7 @@ local function modify(parent, region, data)
     textureWrapMode = region.textureWrapMode,
     desaturated = data.desaturateBackground,
     blendMode = data.blendMode,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     crop_x = region.crop_x,
     crop_y = region.crop_y,
     user_x = region.user_x,
@@ -866,7 +866,7 @@ local function modify(parent, region, data)
     textureWrapMode = region.textureWrapMode,
     desaturated = data.desaturateForeground,
     blendMode = data.blendMode,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     crop_x = region.crop_x,
     crop_y = region.crop_y,
     user_x = region.user_x,
@@ -884,7 +884,7 @@ local function modify(parent, region, data)
     textureWrapMode = region.textureWrapMode,
     desaturated = false,
     blendMode = data.blendMode,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     crop_x = region.crop_x,
     crop_y = region.crop_y,
     user_x = region.user_x,
@@ -906,7 +906,7 @@ local function modify(parent, region, data)
     texture = data.foregroundTexture,
     blendMode = data.blendMode,
     desaturated = data.desaturateForeground,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     width = data.width,
     height = data.height,
     offset = 0
@@ -920,7 +920,7 @@ local function modify(parent, region, data)
     texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
     blendMode = data.blendMode,
     desaturated = data.desaturateBackground,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     width = data.width,
     height = data.height,
     offset = data.backgroundOffset
@@ -939,7 +939,7 @@ local function modify(parent, region, data)
     texture = data.foregroundTexture,
     blendMode = data.blendMode,
     desaturated = false,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     width = data.width,
     height = data.height,
     offset = 0

@@ -42,7 +42,7 @@ Private.LinearProgressTextureBase = {}
 --- @field texture number|string
 --- @field desaturated boolean
 --- @field blendMode BlendMode
---- @field auraRotation number
+--- @field auraRotation number Backport: degrees, added to texRotation for texture-coordinate rotation
 --- @field textureWrapMode WrapMode
 --- @field offset number
 --- @field crop_x number
@@ -375,9 +375,9 @@ local funcs = {
     return self.texture:GetBlendMode()
   end,
 
-  --- @type fun(self: LinearProgressTextureInstance, radians: number)
-  SetAuraRotation = function (self, radians)
-    self.auraRotation = radians or 0
+  --- @type fun(self: LinearProgressTextureInstance, auraRotation: number)
+  SetAuraRotation = function (self, auraRotation)
+    self.auraRotation = auraRotation or 0
     self:UpdateTextures()
   end,
 
