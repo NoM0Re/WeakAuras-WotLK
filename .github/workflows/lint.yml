@@ -15,14 +15,14 @@ jobs:
 
     env:
       LUA_VERSION: 5.1.5
-      LUAROCKS_VERSION: 3.11.1
+      LUAROCKS_VERSION: 3.13.0
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Cache Lua
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       id: luacache
       with:
         path: .lua
@@ -31,7 +31,7 @@ jobs:
           ${{ runner.os }}-lua-${{ env.LUA_VERSION }}
 
     - name: Cache LuaRocks
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       id: luarockscache
       with:
         path: .luarocks
