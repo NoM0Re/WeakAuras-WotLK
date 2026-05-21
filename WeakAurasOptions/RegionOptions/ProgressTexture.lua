@@ -1,5 +1,7 @@
-if not WeakAuras.IsLibsOK() then return end
+﻿if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L;
@@ -28,10 +30,11 @@ local function createOptions(id, data)
         OptionsPrivate.OpenTexturePicker(data, paths, {
           texture = "foregroundTexture",
           color = "foregroundColor",
-          rotation = "rotation",
+          texRotation = "rotation",
+          auraRotation = "auraRotation",
           mirror = "mirror",
           blendMode = "blendMode"
-        }, OptionsPrivate.Private.texture_types);
+        }, OptionsPrivate.Private.texture_types, nil, true)
       end,
       imageWidth = 24,
       imageHeight = 24,
@@ -60,10 +63,11 @@ local function createOptions(id, data)
         OptionsPrivate.OpenTexturePicker(data, paths, {
           texture = "backgroundTexture",
           color = "backgroundColor",
-          rotation = "rotation",
+          texRotation = "rotation",
+          auraRotation = "auraRotation",
           mirror = "mirror",
           blendMode = "blendMode"
-        }, OptionsPrivate.Private.texture_types);
+        }, OptionsPrivate.Private.texture_types, nil, true)
       end,
       disabled = function() return data.sameTexture; end,
       imageWidth = 24,
@@ -227,16 +231,6 @@ local function createOptions(id, data)
         OptionsPrivate.ResetMoverSizer();
       end,
     },
-    rotation = {
-      type = "range",
-      control = "WeakAurasSpinBox",
-      width = WeakAuras.normalWidth,
-      name = L["Rotation"],
-      order = 52,
-      min = 0,
-      max = 360,
-      bigStep = 1
-    },
     alpha = {
       type = "range",
       control = "WeakAurasSpinBox",
@@ -248,12 +242,41 @@ local function createOptions(id, data)
       bigStep = 0.01,
       isPercent = true
     },
+    rotation = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Texture Rotation"],
+      desc = L["Uses Texture Coordinates to rotate the texture."],
+      order = 52,
+      min = 0,
+      max = 360,
+      bigStep = 1
+    },
+    auraRotation = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Rotation"],
+      order = 53,
+      min = 0,
+      max = 360,
+      bigStep = 1
+    },
     smoothProgress = {
       type = "toggle",
       width = WeakAuras.normalWidth,
       name = L["Smooth Progress"],
       desc = L["Animates progress changes"],
       order = 55.1
+    },
+    textureWrapMode = {
+      type = "select",
+      width = WeakAuras.normalWidth,
+      name = L["Texture Wrap"],
+      order = 55.2,
+      values = OptionsPrivate.Private.texture_wrap_types,
+      disabled = function() return true end
     },
     slanted = {
       type = "toggle",
@@ -342,70 +365,6 @@ local function createOptions(id, data)
   };
 end
 
--- Credit to CommanderSirow for taking the time to properly craft the ApplyTransform function
--- to the enhance the abilities of Progress Textures.
-
--- NOTES:
---  Most SetValue() changes are quite equal (among compress/non-compress)
---  (There is no GUI button for mirror_v, but mirror_h)
---  New/Used variables
---   region.user_x (0) - User defined center x-shift [-1, 1]
---   region.user_y (0) - User defined center y-shift [-1, 1]
---   region.mirror_v (false) - Mirroring along x-axis [bool]
---   region.mirror_h (false) - Mirroring along y-axis [bool]
---   region.cos_rotation (1) - cos(ANGLE), precalculated cos-function for given ANGLE [-1, 1]
---   region.sin_rotation (0) - sin(ANGLE), precalculated cos-function for given ANGLE [-1, 1]
---   region.scale (1.0) - user defined scaling [1, INF]
---   region.full_rotation (false) - Allow full rotation [bool]
-
-
-local function ApplyTransform(x, y, region)
-  -- 1) Translate texture-coords to user-defined center
-  x = x - 0.5
-  y = y - 0.5
-
-  -- 2) Shrink texture by 1/sqrt(2)
-  x = x * 1.4142
-  y = y * 1.4142
-
-  -- 3) Scale texture by user-defined amount
-  x = x / region.scale_x
-  y = y / region.scale_y
-
-  -- 4) Apply mirroring if defined
-  if region.mirror_h then
-    x = -x
-  end
-  if region.mirror_v then
-    y = -y
-  end
-
-  -- 5) Rotate texture by user-defined value
-  --[[local x_tmp = region.cos_rotation * x - region.sin_rotation * y
-  local y_tmp = region.sin_rotation * x + region.cos_rotation * y
-  x = x_tmp
-  y = y_tmp]]
-  x, y = region.cos_rotation * x - region.sin_rotation * y, region.sin_rotation * x + region.cos_rotation * y
-
-  -- 6) Translate texture-coords back to (0,0)
-  x = x + 0.5 + region.user_x
-  y = y + 0.5 + region.user_y
-
-  -- Return results
-  return x, y
-end
-
-local function Transform(tx, x, y, angle, aspect) -- Translates texture to x, y and rotates about its center
-  local c, s = cos(angle), sin(angle)
-  y = y / aspect
-  local oy = 0.5 / aspect
-  local ULx, ULy = 0.5 + (x - 0.5) * c - (y - oy) * s, (oy + (y - oy) * c + (x - 0.5) * s) * aspect
-  local LLx, LLy = 0.5 + (x - 0.5) * c - (y + oy) * s, (oy + (y + oy) * c + (x - 0.5) * s) * aspect
-  local URx, URy = 0.5 + (x + 0.5) * c - (y - oy) * s, (oy + (y - oy) * c + (x + 0.5) * s) * aspect
-  local LRx, LRy = 0.5 + (x + 0.5) * c - (y + oy) * s, (oy + (y + oy) * c + (x + 0.5) * s) * aspect
-  tx:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy)
-end
-
 local function createThumbnail()
   local borderframe = CreateFrame("Frame", nil, UIParent);
   borderframe:SetWidth(32);
@@ -421,14 +380,10 @@ local function createThumbnail()
   region:SetWidth(32);
   region:SetHeight(32);
 
-  local background = region:CreateTexture(nil, "BACKGROUND");
-  borderframe.background = background;
-
-  local foreground = region:CreateTexture(nil, "ARTWORK");
-  borderframe.foreground = foreground;
-
-  borderframe.backgroundSpinner = WeakAuras.createSpinner(region, "BACKGROUND", region:GetFrameLevel() + 1);
-  borderframe.foregroundSpinner = WeakAuras.createSpinner(region, "ARTWORK", region:GetFrameLevel() + 2);
+  borderframe.background = OptionsPrivate.Private.LinearProgressTextureBase.create(region, "BACKGROUND", 0)
+  borderframe.foreground = OptionsPrivate.Private.LinearProgressTextureBase.create(region, "ARTWORK", 0)
+  borderframe.backgroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "BACKGROUND", 1)
+  borderframe.foregroundSpinner = OptionsPrivate.Private.CircularProgressTextureBase.create(region, "ARTWORK", 1)
 
   return borderframe;
 end
@@ -443,24 +398,12 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     scale = size/data.height;
     region:SetWidth(scale * data.width);
     region:SetHeight(size);
-    foreground:SetWidth(scale * data.width);
-    foreground:SetHeight(size);
-    foregroundSpinner:SetWidth(scale * data.width);
-    foregroundSpinner:SetHeight(size);
-    backgroundSpinner:SetWidth(scale * data.width)
-    backgroundSpinner:SetHeight(size);
     region.width = scale * data.width;
     region.height = size;
   else
     scale = size/data.width;
     region:SetWidth(size);
     region:SetHeight(scale * data.height);
-    foreground:SetWidth(size);
-    foreground:SetHeight(scale * data.height);
-    foregroundSpinner:SetWidth(size);
-    foregroundSpinner:SetHeight(scale * data.height);
-    backgroundSpinner:SetWidth(size)
-    backgroundSpinner:SetHeight(scale * data.height);
     region.width = size;
     region.height = scale * data.height;
   end
@@ -468,200 +411,137 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   region:ClearAllPoints();
   region:SetPoint("CENTER", borderframe, "CENTER");
 
-  background:SetTexture(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
-  background:SetDesaturated(data.desaturateBackground)
-  background:SetVertexColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
-  background:SetBlendMode(data.blendMode);
+  local crop_x = 1 + (data.crop_x or 0.41)
+  local crop_y = 1 + (data.crop_y or 0.41)
+  local user_x = -1 * (data.user_x or 0)
+  local user_y = data.user_y or 0
+  local auraRotation = data.auraRotation or 0
+  local texRotation = data.rotation or 0
+  local textureWrapMode = data.textureWrapMode or "CLAMPTOBLACKADDITIVE"
 
-  backgroundSpinner:SetTexture(data.sameTexture and data.foregroundTexture or data.backgroundTexture);
-  backgroundSpinner:SetDesaturated(data.desaturateBackground)
-  backgroundSpinner:Color(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
-  backgroundSpinner:SetBlendMode(data.blendMode);
+  OptionsPrivate.Private.LinearProgressTextureBase.modify(background, {
+    offset = 0,
+    texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
+    textureWrapMode = textureWrapMode,
+    desaturated = data.desaturateBackground,
+    blendMode = data.blendMode,
+    auraRotation = auraRotation,
+    crop_x = crop_x,
+    crop_y = crop_y,
+    user_x = user_x,
+    user_y = user_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    width = region.width,
+    height = region.height
+  })
+  background:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4])
 
-  foreground:SetTexture(data.foregroundTexture);
-  foreground:SetVertexColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4]);
-  foreground:SetBlendMode(data.blendMode);
+  OptionsPrivate.Private.LinearProgressTextureBase.modify(foreground, {
+    offset = 0,
+    texture = data.foregroundTexture,
+    textureWrapMode = textureWrapMode,
+    desaturated = data.desaturateForeground,
+    blendMode = data.blendMode,
+    auraRotation = auraRotation,
+    crop_x = crop_x,
+    crop_y = crop_y,
+    user_x = user_x,
+    user_y = user_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    width = region.width,
+    height = region.height
+  })
+  foreground:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
 
-  foregroundSpinner:SetTexture(data.foregroundTexture);
-  foregroundSpinner:SetDesaturated(data.desaturateForeground);
-  foregroundSpinner:Color(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
-  foregroundSpinner:SetBlendMode(data.blendMode);
+  OptionsPrivate.Private.CircularProgressTextureBase.modify(backgroundSpinner, {
+    crop_x = crop_x,
+    crop_y = crop_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
+    blendMode = data.blendMode,
+    desaturated = data.desaturateBackground,
+    auraRotation = auraRotation,
+    width = region.width,
+    height = region.height,
+    offset = data.backgroundOffset or 0
+  })
+  backgroundSpinner:SetColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4])
 
-  background:ClearAllPoints();
-  foreground:ClearAllPoints();
-  background:SetPoint("BOTTOMLEFT", region, "BOTTOMLEFT");
-  background:SetPoint("TOPRIGHT", region, "TOPRIGHT");
-
-  region.mirror_h = data.mirror;
-  region.scale_x = 1 + (data.crop_x or 0.41);
-  region.scale_y = 1 + (data.crop_y or 0.41);
-  region.rotation = data.rotation or 0;
-  region.cos_rotation = cos(region.rotation);
-  region.sin_rotation = sin(region.rotation);
-  region.user_x = -1 * (data.user_x or 0);
-  region.user_y = data.user_y or 0;
-  region.aspect = 1;
+  OptionsPrivate.Private.CircularProgressTextureBase.modify(foregroundSpinner, {
+    crop_x = crop_x,
+    crop_y = crop_y,
+    mirror = data.mirror,
+    texRotation = texRotation,
+    texture = data.foregroundTexture,
+    blendMode = data.blendMode,
+    desaturated = data.desaturateForeground,
+    auraRotation = auraRotation,
+    width = region.width,
+    height = region.height,
+    offset = 0
+  })
+  foregroundSpinner:SetColor(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4])
 
   local function orientHorizontal()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("LEFT", region, "LEFT");
-    region.orientation = "HORIZONTAL_INVERSE";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(progress, 0, region)
-        local URx_, URy_ = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(progress, 1, region)
-        local LRx_, LRy_ = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx , URy , LRx , LRy );
-        foreground:SetWidth(region:GetWidth() * progress);
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx_, URy_, LRx_, LRy_);
-      end
-    end
+    background:SetOrientation("HORIZONTAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("HORIZONTAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientHorizontalInverse()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("RIGHT", region, "RIGHT");
-    region.orientation = "HORIZONTAL";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(1-progress, 0, region)
-        local ULx_, ULy_ = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(1-progress, 1, region)
-        local LLx_, LLy_ = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx , ULy , LLx , LLy , URx, URy, LRx, LRy);
-        foreground:SetWidth(region:GetWidth() * progress);
-        background:SetTexCoord(ULx_, ULy_, LLx_, LLy_, URx, URy, LRx, LRy);
-      end
-    end
+    background:SetOrientation("HORIZONTAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("HORIZONTAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientVertical()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("BOTTOM", region, "BOTTOM");
-    region.orientation = "VERTICAL_INVERSE";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 1-progress, region)
-        local ULx_, ULy_ = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 1-progress, region)
-        local URx_, URy_ = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        background:SetTexCoord(ULx_, ULy_, LLx, LLy, URx_, URy_, LRx, LRy);
-      end
-    end
+    background:SetOrientation("VERTICAL", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("VERTICAL", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
   local function orientVerticalInverse()
-    foreground:ClearAllPoints();
-    foreground:SetPoint("TOP", region, "TOP");
-    region.orientation = "VERTICAL";
-    if(data.compress) then
-      function region:SetValue(progress)
-        region.progress = progress;
-
-
-        local ULx, ULy = ApplyTransform(0, 0, region)
-        local LLx, LLy = ApplyTransform(0, 1, region)
-        local URx, URy = ApplyTransform(1, 0, region)
-        local LRx, LRy = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        background:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-      end
-    else
-      function region:SetValue(progress)
-        region.progress = progress;
-
-        local ULx , ULy  = ApplyTransform(0, 0, region)
-        local LLx , LLy  = ApplyTransform(0, progress, region)
-        local LLx_, LLy_ = ApplyTransform(0, 1, region)
-        local URx , URy  = ApplyTransform(1, 0, region)
-        local LRx , LRy  = ApplyTransform(1, progress, region)
-        local LRx_, LRy_ = ApplyTransform(1, 1, region)
-
-        foreground:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
-        foreground:SetHeight(region:GetHeight() * progress);
-        background:SetTexCoord(ULx, ULy, LLx_, LLy_, URx, URy, LRx_, LRy_);
-      end
-    end
+    background:SetOrientation("VERTICAL_INVERSE", nil, data.slanted, data.slant, data.slantFirst, data.slantMode)
+    foreground:SetOrientation("VERTICAL_INVERSE", data.compress, data.slanted, data.slant, data.slantFirst, data.slantMode)
   end
 
   local function orientCircular(clockwise)
     local startAngle = data.startAngle % 360;
     local endAngle = data.endAngle % 360;
 
-    if (data.inverse) then
-      startAngle, endAngle = endAngle, startAngle
-      startAngle = 360 - startAngle;
-      endAngle = 360 - endAngle;
-      clockwise = not clockwise;
-    end
     if (endAngle <= startAngle) then
       endAngle = endAngle + 360;
     end
 
-    backgroundSpinner:SetProgress(region, startAngle, endAngle, 0, clockwise);
+    backgroundSpinner:SetWidth(30)
+    backgroundSpinner:SetHeight(30)
+    foregroundSpinner:SetWidth(30)
+    foregroundSpinner:SetHeight(30)
+    backgroundSpinner:SetClockwise(clockwise);
+    foregroundSpinner:SetClockwise(clockwise);
+    if (clockwise) then
+      backgroundSpinner:SetProgress(startAngle, endAngle);
+      foregroundSpinner:SetProgress(startAngle, endAngle);
+    else
+      backgroundSpinner:SetProgress(startAngle, endAngle, 1);
+      foregroundSpinner:SetProgress(startAngle, endAngle, 1);
+    end
 
     function region:SetValue(progress)
-      progress = progress or 0;
       region.progress = progress;
 
-      foregroundSpinner:SetProgress(region, startAngle, endAngle, progress, clockwise);
+      if (progress < 0) then
+        progress = 0;
+      end
+
+      if (progress > 1) then
+        progress = 1;
+      end
+
+      local pAngle = (endAngle - startAngle) * progress + startAngle;
+
+      if (clockwise) then
+        foregroundSpinner:SetProgress(startAngle, pAngle);
+      else
+        foregroundSpinner:SetProgress(startAngle, endAngle, progress);
+      end
     end
   end
 
@@ -677,6 +557,12 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     background:Show();
     foregroundSpinner:Hide();
     backgroundSpinner:Hide();
+    function region:SetValue(progress)
+      region.progress = progress;
+      progress = max(0, min(1, progress or 0));
+      background:SetValue(0, 1);
+      foreground:SetValue(0, progress);
+    end
   end
 
   if(data.orientation == "HORIZONTAL_INVERSE") then
@@ -750,7 +636,7 @@ local templates = {
       xOffset = 0,
       yOffset = 150,
       mirror = true,
-      foregroundTexture = "Textures\\SpellActivationOverlays\\Backlash",
+      foregroundTexture = "Textures\\SpellActivationOverlays\\Backlash", -- "460830"
       orientation = "HORIZONTAL",
       inverse = true,
     },

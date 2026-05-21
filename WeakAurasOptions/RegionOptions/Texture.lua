@@ -74,6 +74,14 @@ local function createOptions(id, data)
       name = L["Mirror"],
       order = 6
     },
+    textureWrapMode = {
+      type = "select",
+      width = WeakAuras.normalWidth,
+      name = L["Texture Wrap"],
+      order = 7,
+      values = OptionsPrivate.Private.texture_wrap_types,
+      disabled = function() return true end
+    },
     rotate = {
       type = "toggle",
       width = WeakAuras.normalWidth,

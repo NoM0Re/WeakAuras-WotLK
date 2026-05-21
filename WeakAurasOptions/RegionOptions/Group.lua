@@ -699,7 +699,7 @@ end
 local function modifyThumbnail(parent, frame, data)
   function frame:SetIcon()
     if data.groupIcon then
-      local success = OptionsPrivate.Private.SetTextureOrSpellTexture(frame.icon, data.groupIcon)
+      local success = OptionsPrivate.Private.SetTextureOrAtlas(frame.icon, data.groupIcon)
       if success then
         if frame.defaultIcon then
           frame.defaultIcon:Hide()

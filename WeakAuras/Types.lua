@@ -1254,6 +1254,13 @@ Private.blend_types = {
   BLEND = L["Opaque"]
 }
 
+Private.texture_wrap_types = {
+  CLAMP = L["Clamp"],
+  MIRROR = L["Mirror"],
+  REPEAT = L["Repeat"],
+  CLAMPTOBLACKADDITIVE = L["No Extend"]
+}
+
 Private.slant_mode = {
   INSIDE = L["Keep Inside"],
   EXTEND = L["Extend Outside"]
@@ -1783,6 +1790,7 @@ Private.orientation_types = {
   VERTICAL_INVERSE = L["Top to Bottom"]
 }
 
+---@type table<string, string>
 Private.orientation_with_circle_types = {
   HORIZONTAL_INVERSE = L["Left to Right"],
   HORIZONTAL = L["Right to Left"],
