@@ -10,7 +10,7 @@ local default = function(parentType)
   local defaults = {
     circularTextureVisible = true,
 
-    circularTextureTexture = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\square_border_5px.tga",
+    circularTextureTexture = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\square_mini.tga", -- square_border_5px.tga needs more outside padding for the non vertex spinner backend, so we use square mini as default
     circularTextureDesaturate = false,
     circularTextureColor = {1, 1, 1, 1},
     circularTextureBlendMode = "BLEND",
