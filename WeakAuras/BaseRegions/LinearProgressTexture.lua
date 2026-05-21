@@ -422,6 +422,7 @@ function Private.LinearProgressTextureBase.create(frame, layer, drawLayer)
   local texture = frame:CreateTexture(nil, layer)
   -- texture:SetSnapToPixelGrid(false)
   -- texture:SetTexelSnappingBias(0)
+  Private.FixTextureDesaturation(texture)
   texture:SetDrawLayer(layer, drawLayer)
   linearTexture.texture = texture
   linearTexture.coord  = Private.TextureCoords.create(texture)
