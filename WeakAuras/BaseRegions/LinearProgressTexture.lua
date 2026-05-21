@@ -72,6 +72,15 @@ local function ApplyGeometry(self, startProgress, endProgress)
     return
   end
 
+  if self.compress then
+    local anchor = orientationToAnchorPoint[self.orientation]
+    self.texture:ClearAllPoints()
+    self.texture:SetPoint(anchor, self.parentFrame, anchor)
+    self.texture:SetWidth(math.max(width, 0.0001))
+    self.texture:SetHeight(math.max(height, 0.0001))
+    return
+  end
+
   local left, right, top, bottom = 0, 1, 0, 1
 
   if self.orientation == "HORIZONTAL_INVERSE" then
