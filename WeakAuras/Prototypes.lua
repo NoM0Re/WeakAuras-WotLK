@@ -6381,9 +6381,9 @@ Private.event_prototypes = {
             if runeType == 1 then
               numBloodRunes = numBloodRunes + 1;
             elseif runeType == 2 then
-              numFrostRunes = numFrostRunes + 1;
-            elseif runeType == 3 then
               numUnholyRunes = numUnholyRunes + 1;
+            elseif runeType == 3 then
+              numFrostRunes = numFrostRunes + 1;
             elseif runeType == 4 then
               numDeathRunes = numDeathRunes + 1;
             end
@@ -6525,15 +6525,15 @@ Private.event_prototypes = {
       return numRunes;
     end,
     nameFunc = function(trigger)
-      local runeNames = { L["Blood"], L["Frost"], L["Unholy"], L["Death"] }
+      local runeNames = { L["Blood"], L["Unholy"], L["Frost"], L["Death"] }
       return runeNames[GetRuneType(trigger.rune)];
     end,
     iconFunc = function(trigger)
       if trigger.rune then
         local runeIcons = {
           "Interface\\PlayerFrame\\UI-PlayerFrame-Deathknight-Blood",
-          "Interface\\PlayerFrame\\UI-PlayerFrame-Deathknight-Frost",
           "Interface\\PlayerFrame\\UI-PlayerFrame-Deathknight-Unholy",
+          "Interface\\PlayerFrame\\UI-PlayerFrame-Deathknight-Frost",
           "Interface\\PlayerFrame\\UI-PlayerFrame-Deathknight-Death"
         };
         return runeIcons[GetRuneType(trigger.rune)];
