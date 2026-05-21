@@ -180,6 +180,30 @@ local function FrameDeltaLerp(startValue, endValue, amount, elapsed)
   return DeltaLerp(startValue, endValue, amount, elapsed)
 end
 
+local function setDesaturated(self, desaturated, ...)
+  self.isDesaturated = desaturated and 1 or 0
+  return self._SetDesaturated(self, desaturated, ...)
+end
+
+local function setTexture(self, ...)
+  local apply = self._SetTexture(self, ...)
+  if self.isDesaturated ~= nil then
+    self._SetDesaturated(self, self.isDesaturated == 1)
+  end
+  return apply
+end
+
+--- Texture:SetTexture can clear the desaturation state.
+--- Keep the last SetDesaturated value on the texture object and
+--- re-apply it after every SetTexture call.
+--- @param texture Texture
+function Private.FixTextureDesaturation(texture)
+  texture._SetDesaturated = texture.SetDesaturated
+  texture._SetTexture = texture.SetTexture
+  texture.SetDesaturated = setDesaturated
+  texture.SetTexture = setTexture
+end
+
 do
   local exports = {
     noop = noop,

@@ -335,28 +335,33 @@ function Private.CircularProgressTextureBase.create(frame, layer, drawLayer)
   end
 
   local wedge = scrollchild:CreateTexture(nil, layer)
+  Private.FixTextureDesaturation(wedge)
   wedge:SetPoint("BOTTOMRIGHT", frame, "CENTER")
 
   -- Top Right
   local trTexture = frame:CreateTexture(nil, layer)
+  Private.FixTextureDesaturation(trTexture)
   trTexture:SetPoint("BOTTOMLEFT", frame, "CENTER")
   trTexture:SetPoint("TOPRIGHT")
   trTexture:SetTexCoord(0.5, 1, 0, 0.5)
 
   -- Bottom Right
   local brTexture = frame:CreateTexture(nil, layer)
+  Private.FixTextureDesaturation(brTexture)
   brTexture:SetPoint("TOPLEFT", frame, "CENTER")
   brTexture:SetPoint("BOTTOMRIGHT")
   brTexture:SetTexCoord(0.5, 1, 0.5, 1)
 
   -- Bottom Left
   local blTexture = frame:CreateTexture(nil, layer)
+  Private.FixTextureDesaturation(blTexture)
   blTexture:SetPoint("TOPRIGHT", frame, "CENTER")
   blTexture:SetPoint("BOTTOMLEFT")
   blTexture:SetTexCoord(0, 0.5, 0.5, 1)
 
   -- Top Left
   local tlTexture = frame:CreateTexture(nil, layer)
+  Private.FixTextureDesaturation(tlTexture)
   tlTexture:SetPoint("BOTTOMRIGHT", frame, "CENTER")
   tlTexture:SetPoint("TOPLEFT")
   tlTexture:SetTexCoord(0, 0.5, 0, 0.5)
