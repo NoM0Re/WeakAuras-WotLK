@@ -135,8 +135,8 @@ local funcs = {
     self:UpdateFrameTick()
   end,
   --- @type fun(self: CircularProgressSubElement, radians: number)
-  SetAuraRotation = function(self, degrees)
-    self.circularTexture:SetAuraRotation(degrees / 180 * math.pi)
+  SetAuraRotation = function(self, radians)
+    self.circularTexture:SetAuraRotation(radians)
   end,
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetMirror = function(self, b)
@@ -282,7 +282,7 @@ local function modify(parent, region, parentData, data, first)
     crop_x = 1 + data.circularTextureCrop_x,
     crop_y = 1 + data.circularTextureCrop_y,
     texRotation = data.circularTextureRotation,
-    auraRotation = data.circularTextureAuraRotation / 180 * math.pi,
+    auraRotation = data.circularTextureAuraRotation,
     mirror = data.circularTextureMirror,
     desaturated = data.circularTextureDesaturate,
     blendMode = data.circularTextureBlendMode,

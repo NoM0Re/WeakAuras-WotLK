@@ -1172,11 +1172,12 @@ function Private.regionPrototype.AddExpandFunction(data, region, cloneId, parent
 end
 
 function Private.SetTextureOrAtlas(texture, path, wrapModeH, wrapModeV)
+  -- wrapModeH and wrapModeV is not supported.
   local spellID = tonumber(path)
   if spellID then
-    return texture:SetTexture(select(3, GetSpellInfo(spellID)) or spellID, wrapModeH, wrapModeV)
+    return texture:SetTexture(select(3, GetSpellInfo(spellID)) or spellID)
   else
-    return texture:SetTexture(path, wrapModeH, wrapModeV)
+    return texture:SetTexture(path)
   end
 end
 
