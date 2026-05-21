@@ -134,9 +134,9 @@ local funcs = {
     end
     self:UpdateFrameTick()
   end,
-  --- @type fun(self: CircularProgressSubElement, radians: number)
-  SetAuraRotation = function(self, radians)
-    self.circularTexture:SetAuraRotation(radians)
+  --- @type fun(self: CircularProgressSubElement, auraRotation: number)
+  SetAuraRotation = function(self, auraRotation)
+    self.circularTexture:SetAuraRotation(auraRotation)
   end,
   --- @type fun(self: CircularProgressSubElement, b: boolean)
   SetMirror = function(self, b)

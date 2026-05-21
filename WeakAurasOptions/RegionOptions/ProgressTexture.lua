@@ -415,7 +415,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
   local crop_y = 1 + (data.crop_y or 0.41)
   local user_x = -1 * (data.user_x or 0)
   local user_y = data.user_y or 0
-  local auraRotationRadians = (data.auraRotation or 0) / 180 * math.pi
+  local auraRotation = data.auraRotation or 0
   local texRotation = data.rotation or 0
   local textureWrapMode = data.textureWrapMode or "CLAMPTOBLACKADDITIVE"
 
@@ -425,7 +425,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     textureWrapMode = textureWrapMode,
     desaturated = data.desaturateBackground,
     blendMode = data.blendMode,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     crop_x = crop_x,
     crop_y = crop_y,
     user_x = user_x,
@@ -443,7 +443,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     textureWrapMode = textureWrapMode,
     desaturated = data.desaturateForeground,
     blendMode = data.blendMode,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     crop_x = crop_x,
     crop_y = crop_y,
     user_x = user_x,
@@ -463,7 +463,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     texture = data.sameTexture and data.foregroundTexture or data.backgroundTexture,
     blendMode = data.blendMode,
     desaturated = data.desaturateBackground,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     width = region.width,
     height = region.height,
     offset = data.backgroundOffset or 0
@@ -478,7 +478,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, size)
     texture = data.foregroundTexture,
     blendMode = data.blendMode,
     desaturated = data.desaturateForeground,
-    auraRotation = auraRotationRadians,
+    auraRotation = auraRotation,
     width = region.width,
     height = region.height,
     offset = 0
