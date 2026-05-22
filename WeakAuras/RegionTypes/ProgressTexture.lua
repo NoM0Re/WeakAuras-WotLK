@@ -537,7 +537,6 @@ local funcs = {
   end,
   SetAuraRotation = function(self, auraRotation)
     self.auraRotation = auraRotation
-    local auraRotation = self.auraRotation
     self:ForAllSpinners(self.foregroundSpinner.SetAuraRotation, auraRotation)
 
     self.background:SetAuraRotation(auraRotation)
