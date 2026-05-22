@@ -2318,12 +2318,6 @@ function Private.Modernize(data, oldSnapshot)
     data.information.showNilIsFalse = true
   end
 
-  if data.internalVersion < 90 then
-    if data.regionType == "aurabar" then
-      data.toolTipArea = "ICON"
-    end
-  end
-
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
 end
 
