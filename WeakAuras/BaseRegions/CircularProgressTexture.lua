@@ -189,7 +189,6 @@ local funcs = {
     self.scalex, self.scaley = scalex, scaley
   end,
   --- @type fun(self: CircularProgressTextureInstance, clockwise: boolean)
-  -- ?? do i need it?
   SetClockwise = function(self, clockwise)
     self.clockwise = clockwise
     self:UpdateTextures()
@@ -428,6 +427,9 @@ function Private.CircularProgressTextureBase.modify(circularTexture, options)
     circularTexture.textures[4]:SetPoint("BOTTOMRIGHT", frame, "CENTER")
     circularTexture.textures[4]:SetPoint("TOPLEFT")
   end
+
+  circularTexture.wedge:ClearAllPoints()
+  circularTexture.wedge:SetPoint("BOTTOMRIGHT", frame, "CENTER")
 
   circularTexture:UpdateTextures()
 end

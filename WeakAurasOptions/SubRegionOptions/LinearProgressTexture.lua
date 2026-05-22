@@ -49,7 +49,7 @@ local function createOptions(parentData, data, index, subIndex)
           auraRotation = "linearTextureAuraRotation",
           mirror = "linearTextureMirror",
           blendMode = "linearTextureBlendMode"
-        }, OptionsPrivate.Private.texture_types, nil, true)
+        }, OptionsPrivate.Private.texture_types, nil)
       end,
       imageWidth = 24,
       imageHeight = 24,

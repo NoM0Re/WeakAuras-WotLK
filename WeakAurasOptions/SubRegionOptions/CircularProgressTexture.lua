@@ -49,7 +49,7 @@ local function createOptions(parentData, data, index, subIndex)
           auraRotation = "circularTextureAuraRotation",
           mirror = "circularTextureMirror",
           blendMode = "circularTextureBlendMode"
-        }, OptionsPrivate.Private.texture_types, nil, true)
+        }, OptionsPrivate.Private.texture_types, nil)
       end,
       imageWidth = 24,
       imageHeight = 24,

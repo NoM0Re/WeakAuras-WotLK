@@ -233,14 +233,13 @@ local function hideExtraTextures(extraTextures, from)
 end
 
 local function ensureExtraTextures(region, count)
-  local auraRotation = region.auraRotation
   for i = #region.extraTextures + 1, count do
     local extraTexture = Private.LinearProgressTextureBase.create(region, "ARTWORK", min(i, 7));
     Private.LinearProgressTextureBase.modify(extraTexture, {
       offset = 0,
       blendMode = region.foreground:GetBlendMode(),
       desaturated = false,
-      auraRotation = auraRotation,
+      auraRotation = region.auraRotation,
       texture = region.currentTexture,
       textureWrapMode = region.textureWrapMode,
       crop_x = region.crop_x,
@@ -259,7 +258,6 @@ local function ensureExtraTextures(region, count)
 end
 
 local function ensureExtraSpinners(region, count)
-  local auraRotation = region.auraRotation
   for i = #region.extraSpinners + 1, count do
     local extraSpinner = Private.CircularProgressTextureBase.create(region, "OVERLAY", min(i, 7))
     Private.CircularProgressTextureBase.modify(extraSpinner, {
@@ -270,7 +268,7 @@ local function ensureExtraSpinners(region, count)
       texture = region.currentTexture,
       blendMode = region.foreground:GetBlendMode(),
       desaturated = false,
-      auraRotation = auraRotation,
+      auraRotation = region.auraRotation,
       width = region.width,
       height = region.height,
       offset = 0
