@@ -80,6 +80,11 @@ local function animRotate(object, degrees, anchor, regionRotate, aspect)
     anchor = "CENTER"
   end
 
+  if not aspect or aspect < 0.001 or aspect > 1000 then
+    object:Hide()
+    return
+  end
+
   object.degrees = degrees
   object.regionRotate = regionRotate
   object.aspect = aspect
@@ -210,7 +215,12 @@ local funcs = {
     local width = (self.width or 0) * (self.scalex or 1) + 2 * (self.offset or 0)
     local height = (self.height or 0) * (self.scaley or 1) + 2 * (self.offset or 0)
 
-    if width == 0 or height == 0 then
+    if width <= 0.001 or height <= 0.001 then
+      for i = 1, 4 do
+        self.textures[i]:Hide()
+      end
+      self.scrollframe:Hide()
+      self.wedge:Hide()
       return
     end
 
