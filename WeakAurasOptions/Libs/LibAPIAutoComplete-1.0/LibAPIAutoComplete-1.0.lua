@@ -17,53 +17,291 @@ local skipWords = {
 
 local maxMatches = 100
 
+local lineHeight = 20
+
 for k in pairs(skipWords) do
   for i = #k, 5, -1 do
      skipWords[k:sub(1, i)] = true
   end
 end
 
-local function LoadBlizzard_APIDocumentation()
-  local apiAddonName = "Blizzard_APIDocumentation"
-  local _, loaded = C_AddOns.IsAddOnLoaded(apiAddonName)
+local function LoadAPIDocumentation()
+  local apiAddonName = "APIDocumentation"
+  local _, loaded = IsAddOnLoaded(apiAddonName)
   if not loaded then
-    C_AddOns.LoadAddOn(apiAddonName)
+    LoadAddOn(apiAddonName)
   end
-  if #APIDocumentation.systems == 0 then
-    -- workaround nil errors when loading PetConstantsDocumentation.lua
-    Constants.PetConsts = Constants.PetConsts or {
-      MAX_STABLE_SLOTS = 200,
-      MAX_SUMMONABLE_PETS = 25,
-      MAX_SUMMONABLE_HUNTER_PETS = 5,
-      NUM_PET_SLOTS_THAT_NEED_LEARNED_SPELL = 5,
-      NUM_PET_SLOTS = 205,
-      EXTRA_PET_STABLE_SLOT = 5,
-      STABLED_PETS_FIRST_SLOT_INDEX = 6
-    }
-    Constants.PetConsts_PostCata = Constants.PetConsts_PostCata or {
-      MAX_STABLE_SLOTS = 200,
-      MAX_SUMMONABLE_PETS = 25,
-      MAX_SUMMONABLE_HUNTER_PETS = 5,
-      NUM_PET_SLOTS_THAT_NEED_LEARNED_SPELL = 5,
-      NUM_PET_SLOTS = 205,
-      EXTRA_PET_STABLE_SLOT = 5,
-      STABLED_PETS_FIRST_SLOT_INDEX = 6
-    }
-    Constants.PetConsts_Wrath = Constants.PetConsts_Wrath or {
-      MAX_STABLE_SLOTS = 200,
-      MAX_SUMMONABLE_PETS = 25,
-      MAX_SUMMONABLE_HUNTER_PETS = 5,
-      NUM_PET_SLOTS_THAT_NEED_LEARNED_SPELL = 5,
-      NUM_PET_SLOTS = 205,
-      EXTRA_PET_STABLE_SLOT = 5,
-      STABLED_PETS_FIRST_SLOT_INDEX = 6
-    }
-    MAX_STABLE_SLOTS = MAX_STABLE_SLOTS or 2
-    NUM_PET_SLOTS_THAT_NEED_LEARNED_SPELL = NUM_PET_SLOTS_THAT_NEED_LEARNED_SPELL or 1
-    EXTRA_PET_STABLE_SLOT = EXTRA_PET_STABLE_SLOT or 0
-    -- end of workaround
-    APIDocumentation_LoadUI()
+  if not APIDocumentation or not APIDocumentation.systems then
+    return false
   end
+  if APIDocumentation and APIDocumentation.systems and #APIDocumentation.systems == 0 then
+    APIDocumentation:OnLoad()
+  end
+  return true
+end
+
+local function CreateLegacyDataProvider()
+  local dataProvider = { collection = {} }
+
+  function dataProvider:SetScrollBox(scrollBox)
+    self.scrollBox = scrollBox
+  end
+
+  function dataProvider:Flush()
+    wipe(self.collection)
+    if self.scrollBox and self.scrollBox.selectionBehaviour then
+      self.scrollBox.selectionBehaviour:SetSelectedIndex(nil)
+    end
+    if self.scrollBox then
+      self.scrollBox:Refresh()
+    end
+  end
+
+  function dataProvider:InsertTable(lines)
+    for _, line in ipairs(lines) do
+      tinsert(self.collection, line)
+    end
+    if self.scrollBox then
+      self.scrollBox:Refresh()
+    end
+  end
+
+  function dataProvider:GetSize()
+    return #self.collection
+  end
+
+  function dataProvider:IsEmpty()
+    return #self.collection == 0
+  end
+
+  function dataProvider:Find(index)
+    return self.collection[index]
+  end
+
+  function dataProvider:FindIndex(elementData)
+    for index, data in ipairs(self.collection) do
+      if data == elementData then
+        return index
+      end
+    end
+    return nil
+  end
+
+  function dataProvider:Enumerate()
+    local index = 0
+    return function()
+      index = index + 1
+      local elementData = self.collection[index]
+      if elementData then
+        return index, elementData
+      end
+    end
+  end
+
+  return dataProvider
+end
+
+local function CreateLegacySelectionBehavior(scrollBox)
+  local selectionBehaviour = { scrollBox = scrollBox }
+
+  function selectionBehaviour:RegisterCallback(event, callback)
+    self.callback = callback
+  end
+
+  function selectionBehaviour:SetSelectedIndex(index)
+    local oldData = self.selectedIndex and lib.data:Find(self.selectedIndex)
+    if oldData and self.callback then
+      self.callback(self, oldData, false)
+    end
+    self.selectedIndex = index
+    local newData = self.selectedIndex and lib.data:Find(self.selectedIndex)
+    if newData and self.callback then
+      self.callback(self, newData, true)
+    end
+  end
+
+  function selectionBehaviour:HasSelection()
+    return self.selectedIndex ~= nil
+  end
+
+  function selectionBehaviour:SelectFirstElementData()
+    if lib.data:GetSize() > 0 then
+      self:SetSelectedIndex(1)
+    end
+  end
+
+  function selectionBehaviour:SelectNextElementData()
+    if not self.selectedIndex then
+      self:SelectFirstElementData()
+    elseif self.selectedIndex < lib.data:GetSize() then
+      self:SetSelectedIndex(self.selectedIndex + 1)
+    end
+  end
+
+  function selectionBehaviour:SelectPreviousElementData()
+    if not self.selectedIndex then
+      self:SelectFirstElementData()
+    elseif self.selectedIndex > 1 then
+      self:SetSelectedIndex(self.selectedIndex - 1)
+    end
+  end
+
+  function selectionBehaviour:GetFirstSelectedElementData()
+    return self.selectedIndex and lib.data:Find(self.selectedIndex)
+  end
+
+  return selectionBehaviour
+end
+
+local sliderBackdrop  = {
+  bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
+  edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
+  tile = true, tileSize = 8, edgeSize = 8,
+  insets = { left = 3, right = 3, top = 3, bottom = 3 }
+}
+
+local function CreateLegacyScrollBox()
+  local scrollBox = CreateFrame("ScrollFrame", nil, UIParent)
+  local content = CreateFrame("Frame", nil, scrollBox)
+  scrollBox:SetScrollChild(content)
+  scrollBox:SetSize(400, 150)
+  scrollBox:EnableMouseWheel(true)
+  scrollBox:Hide()
+
+  local background = scrollBox:CreateTexture(nil, "BACKGROUND")
+  background:SetAllPoints()
+  scrollBox.background = background
+  scrollBox.content = content
+  scrollBox.buttons = {}
+  scrollBox.framesByData = {}
+  scrollBox.scrollRange = 0
+
+  local scrollBar = CreateFrame("Slider", nil, UIParent)
+  scrollBar:SetOrientation("VERTICAL")
+  scrollBar:SetWidth(12)
+  scrollBar:SetBackdrop(sliderBackdrop)
+  scrollBar:SetThumbTexture("Interface\\Buttons\\UI-SliderBar-Button-Vertical")
+  scrollBar:SetMinMaxValues(0, 0)
+  scrollBar:SetValueStep(1)
+  scrollBar:SetValue(0)
+  scrollBar:Hide()
+
+  function scrollBar:SetScrollPercentage(percent)
+    local offset = (self.scrollBox and self.scrollBox.scrollRange or 0) * percent
+    self:SetValue(offset)
+  end
+
+  scrollBar.scrollBox = scrollBox
+  scrollBar:SetScript("OnValueChanged", function(self, value)
+    self.scrollBox:SetVerticalScroll(value)
+  end)
+
+  function scrollBox:SetDataProvider(dataProvider)
+    self.dataProvider = dataProvider
+    dataProvider:SetScrollBox(self)
+  end
+
+  function scrollBox:FindFrame(elementData)
+    return self.framesByData[elementData]
+  end
+
+  function scrollBox:Refresh()
+    if not self.dataProvider then
+      return
+    end
+
+    wipe(self.framesByData)
+    local width = self:GetWidth()
+    local lineCount = self.dataProvider:GetSize()
+    content:SetWidth(width)
+    content:SetHeight(math.max(1, lineCount * lineHeight))
+
+    for index = 1, lineCount do
+      local button = self.buttons[index]
+      if not button then
+        button = CreateFrame("Button", nil, content)
+        button:SetHeight(lineHeight)
+        button:SetNormalFontObject(GameFontNormalSmall)
+        local fontString = button:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        button:SetFontString(fontString)
+        button.SetSelected = APIAutoCompleteLineMixin.SetSelected
+        button.Insert = APIAutoCompleteLineMixin.Insert
+        self.buttons[index] = button
+      end
+      local elementData = self.dataProvider:Find(index)
+      button:ClearAllPoints()
+      button:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -((index - 1) * lineHeight))
+      button:SetPoint("TOPRIGHT", content, "TOPRIGHT", 0, -((index - 1) * lineHeight))
+      APIAutoCompleteLineMixin.Init(button, elementData)
+      button:Show()
+      self.framesByData[elementData] = button
+    end
+
+    for index = lineCount + 1, #self.buttons do
+      self.buttons[index]:Hide()
+    end
+
+    self.scrollRange = math.max(0, (lineCount * lineHeight) - self:GetHeight())
+    scrollBar:SetMinMaxValues(0, self.scrollRange)
+    if self:GetVerticalScroll() > self.scrollRange then
+      scrollBar:SetValue(self.scrollRange)
+    end
+  end
+
+  scrollBox:SetScript("OnMouseWheel", function(self, delta)
+    if self.scrollRange == 0 then
+      return
+    end
+    local offset = self:GetVerticalScroll() - (delta * lineHeight)
+    if offset < 0 then
+      offset = 0
+    elseif offset > self.scrollRange then
+      offset = self.scrollRange
+    end
+    scrollBar:SetValue(offset)
+  end)
+
+  return scrollBox, scrollBar
+end
+
+local function SetPropagateKeyboardInput(propagate)
+  if lib.scrollBox.SetPropagateKeyboardInput then
+    lib.scrollBox:SetPropagateKeyboardInput(propagate)
+  end
+end
+
+local function HandleKey(key)
+  if key == "DOWN" then
+    SetPropagateKeyboardInput(false)
+    if not lib.selectionBehaviour:HasSelection() then
+      lib.selectionBehaviour:SelectFirstElementData()
+    else
+      lib.selectionBehaviour:SelectNextElementData()
+    end
+    return true
+  elseif key == "UP" then
+    SetPropagateKeyboardInput(false)
+    if not lib.selectionBehaviour:HasSelection() then
+      lib.selectionBehaviour:SelectFirstElementData()
+    else
+      lib.selectionBehaviour:SelectPreviousElementData()
+    end
+    return true
+  elseif key == "ENTER" and not IsModifierKeyDown() then
+    local selectedElementData = lib.selectionBehaviour:GetFirstSelectedElementData()
+    if selectedElementData then
+      SetPropagateKeyboardInput(false)
+      local elementFrame = lib.scrollBox:FindFrame(selectedElementData)
+      elementFrame:Insert()
+      return true
+    end
+  elseif key == "ESCAPE" then
+    SetPropagateKeyboardInput(false)
+    lib.data:Flush()
+    lib:UpdateWidget(lib.editbox)
+    return true
+  end
+  SetPropagateKeyboardInput(true)
 end
 
 function lib:Hide()
@@ -71,7 +309,7 @@ function lib:Hide()
   self.scrollBar:Hide()
 end
 
----Create APIDoc widget and ensure Blizzard_APIDocumentation is loaded
+---Create APIDoc widget and ensure APIDocumentation is loaded
 local isInit = false
 local function Init()
   if isInit then
@@ -79,33 +317,14 @@ local function Init()
   end
   isInit = true
 
-  -- load Blizzard_APIDocumentation
-  LoadBlizzard_APIDocumentation()
+  LoadAPIDocumentation()
 
-  local scrollBox = CreateFrame("Frame", nil, UIParent, "WowScrollBoxList")
-  scrollBox:SetSize(400, 150)
-  scrollBox:Hide()
-
-  local background = scrollBox:CreateTexture(nil, "BACKGROUND")
-  background:SetAllPoints()
-  scrollBox.background = background
-
-  local scrollBar = CreateFrame("EventFrame", nil, UIParent, "WowTrimScrollBar")
+  local scrollBox, scrollBar = CreateLegacyScrollBox()
   scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT")
   scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT")
-  scrollBar:Hide()
 
-  local view = CreateScrollBoxListLinearView()
-  view:SetElementExtentCalculator(function(dataIndex, elementData)
-    return 20
-  end)
-  view:SetElementInitializer("button", function(frame, elementData)
-    Mixin(frame, APIAutoCompleteLineMixin)
-    frame:Init(elementData)
-  end)
-  ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, view)
-  local selectionBehaviour = ScrollUtil.AddSelectionBehavior(scrollBox, SelectionBehaviorFlags.Deselectable, SelectionBehaviorFlags.Intrusive)
-  selectionBehaviour:RegisterCallback(SelectionBehaviorMixin.Event.OnSelectionChanged, function(o, elementData, selected)
+  local selectionBehaviour = CreateLegacySelectionBehavior(scrollBox)
+  selectionBehaviour:RegisterCallback(nil, function(o, elementData, selected)
     local elementFrame = scrollBox:FindFrame(elementData)
     if elementFrame then
       elementFrame:SetSelected(selected)
@@ -128,7 +347,7 @@ local function Init()
     end
   end)
 
-  lib.data = CreateDataProvider()
+  lib.data = CreateLegacyDataProvider()
   scrollBox:SetDataProvider(lib.data)
 
   lib.scrollBar = scrollBar
@@ -138,36 +357,7 @@ local function Init()
   scrollBox.selectionBehaviour = selectionBehaviour
 
   scrollBox:SetScript("OnKeyDown", function(self, key)
-    if key == "DOWN" then
-      lib.scrollBox:SetPropagateKeyboardInput(false)
-      if not self.selectionBehaviour:HasSelection() then
-        self.selectionBehaviour:SelectFirstElementData()
-      else
-        self.selectionBehaviour:SelectNextElementData()
-      end
-    elseif key == "UP" then
-      lib.scrollBox:SetPropagateKeyboardInput(false)
-      if not self.selectionBehaviour:HasSelection() then
-        self.selectionBehaviour:SelectFirstElementData()
-      else
-        self.selectionBehaviour:SelectPreviousElementData()
-      end
-    elseif key == "ENTER" and not IsModifierKeyDown() then
-      local selectedElementData = self.selectionBehaviour:GetFirstSelectedElementData()
-      if selectedElementData then
-        lib.scrollBox:SetPropagateKeyboardInput(false)
-        local elementFrame = scrollBox:FindFrame(selectedElementData)
-        elementFrame:Insert()
-      end
-    elseif key == "ESCAPE" then
-      lib.scrollBox:SetPropagateKeyboardInput(false)
-      lib.data:Flush()
-      lib:UpdateWidget(lib.editbox)
-    else
-      lib.scrollBox:SetPropagateKeyboardInput(true)
-      lib.data:Flush()
-      lib:UpdateWidget(lib.editbox)
-    end
+    HandleKey(key)
   end)
 end
 
@@ -259,7 +449,21 @@ function lib:enable(editbox, params)
       OnTextChanged(editbox, info.x, info.y, info.w, info.h)
     end
   end)
+  editbox.APIDoc_oldOnKeyDown = editbox:GetScript("OnKeyDown")
+  editbox:SetScript("OnKeyDown", function(...)
+    local _, key = ...
+    if lib.editbox == editbox and lib.data and not lib.data:IsEmpty() and HandleKey(key) then
+      return
+    end
+    if editbox.APIDoc_oldOnKeyDown then
+      editbox.APIDoc_oldOnKeyDown(...)
+    end
+  end)
+  editbox.APIDoc_oldOnHide = editbox:GetScript("OnHide")
   editbox:SetScript("OnHide", function(...)
+    if editbox.APIDoc_oldOnHide then
+      editbox.APIDoc_oldOnHide(...)
+    end
     lib:Hide()
   end)
   editbox.APIDoc_hiddenString = editbox:CreateFontString()
@@ -276,6 +480,10 @@ function lib:disable(editbox)
   editbox.APIDoc_oldOnCursorChanged = nil
   editbox:SetScript("OnTextChanged", editbox.APIDoc_oldOnTextChanged)
   editbox.APIDoc_oldOnTextChanged = nil
+  editbox:SetScript("OnKeyDown", editbox.APIDoc_oldOnKeyDown)
+  editbox.APIDoc_oldOnKeyDown = nil
+  editbox:SetScript("OnHide", editbox.APIDoc_oldOnHide)
+  editbox.APIDoc_oldOnHide = nil
 end
 
 function lib:addLine(lines, apiInfo)
@@ -295,6 +503,9 @@ end
 ---@param config Params
 function lib:Search(word, config)
   self.data:Flush()
+  if not APIDocumentation or not APIDocumentation.systems then
+    return
+  end
   local lines = {}
   if word and #word > 3 then
     local lowerWord = word:lower();
@@ -348,6 +559,9 @@ end
 ---set in lib.data the list of systems
 function lib:ListSystems()
   self.data:Flush()
+  if not APIDocumentation or not APIDocumentation.systems then
+    return
+  end
   local lines = {}
   for i, systemInfo in ipairs(APIDocumentation.systems) do
     if systemInfo.Namespace and #systemInfo.Functions > 0 then
@@ -367,7 +581,7 @@ function lib:UpdateWidget(editbox)
     -- fix size
     local maxLinesShown = config[editbox].maxLinesShown
     local lines = self.data:GetSize()
-    local height = math.min(lines, maxLinesShown) * 20
+    local height = math.min(lines, maxLinesShown) * lineHeight
     local width = 0
     local hiddenString = editbox.APIDoc_hiddenString
     local fontPath = SharedMedia:Fetch("font", "Fira Mono Medium")
@@ -377,10 +591,11 @@ function lib:UpdateWidget(editbox)
       width = math.max(width, hiddenString:GetStringWidth())
     end
     self.scrollBox:SetSize(width, height)
+    self.scrollBox:Refresh()
 
     -- fix look
     local backgroundColor = config[editbox].backgroundColor
-    self.scrollBox.background:SetColorTexture(unpack(backgroundColor))
+    self.scrollBox.background:SetTexture(unpack(backgroundColor))
 
     -- show
     self.scrollBox:SetParent(UIParent)
@@ -388,13 +603,17 @@ function lib:UpdateWidget(editbox)
     self.scrollBox:SetFrameStrata("TOOLTIP")
     self.scrollBar:SetFrameStrata("TOOLTIP")
     self.scrollBox:Show()
-    self.scrollBar:SetShown(lines > maxLinesShown)
+    if lines > maxLinesShown then
+      self.scrollBar:Show()
+    else
+      self.scrollBar:Hide()
+    end
     self.editbox = editbox
   end
 end
 
 local function OnClickCallback(self)
-  local name
+  local name = self.name
   if IndentationLib then
     name = IndentationLib.stripWowColors(self.name)
   elseif WowLua and WowLua.indent then
@@ -537,7 +756,7 @@ function APIAutoCompleteLineMixin:Init(elementData)
   fontString:SetTextColor(0.973, 0.902, 0.581)
   if not self:GetHighlightTexture() then
     local texture = self:CreateTexture()
-    texture:SetColorTexture(0.4,0.4,0.4,0.5)
+    texture:SetTexture(0.4,0.4,0.4,0.5)
     texture:SetAllPoints()
     self:SetHighlightTexture(texture)
   end
@@ -545,7 +764,11 @@ function APIAutoCompleteLineMixin:Init(elementData)
 end
 
 function APIAutoCompleteLineMixin:SetSelected(selected)
-  self:SetHighlightLocked(selected)
+  if selected then
+    self:LockHighlight()
+  else
+    self:UnlockHighlight()
+  end
 end
 
 function APIAutoCompleteLineMixin:Insert()
