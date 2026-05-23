@@ -1780,6 +1780,7 @@ function Private.Modernize(data, oldSnapshot)
         end
       end
     end
+  end
 
   if data.internalVersion < 72 then
       if data.model_path and data.modelIsUnit then
