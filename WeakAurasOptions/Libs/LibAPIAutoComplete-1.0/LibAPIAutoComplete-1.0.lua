@@ -18,6 +18,125 @@ local skipWords = {
 local maxMatches = 100
 
 local lineHeight = 20
+local scrollBoxTextPaddingRight = 4
+local trimScrollBarWidth = 25
+local trimScrollBarButtonSize = 18
+local trimScrollBarButtonHeight = 16
+local trimScrollBarBackplateInsetLeft = 2
+local trimScrollBarBackplateInsetRight = 3
+local trimScrollBarBackplateInsetTop = 3
+local trimScrollBarBackplateInsetBottom = 3
+local trimScrollBarTrackInsetLeft = 4
+local trimScrollBarTrackInsetRight = 4
+local trimScrollBarTrackInsetTop = 22
+local trimScrollBarTrackInsetBottom = 22
+local trimScrollBarThumbOffsetX = 0
+local trimScrollBarStep = lineHeight
+local trimScrollBarAssetPath = "Interface\\AddOns\\WeakAurasOptions\\Libs\\LibAPIAutoComplete-1.0\\assets\\"
+local trimScrollBarProportionalTexture = trimScrollBarAssetPath .. "ScrollBarProportional"
+local trimScrollBarProportionalVerticalTexture = trimScrollBarAssetPath .. "ScrollBarProportionalVertical"
+local trimScrollBarProportionalHorizontalTexture = trimScrollBarAssetPath .. "ScrollBarProportionalHorizontal"
+
+local trimScrollBarAtlas = {
+  ["UI-ScrollBar-EndCap-Top"] = { width = 25, height = 32, texCoords = {0.00390625, 0.101562, 0.21875, 0.46875} },
+  ["UI-ScrollBar-EndCap-Bottom"] = { width = 25, height = 31, texCoords = {0.00390625, 0.101562, 0.484375, 0.726562} },
+  ["!UI-ScrollBar-Center"] = { width = 25, height = 32, texCoords = {0.0078125, 0.203125, 0, 0.03125} },
+
+  ["UI-ScrollBar-Knob-EndCap-Top"] = { width = 18, height = 21, texCoords = {0.25, 0.320312, 0.476562, 0.640625} },
+  ["UI-ScrollBar-Knob-Center"] = { width = 18, height = 1022, texCoords = {0.375, 0.515625, 0.000976562, 0.999023} },
+  ["UI-ScrollBar-Knob-EndCap-Bottom"] = { width = 18, height = 21, texCoords = {0.136719, 0.207031, 0.445312, 0.609375} },
+
+  ["UI-ScrollBar-Knob-MouseOver-EndCap-Top"] = { width = 18, height = 21, texCoords = {0.339844, 0.410156, 0.1875, 0.351562} },
+  ["UI-ScrollBar-Knob-MouseOver-Center"] = { width = 18, height = 1022, texCoords = {0.53125, 0.671875, 0.000976562, 0.999023} },
+  ["UI-ScrollBar-Knob-MouseOver-EndCap-Bottom"] = { width = 18, height = 21, texCoords = {0.339844, 0.410156, 0.0078125, 0.171875} },
+
+  ["UI-ScrollBar-Knob-EndCap-Top-Disabled"] = { width = 18, height = 21, texCoords = {0.25, 0.320312, 0.65625, 0.820312} },
+  ["UI-ScrollBar-Knob-Center-Disabled"] = { width = 18, height = 1022, texCoords = {0.21875, 0.359375, 0.000976562, 0.999023} },
+  ["UI-ScrollBar-Knob-EndCap-Bottom-Disabled"] = { width = 18, height = 21, texCoords = {0.136719, 0.207031, 0.625, 0.789062} },
+
+  ["UI-ScrollBar-ScrollUpButton-Up"] = { width = 18, height = 16, texCoords = {0.8125, 0.882812, 0.0078125, 0.132812} },
+  ["UI-ScrollBar-ScrollUpButton-Down"] = { width = 18, height = 16, texCoords = {0.65625, 0.726562, 0.0078125, 0.132812} },
+  ["UI-ScrollBar-ScrollUpButton-Disabled"] = { width = 18, height = 16, texCoords = {0.578125, 0.648438, 0.0078125, 0.132812} },
+  ["UI-ScrollBar-ScrollUpButton-Highlight"] = { width = 18, height = 16, texCoords = {0.734375, 0.804688, 0.0078125, 0.132812} },
+
+  ["UI-ScrollBar-ScrollDownButton-Up"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.789062, 0.914062} },
+  ["UI-ScrollBar-ScrollDownButton-Down"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.507812, 0.632812} },
+  ["UI-ScrollBar-ScrollDownButton-Disabled"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.367188, 0.492188} },
+  ["UI-ScrollBar-ScrollDownButton-Highlight"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.648438, 0.773438} },
+
+  ["_UI-ScrollBar-Center"] = { width = 32, height = 25, texCoords = {0, 0.03125, 0.0078125, 0.203125} },
+  ["UI-ScrollBar-Knob-Center-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.375, 0.515625} },
+  ["UI-ScrollBar-Knob-MouseOver-Center-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.53125, 0.671875} },
+  ["UI-ScrollBar-Knob-Center-Disabled-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.21875, 0.359375} },
+}
+
+lib.trimScrollBarAtlas = trimScrollBarAtlas
+
+local requiredTrimScrollBarAtlases = {
+  "UI-ScrollBar-EndCap-Top",
+  "UI-ScrollBar-EndCap-Bottom",
+  "!UI-ScrollBar-Center",
+  "UI-ScrollBar-Knob-EndCap-Top",
+  "UI-ScrollBar-Knob-Center",
+  "UI-ScrollBar-Knob-EndCap-Bottom",
+  "UI-ScrollBar-ScrollUpButton-Up",
+  "UI-ScrollBar-ScrollUpButton-Down",
+  "UI-ScrollBar-ScrollUpButton-Highlight",
+  "UI-ScrollBar-ScrollDownButton-Up",
+  "UI-ScrollBar-ScrollDownButton-Down",
+  "UI-ScrollBar-ScrollDownButton-Highlight",
+}
+
+local scrollBarProportionalAtlases = {
+  "UI-ScrollBar-EndCap-Top",
+  "UI-ScrollBar-EndCap-Bottom",
+  "UI-ScrollBar-Knob-EndCap-Top",
+  "UI-ScrollBar-Knob-EndCap-Bottom",
+  "UI-ScrollBar-Knob-MouseOver-EndCap-Top",
+  "UI-ScrollBar-Knob-MouseOver-EndCap-Bottom",
+  "UI-ScrollBar-Knob-EndCap-Top-Disabled",
+  "UI-ScrollBar-Knob-EndCap-Bottom-Disabled",
+  "UI-ScrollBar-ScrollUpButton-Up",
+  "UI-ScrollBar-ScrollUpButton-Down",
+  "UI-ScrollBar-ScrollUpButton-Disabled",
+  "UI-ScrollBar-ScrollUpButton-Highlight",
+  "UI-ScrollBar-ScrollDownButton-Up",
+  "UI-ScrollBar-ScrollDownButton-Down",
+  "UI-ScrollBar-ScrollDownButton-Disabled",
+  "UI-ScrollBar-ScrollDownButton-Highlight",
+}
+
+local scrollBarProportionalVerticalAtlases = {
+  "!UI-ScrollBar-Center",
+  "UI-ScrollBar-Knob-Center",
+  "UI-ScrollBar-Knob-MouseOver-Center",
+  "UI-ScrollBar-Knob-Center-Disabled",
+}
+
+local scrollBarProportionalHorizontalAtlases = {
+  "_UI-ScrollBar-Center",
+  "UI-ScrollBar-Knob-Center-Horizontal",
+  "UI-ScrollBar-Knob-MouseOver-Center-Horizontal",
+  "UI-ScrollBar-Knob-Center-Disabled-Horizontal",
+}
+
+function lib:SetTrimScrollBarAtlasTexturePaths(scrollBarProportional, scrollBarProportionalVertical, scrollBarProportionalHorizontal)
+  for _, atlasName in ipairs(scrollBarProportionalAtlases) do
+    trimScrollBarAtlas[atlasName].texture = scrollBarProportional
+  end
+  for _, atlasName in ipairs(scrollBarProportionalVerticalAtlases) do
+    trimScrollBarAtlas[atlasName].texture = scrollBarProportionalVertical
+  end
+  for _, atlasName in ipairs(scrollBarProportionalHorizontalAtlases) do
+    trimScrollBarAtlas[atlasName].texture = scrollBarProportionalHorizontal
+  end
+end
+
+lib:SetTrimScrollBarAtlasTexturePaths(
+  trimScrollBarProportionalTexture,
+  trimScrollBarProportionalVerticalTexture,
+  trimScrollBarProportionalHorizontalTexture
+)
 
 for k in pairs(skipWords) do
   for i = #k, 5, -1 do
@@ -160,6 +279,306 @@ local sliderBackdrop  = {
   insets = { left = 3, right = 3, top = 3, bottom = 3 }
 }
 
+local function HasTrimScrollBarAssets()
+  for _, atlasName in ipairs(requiredTrimScrollBarAtlases) do
+    local atlas = trimScrollBarAtlas[atlasName]
+    if not atlas or not atlas.texture then
+      return false
+    end
+  end
+  return true
+end
+
+local function SetAtlasTexture(texture, atlasName, width, height, cropToSize)
+  local atlas = trimScrollBarAtlas[atlasName]
+  if not atlas or not atlas.texture then
+    return false
+  end
+
+  local left, right, top, bottom = unpack(atlas.texCoords)
+  if cropToSize then
+    if width and width < atlas.width then
+      right = left + (right - left) * (width / atlas.width)
+    end
+    if height and height < atlas.height then
+      bottom = top + (bottom - top) * (height / atlas.height)
+    end
+  end
+
+  texture:SetTexture(atlas.texture)
+  texture:SetTexCoord(left, right, top, bottom)
+  texture:SetWidth(width or atlas.width)
+  texture:SetHeight(height or atlas.height)
+  return true
+end
+
+local function SetTrimButtonState(button, atlasName)
+  if button and button.Texture then
+    SetAtlasTexture(button.Texture, atlasName)
+  end
+end
+
+local function RefreshTrimButtonState(button)
+  if not button then
+    return
+  end
+
+  if button.disabled then
+    SetTrimButtonState(button, button.disabledAtlas)
+    button.Overlay:Hide()
+  elseif button.down then
+    SetTrimButtonState(button, button.downAtlas)
+  else
+    SetTrimButtonState(button, button.upAtlas)
+    if button.over then
+      button.Overlay:Show()
+    else
+      button.Overlay:Hide()
+    end
+  end
+end
+
+local function CreateTrimScrollBarButton(parent, direction)
+  local button = CreateFrame("Button", nil, parent)
+  button:SetSize(trimScrollBarButtonSize, trimScrollBarButtonHeight)
+
+  button.Texture = button:CreateTexture(nil, "BACKGROUND")
+  button.Texture:SetAllPoints()
+
+  button.Overlay = button:CreateTexture(nil, "OVERLAY")
+  button.Overlay:SetAllPoints()
+  button.Overlay:Hide()
+
+  if direction == "UP" then
+    button.upAtlas = "UI-ScrollBar-ScrollUpButton-Up"
+    button.downAtlas = "UI-ScrollBar-ScrollUpButton-Down"
+    button.disabledAtlas = "UI-ScrollBar-ScrollUpButton-Disabled"
+    button.highlightAtlas = "UI-ScrollBar-ScrollUpButton-Highlight"
+  else
+    button.upAtlas = "UI-ScrollBar-ScrollDownButton-Up"
+    button.downAtlas = "UI-ScrollBar-ScrollDownButton-Down"
+    button.disabledAtlas = "UI-ScrollBar-ScrollDownButton-Disabled"
+    button.highlightAtlas = "UI-ScrollBar-ScrollDownButton-Highlight"
+  end
+
+  SetTrimButtonState(button, button.upAtlas)
+  SetAtlasTexture(button.Overlay, button.highlightAtlas)
+
+  button:SetScript("OnEnter", function(self)
+    self.over = true
+    RefreshTrimButtonState(self)
+  end)
+  button:SetScript("OnLeave", function(self)
+    self.over = nil
+    self.down = nil
+    RefreshTrimButtonState(self)
+  end)
+  button:SetScript("OnMouseDown", function(self)
+    if not self.disabled then
+      self.down = true
+      RefreshTrimButtonState(self)
+    end
+  end)
+  button:SetScript("OnMouseUp", function(self)
+    if not self.disabled then
+      self.down = nil
+      RefreshTrimButtonState(self)
+    end
+  end)
+
+  return button
+end
+
+local function SetTrimThumbAtlas(thumb)
+  local prefix = thumb.over and "UI-ScrollBar-Knob-MouseOver" or "UI-ScrollBar-Knob"
+  SetAtlasTexture(thumb.Begin, prefix .. "-EndCap-Top")
+  SetAtlasTexture(thumb.Middle, prefix .. "-Center", trimScrollBarButtonSize, math.max(1, thumb:GetHeight() - 10), true)
+  SetAtlasTexture(thumb.End, prefix .. "-EndCap-Bottom")
+end
+
+local function UpdateScrollBarFromThumbCursor(thumb)
+  local scrollBar = thumb.scrollBar
+  local range = scrollBar.scrollBox.scrollRange or 0
+  if range <= 0 then
+    return
+  end
+
+  local _, cursorY = GetCursorPosition()
+  local scale = scrollBar.Track:GetEffectiveScale()
+  local y = cursorY / scale
+  local trackHeight = scrollBar.Track:GetHeight()
+  local thumbHeight = thumb:GetHeight()
+  local offsetRange = math.max(1, trackHeight - thumbHeight)
+  local offset = scrollBar.Track:GetTop() - y - (thumb.cursorOffset or 0)
+
+  if offset < 0 then
+    offset = 0
+  elseif offset > offsetRange then
+    offset = offsetRange
+  end
+
+  scrollBar:SetValue(range * offset / offsetRange)
+end
+
+local function CreateTrimScrollBarArtwork(scrollBar)
+  if not HasTrimScrollBarAssets() then
+    return
+  end
+
+  scrollBar:SetWidth(trimScrollBarWidth)
+  scrollBar:SetBackdrop(nil)
+  scrollBar.usesTrimArtwork = true
+
+  local sliderThumb = scrollBar:GetThumbTexture()
+  if sliderThumb then
+    sliderThumb:SetTexture(nil)
+    sliderThumb:SetAlpha(0)
+  end
+
+  local backplate = scrollBar:CreateTexture(nil, "BACKGROUND")
+  backplate:SetPoint("TOPLEFT", scrollBar, "TOPLEFT", trimScrollBarBackplateInsetLeft, -trimScrollBarBackplateInsetTop)
+  backplate:SetPoint("BOTTOMRIGHT", scrollBar, "BOTTOMRIGHT", -trimScrollBarBackplateInsetRight, trimScrollBarBackplateInsetBottom)
+  backplate:SetTexture(0, 0, 0, .75)
+  scrollBar.Backplate = backplate
+
+  local background = CreateFrame("Frame", nil, scrollBar)
+  background:SetAllPoints(scrollBar)
+  scrollBar.Background = background
+
+  background.Begin = background:CreateTexture(nil, "ARTWORK")
+  background.Begin:SetPoint("TOPLEFT", background, "TOPLEFT")
+  SetAtlasTexture(background.Begin, "UI-ScrollBar-EndCap-Top")
+
+  background.End = background:CreateTexture(nil, "ARTWORK")
+  background.End:SetPoint("BOTTOMLEFT", background, "BOTTOMLEFT")
+  SetAtlasTexture(background.End, "UI-ScrollBar-EndCap-Bottom")
+
+  background.Middle = background:CreateTexture(nil, "ARTWORK")
+  background.Middle:SetPoint("TOPLEFT", background.Begin, "BOTTOMLEFT")
+  background.Middle:SetPoint("BOTTOMRIGHT", background.End, "TOPRIGHT")
+  SetAtlasTexture(background.Middle, "!UI-ScrollBar-Center")
+
+  local track = CreateFrame("Frame", nil, scrollBar)
+  track:SetPoint("TOPLEFT", scrollBar, "TOPLEFT", trimScrollBarTrackInsetLeft, -trimScrollBarTrackInsetTop)
+  track:SetPoint("BOTTOMRIGHT", scrollBar, "BOTTOMRIGHT", -trimScrollBarTrackInsetRight, trimScrollBarTrackInsetBottom)
+  track:EnableMouse(true)
+  scrollBar.Track = track
+
+  local thumb = CreateFrame("Frame", nil, track)
+  thumb:SetWidth(trimScrollBarButtonSize)
+  thumb:SetPoint("LEFT", track, "LEFT", trimScrollBarThumbOffsetX, 0)
+  thumb:EnableMouse(true)
+  thumb.scrollBar = scrollBar
+  thumb.Middle = thumb:CreateTexture(nil, "BACKGROUND")
+  thumb.Middle:SetPoint("TOPLEFT", thumb, "TOPLEFT", 0, -5)
+  thumb.Middle:SetPoint("BOTTOMRIGHT", thumb, "BOTTOMRIGHT", 0, 5)
+  thumb.Begin = thumb:CreateTexture(nil, "BORDER")
+  thumb.Begin:SetPoint("TOPLEFT", thumb, "TOPLEFT")
+  thumb.End = thumb:CreateTexture(nil, "BORDER")
+  thumb.End:SetPoint("BOTTOMLEFT", thumb, "BOTTOMLEFT")
+  thumb:SetScript("OnEnter", function(self)
+    self.over = true
+    SetTrimThumbAtlas(self)
+  end)
+  thumb:SetScript("OnLeave", function(self)
+    if not self.dragging then
+      self.over = nil
+      SetTrimThumbAtlas(self)
+    end
+  end)
+  thumb:SetScript("OnMouseDown", function(self, button)
+    if button ~= "LeftButton" then
+      return
+    end
+
+    local _, cursorY = GetCursorPosition()
+    local scale = self.scrollBar.Track:GetEffectiveScale()
+    self.cursorOffset = self:GetTop() - (cursorY / scale)
+    self.dragging = true
+    self.over = true
+    SetTrimThumbAtlas(self)
+    self:SetScript("OnUpdate", UpdateScrollBarFromThumbCursor)
+  end)
+  thumb:SetScript("OnMouseUp", function(self)
+    self.dragging = nil
+    self.cursorOffset = nil
+    self:SetScript("OnUpdate", nil)
+    SetTrimThumbAtlas(self)
+  end)
+  thumb:SetScript("OnHide", function(self)
+    self.dragging = nil
+    self.cursorOffset = nil
+    self:SetScript("OnUpdate", nil)
+  end)
+  scrollBar.Thumb = thumb
+
+  scrollBar.Back = CreateTrimScrollBarButton(scrollBar, "UP")
+  scrollBar.Back:SetPoint("TOPLEFT", scrollBar, "TOPLEFT", trimScrollBarTrackInsetLeft, -4)
+  scrollBar.Back:SetScript("OnClick", function()
+    scrollBar:SetValue(math.max(0, scrollBar:GetValue() - trimScrollBarStep))
+  end)
+
+  scrollBar.Forward = CreateTrimScrollBarButton(scrollBar, "DOWN")
+  scrollBar.Forward:SetPoint("BOTTOMLEFT", scrollBar, "BOTTOMLEFT", trimScrollBarTrackInsetLeft, 4)
+  scrollBar.Forward:SetScript("OnClick", function()
+    scrollBar:SetValue(math.min(scrollBar.scrollBox.scrollRange, scrollBar:GetValue() + trimScrollBarStep))
+  end)
+
+  track:SetScript("OnMouseDown", function(self, button)
+    if button ~= "LeftButton" then
+      return
+    end
+
+    local _, cursorY = GetCursorPosition()
+    local scale = self:GetEffectiveScale()
+    local y = cursorY / scale
+    local thumbTop = scrollBar.Thumb:GetTop()
+    local thumbBottom = scrollBar.Thumb:GetBottom()
+    local page = math.max(lineHeight, scrollBar.scrollBox:GetHeight() - lineHeight)
+
+    if y > thumbTop then
+      scrollBar:SetValue(math.max(0, scrollBar:GetValue() - page))
+    elseif y < thumbBottom then
+      scrollBar:SetValue(math.min(scrollBar.scrollBox.scrollRange, scrollBar:GetValue() + page))
+    end
+  end)
+
+  scrollBar:SetScript("OnEnter", function(self)
+    self.Thumb.over = true
+    SetTrimThumbAtlas(self.Thumb)
+  end)
+
+  scrollBar:SetScript("OnLeave", function(self)
+    self.Thumb.over = nil
+    SetTrimThumbAtlas(self.Thumb)
+  end)
+
+  function scrollBar:RefreshStepperStates()
+    local value = self:GetValue()
+    local range = self.scrollBox.scrollRange or 0
+    self.Back.disabled = value <= 0
+    self.Forward.disabled = range <= 0 or value >= range
+    RefreshTrimButtonState(self.Back)
+    RefreshTrimButtonState(self.Forward)
+  end
+
+  function scrollBar:RefreshArtwork()
+    local range = self.scrollBox.scrollRange or 0
+    local trackHeight = self.Track:GetHeight()
+    local visibleHeight = self.scrollBox:GetHeight()
+    local contentHeight = visibleHeight + range
+    local thumbHeight = math.max(23, trackHeight * visibleHeight / contentHeight)
+    local offsetRange = math.max(0, trackHeight - thumbHeight)
+    local offset = range > 0 and offsetRange * (self:GetValue() / range) or 0
+
+    self.Thumb:SetHeight(thumbHeight)
+    self.Thumb:ClearAllPoints()
+    self.Thumb:SetPoint("TOPLEFT", self.Track, "TOPLEFT", trimScrollBarThumbOffsetX, -offset)
+    SetTrimThumbAtlas(self.Thumb)
+    self:RefreshStepperStates()
+  end
+end
+
 local function CreateLegacyScrollBox()
   local scrollBox = CreateFrame("ScrollFrame", nil, UIParent)
   local content = CreateFrame("Frame", nil, scrollBox)
@@ -185,6 +604,7 @@ local function CreateLegacyScrollBox()
   scrollBar:SetValueStep(1)
   scrollBar:SetValue(0)
   scrollBar:Hide()
+  CreateTrimScrollBarArtwork(scrollBar)
 
   function scrollBar:SetScrollPercentage(percent)
     local offset = (self.scrollBox and self.scrollBox.scrollRange or 0) * percent
@@ -194,6 +614,9 @@ local function CreateLegacyScrollBox()
   scrollBar.scrollBox = scrollBox
   scrollBar:SetScript("OnValueChanged", function(self, value)
     self.scrollBox:SetVerticalScroll(value)
+    if self.RefreshArtwork then
+      self:RefreshArtwork()
+    end
   end)
 
   function scrollBox:SetDataProvider(dataProvider)
@@ -245,6 +668,8 @@ local function CreateLegacyScrollBox()
     scrollBar:SetMinMaxValues(0, self.scrollRange)
     if self:GetVerticalScroll() > self.scrollRange then
       scrollBar:SetValue(self.scrollRange)
+    elseif scrollBar.RefreshArtwork then
+      scrollBar:RefreshArtwork()
     end
   end
 
@@ -590,6 +1015,7 @@ function lib:UpdateWidget(editbox)
       hiddenString:SetText(elementData.name)
       width = math.max(width, hiddenString:GetStringWidth())
     end
+    width = width + scrollBoxTextPaddingRight
     self.scrollBox:SetSize(width, height)
     self.scrollBox:Refresh()
 
@@ -754,6 +1180,8 @@ function APIAutoCompleteLineMixin:Init(elementData)
   fontString:SetFont(fontPath, 12, "")
   fontString:SetPoint("LEFT")
   fontString:SetTextColor(0.973, 0.902, 0.581)
+  fontString:SetShadowColor(0, 0, 0, 0)
+  fontString:SetShadowOffset(0, 0)
   if not self:GetHighlightTexture() then
     local texture = self:CreateTexture()
     texture:SetTexture(0.4,0.4,0.4,0.5)
