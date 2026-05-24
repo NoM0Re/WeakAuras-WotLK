@@ -1,4 +1,10 @@
-local MAJOR, MINOR = "LibAPIAutoComplete-1.0", 6
+-- ===============================================================================
+-- !!! IMPORTANT: CHANGE `texturePath` BELOW TO POINT TO YOUR ADDON'S FILE LOCATION !!!
+-- DON'T FORGET THE BACKSLASH AT THE END (\)!
+-- Example: local texturePath = [[Interface\AddOns\YourAddon\Libs\LibAPIAutoComplete-1.0\assets\]]
+-- ===============================================================================
+
+local MAJOR, MINOR = "LibAPIAutoComplete-1.0", 7
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -16,7 +22,7 @@ local skipWords = {
 }
 
 local maxMatches = 100
-
+local texturePath = [[Interface\AddOns\WeakAurasOptions\Libs\LibAPIAutoComplete-1.0\assets\]]
 local lineHeight = 20
 local scrollBoxTextPaddingRight = 4
 local trimScrollBarWidth = 25
@@ -32,111 +38,8 @@ local trimScrollBarTrackInsetTop = 22
 local trimScrollBarTrackInsetBottom = 22
 local trimScrollBarThumbOffsetX = 0
 local trimScrollBarStep = lineHeight
-local trimScrollBarAssetPath = "Interface\\AddOns\\WeakAurasOptions\\Libs\\LibAPIAutoComplete-1.0\\assets\\"
-local trimScrollBarProportionalTexture = trimScrollBarAssetPath .. "ScrollBarProportional"
-local trimScrollBarProportionalVerticalTexture = trimScrollBarAssetPath .. "ScrollBarProportionalVertical"
-local trimScrollBarProportionalHorizontalTexture = trimScrollBarAssetPath .. "ScrollBarProportionalHorizontal"
-
-local trimScrollBarAtlas = {
-  ["UI-ScrollBar-EndCap-Top"] = { width = 25, height = 32, texCoords = {0.00390625, 0.101562, 0.21875, 0.46875} },
-  ["UI-ScrollBar-EndCap-Bottom"] = { width = 25, height = 31, texCoords = {0.00390625, 0.101562, 0.484375, 0.726562} },
-  ["!UI-ScrollBar-Center"] = { width = 25, height = 32, texCoords = {0.0078125, 0.203125, 0, 0.03125} },
-
-  ["UI-ScrollBar-Knob-EndCap-Top"] = { width = 18, height = 21, texCoords = {0.25, 0.320312, 0.476562, 0.640625} },
-  ["UI-ScrollBar-Knob-Center"] = { width = 18, height = 1022, texCoords = {0.375, 0.515625, 0.000976562, 0.999023} },
-  ["UI-ScrollBar-Knob-EndCap-Bottom"] = { width = 18, height = 21, texCoords = {0.136719, 0.207031, 0.445312, 0.609375} },
-
-  ["UI-ScrollBar-Knob-MouseOver-EndCap-Top"] = { width = 18, height = 21, texCoords = {0.339844, 0.410156, 0.1875, 0.351562} },
-  ["UI-ScrollBar-Knob-MouseOver-Center"] = { width = 18, height = 1022, texCoords = {0.53125, 0.671875, 0.000976562, 0.999023} },
-  ["UI-ScrollBar-Knob-MouseOver-EndCap-Bottom"] = { width = 18, height = 21, texCoords = {0.339844, 0.410156, 0.0078125, 0.171875} },
-
-  ["UI-ScrollBar-Knob-EndCap-Top-Disabled"] = { width = 18, height = 21, texCoords = {0.25, 0.320312, 0.65625, 0.820312} },
-  ["UI-ScrollBar-Knob-Center-Disabled"] = { width = 18, height = 1022, texCoords = {0.21875, 0.359375, 0.000976562, 0.999023} },
-  ["UI-ScrollBar-Knob-EndCap-Bottom-Disabled"] = { width = 18, height = 21, texCoords = {0.136719, 0.207031, 0.625, 0.789062} },
-
-  ["UI-ScrollBar-ScrollUpButton-Up"] = { width = 18, height = 16, texCoords = {0.8125, 0.882812, 0.0078125, 0.132812} },
-  ["UI-ScrollBar-ScrollUpButton-Down"] = { width = 18, height = 16, texCoords = {0.65625, 0.726562, 0.0078125, 0.132812} },
-  ["UI-ScrollBar-ScrollUpButton-Disabled"] = { width = 18, height = 16, texCoords = {0.578125, 0.648438, 0.0078125, 0.132812} },
-  ["UI-ScrollBar-ScrollUpButton-Highlight"] = { width = 18, height = 16, texCoords = {0.734375, 0.804688, 0.0078125, 0.132812} },
-
-  ["UI-ScrollBar-ScrollDownButton-Up"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.789062, 0.914062} },
-  ["UI-ScrollBar-ScrollDownButton-Down"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.507812, 0.632812} },
-  ["UI-ScrollBar-ScrollDownButton-Disabled"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.367188, 0.492188} },
-  ["UI-ScrollBar-ScrollDownButton-Highlight"] = { width = 18, height = 16, texCoords = {0.339844, 0.410156, 0.648438, 0.773438} },
-
-  ["_UI-ScrollBar-Center"] = { width = 32, height = 25, texCoords = {0, 0.03125, 0.0078125, 0.203125} },
-  ["UI-ScrollBar-Knob-Center-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.375, 0.515625} },
-  ["UI-ScrollBar-Knob-MouseOver-Center-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.53125, 0.671875} },
-  ["UI-ScrollBar-Knob-Center-Disabled-Horizontal"] = { width = 1022, height = 18, texCoords = {0.000976562, 0.999023, 0.21875, 0.359375} },
-}
-
-lib.trimScrollBarAtlas = trimScrollBarAtlas
-
-local requiredTrimScrollBarAtlases = {
-  "UI-ScrollBar-EndCap-Top",
-  "UI-ScrollBar-EndCap-Bottom",
-  "!UI-ScrollBar-Center",
-  "UI-ScrollBar-Knob-EndCap-Top",
-  "UI-ScrollBar-Knob-Center",
-  "UI-ScrollBar-Knob-EndCap-Bottom",
-  "UI-ScrollBar-ScrollUpButton-Up",
-  "UI-ScrollBar-ScrollUpButton-Down",
-  "UI-ScrollBar-ScrollUpButton-Highlight",
-  "UI-ScrollBar-ScrollDownButton-Up",
-  "UI-ScrollBar-ScrollDownButton-Down",
-  "UI-ScrollBar-ScrollDownButton-Highlight",
-}
-
-local scrollBarProportionalAtlases = {
-  "UI-ScrollBar-EndCap-Top",
-  "UI-ScrollBar-EndCap-Bottom",
-  "UI-ScrollBar-Knob-EndCap-Top",
-  "UI-ScrollBar-Knob-EndCap-Bottom",
-  "UI-ScrollBar-Knob-MouseOver-EndCap-Top",
-  "UI-ScrollBar-Knob-MouseOver-EndCap-Bottom",
-  "UI-ScrollBar-Knob-EndCap-Top-Disabled",
-  "UI-ScrollBar-Knob-EndCap-Bottom-Disabled",
-  "UI-ScrollBar-ScrollUpButton-Up",
-  "UI-ScrollBar-ScrollUpButton-Down",
-  "UI-ScrollBar-ScrollUpButton-Disabled",
-  "UI-ScrollBar-ScrollUpButton-Highlight",
-  "UI-ScrollBar-ScrollDownButton-Up",
-  "UI-ScrollBar-ScrollDownButton-Down",
-  "UI-ScrollBar-ScrollDownButton-Disabled",
-  "UI-ScrollBar-ScrollDownButton-Highlight",
-}
-
-local scrollBarProportionalVerticalAtlases = {
-  "!UI-ScrollBar-Center",
-  "UI-ScrollBar-Knob-Center",
-  "UI-ScrollBar-Knob-MouseOver-Center",
-  "UI-ScrollBar-Knob-Center-Disabled",
-}
-
-local scrollBarProportionalHorizontalAtlases = {
-  "_UI-ScrollBar-Center",
-  "UI-ScrollBar-Knob-Center-Horizontal",
-  "UI-ScrollBar-Knob-MouseOver-Center-Horizontal",
-  "UI-ScrollBar-Knob-Center-Disabled-Horizontal",
-}
-
-function lib:SetTrimScrollBarAtlasTexturePaths(scrollBarProportional, scrollBarProportionalVertical, scrollBarProportionalHorizontal)
-  for _, atlasName in ipairs(scrollBarProportionalAtlases) do
-    trimScrollBarAtlas[atlasName].texture = scrollBarProportional
-  end
-  for _, atlasName in ipairs(scrollBarProportionalVerticalAtlases) do
-    trimScrollBarAtlas[atlasName].texture = scrollBarProportionalVertical
-  end
-  for _, atlasName in ipairs(scrollBarProportionalHorizontalAtlases) do
-    trimScrollBarAtlas[atlasName].texture = scrollBarProportionalHorizontal
-  end
-end
-
-lib:SetTrimScrollBarAtlasTexturePaths(
-  trimScrollBarProportionalTexture,
-  trimScrollBarProportionalVerticalTexture,
-  trimScrollBarProportionalHorizontalTexture
-)
+local trimScrollBarProportionalTexture = texturePath .. "ScrollBarProportional"
+local trimScrollBarProportionalVerticalTexture = texturePath .. "ScrollBarProportionalVertical"
 
 for k in pairs(skipWords) do
   for i = #k, 5, -1 do
@@ -144,8 +47,8 @@ for k in pairs(skipWords) do
   end
 end
 
-local function LoadAPIDocumentation()
-  local apiAddonName = "APIDocumentation"
+local function LoadBlizzard_APIDocumentation()
+  local apiAddonName = "APIDocumentation" -- https://github.com/NoM0Re/WeakAuras-WotLK/tree/master/APIDocumentation
   local _, loaded = IsAddOnLoaded(apiAddonName)
   if not loaded then
     LoadAddOn(apiAddonName)
@@ -153,13 +56,13 @@ local function LoadAPIDocumentation()
   if not APIDocumentation or not APIDocumentation.systems then
     return false
   end
-  if APIDocumentation and APIDocumentation.systems and #APIDocumentation.systems == 0 then
+  if #APIDocumentation.systems == 0 then
     APIDocumentation:OnLoad()
   end
   return true
 end
 
-local function CreateLegacyDataProvider()
+local function CreateDataProvider()
   local dataProvider = { collection = {} }
 
   function dataProvider:SetScrollBox(scrollBox)
@@ -279,57 +182,50 @@ local sliderBackdrop  = {
   insets = { left = 3, right = 3, top = 3, bottom = 3 }
 }
 
-local function HasTrimScrollBarAssets()
-  for _, atlasName in ipairs(requiredTrimScrollBarAtlases) do
-    local atlas = trimScrollBarAtlas[atlasName]
-    if not atlas or not atlas.texture then
-      return false
-    end
-  end
-  return true
-end
-
-local function SetAtlasTexture(texture, atlasName, width, height, cropToSize)
-  local atlas = trimScrollBarAtlas[atlasName]
-  if not atlas or not atlas.texture then
-    return false
-  end
-
-  local left, right, top, bottom = unpack(atlas.texCoords)
+local function SetTrimTexture(texture, file, width, height, left, right, top, bottom, nativeWidth, nativeHeight, cropToSize)
   if cropToSize then
-    if width and width < atlas.width then
-      right = left + (right - left) * (width / atlas.width)
+    if width and width < nativeWidth then
+      right = left + (right - left) * (width / nativeWidth)
     end
-    if height and height < atlas.height then
-      bottom = top + (bottom - top) * (height / atlas.height)
+    if height and height < nativeHeight then
+      bottom = top + (bottom - top) * (height / nativeHeight)
     end
   end
 
-  texture:SetTexture(atlas.texture)
+  texture:SetTexture(file)
   texture:SetTexCoord(left, right, top, bottom)
-  texture:SetWidth(width or atlas.width)
-  texture:SetHeight(height or atlas.height)
-  return true
+  texture:SetWidth(width)
+  texture:SetHeight(height)
 end
 
-local function SetTrimButtonState(button, atlasName)
-  if button and button.Texture then
-    SetAtlasTexture(button.Texture, atlasName)
+local function SetTrimButtonState(button)
+  if button.direction == "UP" then
+    if button.disabled then
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.578125, 0.648438, 0.0078125, 0.132812, 18, 16)
+    elseif button.down then
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.65625, 0.726562, 0.0078125, 0.132812, 18, 16)
+    else
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.8125, 0.882812, 0.0078125, 0.132812, 18, 16)
+    end
+  else
+    if button.disabled then
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.339844, 0.410156, 0.367188, 0.492188, 18, 16)
+    elseif button.down then
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.339844, 0.410156, 0.507812, 0.632812, 18, 16)
+    else
+      SetTrimTexture(button.Texture, trimScrollBarProportionalTexture, 18, 16, 0.339844, 0.410156, 0.789062, 0.914062, 18, 16)
+    end
   end
 end
 
 local function RefreshTrimButtonState(button)
-  if not button then
-    return
-  end
-
   if button.disabled then
-    SetTrimButtonState(button, button.disabledAtlas)
+    SetTrimButtonState(button)
     button.Overlay:Hide()
   elseif button.down then
-    SetTrimButtonState(button, button.downAtlas)
+    SetTrimButtonState(button)
   else
-    SetTrimButtonState(button, button.upAtlas)
+    SetTrimButtonState(button)
     if button.over then
       button.Overlay:Show()
     else
@@ -340,6 +236,7 @@ end
 
 local function CreateTrimScrollBarButton(parent, direction)
   local button = CreateFrame("Button", nil, parent)
+  button.direction = direction
   button:SetSize(trimScrollBarButtonSize, trimScrollBarButtonHeight)
 
   button.Texture = button:CreateTexture(nil, "BACKGROUND")
@@ -349,20 +246,12 @@ local function CreateTrimScrollBarButton(parent, direction)
   button.Overlay:SetAllPoints()
   button.Overlay:Hide()
 
-  if direction == "UP" then
-    button.upAtlas = "UI-ScrollBar-ScrollUpButton-Up"
-    button.downAtlas = "UI-ScrollBar-ScrollUpButton-Down"
-    button.disabledAtlas = "UI-ScrollBar-ScrollUpButton-Disabled"
-    button.highlightAtlas = "UI-ScrollBar-ScrollUpButton-Highlight"
+  SetTrimButtonState(button)
+  if button.direction == "UP" then
+    SetTrimTexture(button.Overlay, trimScrollBarProportionalTexture, 18, 16, 0.734375, 0.804688, 0.0078125, 0.132812, 18, 16)
   else
-    button.upAtlas = "UI-ScrollBar-ScrollDownButton-Up"
-    button.downAtlas = "UI-ScrollBar-ScrollDownButton-Down"
-    button.disabledAtlas = "UI-ScrollBar-ScrollDownButton-Disabled"
-    button.highlightAtlas = "UI-ScrollBar-ScrollDownButton-Highlight"
+    SetTrimTexture(button.Overlay, trimScrollBarProportionalTexture, 18, 16, 0.339844, 0.410156, 0.648438, 0.773438, 18, 16)
   end
-
-  SetTrimButtonState(button, button.upAtlas)
-  SetAtlasTexture(button.Overlay, button.highlightAtlas)
 
   button:SetScript("OnEnter", function(self)
     self.over = true
@@ -389,11 +278,17 @@ local function CreateTrimScrollBarButton(parent, direction)
   return button
 end
 
-local function SetTrimThumbAtlas(thumb)
-  local prefix = thumb.over and "UI-ScrollBar-Knob-MouseOver" or "UI-ScrollBar-Knob"
-  SetAtlasTexture(thumb.Begin, prefix .. "-EndCap-Top")
-  SetAtlasTexture(thumb.Middle, prefix .. "-Center", trimScrollBarButtonSize, math.max(1, thumb:GetHeight() - 10), true)
-  SetAtlasTexture(thumb.End, prefix .. "-EndCap-Bottom")
+local function SetTrimThumbTexture(thumb)
+  local middleHeight = math.max(1, thumb:GetHeight() - 10)
+  if thumb.over then
+    SetTrimTexture(thumb.Begin, trimScrollBarProportionalTexture, 18, 21, 0.339844, 0.410156, 0.1875, 0.351562, 18, 21)
+    SetTrimTexture(thumb.Middle, trimScrollBarProportionalVerticalTexture, 18, middleHeight, 0.53125, 0.671875, 0.000976562, 0.999023, 18, 1022, true)
+    SetTrimTexture(thumb.End, trimScrollBarProportionalTexture, 18, 21, 0.339844, 0.410156, 0.0078125, 0.171875, 18, 21)
+  else
+    SetTrimTexture(thumb.Begin, trimScrollBarProportionalTexture, 18, 21, 0.25, 0.320312, 0.476562, 0.640625, 18, 21)
+    SetTrimTexture(thumb.Middle, trimScrollBarProportionalVerticalTexture, 18, middleHeight, 0.375, 0.515625, 0.000976562, 0.999023, 18, 1022, true)
+    SetTrimTexture(thumb.End, trimScrollBarProportionalTexture, 18, 21, 0.136719, 0.207031, 0.445312, 0.609375, 18, 21)
+  end
 end
 
 local function UpdateScrollBarFromThumbCursor(thumb)
@@ -421,10 +316,6 @@ local function UpdateScrollBarFromThumbCursor(thumb)
 end
 
 local function CreateTrimScrollBarArtwork(scrollBar)
-  if not HasTrimScrollBarAssets() then
-    return
-  end
-
   scrollBar:SetWidth(trimScrollBarWidth)
   scrollBar:SetBackdrop(nil)
   scrollBar.usesTrimArtwork = true
@@ -447,16 +338,16 @@ local function CreateTrimScrollBarArtwork(scrollBar)
 
   background.Begin = background:CreateTexture(nil, "ARTWORK")
   background.Begin:SetPoint("TOPLEFT", background, "TOPLEFT")
-  SetAtlasTexture(background.Begin, "UI-ScrollBar-EndCap-Top")
+  SetTrimTexture(background.Begin, trimScrollBarProportionalTexture, 25, 32, 0.00390625, 0.101562, 0.21875, 0.46875, 25, 32)
 
   background.End = background:CreateTexture(nil, "ARTWORK")
   background.End:SetPoint("BOTTOMLEFT", background, "BOTTOMLEFT")
-  SetAtlasTexture(background.End, "UI-ScrollBar-EndCap-Bottom")
+  SetTrimTexture(background.End, trimScrollBarProportionalTexture, 25, 31, 0.00390625, 0.101562, 0.484375, 0.726562, 25, 31)
 
   background.Middle = background:CreateTexture(nil, "ARTWORK")
   background.Middle:SetPoint("TOPLEFT", background.Begin, "BOTTOMLEFT")
   background.Middle:SetPoint("BOTTOMRIGHT", background.End, "TOPRIGHT")
-  SetAtlasTexture(background.Middle, "!UI-ScrollBar-Center")
+  SetTrimTexture(background.Middle, trimScrollBarProportionalVerticalTexture, 25, 32, 0.0078125, 0.203125, 0, 0.03125, 25, 32)
 
   local track = CreateFrame("Frame", nil, scrollBar)
   track:SetPoint("TOPLEFT", scrollBar, "TOPLEFT", trimScrollBarTrackInsetLeft, -trimScrollBarTrackInsetTop)
@@ -478,12 +369,12 @@ local function CreateTrimScrollBarArtwork(scrollBar)
   thumb.End:SetPoint("BOTTOMLEFT", thumb, "BOTTOMLEFT")
   thumb:SetScript("OnEnter", function(self)
     self.over = true
-    SetTrimThumbAtlas(self)
+    SetTrimThumbTexture(self)
   end)
   thumb:SetScript("OnLeave", function(self)
     if not self.dragging then
       self.over = nil
-      SetTrimThumbAtlas(self)
+      SetTrimThumbTexture(self)
     end
   end)
   thumb:SetScript("OnMouseDown", function(self, button)
@@ -496,14 +387,14 @@ local function CreateTrimScrollBarArtwork(scrollBar)
     self.cursorOffset = self:GetTop() - (cursorY / scale)
     self.dragging = true
     self.over = true
-    SetTrimThumbAtlas(self)
+    SetTrimThumbTexture(self)
     self:SetScript("OnUpdate", UpdateScrollBarFromThumbCursor)
   end)
   thumb:SetScript("OnMouseUp", function(self)
     self.dragging = nil
     self.cursorOffset = nil
     self:SetScript("OnUpdate", nil)
-    SetTrimThumbAtlas(self)
+    SetTrimThumbTexture(self)
   end)
   thumb:SetScript("OnHide", function(self)
     self.dragging = nil
@@ -545,12 +436,12 @@ local function CreateTrimScrollBarArtwork(scrollBar)
 
   scrollBar:SetScript("OnEnter", function(self)
     self.Thumb.over = true
-    SetTrimThumbAtlas(self.Thumb)
+    SetTrimThumbTexture(self.Thumb)
   end)
 
   scrollBar:SetScript("OnLeave", function(self)
     self.Thumb.over = nil
-    SetTrimThumbAtlas(self.Thumb)
+    SetTrimThumbTexture(self.Thumb)
   end)
 
   function scrollBar:RefreshStepperStates()
@@ -574,7 +465,7 @@ local function CreateTrimScrollBarArtwork(scrollBar)
     self.Thumb:SetHeight(thumbHeight)
     self.Thumb:ClearAllPoints()
     self.Thumb:SetPoint("TOPLEFT", self.Track, "TOPLEFT", trimScrollBarThumbOffsetX, -offset)
-    SetTrimThumbAtlas(self.Thumb)
+    SetTrimThumbTexture(self.Thumb)
     self:RefreshStepperStates()
   end
 end
@@ -695,7 +586,46 @@ local function SetPropagateKeyboardInput(propagate)
   end
 end
 
+local function IsWidgetOpen()
+  return lib.scrollBox and lib.scrollBox:IsShown() and lib.data and not lib.data:IsEmpty()
+end
+
+local modifierKeys = {
+  LSHIFT = true,
+  RSHIFT = true,
+  LCTRL = true,
+  RCTRL = true,
+  LALT = true,
+  RALT = true,
+}
+
+local function CloseWidgetFromKey()
+  if lib.data then
+    lib.data:Flush()
+  end
+  if lib.editbox then
+    lib:UpdateWidget(lib.editbox)
+  else
+    lib:Hide()
+  end
+end
+
 local function HandleKey(key)
+  if key == "UPARROW" then
+    key = "UP"
+  elseif key == "DOWNARROW" then
+    key = "DOWN"
+  elseif key == "LEFTARROW" then
+    key = "LEFT"
+  elseif key == "RIGHTARROW" then
+    key = "RIGHT"
+  end
+
+  if modifierKeys[key] then
+    CloseWidgetFromKey()
+    return true
+  end
+
   if key == "DOWN" then
     SetPropagateKeyboardInput(false)
     if not lib.selectionBehaviour:HasSelection() then
@@ -717,7 +647,13 @@ local function HandleKey(key)
     if selectedElementData then
       SetPropagateKeyboardInput(false)
       local elementFrame = lib.scrollBox:FindFrame(selectedElementData)
-      elementFrame:Insert()
+      if elementFrame then
+        elementFrame:Insert()
+      elseif selectedElementData.name then
+        lib:SetWord(lib.editbox, selectedElementData.name)
+        lib:Hide()
+        lib.editbox:SetFocus()
+      end
       return true
     end
   elseif key == "ESCAPE" then
@@ -725,16 +661,171 @@ local function HandleKey(key)
     lib.data:Flush()
     lib:UpdateWidget(lib.editbox)
     return true
+  elseif key == "LEFT" or key == "RIGHT" then
+    local editbox = lib.editbox
+    local cursorPosition = editbox:GetCursorPosition()
+    if key == "LEFT" and cursorPosition > 0 then
+      editbox:SetCursorPosition(cursorPosition - 1)
+    elseif key == "RIGHT" then
+      local text = editbox.APIDoc_originalGetText and editbox:APIDoc_originalGetText() or editbox:GetText()
+      if cursorPosition < #text then
+        editbox:SetCursorPosition(cursorPosition + 1)
+      end
+    end
+    editbox:SetFocus()
+    return true
   end
   SetPropagateKeyboardInput(true)
+end
+
+local function HandleArrowKey(key)
+  if key == "DOWN" or key == "UP" or key == "LEFT" or key == "RIGHT"
+      or key == "DOWNARROW" or key == "UPARROW" or key == "LEFTARROW" or key == "RIGHTARROW" then
+    return HandleKey(key)
+  end
+end
+
+local function KeyboardCaptureButton_OnClick(self)
+  if lib.editbox and IsWidgetOpen() then
+    HandleKey(self.key)
+  end
+end
+
+local function KeyboardCapture_OnUpdate(self)
+  local modifierDown = IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown()
+  if modifierDown and not self.modifierDown then
+    CloseWidgetFromKey()
+  end
+  self.modifierDown = modifierDown
+end
+
+local function CreateKeyboardCapture()
+  local capture = CreateFrame("Frame", "LibAPIAutoCompleteKeyboardCapture", UIParent)
+  capture:Hide()
+
+  capture.up = CreateFrame("Button", "LibAPIAutoCompleteKeyboardCaptureUp", capture)
+  capture.up.key = "UP"
+  capture.up:SetScript("OnClick", KeyboardCaptureButton_OnClick)
+
+  capture.down = CreateFrame("Button", "LibAPIAutoCompleteKeyboardCaptureDown", capture)
+  capture.down.key = "DOWN"
+  capture.down:SetScript("OnClick", KeyboardCaptureButton_OnClick)
+
+  capture.left = CreateFrame("Button", "LibAPIAutoCompleteKeyboardCaptureLeft", capture)
+  capture.left.key = "LEFT"
+  capture.left:SetScript("OnClick", KeyboardCaptureButton_OnClick)
+
+  capture.right = CreateFrame("Button", "LibAPIAutoCompleteKeyboardCaptureRight", capture)
+  capture.right.key = "RIGHT"
+  capture.right:SetScript("OnClick", KeyboardCaptureButton_OnClick)
+
+  capture.enter = CreateFrame("Button", "LibAPIAutoCompleteKeyboardCaptureEnter", capture)
+  capture.enter.key = "ENTER"
+  capture.enter:SetScript("OnClick", KeyboardCaptureButton_OnClick)
+
+  capture:SetScript("OnUpdate", KeyboardCapture_OnUpdate)
+  return capture
+end
+
+local function EnableKeyboardCapture()
+  if not SetOverrideBindingClick then
+    return
+  end
+
+  lib.keyboardCapture = lib.keyboardCapture or CreateKeyboardCapture()
+  local capture = lib.keyboardCapture
+  capture.modifierDown = IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown()
+  capture:Show()
+  ClearOverrideBindings(capture)
+  SetOverrideBindingClick(capture, true, "UP", capture.up:GetName())
+  SetOverrideBindingClick(capture, true, "DOWN", capture.down:GetName())
+  SetOverrideBindingClick(capture, true, "LEFT", capture.left:GetName())
+  SetOverrideBindingClick(capture, true, "RIGHT", capture.right:GetName())
+  SetOverrideBindingClick(capture, true, "ENTER", capture.enter:GetName())
+end
+
+local function DisableKeyboardCapture()
+  local capture = lib.keyboardCapture
+  if capture then
+    if ClearOverrideBindings then
+      ClearOverrideBindings(capture)
+    end
+    capture:Hide()
+    capture.modifierDown = nil
+  end
+end
+
+local function EnableEditBoxArrowKeyCapture(editbox)
+  if editbox.SetAltArrowKeyMode then
+    if editbox.APIDoc_oldAltArrowKeyMode == nil then
+      editbox.APIDoc_oldAltArrowKeyMode = editbox.GetAltArrowKeyMode and editbox:GetAltArrowKeyMode() or false
+    end
+    editbox:SetAltArrowKeyMode(true)
+  end
+end
+
+local function DisableEditBoxArrowKeyCapture(editbox)
+  if editbox and editbox.SetAltArrowKeyMode and editbox.APIDoc_oldAltArrowKeyMode ~= nil then
+    editbox:SetAltArrowKeyMode(editbox.APIDoc_oldAltArrowKeyMode)
+    editbox.APIDoc_oldAltArrowKeyMode = nil
+  end
+end
+
+local function EnableEditBoxEnterCapture(editbox)
+  if editbox.APIDoc_enterCaptureEnabled then
+    return
+  end
+
+  editbox.APIDoc_enterCaptureEnabled = true
+  editbox.APIDoc_hasOldOnEnterPressed = editbox:GetScript("OnEnterPressed") ~= nil
+  editbox.APIDoc_oldOnEnterPressed = editbox:GetScript("OnEnterPressed")
+  editbox:SetScript("OnEnterPressed", function(...)
+    if lib.editbox == editbox and IsWidgetOpen() and HandleKey("ENTER") then
+      return
+    end
+    if editbox.APIDoc_oldOnEnterPressed then
+      return editbox.APIDoc_oldOnEnterPressed(...)
+    end
+  end)
+end
+
+local function DisableEditBoxEnterCapture(editbox)
+  if not editbox or not editbox.APIDoc_enterCaptureEnabled then
+    return
+  end
+
+  if editbox.APIDoc_hasOldOnEnterPressed then
+    editbox:SetScript("OnEnterPressed", editbox.APIDoc_oldOnEnterPressed)
+  else
+    editbox:SetScript("OnEnterPressed", nil)
+  end
+  editbox.APIDoc_enterCaptureEnabled = nil
+  editbox.APIDoc_oldOnEnterPressed = nil
+  editbox.APIDoc_hasOldOnEnterPressed = nil
+end
+
+local function EnableActiveInputCapture(editbox)
+  EnableEditBoxArrowKeyCapture(editbox)
+  EnableEditBoxEnterCapture(editbox)
+  EnableKeyboardCapture()
+end
+
+local function DisableActiveInputCapture(editbox)
+  DisableKeyboardCapture()
+  DisableEditBoxArrowKeyCapture(editbox)
+  DisableEditBoxEnterCapture(editbox)
 end
 
 function lib:Hide()
   self.scrollBox:Hide()
   self.scrollBar:Hide()
+  DisableActiveInputCapture(self.editbox)
+  if self.data and not self.data:IsEmpty() then
+    self.data:Flush()
+  end
 end
 
----Create APIDoc widget and ensure APIDocumentation is loaded
+---Create APIDoc widget and ensure Blizzard_APIDocumentation is loaded
 local isInit = false
 local function Init()
   if isInit then
@@ -742,7 +833,8 @@ local function Init()
   end
   isInit = true
 
-  LoadAPIDocumentation()
+  -- load Blizzard_APIDocumentation
+  LoadBlizzard_APIDocumentation()
 
   local scrollBox, scrollBar = CreateLegacyScrollBox()
   scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT")
@@ -772,7 +864,7 @@ local function Init()
     end
   end)
 
-  lib.data = CreateLegacyDataProvider()
+  lib.data = CreateDataProvider()
   scrollBox:SetDataProvider(lib.data)
 
   lib.scrollBar = scrollBar
@@ -877,13 +969,26 @@ function lib:enable(editbox, params)
   editbox.APIDoc_oldOnKeyDown = editbox:GetScript("OnKeyDown")
   editbox:SetScript("OnKeyDown", function(...)
     local _, key = ...
-    if lib.editbox == editbox and lib.data and not lib.data:IsEmpty() and HandleKey(key) then
+    if lib.editbox == editbox and IsWidgetOpen() and HandleKey(key) then
       return
     end
     if editbox.APIDoc_oldOnKeyDown then
       editbox.APIDoc_oldOnKeyDown(...)
     end
   end)
+  if editbox.HasScript and editbox:HasScript("OnArrowPressed") then
+    editbox.APIDoc_oldOnArrowPressed = editbox:GetScript("OnArrowPressed")
+    editbox:SetScript("OnArrowPressed", function(...)
+      local _, key = ...
+      if lib.editbox == editbox and IsWidgetOpen() and HandleArrowKey(key) then
+        return
+      end
+      if editbox.APIDoc_oldOnArrowPressed then
+        editbox.APIDoc_oldOnArrowPressed(...)
+      end
+    end)
+  end
+  editbox:EnableKeyboard(true)
   editbox.APIDoc_oldOnHide = editbox:GetScript("OnHide")
   editbox:SetScript("OnHide", function(...)
     if editbox.APIDoc_oldOnHide then
@@ -900,6 +1005,7 @@ function lib:disable(editbox)
   if not config[editbox] then
     return
   end
+  DisableActiveInputCapture(editbox)
   config[editbox] = nil
   editbox:SetScript("OnCursorChanged", editbox.APIDoc_oldOnCursorChanged)
   editbox.APIDoc_oldOnCursorChanged = nil
@@ -907,6 +1013,10 @@ function lib:disable(editbox)
   editbox.APIDoc_oldOnTextChanged = nil
   editbox:SetScript("OnKeyDown", editbox.APIDoc_oldOnKeyDown)
   editbox.APIDoc_oldOnKeyDown = nil
+  if editbox.APIDoc_oldOnArrowPressed then
+    editbox:SetScript("OnArrowPressed", editbox.APIDoc_oldOnArrowPressed)
+    editbox.APIDoc_oldOnArrowPressed = nil
+  end
   editbox:SetScript("OnHide", editbox.APIDoc_oldOnHide)
   editbox.APIDoc_oldOnHide = nil
 end
@@ -1028,13 +1138,14 @@ function lib:UpdateWidget(editbox)
     self.scrollBar:SetParent(UIParent)
     self.scrollBox:SetFrameStrata("TOOLTIP")
     self.scrollBar:SetFrameStrata("TOOLTIP")
+    self.editbox = editbox
     self.scrollBox:Show()
+    EnableActiveInputCapture(editbox)
     if lines > maxLinesShown then
       self.scrollBar:Show()
     else
       self.scrollBar:Hide()
     end
-    self.editbox = editbox
   end
 end
 
