@@ -30,7 +30,7 @@ local function filterAnimPresetTypes(intable, id)
     for key, value in pairs(intable) do
       local preset = OptionsPrivate.Private.anim_presets[key];
       if(preset) then
-        if not((preset.use_scale and not region.Scale) or (preset.use_rotate and not region.Rotate)) then
+        if not((preset.use_scale and not region.Scale) or (preset.use_rotate and not region.SetAnimRotation)) then
           ret[key] = value;
         end
       end
@@ -323,7 +323,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         name = L["Rotate In"],
         order = 46,
         hidden = function()
-          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       start_rotateType = {
@@ -333,7 +333,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         order = 47,
         values = anim_rotate_types,
         hidden = function()
-          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       -- texteditor added below
@@ -347,7 +347,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         softMax = 360,
         bigStep = 3,
         hidden = function()
-          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.start.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       start_use_color = {
@@ -610,7 +610,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         name = L["Rotate"],
         order = 66,
         hidden = function()
-          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       main_rotateType = {
@@ -620,7 +620,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         order = 67,
         values = anim_rotate_types,
         hidden = function()
-          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       -- text editor added below
@@ -634,7 +634,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         softMax = 360,
         bigStep = 3,
         hidden = function()
-          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       main_use_color = {
@@ -882,7 +882,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         name = L["Rotate Out"],
         order = 86,
         hidden = function()
-          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       finish_rotateType = {
@@ -892,7 +892,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         order = 87,
         values = anim_rotate_types,
         hidden = function()
-          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+           return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       -- texteditor added below
@@ -906,7 +906,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         softMax = 360,
         bigStep = 3,
         hidden = function()
-          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Rotate)
+          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       finish_use_color = {
@@ -995,7 +995,7 @@ function OptionsPrivate.GetAnimationOptions(data)
   local function hideStartRotateFunc()
     return data.animation.start.type ~= "custom"
             or data.animation.start.rotateType ~= "custom"
-            or not (data.animation.start.use_rotate and OptionsPrivate.Private.EnsureRegion(id).Rotate)
+           or not (data.animation.start.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "start_rotateFunc",
                           "https://github.com/WeakAuras/WeakAuras2/wiki/Custom-Code-Blocks#rotate",
@@ -1042,7 +1042,7 @@ function OptionsPrivate.GetAnimationOptions(data)
   local function hideMainRotateFunc()
     return data.animation.main.type ~= "custom"
             or data.animation.main.rotateType ~= "custom"
-            or not (data.animation.main.use_rotate and OptionsPrivate.Private.EnsureRegion(id).Rotate)
+           or not (data.animation.main.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "main_rotateFunc",
                           "https://github.com/WeakAuras/WeakAuras2/wiki/Custom-Code-Blocks#rotate",
@@ -1088,7 +1088,7 @@ function OptionsPrivate.GetAnimationOptions(data)
   local function hideFinishRotateFunc()
     return data.animation.finish.type ~= "custom"
             or data.animation.finish.rotateType ~= "custom"
-            or not (data.animation.finish.use_rotate and OptionsPrivate.Private.EnsureRegion(id).Rotate)
+           or not (data.animation.finish.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "finish_rotateFunc",
                           "https://github.com/WeakAuras/WeakAuras2/wiki/Custom-Code-Blocks#rotate",

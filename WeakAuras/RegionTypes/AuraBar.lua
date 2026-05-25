@@ -1038,7 +1038,7 @@ local funcs = {
     end
 
     iconPath = iconPath or self.displayIcon or "Interface\\Icons\\INV_Misc_QuestionMark"
-    Private.SetTextureOrSpellTexture(self.icon, iconPath)
+    Private.SetTextureOrAtlas(self.icon, iconPath)
   end,
   SetOverlayColor = function(self, id, r, g, b, a)
     self.bar:SetAdditionalBarColor(id, { r, g, b, a});
@@ -1134,19 +1134,6 @@ local funcs = {
   end
 }
 
-local function setDesaturated(self, desaturated, ...)
-  self.isDesaturated = desaturated and 1 or 0
-  return self._SetDesaturated(self, desaturated, ...)
-end
-
-local function setTexture(self, ...)
-  local apply = self._SetTexture(self, ...)
-  if self.isDesaturated ~= nil then
-    self:_SetDesaturated(self.isDesaturated == 1)
-  end
-  return apply
-end
-
 -- Called when first creating a new region/display
 local function create(parent)
   -- Create overall region (containing everything else)
@@ -1190,10 +1177,7 @@ local function create(parent)
   region.icon = icon;
   icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark");
 
-  icon._SetDesaturated = icon.SetDesaturated
-  icon.SetDesaturated = setDesaturated
-  icon._SetTexture = icon.SetTexture
-  icon.SetTexture = setTexture
+  Private.FixTextureDesaturation(icon)
 
   local oldSetFrameLevel = region.SetFrameLevel;
   function region.SetFrameLevel(self, frameLevel)

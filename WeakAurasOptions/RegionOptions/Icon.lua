@@ -304,7 +304,7 @@ local function modifyThumbnail(parent, frame, data)
       iconPath = path or data.displayIcon
     end
 
-    OptionsPrivate.Private.SetTextureOrSpellTexture(self.icon,
+    OptionsPrivate.Private.SetTextureOrAtlas(self.icon,
       iconPath and iconPath ~= "" and iconPath or "Interface\\Icons\\INV_Misc_QuestionMark")
   end
 
