@@ -1,4 +1,6 @@
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 Private.Features:Register({
@@ -8,21 +10,48 @@ Private.Features:Register({
   persist = true,
 })
 
+---@class TimeMachine
 local TimeMachine = {
+  ---@type change
   next = {
     forward = {},
     backward = {}
   },
   transaction = false,
+  ---@type change[]
   changes = {},
+  ---@type table<actionType, Action>
   actions = {},
+  ---@type table<string, {idempotent: boolean, func: function}>
   effects = {},
   index = 0,
   sub = Private.CreateSubscribableObject(),
 }
 
 Private.TimeMachine = TimeMachine
+---@alias keyPath key | (key)[]
+---@alias Actor fun(data: table, path: keyPath, payload: any)
+---@alias Inverter fun(data: table, path: keyPath, payload?: any): actionType, keyPath, any
+---@alias actionType string
+---@alias effectType string
+---@class Action
+---@field actor Actor
+---@field inverter Inverter
+---@field autoEffects? effectType[]
+---@class actionRecord
+---@field uid uid
+---@field actionType actionType
+---@field path keyPath
+---@field payload any
+---@field effects? effectType[]
+---@field suppressAutoEffects? table<effectType, boolean>
+---@class change
+---@field forward actionRecord[]
+---@field backward actionRecord[]
 
+---@param data table
+---@param path keyPath
+---@return table, key
 local function resolveKey(data, path)
   if type(path) ~= 'table' then
     return data, path
@@ -49,6 +78,7 @@ local function copy(tbl, key)
   end
 end
 
+---@type fun(self: self, tag: effectType, func: fun(uid:uid, data: auraData), idempotent?: boolean)
 function TimeMachine:RegisterEffect(tag, func, idempotent)
   if self.effects[tag] then
     error("Effect already registered: " .. tag)
@@ -77,6 +107,7 @@ TimeMachine.sub:AddSubscriber("Step", {
   end
   })
 
+---@type fun(self: self, actionType: actionType, action: Actor<any>, inverter: Inverter<any, any>, autoEffects?: effectType[])
 function TimeMachine:RegisterAction(actionType, actor, inverter, autoEffects)
   if self.actions[actionType] then
     error("Action already registered: " .. actionType)
@@ -179,6 +210,7 @@ TimeMachine:RegisterAction("move",
   {"add", "options_cu"}
 )
 
+---@param path keyPath
 local function keyPathToString(path)
   if type(path) == 'table' then
     return table.concat(path, '.')
@@ -187,6 +219,7 @@ local function keyPathToString(path)
   end
 end
 
+---@param effects effectType[]
 local function invertEffects(effects)
   local inverted = {}
   for i = #effects, 1, -1 do
@@ -218,6 +251,7 @@ local function FormatPayload(payload)
   return payload
 end
 
+---@param record actionRecord
 function TimeMachine:Append(record)
   local action = self.actions[record.actionType]
   Private.DebugPrint("Forward action", record.actionType, "for", record.uid, "at", keyPathToString(record.path), "with", FormatPayload(record.payload))
@@ -229,6 +263,7 @@ function TimeMachine:Append(record)
     error("No inverter for action: " .. record.actionType)
   end
   local actionType, path, payload = inverter(Private.GetDataByUID(record.uid), record.path, record.payload)
+  ---@type actionRecord
   local inverseRecord = {
     uid = record.uid,
     actionType = actionType,
@@ -245,6 +280,7 @@ function TimeMachine:Append(record)
   end
 end
 
+---@param records actionRecord[]
 function TimeMachine:AppendMany(records)
   local commit = false
   if not self.transaction then
@@ -267,6 +303,7 @@ function TimeMachine:Reject()
   self.transaction = false
 end
 
+---@param instant? boolean
 function TimeMachine:Commit(instant)
   if not self.transaction and not instant then
     WeakAuras.prettyPrint("If you're reading this, a time machine transaction was committed, but there was no transaction in progress. That's not supposed to happen. Please report this to the WeakAuras developers, thanks!")
@@ -291,6 +328,9 @@ function TimeMachine:Commit(instant)
   return self:StepForward()
 end
 
+---@param records actionRecord[]
+---@param delayedEffects? table<uid, table<effectType, boolean>>
+---@return {uid: uid, effect: effectType}[]?
 function TimeMachine:Apply(records, delayedEffects)
   for _, record in ipairs(records) do
     local action = self.actions[record.actionType]
@@ -300,6 +340,7 @@ function TimeMachine:Apply(records, delayedEffects)
     local data = Private.GetDataByUID(record.uid)
     action.actor(data, record.path, record.payload)
     if action.autoEffects or record.effects then
+      ---@type effectType[]
       local effects = {}
       if action.autoEffects then
         for _, effect in ipairs(action.autoEffects) do
@@ -353,6 +394,7 @@ function TimeMachine:StepBackward()
 end
 
 --- much safer than the name suggests!
+---@param id string
 function TimeMachine:DestroyTheUniverse(id)
   if self.transaction then
     WeakAuras.prettyPrint("If you're reading this, a time machine transaction was destroyed, but there was one in progress. That's not supposed to happen. Please report this to the WeakAuras developers, thanks!")

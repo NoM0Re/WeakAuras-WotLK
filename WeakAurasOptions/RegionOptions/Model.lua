@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L;
@@ -133,6 +135,7 @@ local function createOptions(id, data)
 end
 
 local function createThumbnail()
+    ---@class frame
   local borderframe = CreateFrame("Frame", nil, UIParent);
   borderframe:SetWidth(32);
   borderframe:SetHeight(32);
@@ -142,6 +145,7 @@ local function createThumbnail()
   border:SetTexture("Interface\\BUTTONS\\UI-Quickslot2.blp");
   border:SetTexCoord(0.2, 0.8, 0.2, 0.8);
 
+  ---@class Model
   local model = CreateFrame("PlayerModel", nil, borderframe);
   borderframe.model = model;
   model:SetFrameStrata("FULLSCREEN");

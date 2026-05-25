@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 -- Talent Data for normal Wrath Realms
@@ -7,6 +9,7 @@ if not WeakAuras.IsWrath() or WeakAuras.IsWrathReborn() then
   return
 end
 
+---@class WeakAuras
 local WeakAuras = WeakAuras;
 local L = WeakAuras.L;
 

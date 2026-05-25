@@ -1,6 +1,8 @@
 if not WeakAuras.IsLibsOK() then return end
 
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L
@@ -58,6 +60,7 @@ local function createOptions(id, data)
 end
 
 local function createThumbnail()
+  ---@class frame: FrameScriptObject
   local frame = CreateFrame("Frame", nil, UIParent)
   frame:SetWidth(32)
   frame:SetHeight(32)

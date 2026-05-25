@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local tinsert, tremove = table.insert, table.remove
@@ -1771,6 +1773,7 @@ Constructor
 
 local function Constructor()
   local name = "WeakAurasDisplayButton"..AceGUI:GetNextWidgetNum(Type);
+  ---@class Button
   local button = CreateFrame("Button", name, UIParent, "OptionsListButtonTemplate");
   button:SetHeight(32);
   button:SetWidth(1000);
@@ -1810,6 +1813,7 @@ local function Constructor()
 
   button.description = {};
 
+  ---@class Button
   local view = CreateFrame("Button", nil, button);
   button.view = view;
   view:SetWidth(16);
@@ -1920,6 +1924,7 @@ local function Constructor()
   downgroup:SetScript("OnLeave", Hide_Tooltip);
   downgroup:Hide();
 
+  ---@class Button
   local expand = CreateFrame("Button", nil, button);
   button.expand = expand;
   expand.expanded = true;

@@ -6,6 +6,7 @@ local AceGUI = LibStub("AceGUI-3.0");
 local floor, ceil, tinsert = floor, ceil, tinsert;
 local CreateFrame, UnitClass, UnitRace = CreateFrame, UnitClass, UnitRace;
 
+---@class WeakAuras
 local WeakAuras = WeakAuras;
 local L = WeakAuras.L
 

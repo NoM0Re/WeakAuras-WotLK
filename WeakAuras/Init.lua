@@ -1,6 +1,10 @@
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
+---@class WeakAuras
 WeakAuras = {}
+---@type table<string, string>
 WeakAuras.L = {}
 Private.frames = {}
 
@@ -55,6 +59,7 @@ function WeakAuras.IsClassicPlus()
   return flavor == "ClassicPlus"
 end
 
+---@param ... string
 WeakAuras.prettyPrint = function(...)
   print("|cff9900ffWeakAuras:|r ", ...)
 end
@@ -137,21 +142,26 @@ end
 function Private.StopProfileAura(_)
 end
 
+---@type fun()
 function Private.StartProfileUID()
 end
 
+---@type fun()
 function Private.StopProfileUID()
 end
 
 Private.ExecEnv = {}
 
 -- If WeakAuras shuts down due to being installed on the wrong target, keep the bindings from erroring
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.StartProfile(_)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.StopProfile()
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.PrintProfile()
 end
 

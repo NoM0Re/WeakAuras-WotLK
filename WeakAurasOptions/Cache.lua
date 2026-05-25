@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 -- Lua APIs
@@ -8,6 +10,7 @@ local pairs, error, coroutine = pairs, error, coroutine
 -- WoW APIs
 local GetSpellInfo, IsSpellKnown = GetSpellInfo, IsSpellKnown
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 
 local spellCache = {}
@@ -276,6 +279,8 @@ function spellCache.BestKeyMatch(nearkey)
   return bestKey;
 end
 
+---@param input string | number
+---@return string name, number? id
 function spellCache.CorrectAuraName(input)
   if (not cache) then
     error("spellCache has not been loaded. Call WeakAuras.spellCache.Load(...) first.")
