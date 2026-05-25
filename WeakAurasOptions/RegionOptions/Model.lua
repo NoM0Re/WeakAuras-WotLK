@@ -24,7 +24,7 @@ local function createOptions(id, data)
       order = 0.6,
       hidden = function() return data.modelIsUnit end
     },
-    model_model_path = {
+    model_fileId = {
       type = "input",
       width = WeakAuras.doubleWidth - 0.15,
       name = L["Model"],
@@ -38,7 +38,7 @@ local function createOptions(id, data)
       func = function()
         OptionsPrivate.OpenModelPicker(data, {});
       end,
-      disabled = function() return data.modelIsUnit end,
+      disabled = function() return data.modelIsUnit or (WeakAuras.BuildInfo > 80100 and data.modelDisplayInfo) end,
       imageWidth = 24,
       imageHeight = 24,
       control = "WeakAurasIcon",
@@ -56,12 +56,25 @@ local function createOptions(id, data)
       width = WeakAuras.normalWidth,
       name = L["Animation Sequence"],
       min = 0,
-      softMax = 150,
+      softMax = 1499,
       step = 1,
       bigStep = 1,
       order = 6,
       disabled = function() return not data.advance end
     },
+    api = {
+      type = "toggle",
+      name = L["Use SetTransform"],
+      order = 7,
+      width = WeakAuras.normalWidth,
+    },
+    portraitZoom = {
+      type = "toggle",
+      width = WeakAuras.normalWidth,
+      name = L["Portrait Zoom"],
+      order = 8,
+    },
+    -- old settings
     model_z = {
       type = "range",
       control = "WeakAurasSpinBox",
@@ -72,6 +85,7 @@ local function createOptions(id, data)
       step = .001,
       bigStep = 0.05,
       order = 20,
+      hidden = function() return data.api end
     },
     model_x = {
       type = "range",
@@ -83,6 +97,7 @@ local function createOptions(id, data)
       step = .001,
       bigStep = 0.05,
       order = 30,
+      hidden = function() return data.api end
     },
     model_y = {
       type = "range",
@@ -94,6 +109,7 @@ local function createOptions(id, data)
       step = .001,
       bigStep = 0.05,
       order = 40,
+      hidden = function() return data.api end
     },
     rotation = {
       type = "range",
@@ -105,6 +121,92 @@ local function createOptions(id, data)
       step = 1,
       bigStep = 3,
       order = 45,
+      hidden = function() return data.api end
+    },
+    -- New Settings
+    model_st_tx = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["X Offset"],
+      softMin = -1000,
+      softMax = 1000,
+      step = 1,
+      bigStep = 5,
+      order = 20,
+      hidden = function() return not data.api end
+    },
+    model_st_ty = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Y Offset"],
+      softMin = -1000,
+      softMax = 1000,
+      step = 1,
+      bigStep = 5,
+      order = 21,
+      hidden = function() return not data.api end
+    },
+    model_st_tz = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Z Offset"],
+      softMin = -1000,
+      softMax = 1000,
+      step = 1,
+      bigStep = 5,
+      order = 22,
+      hidden = function() return not data.api end
+    },
+    model_st_rx = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["X Rotation"],
+      min = 0,
+      max = 360,
+      step = 1,
+      bigStep = 3,
+      order = 23,
+      hidden = function() return not data.api end
+    },
+    model_st_ry = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Y Rotation"],
+      min = 0,
+      max = 360,
+      step = 1,
+      bigStep = 3,
+      order = 24,
+      hidden = function() return not data.api end
+    },
+    model_st_rz = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Z Rotation"],
+      min = 0,
+      max = 360,
+      step = 1,
+      bigStep = 3,
+      order = 25,
+      hidden = function() return not data.api end
+    },
+    model_st_us = {
+      type = "range",
+      control = "WeakAurasSpinBox",
+      width = WeakAuras.normalWidth,
+      name = L["Scale"],
+      min = 5,
+      max = 1000,
+      step = 0.1,
+      bigStep = 5,
+      order = 26,
+      hidden = function() return not data.api end
     },
     alpha = {
       type = "range",
@@ -169,9 +271,11 @@ local function modifyThumbnail(parent, region, data)
   model:SetWidth(region:GetWidth() - 2);
   model:SetHeight(region:GetHeight() - 2);
   model:SetPoint("center", region, "center");
-  WeakAuras.SetModel(model, data.model_path, data.modelIsUnit, data.modelDisplayInfo)
+  WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
   model:SetScript("OnShow", function()
-    WeakAuras.SetModel(model, data.model_path, data.modelIsUnit, data.modelDisplayInfo)
+    WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
+    model:SetPortraitZoom(data.portraitZoom and 1 or 0)
+    -- model:ClearTransform();
     model:SetPosition(data.model_z, data.model_x, data.model_y);
     model:SetFacing(rad(data.rotation));
   end);
@@ -184,7 +288,7 @@ end
 
 local function createIcon()
   local data = {
-    model_path = "Creature/Arthaslichking/arthaslichking.m2",
+    model_fileId = "Creature/Arthaslichking/arthaslichking.m2", -- "122968"
     modelIsUnit = false,
     model_x = 0,
     model_y = 0,
@@ -217,7 +321,7 @@ tinsert(templates, {
   data = {
     width = 100,
     height = 100,
-    model_path = "spells/6fx_smallfire.m2",
+    model_fileId = "spells/6fx_smallfire.m2",
     model_x = 0,
     model_y = -0.5,
     model_z = -1.5
@@ -231,7 +335,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_druid_halfmoon_missile.m2",
+    model_fileId = "spells/7fx_druid_halfmoon_missile.m2",
     model_x = 0,
     model_y = 0.7,
     model_z = 1.5
@@ -245,7 +349,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/proc_arcane_impact_low.m2",
+    model_fileId = "spells/proc_arcane_impact_low.m2",
     model_x = 0,
     model_y = 0.8,
     model_z = 2
@@ -259,7 +363,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_godking_orangerune_state.m2",
+    model_fileId = "spells/7fx_godking_orangerune_state.m2",
   },
 })
 tinsert(templates, {
@@ -270,7 +374,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_godking_bluerune_state.m2",
+    model_fileId = "spells/7fx_godking_bluerune_state.m2",
   }
 })
 tinsert(templates, {
@@ -281,7 +385,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_godking_yellowrune_state.m2",
+    model_fileId = "spells/7fx_godking_yellowrune_state.m2",
   }
 })
 tinsert(templates, {
@@ -292,7 +396,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_godking_purplerune_state.m2",
+    model_fileId = "spells/7fx_godking_purplerune_state.m2",
   }
 })
 tinsert(templates, {
@@ -303,7 +407,7 @@ tinsert(templates, {
     height = 100,
     advance = true,
     sequence = 1,
-    model_path = "spells/7fx_godking_greenrune_state.m2",
+    model_fileId = "spells/7fx_godking_greenrune_state.m2",
   }
 })
 
