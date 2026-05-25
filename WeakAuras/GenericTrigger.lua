@@ -3136,6 +3136,10 @@ do
         if not(itemCdHandles[id]) then
           itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
         end
+
+        if not WeakAuras.IsPaused() then
+          Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id)
+        end
       end
     end
   end
