@@ -1,7 +1,7 @@
 local AddonName = ...
 local Private = select(2, ...)
 
-local internalVersion = 89
+local internalVersion = 90
 
 -- Lua APIs
 local insert = table.insert
@@ -1276,6 +1276,7 @@ loadedFrame:SetScript("OnEvent", function(self, event, ...)
       db.features = db.features or {}
       db.migrationCutoff = db.migrationCutoff or 730
       db.historyCutoff = db.historyCutoff or 730
+      db.lastLoaded = {}
 
       Private.SyncParentChildRelationships();
       local isFirstUIDValidation = db.dbVersion == nil or db.dbVersion < 26;
@@ -1383,8 +1384,20 @@ function WeakAuras.Toggle()
   end
 end
 
-function Private.SquelchingActions()
-  return squelch_actions;
+function Private.SquelchingActions(uid)
+  if squelch_actions then
+    return true
+  end
+
+  local data = Private.GetDataByUID(uid)
+  if data.information.squelchOnLoad then
+    local lastLoaded = db.lastLoaded[uid]
+    if lastLoaded and GetTime() - lastLoaded < 0.5 then
+      return true
+    end
+  end
+
+  return false
 end
 
 function Private.PauseAllDynamicGroups()
@@ -1825,8 +1838,11 @@ function Private.Resume()
 end
 
 function Private.LoadDisplays(toLoad, ...)
+  local currentTime = GetTime()
   for id in pairs(toLoad) do
-    local uid = WeakAuras.GetData(id).uid
+    local data = WeakAuras.GetData(id)
+    local uid = data.uid
+    db.lastLoaded[uid] = currentTime
     Private.RegisterForGlobalConditions(uid);
     triggerState[id].triggers = {};
     triggerState[id].activationTime = {}
@@ -1997,6 +2013,7 @@ function WeakAuras.Delete(data)
   end
 
   db.displays[id] = nil;
+  db.lastLoaded[uid] = nil
 
   Private.DeleteAuraEnvironment(id)
   triggerState[id] = nil;
@@ -2118,10 +2135,10 @@ function WeakAuras.Rename(data, newid)
 
   Private.ProfileRenameAura(oldid, newid);
 
+  Private.callbacks:Fire("Rename", data.uid, oldid, newid)
+
   -- TODO: This should not be necessary
   WeakAuras.Add(data)
-
-  Private.callbacks:Fire("Rename", data.uid, oldid, newid)
 end
 
 function Private.Convert(data, newType)
@@ -2673,6 +2690,10 @@ local function validateUserConfig(data, options, config)
           end
         elseif option.type == "multiselect" then
           local multiselect = config[key]
+          if type(multiselect) ~= "table" then
+            config[key] = {}
+            multiselect = config[key]
+          end
           for i, v in ipairs(multiselect) do
             if option.default[i] ~= nil then
               if type(v) ~= "boolean" then
@@ -2682,12 +2703,18 @@ local function validateUserConfig(data, options, config)
               multiselect[i] = nil
             end
           end
+          if type(option.default) ~= "table" then
+            option.default = {}
+          end
           for i, v in ipairs(option.default) do
             if type(multiselect[i]) ~= "boolean" then
               multiselect[i] = v
             end
           end
         elseif option.type == "color" then
+          if type(config[key]) ~= "table" then
+            config[key] = {}
+          end
           for i = 1, 4 do
             local c = config[key][i]
             if type(c) ~= "number" or c < 0 or c > 1 then
@@ -3225,6 +3252,7 @@ function Private.SetRegion(data, cloneId)
         end
       end
       region.id = id;
+      region.uid = data.uid
       region.cloneId = cloneId or "";
       Private.validate(data, regionTypes[regionType].default);
 
@@ -3385,7 +3413,7 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
     DEFAULT_CHAT_FRAME:AddMessage(message, r or 1, g or 1, b or 1);
   elseif message_type == "TTS" then
     if WeakAuras.IsAwesomeEnabled() == 2 then
-      if not Private.SquelchingActions() then
+      if not Private.SquelchingActions(region.uid) then
         pcall(function()
         local voice = C_TTSSettings and C_TTSSettings.GetSpeechVoiceID()
         if not voice then return end
@@ -5876,13 +5904,13 @@ function Private.FindUnusedId(prefix)
   return id
 end
 
-function WeakAuras.SetModel(frame, model_path, isUnit, isDisplayInfo)
+function WeakAuras.SetModel(frame, unused, model_fileId, isUnit, isDisplayInfo)
   if isDisplayInfo then
-    pcall(frame.SetDisplayInfo, frame, tonumber(model_path))
+    pcall(frame.SetDisplayInfo, frame, model_fileId)
   elseif isUnit then
-    pcall(frame.SetUnit, frame, model_path)
+    pcall(frame.SetUnit, frame, model_fileId)
   else
-    pcall(frame.SetModel, frame, model_path)
+    pcall(frame.SetModel, frame, model_fileId)
   end
 end
 

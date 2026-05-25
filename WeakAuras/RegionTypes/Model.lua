@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 local SharedMedia = LibStub("LibSharedMedia-3.0");
@@ -7,11 +9,20 @@ local L = WeakAuras.L;
 
 -- Default settings
 local default = {
-  model_path = "Creature/Arthaslichking/arthaslichking.m2",
+  model_fileId = "Creature/Arthaslichking/arthaslichking.m2", -- "122968"
   modelIsUnit = false,
+  api = false, -- false ==> SetPosition + SetFacing; true ==> SetTransform
   model_x = 0,
   model_y = 0,
   model_z = 0,
+  -- SetTransform
+  model_st_tx = 40,
+  model_st_ty = 0,
+  model_st_tz = 0,
+  model_st_rx = 90,
+  model_st_ry = 0,
+  model_st_rz = 90,
+  model_st_us = 40,
   width = 200,
   height = 200,
   sequence = 1,
@@ -99,15 +110,16 @@ local function create(parent)
 end
 
 local function CreateModel()
-  return CreateFrame("PlayerModel", nil, UIParent)
+  local frame = CreateFrame("PlayerModel", nil, UIParent)
+  return frame
 end
 
 -- Keep the two model apis separate
-local poolModelApi = CreateObjectPool(CreateModel)
-local poolUnitApi = CreateObjectPool(CreateModel)
+local poolOldApi = CreateObjectPool(CreateModel)
+local poolNewApi = CreateObjectPool(CreateModel)
 
 local function ConfigureModel(region, model, data)
-  model.modelIsUnit = data.modelIsUnit
+  model.api = data.api
 
   model:ClearAllPoints()
   model:SetAllPoints(region)
@@ -116,27 +128,44 @@ local function ConfigureModel(region, model, data)
   model:Show()
 
   -- Adjust model
-  WeakAuras.SetModel(model, data.model_path, data.modelIsUnit, data.modelDisplayInfo)
+  WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
+  model:SetPortraitZoom(data.portraitZoom and 1 or 0);
+  --model:ClearTransform()
   model:SetPosition(data.model_z, data.model_x, data.model_y);
   model:SetFacing(rad(region.rotation));
 
   model:SetScript("OnShow", function()
-    WeakAuras.SetModel(model, data.model_path, data.modelIsUnit, data.modelDisplayInfo)
+    WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
+    --model:ClearTransform()
     model:SetPosition(data.model_z, data.model_x, data.model_y);
     model:SetFacing(rad(region.rotation));
   end)
 
   if data.modelIsUnit then
     model:RegisterEvent("UNIT_MODEL_CHANGED");
-    if (data.model_path == "target") then
+
+    local unit = data.model_fileId
+
+    if (unit == "target") then
       model:RegisterEvent("PLAYER_TARGET_CHANGED");
-    elseif (data.model_path == "focus") then
+    elseif (unit == "focus") then
       model:RegisterEvent("PLAYER_FOCUS_CHANGED");
     end
     model:SetScript("OnEvent", function(self, event, unitId)
       Private.StartProfileSystem("model");
-      if (event ~= "UNIT_MODEL_CHANGED" or UnitIsUnit(unitId, data.model_path)) then
-        WeakAuras.SetModel(model, data.model_path, data.modelIsUnit, data.modelDisplayInfo)
+      if (event ~= "UNIT_MODEL_CHANGED" or UnitIsUnit(unitId, unit)) then
+        WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
+        if data.advance then
+          local elapsed = 0;
+          model:SetScript("OnUpdate", function(self, elaps)
+            Private.StartProfileSystem("model");
+            elapsed = elapsed + (elaps * 1000);
+            model:SetSequenceTime(data.sequence, elapsed);
+            Private.StopProfileSystem("model");
+          end)
+        else
+          model:SetScript("OnUpdate", nil)
+        end
       end
       Private.StopProfileSystem("model");
     end
@@ -149,7 +178,7 @@ local function ConfigureModel(region, model, data)
   end
 
   -- Enable model animation
-  if(data.advance) then
+  if data.advance then
     local elapsed = 0;
     model:SetScript("OnUpdate", function(self, elaps)
       Private.StartProfileSystem("model");
@@ -163,7 +192,7 @@ local function ConfigureModel(region, model, data)
 end
 
 local function AcquireModel(region, data)
-  local pool = data.modelIsUnit and poolUnitApi or poolModelApi
+  local pool = data.api and poolNewApi or poolOldApi
   local model = pool:Acquire()
   ConfigureModel(region, model, data)
   return model
@@ -177,7 +206,7 @@ local function ReleaseModel(model)
   model:UnregisterEvent("PLAYER_TARGET_CHANGED");
   model:UnregisterEvent("PLAYER_FOCUS_CHANGED");
   model:SetScript("OnEvent", nil);
-  local pool = model.modelIsUnit and poolUnitApi or poolModelApi
+  local pool = model.api and poolNewApi or poolOldApi
   pool:Release(model)
 end
 
