@@ -5904,13 +5904,13 @@ function Private.FindUnusedId(prefix)
   return id
 end
 
-function WeakAuras.SetModel(frame, model_path, isUnit, isDisplayInfo)
+function WeakAuras.SetModel(frame, unused, model_fileId, isUnit, isDisplayInfo)
   if isDisplayInfo then
-    pcall(frame.SetDisplayInfo, frame, tonumber(model_path))
+    pcall(frame.SetDisplayInfo, frame, model_fileId)
   elseif isUnit then
-    pcall(frame.SetUnit, frame, model_path)
+    pcall(frame.SetUnit, frame, model_fileId)
   else
-    pcall(frame.SetModel, frame, model_path)
+    pcall(frame.SetModel, frame, model_fileId)
   end
 end
 

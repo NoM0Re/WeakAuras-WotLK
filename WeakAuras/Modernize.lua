@@ -2,12 +2,15 @@ if not WeakAuras.IsLibsOK() then
   return
 end
 
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 local L = WeakAuras.L
 
 -- Takes as input a table of display data and attempts to update it to be compatible with the current version
 --- Modernizes the aura data
+---@param data auraData
 function Private.Modernize(data, oldSnapshot)
   if not data.internalVersion or data.internalVersion < 2 then
     WeakAuras.prettyPrint(string.format("Data for '%s' is too old, can't modernize.", data.id))
@@ -1777,7 +1780,12 @@ function Private.Modernize(data, oldSnapshot)
         end
       end
     end
+  end
 
+  if data.internalVersion < 72 then
+      if data.model_path and data.modelIsUnit then
+        data.model_fileId = data.model_path
+      end
   end
 
   if data.internalVersion < 73 then
@@ -2312,6 +2320,10 @@ function Private.Modernize(data, oldSnapshot)
   if data.internalVersion < 90 then
     if data.regionType == "aurabar" then
       data.toolTipArea = "ICON"
+    end
+    -- Migrate model fileId
+    if data.model_path and data.modelIsUnit then
+      data.model_fileId = data.model_path
     end
   end
 
