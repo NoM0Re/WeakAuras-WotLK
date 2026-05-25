@@ -1464,6 +1464,15 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   -- version 62 became 64 to fix a broken modernize
+
+  if data.internalVersion < 63 or isFromFork then
+    if data.regionType == "texture" then
+      if not data.rotate then
+        data.rotation = data.discrete_rotation
+      end
+    end
+  end
+
   if data.internalVersion < 64 or isFromFork then
     if data.regionType == "dynamicgroup" then
       if data.sort == "custom" and type(data.sortOn) ~= "string" or data.sortOn == "" then
