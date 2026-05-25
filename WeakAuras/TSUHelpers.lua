@@ -1,8 +1,12 @@
 if not WeakAuras.IsLibsOK() then return end
 
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
+---@alias key string | integer
+---@alias states table<key, state>
 local function fixMissingFields(state)
   if type(state) ~= "table" then return end
   -- set show
@@ -11,6 +15,7 @@ local function fixMissingFields(state)
   end
 end
 
+---@type fun(states: states, key: key): boolean
 local remove = function(states, key)
   local changed = false
   local state = states[key]
@@ -22,6 +27,7 @@ local remove = function(states, key)
   return changed
 end
 
+---@type fun(states: states): boolean
 local removeAll = function(states)
   local changed = false
   for cloneId in pairs(states) do
@@ -73,6 +79,7 @@ local function recurseReplaceOrUpdate(t1, t2, isRoot, replace)
   return changed
 end
 
+---@type fun(states: states, key: key, newState: state): boolean
 local replaceOrUpdate = function(states, key, newState, replace)
   local changed = false
   local state = states[key]
@@ -86,6 +93,7 @@ local replaceOrUpdate = function(states, key, newState, replace)
   return changed
 end
 
+---@type fun(states: states, key: key, newState: state): boolean
 local create = function(states, key, newState)
   states[key] = newState
   states[key].changed = true
@@ -93,6 +101,7 @@ local create = function(states, key, newState)
   return true
 end
 
+---@type fun(states: states, key: key?, newState: state): boolean
 local createOrUpdate = function(states, key, newState)
   key = key or ""
   if states[key] then
@@ -102,6 +111,7 @@ local createOrUpdate = function(states, key, newState)
   end
 end
 
+---@type fun(states: states, key: key, field: any?): any
 local get = function(states, key, field)
   key = key or ""
   local state = states[key]
@@ -114,6 +124,7 @@ local get = function(states, key, field)
   return nil
 end
 
+---@type fun(states: states, key: key?, newState: state): boolean
 local createOrReplace = function(states, key, newState)
   key = key or ""
   if states[key] then

@@ -1,6 +1,8 @@
 if not WeakAuras.IsLibsOK() then return end
 
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local createCenterLines = true -- Creates only the middle lines
@@ -19,6 +21,7 @@ local Round = OptionsPrivate.Round
 local tIndexOf = OptionsPrivate.tIndexOf
 local CreateLine = OptionsPrivate.CreateLine
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
@@ -369,7 +372,7 @@ local function ConstructSizer(frame)
   return top, topright, right, bottomright, bottom, bottomleft, left, topleft
 end
 
-local AlignmentLines = CreateFrame("Frame", nil, UIParent)
+local AlignmentLines = CreateFrame("Frame", nil, UIParent) --[[@as AlignmentLines]]
 AlignmentLines:SetAllPoints(UIParent)
 AlignmentLines:SetFrameStrata("BACKGROUND")
 
@@ -600,6 +603,8 @@ local function AlignToPixelY(virY)
   return Round(virY * 1)
 end
 
+---@param self AlignmentLines
+---@param sizerPoint AnchorPoint?
 AlignmentLines.CreateMiddleLines = function(self, sizerPoint)
   if not createCenterLines then
     return
@@ -748,6 +753,7 @@ AlignmentLines.MergeLineInformation = function(self, lines)
   return result
 end
 
+---@param self AlignmentLines
 AlignmentLines.CleanUpLines = function(self)
   for _, line in pairs(self.horizontalLines) do
     line:Release()
@@ -761,6 +767,9 @@ AlignmentLines.CleanUpLines = function(self)
   wipe(self.verticalLines)
 end
 
+---@param self AlignmentLines
+---@param data auraData
+---@param sizerPoint AnchorPoint?
 AlignmentLines.CreateLines = function(self, data, sizerPoint)
   self:CleanUpLines()
 
@@ -799,6 +808,10 @@ AlignmentLines.CreateLines = function(self, data, sizerPoint)
   end
 end
 
+---@param lines AlignmentLine[]
+---@param positions table<"LEFT"|"RIGHT"|"TOP"|"BOTTOM"|"CENTERX"|"CENTERY", number>
+---@param auraSize number?
+---@return number? -- The delta
 local function SelectLines(lines, positions, auraSize)
   if #lines == 0 then
     -- Nothing to do

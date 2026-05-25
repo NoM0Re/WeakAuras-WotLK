@@ -1,4 +1,6 @@
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local ipairs = ipairs

@@ -1,7 +1,10 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local prettyPrint = WeakAuras.prettyPrint
@@ -225,6 +228,7 @@ local RegisterProfile = function(startType)
   return delayedStart
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.StartProfile(startType)
   if currentProfileState == "profiling" then
     prettyPrint(L["Profiling already started."])
@@ -254,6 +258,7 @@ end
 local function doNothing()
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.StopProfile()
   if (currentProfileState ~= "profiling") then
     prettyPrint(L["Profiling not running."])
@@ -377,6 +382,7 @@ local function unitEventToMultiUnit(event)
   return event
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.PrintProfile()
   local popup = ProfilePopup()
   if not profileData.systems.time then

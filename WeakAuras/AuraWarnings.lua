@@ -1,7 +1,10 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
@@ -71,6 +74,11 @@ local titles = {
   error = L["Error"],
 }
 
+---@param result string
+---@param messages string[]
+---@param icon string
+---@param mixedSeverity boolean
+---@return string
 local function AddMessages(result, messages, icon, mixedSeverity)
   if not messages then
     return result
@@ -95,6 +103,7 @@ function Private.AuraWarnings.FormatWarnings(uid)
   local maxSeverity
   local mixedSeverity = false
 
+  ---@type table<AuraWarningSeverity, string[]>
   local messagePerSeverity = {}
 
   for key, warning in pairs(warnings[uid]) do

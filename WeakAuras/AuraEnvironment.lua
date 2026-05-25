@@ -1,7 +1,10 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
@@ -420,6 +423,10 @@ local function MakeReadOnly(input, options)
 end
 
 --- Wraps a table, so that accessing any key in it creates a deprecated warning
+---@param input table
+---@param name string
+---@param warningMsg string
+---@return table
 local function MakeDeprecated(input, name, warningMsg)
   return setmetatable({},
   {

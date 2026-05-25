@@ -1,8 +1,22 @@
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 -- BuildTypes "dev" | "pr" | "alpha" | "beta" | "release"
+---@alias BuildType "dev" | "pr" | "alpha" | "beta" | "release"
+---@class feature
+---@field id string
+---@field autoEnable? BuildType[]
+---@field requiredByAura? fun(self: self, aura: auraData): boolean
+---@field enabled? boolean
+---@field persist? true
+---@field sub? SubscribableObject
 
+---@class Features
+---@field private db? table<string, boolean>
+---@field private __feats table<string, feature>
+---@field private hydrated boolean
 local Features = {
   __feats = {},
   hydrated = false,
@@ -10,14 +24,17 @@ local Features = {
 Private.Features = Features
 
 
+---@param id string
 function Features:Exists(id)
   return self.__feats[id] ~= nil
 end
 
+---@param id string
 function Features:Enabled(id)
     return self.hydrated and self:Exists(id) and self.__feats[id].enabled
 end
 
+---@param id string
 function Features:Enable(id)
   if not self:Exists(id) then return end
   if not self.hydrated then
@@ -31,6 +48,7 @@ function Features:Enable(id)
   end
 end
 
+---@param id string
 function Features:Disable(id)
   if not self:Exists(id) then return end
   if not self.hydrated then
@@ -44,6 +62,7 @@ function Features:Disable(id)
   end
 end
 
+---@return {id: string, enabled: boolean}[]
 function Features:ListFeatures()
   if not self.hydrated then return {} end
   local list = {}
@@ -82,6 +101,7 @@ function Features:Hydrate()
   end
 end
 
+---@param feature feature
 function Features:Register(feature)
   if self.hydrated then
     error("Cannot register a feature after hydration", 2)
@@ -92,6 +112,9 @@ function Features:Register(feature)
   end
 end
 
+---@param id string
+---@param enabledFunc function
+---@param disabledFunc? function
 ---hide a code path behind a feature flag,
 ---optionally provide a disabled path
 function Features:Wrap(id, enabledFunc, disabledFunc)
@@ -106,6 +129,8 @@ function Features:Wrap(id, enabledFunc, disabledFunc)
   end
 end
 
+---@param data auraData
+---@return boolean, table<string, boolean>
 function Features:AuraCanFunction(data)
   local enabled = true
   local reasons = {}
@@ -120,6 +145,9 @@ function Features:AuraCanFunction(data)
   return enabled, reasons
 end
 
+---@param id string
+---@param enable function
+---@param disable function
 function Features:Subscribe(id, enable, disable)
   local tbl = {
     Enable = enable,

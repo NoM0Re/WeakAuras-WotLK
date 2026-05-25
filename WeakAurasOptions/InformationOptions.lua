@@ -1,10 +1,14 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L
 
 --- Creates the options for one aura
+---@param data auraData
+---@return table
 function OptionsPrivate.GetInformationOptions(data)
   local isGroup = data.controlledChildren and true or false
   local isTmpGroup = type(data.id) == "table"

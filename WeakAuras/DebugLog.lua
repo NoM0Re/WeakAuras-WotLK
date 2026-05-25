@@ -1,7 +1,10 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
@@ -41,6 +44,9 @@ local function serialize(log, input)
   end
 end
 
+---@param uid uid
+---@param text string
+---@param ... any
 function Private.DebugLog.Print(uid, text, ...)
   if enabled[uid] then
     local log = debugLogs[uid]
@@ -64,10 +70,13 @@ function Private.DebugLog.Print(uid, text, ...)
   end
 end
 
+---@param self any
+---@param msg string
 local function AddMessage(self, msg)
   tinsert(self, msg)
 end
 
+---@param uid uid
 function Private.DebugLog.Clear(uid)
   if enabled[uid] then
     debugLogs[uid] = {
@@ -79,6 +88,8 @@ function Private.DebugLog.Clear(uid)
   end
 end
 
+---@param uid uid
+---@param enable boolean
 function Private.DebugLog.SetEnabled(uid, enable)
   if enabled[uid] == enable then
     return
@@ -95,16 +106,22 @@ function Private.DebugLog.SetEnabled(uid, enable)
   end
 end
 
+---@param uid uid
+---@return boolean
 function Private.DebugLog.IsEnabled(uid)
   return enabled[uid]
 end
 
+---@param uid uid
+---@return string?
 function Private.DebugLog.GetLogs(uid)
   if debugLogs[uid] then
     return table.concat(debugLogs[uid], "\n")
   end
 end
 
+---@param _ any
+---@param uid uid
 local function OnDelete(_, uid)
   debugLogs[uid] = nil
   enabled[uid] = nil

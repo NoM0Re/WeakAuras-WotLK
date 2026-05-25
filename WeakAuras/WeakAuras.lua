@@ -1,4 +1,6 @@
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 local internalVersion = 90
@@ -34,6 +36,7 @@ local GetNumGroupMembers = Private.GetNumGroupMembers
 local Round, MergeTable = Private.Round, Private.MergeTable
 
 local ADDON_NAME = "WeakAuras"
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local versionString = WeakAuras.versionString
@@ -276,6 +279,7 @@ BINDING_NAME_WEAKAURASPRINTPROFILING = L["Print Profiling Results"]
 -- Noteable properties:
 --  debug: If set to true, WeakAura.debug() outputs messages to the chat frame
 --  displays: All aura settings, keyed on their id
+---@class WeakAurasSaved
 local db;
 
 -- While true no events are handled. E.g. WeakAuras is paused while the Options dialog is open
@@ -390,6 +394,8 @@ do
   end
 end
 
+---@param unit UnitToken
+---@return boolean isPet
 WeakAuras.UnitIsPet = function(unit)
   return WeakAuras.petUnitToUnit[unit] ~= nil
 end
@@ -423,6 +429,7 @@ function Private.validate(input, default)
   end
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function Private.RegisterRegionType(name, createFunction, modifyFunction, default, properties, validate)
   if not(name) then
     error("Improper arguments to Private.RegisterRegionType - name is not defined", 2);
@@ -455,6 +462,18 @@ function Private.RegisterRegionType(name, createFunction, modifyFunction, defaul
   end
 end
 
+---@private
+---@param name string
+---@param displayName string
+---@param supportFunction function
+---@param createFunction function
+---@param modifyFunction function
+---@param onAcquire function
+---@param onRelease function
+---@param default table
+---@param addDefaultsForNewAura function
+---@param properties table
+---@param supportsAdd? boolean
 function WeakAuras.RegisterSubRegionType(name, displayName, supportFunction, createFunction, modifyFunction, onAcquire, onRelease, default, addDefaultsForNewAura, properties, supportsAdd)
   if not(name) then
     error("Improper arguments to WeakAuras.RegisterSubRegionType - name is not defined", 2);
@@ -517,6 +536,7 @@ function WeakAuras.RegisterSubRegionType(name, displayName, supportFunction, cre
   end
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function Private.RegisterRegionOptions(name, createFunction, icon, displayName, createThumbnail, modifyThumbnail, description, templates, getAnchors)
   if not(name) then
     error("Improper arguments to Private.RegisterRegionOptions - name is not defined", 2);
@@ -580,6 +600,11 @@ function Private.RegisterRegionOptions(name, createFunction, icon, displayName, 
   end
 end
 
+---@private
+---@param name string
+---@param createFunction function
+---@param description string
+---@param getAnchors function?
 function WeakAuras.RegisterSubRegionOptions(name, createFunction, description, getAnchors)
   if not(name) then
     error("Improper arguments to WeakAuras.RegisterSubRegionOptions - name is not defined", 2);
@@ -603,6 +628,7 @@ function WeakAuras.RegisterSubRegionOptions(name, createFunction, description, g
 end
 
 -- This function is replaced in WeakAurasOptions.lua
+---@diagnostic disable-next-line: duplicate-set-field (it's replaced in WeakAurasOptions.lua)
 function WeakAuras.IsOptionsOpen()
   return false;
 end
@@ -1258,6 +1284,7 @@ local isInitialLogin
 loadedFrame:SetScript("OnEvent", function(self, event, ...)
   if(event == "ADDON_LOADED") then
     if(... == ADDON_NAME) then
+      ---@type WeakAurasSaved
       WeakAurasSaved = WeakAurasSaved or {};
       db = WeakAurasSaved;
       Private.db = db
@@ -1446,6 +1473,10 @@ local function DestroyEncounterTable()
 end
 
 local function CreateEncounterTable(encounter_id)
+  ---@class CurrentEncounter
+  ---@field encounterId number
+  ---@field zone_id number
+  ---@field boss_guids number[]
   WeakAuras.CurrentEncounter = {
     id = encounter_id,
     zone_id = GetCurrentMapAreaID(),
@@ -1515,10 +1546,12 @@ local function GetInstanceTypeAndSize()
   return "none", "none", nil, nil
 end
 
+---@return string instanceType
 function WeakAuras.InstanceType()
   return (GetInstanceTypeAndSize())
 end
 
+---@return string difficulty
 function WeakAuras.InstanceDifficulty()
   return select(2, GetInstanceTypeAndSize())
 end
@@ -1653,6 +1686,7 @@ function Private.ScanForLoadsGroup(toCheck)
     local data = WeakAuras.GetData(id)
     if(data.controlledChildren) then
       if(#data.controlledChildren > 0) then
+        ---@type boolean?
         local any_loaded = false;
         for child in Private.TraverseLeafs(data) do
           if(loaded[child.id] ~= nil) then
@@ -1937,6 +1971,7 @@ function Private.UIDtoID(uid)
   return UIDtoID[uid]
 end
 
+---@private
 function WeakAuras.Delete(data)
   Private.TimeMachine:DestroyTheUniverse(data.id)
   local id = data.id;
@@ -2431,7 +2466,10 @@ local function loadOrder(tbl, idtable)
   return order
 end
 
+---@type fun(data: auraData)
 local pAdd
+---@param tbl auraData[]
+---@param takeSnapshots boolean
 function Private.AddMany(tbl, takeSnapshots)
   local idtable = {};
   local anchorTargets = {}
@@ -3291,6 +3329,9 @@ function Private.SetRegion(data, cloneId)
   end
 end
 
+---@param id auraId
+---@param cloneId string
+---@return table
 local function EnsureClone(id, cloneId)
   clones[id] = clones[id] or {}
   if not(clones[id][cloneId]) then
@@ -3307,6 +3348,8 @@ function Private.CreatingRegions()
 end
 
 --- Ensures that a region exists
+---@param id auraId
+---@return table
 local function EnsureRegion(id)
   if not Private.regions[id] or not Private.regions[id].region then
     Private.regions[id] = Private.regions[id] or {}
@@ -3348,6 +3391,9 @@ function Private.EnsureRegion(id, cloneId)
 end
 
 ---returns the region, if it exists
+---@param id auraId
+---@param cloneId string|nil
+---@return table|nil
 function WeakAuras.GetRegion(id, cloneId)
   if(cloneId and cloneId ~= "") then
     return clones[id] and clones[id][cloneId]
@@ -4282,9 +4328,17 @@ function WeakAuras.EnsureString(input)
 end
 
 -- Handle coroutines
+---@alias threadPriority 'urgent' | 'normal' | 'background' | 'instant'
+---@alias threadPool table<string, threadData>
+---@class threadData
+---@field thread thread
+---@field sequence table<string, number> to help debug problems in threads
+---@class Threads
+---@field pools table<threadPriority, threadPool>
 local threads = {
   frame = CreateFrame("Frame"),
   size = 0,
+  ---@type table<string, threadPriority>
   prios = {},
   pools = {
     urgent = {},
@@ -4294,6 +4348,7 @@ local threads = {
   },
 };
 do
+  ---@type table<threadPriority, true>
   local validPriorities = {
     urgent = true,
     normal = true,
@@ -4302,6 +4357,9 @@ do
   }
 
   -- Add an action to be resumed via OnUpdate
+  ---@param name string
+  ---@param thread thread | function
+  ---@param prio threadPriority?
   function threads:Add(name, thread, prio)
     if not prio or not validPriorities[prio] then
       prio = "normal"
@@ -4320,6 +4378,8 @@ do
     end
   end
 
+  ---@param name string
+  ---@param prio threadPriority
   function threads:SetPriority(name, prio)
     local oldPrio = self.prios[name]
     if oldPrio and oldPrio ~= prio then
@@ -4330,6 +4390,7 @@ do
   end
 
   -- Remove an action from OnUpdate
+  ---@param name string
   function threads:Remove(name)
     local prio = self.prios[name]
     if prio then
@@ -4343,6 +4404,9 @@ do
     end
   end
 
+  ---@param pool threadPool
+  ---@param finish number
+  ---@param defaultEstimate number
   local function runThreadPool(pool, finish, defaultEstimate)
     local start = debugprofilestop()
     if finish <= start then return end
@@ -4363,7 +4427,7 @@ do
           end
           if coroutine.status(threadData.thread) ~= "dead" then
             estimates[name] = type(val1) == "number" and val1 or defaultEstimate
-            local sequence = val2 or ""
+            local sequence = val2 or "" --[[@as string]]
             threadData.sequence[sequence] = (threadData.sequence[sequence] or 0) + 1
           else
             threads:Remove(name)
@@ -4373,6 +4437,10 @@ do
     until not continue
   end
 
+  ---@param name string
+  ---@param func thread
+  ---@param limit number
+  ---@param defaultEstimate number?
   function threads:Immediate(name, func, limit, defaultEstimate)
     self:Add(name, func, "instant")
     runThreadPool(self.pools.instant, debugprofilestop() + limit, defaultEstimate or 1000)
@@ -5418,6 +5486,7 @@ local function ensureMouseFrame()
   if (mouseFrame) then
     return;
   end
+  ---@class Frame
   mouseFrame = CreateFrame("Frame", "WeakAurasAttachToMouseFrame", UIParent);
   mouseFrame.attachedVisibleFrames = {};
   mouseFrame:SetWidth(1);
@@ -5932,6 +6001,8 @@ end
 
 -- SafeToNumber converts a string to number, but only if it fits into a unsigned 32bit integer
 -- The C api often takes only 32bit values, and complains if passed a value outside
+---@param input any
+---@return number|nil number
 function WeakAuras.SafeToNumber(input)
   local nr = tonumber(input)
   return nr and (nr < 2147483648 and nr > -2147483649) and nr or nil
@@ -5956,6 +6027,8 @@ local textSymbols = {
   ["{rt16}"] = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcons.blp:0:0:0:0:64:64:48:64:48:64|t",
 }
 
+---@param txt string
+---@return string result
 function WeakAuras.ReplaceRaidMarkerSymbols(txt)
   local start = 1
 
@@ -6037,6 +6110,8 @@ do
     trackableUnits["nameplate" .. i] = true
   end
 
+  ---@param unit UnitToken
+  ---@return boolean result
   function WeakAuras.UntrackableUnit(unit)
     return not trackableUnits[unit]
   end
@@ -6044,6 +6119,9 @@ end
 
 do
   local ownRealm = GetRealmName()
+  ---@param unit UnitToken
+  ---@return string name
+  ---@return string realm
   function WeakAuras.UnitNameWithRealm(unit)
     local name, realm = UnitName(unit)
     return name or "", realm or ownRealm or ""
@@ -6213,6 +6291,7 @@ end
 
 -- Helper function to make the templates not care, how the generic triggers
 -- are categorized
+---@private
 function WeakAuras.GetTriggerCategoryFor(triggerType)
   local prototype = Private.event_prototypes[triggerType]
   return prototype and prototype.type
@@ -6328,6 +6407,8 @@ do
   end
 
   -- Returns whether the data is a group or dynamicgroup
+  ---@param data auraData
+  ---@return boolean
   function Private.IsGroupType(data)
     return data.regionType == "group" or data.regionType == "dynamicgroup"
   end

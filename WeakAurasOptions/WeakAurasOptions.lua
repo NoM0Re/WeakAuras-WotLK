@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 -- Lua APIs
@@ -17,6 +19,7 @@ local tAppendAll = OptionsPrivate.tAppendAll
 
 local AceGUI = LibStub("AceGUI-3.0")
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local ADDON_NAME = "WeakAurasOptions";
@@ -571,6 +574,7 @@ local function OptionsFrame()
 end
 
 if not WeakAuras.ToggleOptions then
+  ---@type fun(msg: string, Private: Private)
   function WeakAuras.ToggleOptions(msg, Private)
     if not Private then
       return
@@ -1636,6 +1640,7 @@ end
 function OptionsPrivate.DropIndicator()
   local indicator = frame.dropIndicator
   if not indicator then
+    ---@class Frame
     indicator = CreateFrame("Frame", "WeakAuras_DropIndicator")
     indicator:SetHeight(4)
     indicator:SetFrameStrata("FULLSCREEN")

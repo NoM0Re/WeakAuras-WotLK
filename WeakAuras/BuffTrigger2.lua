@@ -44,7 +44,9 @@ GetTriggerConditions(data, triggernum)
 Returns the potential conditions for a trigger
 ]=]--
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 local function FixDebuffClass(debuffClass)
@@ -67,6 +69,7 @@ local GetNumSubgroupMembers = Private.GetNumSubgroupMembers
 local GetNumGroupMembers = Private.GetNumGroupMembers
 local UnitAura = UnitAura
 
+---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local timer = WeakAuras.timer
@@ -1301,6 +1304,7 @@ local function UpdateTriggerState(time, id, triggernum)
   local updated
   local nextCheck
   local matchCount = 0
+  ---@type number?
   local totalStacks = 0
   local unitCount = 0
   local auraDatas = {}

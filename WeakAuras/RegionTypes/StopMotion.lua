@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class Private
 local Private = select(2, ...)
 
 local L = WeakAuras.L;
@@ -95,6 +97,7 @@ local function GetProperties(data)
   return result
 end
 
+---@type fun(parent: WARegion) : StopMotionRegion
 local function create(parent)
   local frame = CreateFrame("Frame", nil, UIParent)
   frame:SetMovable(true)
@@ -136,6 +139,7 @@ local FrameTickFunctions = {
   end,
 }
 
+---@type fun(parent: Region, region: StopMotionRegion, data: table)
 local function modify(parent, region, data)
     Private.regionPrototype.modify(parent, region, data)
 
