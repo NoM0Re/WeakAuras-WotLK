@@ -1,5 +1,7 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
 local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L;
@@ -106,6 +108,7 @@ local function GetCustomTriggerOptions(data, triggernum)
       type = "input",
       multiline = true,
       control = "WeakAuras-MultiLineEditBoxWithEnter",
+      LAAC = { disableFunctions = true, disableSystems = true },
       width = WeakAuras.doubleWidth,
       name = L["Event(s)"],
       desc = L["Custom trigger status tooltip"],
@@ -123,6 +126,7 @@ local function GetCustomTriggerOptions(data, triggernum)
       type = "input",
       multiline = true,
       control = "WeakAuras-MultiLineEditBoxWithEnter",
+      LAAC = { disableFunctions = true, disableSystems = true },
       name = L["Event(s)"],
       desc = L["Custom trigger event tooltip"],
       width = WeakAuras.doubleWidth,

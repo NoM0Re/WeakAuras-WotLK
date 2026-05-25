@@ -65,9 +65,17 @@ end, true)
 
 TimeMachine:RegisterEffect("options_cu", function(uid, data)
   if WeakAuras.IsOptionsOpen() then
-    WeakAuras.ClearAndUpdateOptions(data.id, true)
+    WeakAuras.ClearOptions(data.id)
   end
 end, true)
+
+TimeMachine.sub:AddSubscriber("Step", {
+  Step = function()
+    if WeakAuras.IsOptionsOpen() then
+      WeakAuras.ClearAndUpdateOptions()
+    end
+  end
+  })
 
 function TimeMachine:RegisterAction(actionType, actor, inverter, autoEffects)
   if self.actions[actionType] then
@@ -195,9 +203,24 @@ function TimeMachine:StartTransaction()
   self.transaction = true
 end
 
+local function FormatPayload(payload)
+  if type(payload) == "table" then
+    local result = {}
+    for k, v in pairs(payload) do
+      if type(v) == "table" then
+        tinsert(result, k .. ": (table)")
+      else
+        tinsert(result, k .. ":" .. tostring(v))
+      end
+    end
+    return table.concat(result, ", ")
+  end
+  return payload
+end
+
 function TimeMachine:Append(record)
   local action = self.actions[record.actionType]
-  Private.DebugPrint("Forward action", record.actionType, "for", record.uid, "at", keyPathToString(record.path), "with", record.payload)
+  Private.DebugPrint("Forward action", record.actionType, "for", record.uid, "at", keyPathToString(record.path), "with", FormatPayload(record.payload))
   if not action then
     error("No action for actionType: " .. record.actionType)
   end
@@ -214,7 +237,7 @@ function TimeMachine:Append(record)
     suppressAutoEffects = record.suppressAutoEffects and CopyTable(record.suppressAutoEffects) or nil,
     effects = record.effects and invertEffects(record.effects) or nil,
   }
-  Private.DebugPrint("Backward action", actionType, "for", record.uid, "at", keyPathToString(path), "with", payload)
+  Private.DebugPrint("Backward action", actionType, "for", record.uid, "at", keyPathToString(path), "with", FormatPayload(payload))
   table.insert(self.next.forward, record)
   table.insert(self.next.backward, 1, inverseRecord)
   if not self.transaction then
@@ -249,6 +272,13 @@ function TimeMachine:Commit(instant)
     WeakAuras.prettyPrint("If you're reading this, a time machine transaction was committed, but there was no transaction in progress. That's not supposed to happen. Please report this to the WeakAuras developers, thanks!")
     return
   end
+
+  if next(self.next.forward) == nil then
+    -- No actual changes, probably because of old code
+    self.transaction = false
+    return
+  end
+
   while self.index < #self.changes do
     table.remove(self.changes)
   end

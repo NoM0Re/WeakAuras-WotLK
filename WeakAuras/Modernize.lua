@@ -2318,6 +2318,9 @@ function Private.Modernize(data, oldSnapshot)
   end
 
   if data.internalVersion < 90 then
+    if data.regionType == "aurabar" then
+      data.toolTipArea = "ICON"
+    end
     -- Migrate model fileId
     if data.model_path and data.modelIsUnit then
       data.model_fileId = data.model_path
