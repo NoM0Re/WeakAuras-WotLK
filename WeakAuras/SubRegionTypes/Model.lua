@@ -12,14 +12,22 @@ local default = function(parentType)
   return {
     model_visible = true,
     model_alpha = 1,
-
+    api = false,
     model_x = 0,
     model_y = 0,
     model_z = 0,
     rotation = 0,
+    -- SetTransform
+    model_st_tx = 0,
+    model_st_ty = 0,
+    model_st_tz = 0,
+    model_st_rx = 270,
+    model_st_ry = 0,
+    model_st_rz = 0,
+    model_st_us = 40,
 
-    model_path = "Creature/Arthaslichking/arthaslichking.m2",
-    bar_model_clip = true
+    model_fileId = "Creature/Arthaslichking/arthaslichking.m2", -- "122968"
+    bar_model_attach = true
   }
 end
 
@@ -46,8 +54,12 @@ local function PreShow(self)
   self:Show()
 
   -- Adjust model
-  self:SetModel(data.model_path)
+  local modelId = data.model_fileId
+  if modelId then
+    pcall(self.SetModel, self, modelId)
+  end
 
+  --self:ClearTransform()
   self:SetPosition(data.model_z, data.model_x, data.model_y);
   self:SetFacing(rad(data.rotation))
   self:SetAlpha(self.region.alpha)
@@ -60,28 +72,40 @@ local function CreateModel()
 end
 
 -- Keep the two model apis separate
-local pool = CreateObjectPool(CreateModel)
+local poolOldApi = CreateObjectPool(CreateModel)
+local poolNewApi = CreateObjectPool(CreateModel)
+
 
 local function AcquireModel(region, data)
+  local pool = data.api and poolNewApi or poolOldApi
   local model = pool:Acquire()
   model.data = data
   Private.barmodels[model] = true
-
-  model:ClearAllPoints()
+  model.api = data.api
 
   local anchor
   if region.parentType == "aurabar" then
+    if data.bar_model_attach then
+      if data.bar_model_stretch then
+        anchor = region.parent.bar.fgMask
+      else
+        anchor = region.parent.bar
+      end
+    else
     anchor = region.parent.bar
+    end
   else
     anchor = region.parent
   end
 
+
   local extra_width, extra_height = 0, 0
-  if not(data.bar_model_clip and region.parentType == "aurabar") then
+  if not(data.bar_model_attach and region.parentType == "aurabar") then
     extra_width = data.extra_width or 0
     extra_height = data.extra_height or 0
   end
 
+  model:ClearAllPoints()
   model:SetPoint("TOPLEFT", anchor ,"TOPLEFT", -extra_width/2, extra_height/2)
   model:SetPoint("BOTTOMRIGHT", anchor ,"BOTTOMRIGHT", extra_width/2, -extra_height/2)
 
@@ -90,20 +114,21 @@ local function AcquireModel(region, data)
   model:Show()
 
   -- Adjust model
-  model:SetModel(data.model_path)
-  model:SetPosition(data.model_z, data.model_x, data.model_y);
-  model:SetScript("OnShow", function()
-    model:SetModel(data.model_path)
-    model:SetPosition(data.model_z, data.model_x, data.model_y);
-  end)
-  model:SetFacing(rad(data.rotation))
+  local modelId = data.model_fileId
+  if modelId then
+    pcall(model.SetModel, model, modelId)
+  end
 
+  --model:ClearTransform()
+  model:SetPosition(data.model_z, data.model_x, data.model_y);
+  model:SetFacing(rad(data.rotation))
   return model
 end
 
 local function ReleaseModel(model)
   --model:SetKeepModelOnHide(false)
   model:Hide()
+  local pool = model.api and poolNewApi or poolOldApi
   pool:Release(model)
   Private.barmodels[model] = nil
 end
@@ -158,6 +183,7 @@ local funcs = {
 
 local function create()
   local subRegion = CreateFrame("Frame", nil, UIParent)
+  --subRegion:SetFlattensRenderLayers(true)
   --subRegion:SetClipsChildren(true)
 
   for k, v in pairs(funcs) do
@@ -190,7 +216,7 @@ local function modify(parent, region, parentData, data, first)
 
   local anchor
   if parentData.regionType == "aurabar" then
-    if data.bar_model_clip then
+    if data.bar_model_attach then
       anchor = parent.bar.fgMask
     else
       anchor = parent.bar
@@ -200,7 +226,7 @@ local function modify(parent, region, parentData, data, first)
   end
 
   local extra_width, extra_height = 0, 0
-  if not(data.bar_model_clip and parentData.regionType == "aurabar") then
+  if not(data.bar_model_attach and parentData.regionType == "aurabar") then
     extra_width = data.extra_width or 0
     extra_height = data.extra_height or 0
   end
