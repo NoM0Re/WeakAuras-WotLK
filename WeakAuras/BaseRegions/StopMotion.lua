@@ -8,9 +8,49 @@ local Private = select(2, ...)
 local L = WeakAuras.L
 local texture_data = WeakAuras.StopMotion.texture_data
 
+--- @class StopMotionBase
 Private.StopMotionBase = {}
 
+--- @alias StopMotionAnimationType "progress"|"timed"|"background"
+
+--- @class StopMotionBaseInstance
+--- @field texture Texture
+--- @field startTime number?
+--- @field currentFrame number?
+--- @field inverseDirection boolean?
+--- @field frameRate number
+--- @field animationType StopMotionAnimationType
+--- @field textureFile number
+--- @field startFrame number
+--- @field endFrame number
+--- @field lastFrame number
+--- @field rows number
+--- @field columns number
+--- @field fileWidth number
+--- @field fileHeight number
+--- @field frameWidth number
+--- @field frameHeight number
+--- @field SetBaseTexture fun(self: StopMotionBaseInstance, texture: string)
+--- @field SetFrame fun(self: StopMotionBaseInstance, texture: string, frame: number)
+
+--- @class StopMotionOptions
+--- @field frameRate number?
+--- @field inverseDirection boolean?
+--- @field animationType StopMotionAnimationType
+--- @field startPercent number
+--- @field endPercent number
+--- @field texture string|number
+--- @field blendMode BlendMode
+--- @field customFrames number?
+--- @field customRows number?
+--- @field customColumns number?
+--- @field customFileWidth number?
+--- @field customFrameWidth number?
+--- @field customFrameHeight number?
+
 -- Helper method for Options
+
+--- @type fun(textureName: string): boolean
 function Private.StopMotionBase.textureNameHasData(textureName)
   if not textureName then
     return false
@@ -27,6 +67,7 @@ function Private.StopMotionBase.textureNameHasData(textureName)
   end
 end
 
+--- @type fun(texture: string, frame: number, rows: number, columns: number, frameScaleW: number, frameScaleH: number)
 local function setTile(texture, frame, rows, columns, frameScaleW, frameScaleH)
   frame = frame - 1
   local row = floor(frame / columns)
@@ -46,6 +87,7 @@ end
 WeakAuras.setTile = setTile
 
 -- Helper method for Options
+--- @type fun(textureWidget: table, texturePath: string, textureName: string)
 function Private.StopMotionBase.setTextureFunc(textureWidget, texturePath, textureName)
   local data = texture_data[texturePath]
   if not(data) then
@@ -86,7 +128,7 @@ function Private.StopMotionBase.setTextureFunc(textureWidget, texturePath, textu
   if (data) then
       if (data.rows and data.columns) then
         -- Texture Atlas
-        textureWidget:SetTexture(texturePath, textureName)
+        textureWidget:SetTexture(texturePath)
 
         setTile(textureWidget, data.count, data.rows, data.columns, data.frameScaleW or 1, data.frameScaleH or 1)
 
@@ -103,8 +145,8 @@ function Private.StopMotionBase.setTextureFunc(textureWidget, texturePath, textu
         end)
       else
         -- Numbered Textures
-        local texture = texturePath .. string.format("%03d", texture_data[texturePath].count)
-        textureWidget:SetTexture(texture, textureName)
+        local texture = texturePath .. format("%03d", texture_data[texturePath].count)
+        textureWidget:SetTexture(texture)
         textureWidget:SetTexCoord(0, 1, 0, 1)
 
         textureWidget:SetOnUpdate(function(self, elapsed)
@@ -115,21 +157,23 @@ function Private.StopMotionBase.setTextureFunc(textureWidget, texturePath, textu
             if (textureWidget.frameNr == data.count) then
               textureWidget.frameNr = 1
             end
-            local texture = texturePath .. string.format("%03d", textureWidget.frameNr)
+            local texture = texturePath .. format("%03d", textureWidget.frameNr)
             textureWidget:SetTexture(texture, textureName)
           end
         end)
       end
   else
-    local texture = texturePath .. string.format("%03d", 1)
-    textureWidget:SetTexture(texture, textureName)
+    local texture = texturePath .. format("%03d", 1)
+    textureWidget:SetTexture(texture)
   end
 end
 
+--- @type fun(self: StopMotionBaseInstance, texture: string)
 local function SetTextureViaAtlas(self, texture)
   self.texture:SetTexture(texture)
 end
 
+--- @type fun(self: StopMotionBaseInstance, texture: string, frame: number)
 local function SetFrameViaAtlas(self, texture, frame)
   local frameScaleW = 1
   local frameScaleH = 1
@@ -142,28 +186,39 @@ local function SetFrameViaAtlas(self, texture, frame)
   setTile(self.texture, frame, self.rows, self.columns, frameScaleW, frameScaleH)
 end
 
+--- @type fun(self: StopMotionBaseInstance, texture: string)
 local function SetTextureViaFrames(self, texture)
-  self.texture:SetTexture(texture .. string.format("%03d", 0))
+  self.texture:SetTexture(texture .. format("%03d", 0))
   self.texture:SetTexCoord(0, 1, 0, 1)
 end
 
+--- @type fun(self: StopMotionBaseInstance, texture: string, frame: number)
 local function SetFrameViaFrames(self, texture, frame)
-  self.texture:SetTexture(texture .. string.format("%03d", frame))
+  self.texture:SetTexture(texture .. format("%03d", frame))
 end
 
+  --- @class StopMotionBaseInstance
 local funcs = {
+  --- @type fun(self: StopMotionBaseInstance, b: boolean)
   SetDesaturated = function(self, b)
     self.texture:SetDesaturated(b)
   end,
+  --- @type fun(self: StopMotionBaseInstance, r: number, g: number, b: number, a: number?)
   SetColor = function(self, r, g, b, a)
     self.texture:SetVertexColor(r, g, b, a)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance) : number, number, number, number
   GetColor = function(self)
     return self.texture:GetVertexColor()
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, time: number)
   SetStartTime = function(self, time)
     self.startTime = time
   end,
+
+  --- @type fun(self: StopMotionBaseInstance)
   TimedUpdate = function(self)
     local timeSinceStart = (GetTime() - self.startTime)
     local newCurrentFrame = floor(timeSinceStart * (self.frameRate or 15))
@@ -213,6 +268,8 @@ local funcs = {
     end
     self:SetFrame(self.textureFile, frame)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, progress: number)
   SetProgress = function(self, progress)
     local frames
     local startFrame = self.startFrame
@@ -240,18 +297,28 @@ local funcs = {
     end
     self:SetFrame(self.textureFile, frame)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance)
   ClearAllPoints = function(self)
     self.texture:ClearAllPoints()
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, ... : any)
   SetAllPoints = function(self, ...)
     self.texture:SetAllPoints(...)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, ... : any)
   SetPoint = function(self, ...)
     self.texture:SetPoint(...)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, w: number, h: number)
   SetSize = function(self, w, h)
     self.texture:SetSize(w, h)
   end,
+
+  --- @type fun(self: StopMotionBaseInstance, b: boolean)
   SetVisible = function(self, b)
     if b then
       self.texture:Show()
@@ -261,20 +328,25 @@ local funcs = {
   end
 }
 
+--- @type fun(frame:Frame, drawLayer: DrawLayer) : StopMotionBaseInstance
 function Private.StopMotionBase.create(frame, drawLayer)
   local stopMotion = {}
 
   local texture = frame:CreateTexture(nil, "ARTWORK")
   stopMotion.texture = texture
   texture:SetAllPoints(frame)
+  -- texture:SetSnapToPixelGrid(false)
+  -- texture:SetTexelSnappingBias(0)
 
   for funcName, func in pairs(funcs) do
     stopMotion[funcName] = func
   end
 
+  --- @cast stopMotion StopMotionBaseInstance
   return stopMotion
 end
 
+--- @type fun(stopMotion: StopMotionBaseInstance, options: StopMotionOptions)
 function Private.StopMotionBase.modify(stopMotion, options)
   stopMotion.frameRate = options.frameRate
   stopMotion.inverseDirection = options.inverseDirection

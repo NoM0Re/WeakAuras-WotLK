@@ -421,7 +421,7 @@ local funcs = {
   UpdateTexture = function(self)
     if self.use_texture then
       for _, tick in ipairs(self.ticks) do
-        tick:SetTexture(tick, self.tick_texture)
+        Private.SetTextureOrAtlas(tick, self.tick_texture, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
       end
     else
       for _, tick in ipairs(self.ticks) do
@@ -506,6 +506,8 @@ local function modify(parent, region, parentData, data, first)
 
     if region.ticks[i] == nil then
       local texture = region:CreateTexture()
+      -- texture:SetSnapToPixelGrid(false)
+      -- texture:SetTexelSnappingBias(0)
       texture:SetDrawLayer("ARTWORK", 3)
       texture:SetAllPoints()
       region.ticks[i] = texture
@@ -533,7 +535,7 @@ local function modify(parent, region, parentData, data, first)
 
   if data.use_texture then
     for _, tick in ipairs(region.ticks) do
-      tick:SetTexture(data.tick_texture)
+      Private.SetTextureOrAtlas(tick, data.tick_texture, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
     end
   end
 

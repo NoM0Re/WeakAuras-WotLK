@@ -1,10 +1,12 @@
+if not WeakAuras.IsLibsOK() then return end
+
 ---@type string
 local AddonName = ...
 ---@class Private
 local Private = select(2, ...)
 
--- BuildTypes "dev" | "pr" | "alpha" | "beta" | "release"
 ---@alias BuildType "dev" | "pr" | "alpha" | "beta" | "release"
+
 ---@class feature
 ---@field id string
 ---@field autoEnable? BuildType[]
@@ -22,7 +24,6 @@ local Features = {
   hydrated = false,
 }
 Private.Features = Features
-
 
 ---@param id string
 function Features:Exists(id)
@@ -165,7 +166,7 @@ Features:Register({
   autoEnable = {"dev"}
 })
 
-
 Private.DebugPrint = Features:Wrap("debug", function(...)
   print("|cff00d3ffWeakAuras-Debug:|r ", ...)
 end)
+

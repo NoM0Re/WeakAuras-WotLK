@@ -29,15 +29,18 @@ local TimeMachine = {
 }
 
 Private.TimeMachine = TimeMachine
+
 ---@alias keyPath key | (key)[]
 ---@alias Actor fun(data: table, path: keyPath, payload: any)
 ---@alias Inverter fun(data: table, path: keyPath, payload?: any): actionType, keyPath, any
 ---@alias actionType string
 ---@alias effectType string
+
 ---@class Action
 ---@field actor Actor
 ---@field inverter Inverter
 ---@field autoEffects? effectType[]
+
 ---@class actionRecord
 ---@field uid uid
 ---@field actionType actionType
@@ -45,6 +48,7 @@ Private.TimeMachine = TimeMachine
 ---@field payload any
 ---@field effects? effectType[]
 ---@field suppressAutoEffects? table<effectType, boolean>
+
 ---@class change
 ---@field forward actionRecord[]
 ---@field backward actionRecord[]

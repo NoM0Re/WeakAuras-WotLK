@@ -869,6 +869,8 @@ local function RunTriggerFunc(allStates, data, id, triggernum, event, arg1, arg2
   return updateTriggerState;
 end
 
+---ScanEvents may receive composed events like `event:spellId`
+---For system profiling we want extract the event
 ---@param composedEvent string
 ---@return string
 local function getGameEventFromComposedEvent(composedEvent)
@@ -989,7 +991,6 @@ function WeakAuras.ScanUnitEvents(event, unit, ...)
   scannerFrame:Queue(Private.ScanUnitEvents, event, unit, ...)
 end
 
-
 local function checkOnUpdateThrottle(data)
   if data.onUpdateThrottle then
     local now = GetTime()
@@ -1090,7 +1091,6 @@ function Private.CancelAllDelayedTriggers()
     Private.CancelDelayedTrigger(id)
   end
 end
-
 
 ---@type fun(id, watchedTriggernums)
 function Private.ScanEventsWatchedTrigger(id, watchedTriggernums)
@@ -1321,6 +1321,7 @@ end
 
 local genericTriggerRegisteredEvents = {};
 local genericTriggerRegisteredUnitEvents = {};
+
 ---@class WeakAurasGenericTriggerFrame: FrameScriptObject
 local frame = CreateFrame("Frame");
 frame.unitFrames = {};
@@ -1659,8 +1660,6 @@ do
 end
 
 --- Adds a display, creating all internal data structures for all triggers.
--- @param data
--- @param region
 ---@param data auraData
 ---@param region table
 function GenericTrigger.Add(data, region)
@@ -2493,6 +2492,35 @@ do
     return cd
   end
 
+
+  --- @class PerSpellDetails
+  --- @field known boolean? whether the spell is known by the player or not
+  --- @field charges number? the number of charges as returned by GetSpellCharges
+  --- @field chargesMax number? the number of max charges as returned by GetSpellCharges
+  --- @field chargeGainTime number?
+  --- @field chargeLostTime number?
+  --- @field count number?
+  --- @field name string
+  --- @field icon number
+  --- @field id number
+  --- @field watched table<number, boolean>
+
+  -- Basic details like name, icon, charges, times per effective spell id
+  -- Also contains the mapping from effective spell id to watched
+  --- @class SpellDetails
+  --- @field private data table<number, PerSpellDetails>
+  --- @field private watchedSpellIds table<number, table<boolean, table<boolean, number>>> --- Maps user spell id to effective spell id via useExact and followoverride
+  --- @field private spellCds SpellCDHandler
+  --- @field private spellCdsRune SpellCDHandler
+  --- @field private spellCdsOnlyCooldown SpellCDHandler
+  --- @field private spellCdsOnlyCooldownRune SpellCDHandler
+  --- @field private spellCdsCharges SpellCDHandler
+  --- @field private AddEffectiveSpellId fun(self: SpellDetails, effectiveSpellId: number, userSpellId: number)
+  --- @field CheckSpellKnown fun(self: SpellDetails) Handles the SPELLS_CHANGED event (and intial setup)
+  --- @field CheckSpellCooldowns fun(self: SpellDetails, runeDuration: number?)
+  --- @field CheckSpellCooldown fun(self: SpellDetails, effectiveSpellId: number, runeDuration: number?)
+  --- @field SendEventsForSpell fun(self: SpellDetails, effectiveSpellId: number, event: string, ...: any[])
+  --- @field GetSpellCharges fun(self: SpellDetails, effectiveSpellId: number, ignoreSpellKnown: boolean): number?, number?, number?, number?, number?
   local SpellDetails = {
     -- The data per effective spellId
     data = {
@@ -3483,21 +3511,6 @@ function WeakAuras.WatchUnitChange(unit)
       UNIT_TARGET = function(unit, eventsToSend)
         handleUnit(unit .. "target", eventsToSend, unitUpdate, markerInit, reactionInit)
       end,
-      PARTY_MEMBERS_CHANGED = function(_, eventsToSend)
-        for unit in pairs(Private.multiUnitUnits.group) do
-          handleUnit(unit, eventsToSend, unitUpdate, markerInit, reactionInit)
-        end
-        local inRaid = IsInRaid()
-        local inRaidChanged = inRaid ~= watchUnitChange.inRaid
-        if inRaidChanged then
-          for unit in pairs(Private.multiUnitUnits.group) do
-            if watchUnitChange.trackedUnits[unit] and watchUnitChange.unitIdToGUID[unit] then
-              eventsToSend["UNIT_CHANGED_" .. unit] = unit
-            end
-          end
-          watchUnitChange.inRaid = inRaid
-        end
-      end,
       RAID_ROSTER_UPDATE = function(_, eventsToSend)
         for unit in pairs(Private.multiUnitUnits.group) do
           handleUnit(unit, eventsToSend, unitUpdate, markerInit, reactionInit)
@@ -3514,6 +3527,7 @@ function WeakAuras.WatchUnitChange(unit)
         end
       end
     }
+    handleEvent.PARTY_MEMBERS_CHANGED = handleEvent.RAID_ROSTER_UPDATE
 
     watchUnitChange:SetScript("OnEvent", function(self, event, unit)
       Private.StartProfileSystem("generictrigger unit change");
@@ -3619,58 +3633,61 @@ function Private.ExecEnv.CheckTotemIcon(totemIcon, triggerTotemIcon, operator)
 end
 
 -- Queueable Spells
-local queueableSpells
-local classQueueableSpells = {
-  ["WARRIOR"] = {
-    (select(1, GetSpellInfo(78))),    -- Heroic Strike
-    (select(1, GetSpellInfo(845))),   -- Cleave
-  },
-  ["HUNTER"] = {
-    (select(1, GetSpellInfo(2973))),  -- Raptor Strike
-  },
-  ["DRUID"] = {
-    (select(1, GetSpellInfo(6807))),  -- Maul
-  },
-  ["DEATHKNIGHT"] = {
-    (select(1, GetSpellInfo(56815))), -- Rune Strike
-  },
-}
-local class = select(2, UnitClass("player"))
-queueableSpells = classQueueableSpells[class]
+do
+  local queueableSpells
+  local classQueueableSpells = {
+    ["WARRIOR"] = {
+      (select(1, GetSpellInfo(78))),    -- Heroic Strike
+      (select(1, GetSpellInfo(845))),   -- Cleave
+    },
+    ["HUNTER"] = {
+      (select(1, GetSpellInfo(2973))),  -- Raptor Strike
+    },
+    ["DRUID"] = {
+      (select(1, GetSpellInfo(6807))),  -- Maul
+    },
+    ["DEATHKNIGHT"] = {
+      (select(1, GetSpellInfo(56815))), -- Rune Strike
+    },
+  }
+  local class = select(2, UnitClass("player"))
+  queueableSpells = classQueueableSpells[class]
 
-local queuedSpellFrame
-function WeakAuras.WatchForQueuedSpell()
-  if not queuedSpellFrame then
-    queuedSpellFrame = CreateFrame("Frame")
-    Private.frames["Queued Spell Handler"] = queuedSpellFrame
-    queuedSpellFrame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
+  local queuedSpellFrame
+  function WeakAuras.WatchForQueuedSpell()
+    if not queuedSpellFrame then
+      queuedSpellFrame = CreateFrame("Frame")
+      Private.frames["Queued Spell Handler"] = queuedSpellFrame
+      queuedSpellFrame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
 
-    queuedSpellFrame:SetScript("OnEvent", function(self)
-      local newQueuedSpell
-      if queueableSpells then
-        for _, spellName in ipairs(queueableSpells) do
-          if IsCurrentSpell(spellName) then
-            newQueuedSpell = spellName
-            break
+      queuedSpellFrame:SetScript("OnEvent", function(self)
+        local newQueuedSpell
+        if queueableSpells then
+          for _, spellName in ipairs(queueableSpells) do
+            if IsCurrentSpell(spellName) then
+              newQueuedSpell = spellName
+              break
+            end
           end
         end
-      end
-      if newQueuedSpell ~= self.queuedSpell then
-        self.queuedSpell = newQueuedSpell
-        Private.ScanEvents("WA_UNIT_QUEUED_SPELL_CHANGED", "player")
-      end
-    end)
+        if newQueuedSpell ~= self.queuedSpell then
+          self.queuedSpell = newQueuedSpell
+          Private.ScanEvents("WA_UNIT_QUEUED_SPELL_CHANGED", "player")
+        end
+      end)
+    end
   end
-end
+
   ---@return integer? spellID
-function WeakAuras.GetQueuedSpell()
-  return queuedSpellFrame and queuedSpellFrame.queuedSpell
+  function WeakAuras.GetQueuedSpell()
+    return queuedSpellFrame and queuedSpellFrame.queuedSpell
+  end
 end
 
 ---@param powerTypeToCheck integer
 ---@return number? cost
 function WeakAuras.GetSpellCost(powerTypeToCheck)
-  local spellName = UnitCastingInfo("player")
+  local spellName = WeakAuras.UnitCastingInfo("player")
   if not spellName then -- not casting so check if it is queued
     spellName = WeakAuras.GetQueuedSpell()
   end
@@ -3708,7 +3725,7 @@ do
     if not(tenchFrame) then
       tenchFrame = CreateFrame("Frame");
       tenchFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-      tenchFrame:RegisterEvent("UNIT_INVENTORY_CHANGED", "player")
+      tenchFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
       tenchFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 
       local function getTenchName(id)
@@ -3818,6 +3835,7 @@ end
 -- Cast Latency
 do
   local castLatencyFrame
+
   ---@private
   function WeakAuras.WatchForCastLatency()
     if not castLatencyFrame then
@@ -3904,7 +3922,13 @@ end
 
 -- Mounted Frame
 do
-  local mountedFrame
+  ---@class mountedFrame
+  ---@field elapsed integer|nil
+  ---@field delay integer|nil
+  ---@field isMounted boolean|nil
+
+  ---@type mountedFrame|Frame|nil
+  local mountedFrame = nil
   local elapsed = 0;
   local delay = 0.5;
   local isMounted = IsMounted();
@@ -3923,9 +3947,11 @@ do
     Private.StopProfileSystem("generictrigger mounted")
   end
 
+  ---@private
   function WeakAuras.WatchForMounts()
     if not (mountedFrame) then
       mountedFrame = CreateFrame("Frame")
+    --- @cast mountedFrame mountedFrame
 	  Private.frames["Mount Use Handler"] = mountedFrame
       mountedFrame:RegisterEvent("COMPANION_UPDATE")
       mountedFrame:SetScript("OnEvent", function(self, _, arg)
@@ -3940,6 +3966,10 @@ end
 
 -- Player Moving
 do
+  --- @class PlayerMovingFrame
+  --- @field moving integer|nil
+  --- @field speed integer|nil
+
   ---@type PlayerMovingFrame|Frame|nil
   local playerMovingFrame = nil
 
@@ -3963,6 +3993,7 @@ do
   function WeakAuras.WatchForPlayerMoving()
     if not(playerMovingFrame) then
       playerMovingFrame = CreateFrame("Frame");
+      --- @cast playerMovingFrame PlayerMovingFrame
       Private.frames["Player Moving Frame"] =  playerMovingFrame;
       playerMovingFrame.speed = GetUnitSpeed("player")
     end
@@ -4214,7 +4245,7 @@ function GenericTrigger.GetTsuConditionVariables(id, triggernum)
   end
 end
 
---- Returns a table containing the names of all overlays
+---Returns a table containing the names of all overlays
 ---@param data auraData
 ---@param triggernum number
 function GenericTrigger.GetOverlayInfo(data, triggernum)
@@ -4304,9 +4335,6 @@ function GenericTrigger.GetNameAndIcon(data, triggernum)
 end
 
 ---Returns the type of tooltip to show for the trigger.
--- @param data
--- @param triggernum
--- @return string
 ---@param data auraData
 ---@param triggernum number
 ---@return boolean|string
@@ -4340,7 +4368,6 @@ function GenericTrigger.SetToolTip(trigger, state)
       end
       return true
     elseif (state.spellId) then
-      --DEPRECATED GameTooltip:SetSpellByID(state.spellId);
       GameTooltip:SetHyperlink("spell:"..(state.spellId or 0));
       return true
     elseif (state.link) then
@@ -4364,7 +4391,6 @@ function GenericTrigger.SetToolTip(trigger, state)
   local prototype = GenericTrigger.GetPrototype(trigger)
   if prototype then
     if prototype.hasSpellID then
-      --DEPRECATED GameTooltip:SetSpellByID(trigger.spellName or 0);
       GameTooltip:SetHyperlink("spell:"..(trigger.spellName or 0));
       return true
     elseif prototype.hasItemID then
@@ -4867,9 +4893,9 @@ end
 
 ---@return number hitChance
 WeakAuras.GetHitChance = function()
-  local melee = (GetCombatRatingBonus(CR_HIT_MELEE) or 0)
-  local ranged = (GetCombatRatingBonus(CR_HIT_RANGED) or 0)
-  local spell = (GetCombatRatingBonus(CR_HIT_SPELL) or 0)
+  local melee = GetCombatRatingBonus(CR_HIT_MELEE) or 0
+  local ranged = GetCombatRatingBonus(CR_HIT_RANGED) or 0
+  local spell = GetCombatRatingBonus(CR_HIT_SPELL) or 0
   return max(melee, ranged, spell)
 end
 

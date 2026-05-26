@@ -50,7 +50,7 @@ function Private.InitializeEncounterAndZoneLists()
         { L["Thaddius"], 1120 },
         -- Frostwyrm Lair
         { L["Sapphiron"], 1119 },
-        { L["Kel'Thuzad"], 1114 }
+        { L["Kel'Thuzad"], 1114 },
       }
     },
     {

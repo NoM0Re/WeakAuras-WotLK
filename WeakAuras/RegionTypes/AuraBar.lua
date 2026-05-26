@@ -264,6 +264,8 @@ local anchorAlignment = {
   ["VERTICAL_INVERSE"] = { "BOTTOMLEFT", "BOTTOMRIGHT", "TOP" }
 }
 
+local extraTextureWrapMode = "REPEAT";
+
 -- Emulate blizzard statusbar with advanced features (more grow directions)
 local barPrototype = {
   ["UpdateAnchors"] = function(self)
@@ -357,6 +359,7 @@ local barPrototype = {
       for index, additionalBar in ipairs(self.additionalBars) do
         if (not self.extraTextures[index]) then
           local extraTexture = self:CreateTexture(nil, "ARTWORK");
+          -- extraTexture:SetTexelSnappingBias(0)
           extraTexture:SetDrawLayer("ARTWORK", min(index, 7));
           self.extraTextures[index] = extraTexture;
         end
@@ -424,9 +427,9 @@ local barPrototype = {
           local texture = self.additionalBarsTextures and self.additionalBarsTextures[index];
           if texture then
             local texturePath = SharedMedia:Fetch("statusbar", texture) or ""
-            extraTexture:SetTexture(texturePath)
+            Private.SetTextureOrAtlas(extraTexture, texturePath, extraTextureWrapMode, extraTextureWrapMode)
           else
-            extraTexture:SetTexture(self:GetStatusBarTexture());
+            Private.SetTextureOrAtlas(extraTexture, self:GetStatusBarTexture(), extraTextureWrapMode, extraTextureWrapMode)
           end
 
           local xOffset = 0;
@@ -572,15 +575,15 @@ local barPrototype = {
 
   -- Blizzard like SetStatusBarTexture
   ["SetStatusBarTexture"] = function(self, texture)
-    self.fg:SetTexture(texture);
-    self.bg:SetTexture(texture);
+    Private.SetTextureOrAtlas(self.fg, texture)
+    Private.SetTextureOrAtlas(self.bg, texture)
     for index, extraTexture in ipairs(self.extraTextures) do
-      extraTexture:SetTexture(texture);
+      Private.SetTextureOrAtlas(extraTexture, texture, extraTextureWrapMode, extraTextureWrapMode)
     end
   end,
 
   ["GetStatusBarTexture"] = function(self)
-    return self.fg:GetTexture();
+    return self.fg:GetTexture()
   end,
 
   -- Set bar color
@@ -1138,6 +1141,7 @@ local funcs = {
 local function create(parent)
   -- Create overall region (containing everything else)
   local region = CreateFrame("Frame", nil, parent);
+  --- @cast region table|Frame
   region.regionType = "aurabar"
   region:SetMovable(true);
   region:SetResizable(true);
@@ -1147,6 +1151,7 @@ local function create(parent)
 
   -- Create statusbar (inherit prototype)
   local bar = CreateFrame("Frame", nil, region);
+  --- @cast bar table|Frame
   Private.Mixin(bar, Private.SmoothStatusBarMixin);
   fgMask:SetAllPoints(bar);
 
@@ -1176,7 +1181,6 @@ local function create(parent)
   local icon = iconFrame:CreateTexture(nil, "OVERLAY");
   region.icon = icon;
   icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark");
-
   Private.FixTextureDesaturation(icon)
 
   local oldSetFrameLevel = region.SetFrameLevel;
@@ -1256,7 +1260,7 @@ local function modify(parent, region, data)
   region:UpdateStatusBarTexture();
   bar:SetBackgroundColor(data.backgroundColor[1], data.backgroundColor[2], data.backgroundColor[3], data.backgroundColor[4]);
   -- Update spark settings
-  bar.spark:SetTexture(data.sparkTexture);
+  Private.SetTextureOrAtlas(bar.spark, data.sparkTexture);
   bar.spark:SetVertexColor(data.sparkColor[1], data.sparkColor[2], data.sparkColor[3], data.sparkColor[4]);
   bar.spark:SetWidth(data.sparkWidth);
   bar.spark:SetHeight(data.sparkHeight);
@@ -1317,7 +1321,6 @@ local function modify(parent, region, data)
     else
       region.tooltipFrame:SetAllPoints(region)
     end
-
     region.tooltipFrame:EnableMouse(true);
   elseif region.tooltipFrame then
     -- Disable tooltip

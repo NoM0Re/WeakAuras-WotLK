@@ -7,7 +7,6 @@ local internalVersion = 90
 
 -- Lua APIs
 local insert = table.insert
-local ipairs_reverse = Private.ipairs_reverse
 
 -- WoW APIs
 local IsAddOnLoaded, LoadAddOn
@@ -31,9 +30,6 @@ local GetTime, UpdateAddOnCPUUsage, GetFrameCPUUsage, debugprofilestop, MAX_BOSS
 local CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
   = CreateFrame, IsShiftKeyDown, GetScreenWidth, GetScreenHeight, GetCursorPosition
 local debugstack, wipe, GetSpellInfo = debugstack, wipe, GetSpellInfo
-local IsInRaid, IsInGroup = Private.IsInRaid, Private.IsInGroup
-local GetNumGroupMembers = Private.GetNumGroupMembers
-local Round, MergeTable = Private.Round, Private.MergeTable
 
 local ADDON_NAME = "WeakAuras"
 ---@class WeakAuras
@@ -56,6 +52,10 @@ Private.watched_trigger_events = {}
 
 -- The worlds simplest callback system.
 -- That supports 1:N, but no de-registration and breaks if registering in a callback
+--- @class callbacks
+--- @field events table
+--- @field RegisterCallback fun(self: callbacks, event: string, handler: function)
+--- @field Fire fun(self: callbacks, event: string, ... : any)
 Private.callbacks = {}
 Private.callbacks.events = {}
 
@@ -86,8 +86,8 @@ if CustomNames then
 else
   WeakAuras.GetName = function(name) return name end
   WeakAuras.UnitName = UnitName
-  WeakAuras.GetUnitName = UnitName
-  WeakAuras.UnitFullName = UnitName
+  WeakAuras.GetUnitName = GetUnitName
+  WeakAuras.UnitFullName = UnitFullName
 end
 
 local timer = WeakAurasTimers
@@ -279,6 +279,7 @@ BINDING_NAME_WEAKAURASPRINTPROFILING = L["Print Profiling Results"]
 -- Noteable properties:
 --  debug: If set to true, WeakAura.debug() outputs messages to the chat frame
 --  displays: All aura settings, keyed on their id
+
 ---@class WeakAurasSaved
 local db;
 
@@ -627,7 +628,6 @@ function WeakAuras.RegisterSubRegionOptions(name, createFunction, description, g
   end
 end
 
--- This function is replaced in WeakAurasOptions.lua
 ---@diagnostic disable-next-line: duplicate-set-field (it's replaced in WeakAurasOptions.lua)
 function WeakAuras.IsOptionsOpen()
   return false;
@@ -1041,9 +1041,9 @@ function Private.CountWagoUpdates()
 end
 
 local function tooltip_draw()
-  local tooltip = GameTooltip;
-  tooltip:ClearLines();
-  tooltip:AddDoubleLine("WeakAuras", versionString);
+  local tooltip = GameTooltip
+  tooltip:ClearLines()
+  tooltip:AddDoubleLine("WeakAuras", versionString)
   if Private.CompanionData.slugs then
     local count = Private.CountWagoUpdates()
     if count > 0 then
@@ -1182,7 +1182,7 @@ end
 
 local function CheckForPreviousEncounter()
   if (UnitAffectingCombat ("player") or InCombatLockdown()) then
-    for i = 1, MAX_BOSS_FRAMES do
+    for i = 1, 5 do
       if (UnitExists ("boss" .. i)) then
         local guid = UnitGUID ("boss" .. i)
         if (guid and db.CurrentEncounter.boss_guids [guid]) then
@@ -1451,7 +1451,7 @@ end
 local function StoreBossGUIDs()
   Private.StartProfileSystem("boss_guids")
   if (WeakAuras.CurrentEncounter and WeakAuras.CurrentEncounter.boss_guids) then
-    for i = 1, MAX_BOSS_FRAMES do
+    for i = 1, 5 do
       if (UnitExists ("boss" .. i)) then
         local guid = UnitGUID ("boss" .. i)
         if (guid) then
@@ -1497,10 +1497,10 @@ function Private.IsOptionsProcessingPaused()
 end
 
 function Private.ExecEnv.GroupType()
-  if (IsInRaid()) then
+  if (Private.IsInRaid()) then
     return "raid";
   end
-  if (IsInGroup()) then
+  if (Private.IsInGroup()) then
     return "group";
   end
   return "solo";
@@ -1511,7 +1511,7 @@ local function GetInstanceTypeAndSize()
   local inInstance, Type = IsInInstance()
   local _, instanceType, difficultyIndex, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
   if inInstance or instanceType ~= "none" then
-    local ZoneMapID = GetCurrentMapAreaID()
+    local zoneMapID = GetCurrentMapAreaID()
     size = Type
     -- WORKAROUND Tol'Viron arena returning a difficulty index of 1
     if Type == "arena" or Type == "pvp" then
@@ -1541,7 +1541,7 @@ local function GetInstanceTypeAndSize()
         difficulty = "heroic"
       end
     end
-    return size, difficulty, instanceType, ZoneMapID
+    return size, difficulty, instanceType, zoneMapID
   end
   return "none", "none", nil, nil
 end
@@ -1626,7 +1626,7 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
   end
 
   local group = Private.ExecEnv.GroupType()
-  local groupSize = GetNumGroupMembers()
+  local groupSize = Private.GetNumGroupMembers()
 
   local changed = 0;
   local shouldBeLoaded, couldBeLoaded;
@@ -1730,7 +1730,6 @@ loadFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
 loadFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
 loadFrame:RegisterEvent("PLAYER_ROLES_ASSIGNED");
 loadFrame:RegisterEvent("SPELLS_CHANGED");
-loadFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 loadFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 loadFrame:RegisterEvent("PLAYER_DEAD")
 loadFrame:RegisterEvent("PLAYER_ALIVE")
@@ -1742,6 +1741,7 @@ loadFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 local unitLoadFrame = CreateFrame("Frame");
 Private.frames["Display Load Handling 2"] = unitLoadFrame;
 
+unitLoadFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 unitLoadFrame:RegisterEvent("UNIT_FLAGS");
 unitLoadFrame:RegisterEvent("UNIT_ENTERED_VEHICLE");
 unitLoadFrame:RegisterEvent("UNIT_EXITED_VEHICLE");
@@ -2170,6 +2170,7 @@ function WeakAuras.Rename(data, newid)
 
   Private.ProfileRenameAura(oldid, newid);
 
+
   Private.callbacks:Fire("Rename", data.uid, oldid, newid)
 
   -- TODO: This should not be necessary
@@ -2190,7 +2191,7 @@ function Private.Convert(data, newType)
 
   -- Clean up sub regions
   if data.subRegions then
-    for index, subRegionData in ipairs_reverse(data.subRegions) do
+    for index, subRegionData in Private.ipairs_reverse(data.subRegions) do
       local subType = subRegionData.type
       local removeSubRegion = true
       if subType and Private.subRegionTypes[subType] then
@@ -2305,7 +2306,6 @@ StaticPopupDialogs["WEAKAURAS_CONFIRM_REPAIR"] = {
       Private.Login()
     end
   end,
-
   whileDead = 1,
   showAlert = 1,
   timeout = 0,
@@ -2471,7 +2471,9 @@ local pAdd
 ---@param tbl auraData[]
 ---@param takeSnapshots boolean
 function Private.AddMany(tbl, takeSnapshots)
+  --- @type table<auraId, auraData>
   local idtable = {};
+  --- @type table<auraId, auraId> The anchoring targets of other auras, key is the anchor, value is the aura that is anchoring
   local anchorTargets = {}
   for _, data in ipairs(tbl) do
     -- There was an unfortunate bug in update.lua in 2022 that resulted
@@ -2577,6 +2579,8 @@ function Private.AddMany(tbl, takeSnapshots)
   end
 end
 
+-- Workaround dynamic groups not being dimmed correctly on initial login.
+-- Use GetZoneText as a late-login signal to trigger one final refresh.
 do
   local function FixGroupChildren()
     for _, data in pairs(Private.regions) do
@@ -2719,7 +2723,7 @@ local function validateUserConfig(data, options, config)
           else
             if option.type == "number" and option.step then
               local min = option.min or 0
-              config[key] = option.step * Round((value - min)/option.step) + min
+              config[key] = option.step * Private.Round((value - min)/option.step) + min
             end
           end
         elseif option.type == "select" then
@@ -2771,6 +2775,7 @@ local function validateUserConfig(data, options, config)
   end
 end
 
+-- !! TODO: DONT LIKE IT DONT WANT THIS
 local function removeNameplateUnitsAndAnchors(data)
   -- Dynamic Group Anchor
   if data.useAnchorPerUnit == true and data.anchorPerUnit == "NAMEPLATE" then
@@ -2895,6 +2900,7 @@ local oldDataStub2 = {
   conditions = {},
 }
 
+--- @type fun(data: auraData)
 function Private.WarnEncounterEvent(data)
   if data.load and (data.load.use_encounter ~= nil or data.load.use_encounterid) then
     Private.AuraWarnings.UpdateWarning(data.uid, "dbm_required_for_load_encounter", "error",
@@ -2904,6 +2910,7 @@ function Private.WarnEncounterEvent(data)
   end
 end
 
+--- @type fun(data: auraData)
 function Private.UpdateSoundIcon(data)
   local function testConditions()
     local sound, tts
@@ -3094,6 +3101,7 @@ function pAdd(data, simpleChange)
         Private.ClearAuraEnvironment(parent.id);
       end
       db.displays[id] = data;
+
       if WeakAuras.GetRegion(data.id) then
         Private.SetRegion(data)
       end
@@ -3329,6 +3337,7 @@ function Private.SetRegion(data, cloneId)
   end
 end
 
+--- Ensures that a clone exists
 ---@param id auraId
 ---@param cloneId string
 ---@return table
@@ -3359,6 +3368,7 @@ local function EnsureRegion(id)
 
     -- So we go up the list of parents and collect auras that must be created
     -- If we find a parent already exists, we can stop
+    --- @type auraId[]
     local aurasToCreate = {}
 
     while(id) do
@@ -3371,7 +3381,7 @@ local function EnsureRegion(id)
       end
     end
 
-    for _, toCreateId in ipairs_reverse(aurasToCreate) do
+    for _, toCreateId in Private.ipairs_reverse(aurasToCreate) do
       local data = WeakAuras.GetData(toCreateId)
       Private.SetRegion(data)
     end
@@ -3430,7 +3440,7 @@ end
 
 function Private.SetAllStatesHiddenExcept(id, triggernum, list)
   local triggerState = WeakAuras.GetTriggerStateForTrigger(id, triggernum);
-  for cloneId, state in  pairs(triggerState) do
+  for cloneId in pairs(triggerState) do
     if (not (list[cloneId])) then
       triggerState[cloneId] = nil
     end
@@ -3485,7 +3495,7 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
         message_dest = Private.ReplacePlaceHolders(message_dest, region, customCache, useHiddenStates, formatters);
       end
       if message_dest_isunit == true then
-        message_dest = UnitName(message_dest)
+        message_dest = GetUnitName(message_dest, true)
       end
       pcall(function() SendChatMessage(message, "WHISPER", nil, message_dest) end);
     end
@@ -3790,6 +3800,7 @@ function Private.PerformActions(data, when, region)
   end
 end
 
+--- @type fun(id: auraId): auraData?
 function WeakAuras.GetData(id)
   return id and db.displays[id];
 end
@@ -3875,7 +3886,7 @@ Private.GetAdditionalProperties = function(data)
       if triggerSystem then
         local triggerProps = triggerSystem.GetAdditionalProperties(child, i)
         if triggerProps and props[i] then
-          MergeTable(props[i], triggerProps)
+          Private.MergeTable(props[i], triggerProps)
         elseif triggerProps then
           props[i] = triggerProps
         end
@@ -4348,6 +4359,7 @@ local threads = {
   },
 };
 do
+
   ---@type table<threadPriority, true>
   local validPriorities = {
     urgent = true,
@@ -4404,6 +4416,7 @@ do
     end
   end
 
+
   ---@param pool threadPool
   ---@param finish number
   ---@param defaultEstimate number
@@ -4436,6 +4449,7 @@ do
       end
     until not continue
   end
+
 
   ---@param name string
   ---@param func thread
@@ -4504,12 +4518,15 @@ function WeakAuras.GetActiveTriggers(id)
 end
 
 do
+  --- @type table<auraId, boolean>
   local visibleFakeStates = {}
 
+  --- @type fun(_: any, uid: uid, id: auraId)
   local function OnDelete(_, uid, id)
     visibleFakeStates[id] = nil
   end
 
+  --- @type fun(_: any, uid: uid, oldId: auraId, newId: auraId)
   local function OnRename(_, uid, oldId, newId)
     visibleFakeStates[newId] = visibleFakeStates[oldId]
     visibleFakeStates[oldId] = nil
@@ -4613,6 +4630,7 @@ do
   end
 end
 
+--- @type fun(id: auraId, triggernum: integer, cloneId: string)
 local function stopAutoHideTimerForTrigger(id, triggernum, cloneId)
   if(timers[id] and timers[id][triggernum] and timers[id][triggernum][cloneId]) then
     local record = timers[id][triggernum][cloneId];
@@ -5999,8 +6017,8 @@ function Private.IsCLEUSubevent(subevent)
   return false
 end
 
--- SafeToNumber converts a string to number, but only if it fits into a unsigned 32bit integer
--- The C api often takes only 32bit values, and complains if passed a value outside
+--- SafeToNumber converts a string to number, but only if it fits into a unsigned 32bit integer
+--- The C api often takes only 32bit values, and complains if passed a value outside
 ---@param input any
 ---@return number|nil number
 function WeakAuras.SafeToNumber(input)
@@ -6079,6 +6097,16 @@ function Private.ReplaceLocalizedRaidMarkers(txt)
   end
 end
 
+-- WORKAROUND
+-- UnitPlayerControlled doesn't work if the target is "too" far away
+-- ! This tracks only players, UnitPlayerControlled(unit) would track more than that.
+--- @return boolean?
+function Private.UnitPlayerControlledFixed(unit)
+  local guid = UnitGUID(unit)
+  local typeBits = guid and tonumber(guid:match("^0x(%x%x%x)"), 16)
+  return typeBits and bit.band(typeBits, 0x00F) == 0x000 or false
+end
+
 do
   local trackableUnits = {}
   trackableUnits["player"] = true
@@ -6097,7 +6125,7 @@ do
     trackableUnits["partypet" .. i] = true
   end
 
-  for i = 1, MAX_BOSS_FRAMES do
+  for i = 1, 5 do
     trackableUnits["boss" .. i] = true
   end
 
@@ -6118,16 +6146,18 @@ do
 end
 
 do
-  local ownRealm = GetRealmName()
+  local ownRealm = select(2, UnitFullName("player"))
   ---@param unit UnitToken
   ---@return string name
   ---@return string realm
   function WeakAuras.UnitNameWithRealm(unit)
-    local name, realm = UnitName(unit)
+    ownRealm = ownRealm or select(2, UnitFullName("player"))
+    local name, realm = UnitFullName(unit)
     return name or "", realm or ownRealm or ""
   end
 
   function WeakAuras.UnitNameWithRealmCustomName(unit)
+    ownRealm = ownRealm or select(2, UnitFullName("player"))
     local name, realm =  WeakAuras.UnitFullName(unit)
     return name or "", realm or ownRealm or ""
   end
@@ -6406,7 +6436,7 @@ do
     return coroutine.wrap(TraverseParents), data
   end
 
-  -- Returns whether the data is a group or dynamicgroup
+  --- Returns whether the data is a group or dynamicgroup
   ---@param data auraData
   ---@return boolean
   function Private.IsGroupType(data)

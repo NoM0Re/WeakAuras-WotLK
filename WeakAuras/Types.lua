@@ -13,8 +13,6 @@ local LSM = LibStub("LibSharedMedia-3.0");
 local wipe = wipe
 local GetNumShapeshiftForms, GetShapeshiftFormInfo = GetNumShapeshiftForms, GetShapeshiftFormInfo
 local WrapTextInColorCode = Private.WrapTextInColorCode
-local Round = Private.Round
-local tCompare = Private.tCompare
 
 local function WA_GetClassColor(classFilename)
   local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[classFilename]
@@ -34,12 +32,10 @@ Private.glow_action_types = {
 ---@type table<string, string>
 Private.glow_frame_types = {
   UNITFRAME = L["Unit Frame"],
+  NAMEPLATE = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
   FRAMESELECTOR = L["Frame Selector"],
   PARENTFRAME = L["Parent Frame"]
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.glow_frame_types.NAMEPLATE = L["Nameplate"]
-end
 
 ---@type table<dynamicGroupCircularTypes, string>
 Private.circular_group_constant_factor_types = {
@@ -74,6 +70,7 @@ Private.character_types = {
 }
 
 ---@type table<string, string>
+--!! FIX ME
 Private.spec_position_types = {
   caster = L["Ranged"],
   melee = L["Melee"]
@@ -247,7 +244,7 @@ local simpleFormatters = {
   end,
   AbbreviateLargeNumbers = function(value)
     if type(value) == "string" then value = tonumber(value) end
-    return (type(value) == "number") and Private.AbbreviateLargeNumbers(Round(value)) or value
+    return (type(value) == "number") and Private.AbbreviateLargeNumbers(Private.Round(value)) or value
   end,
   BreakUpLargeNumbers = function(value)
     if type(value) == "string" then value = tonumber(value) end
@@ -263,7 +260,7 @@ local simpleFormatters = {
   end,
   round = function(value)
     if type(value) == "string" then value = tonumber(value) end
-    return (type(value) == "number") and Round(value) or value
+    return (type(value) == "number") and Private.Round(value) or value
   end,
   time = {
     [0] = function(value)
@@ -300,9 +297,11 @@ local simpleFormatters = {
     end,
   },
 }
+
 ---@alias optionAdder fun(name: string, option: table)
 ---@alias optionGetter fun(name: string): any
 ---@alias formatter fun(input: any): string
+
 ---@class FormatType
 ---@field display string
 ---@field AddOptions fun(symbol: string, hidden: boolean, addOption: optionAdder, get: optionGetter)
@@ -783,7 +782,7 @@ Private.format_types = {
       local abbreviateFunc
       if color == "class" then
         colorFunc = function(unit, text)
-          if unit and UnitPlayerControlled(unit) then
+          if unit and Private.UnitPlayerControlledFixed(unit) then
             local classFilename = select(2, UnitClass(unit))
             if classFilename then
               return WrapTextInColorCode(text, WA_GetClassColor(classFilename))
@@ -1114,14 +1113,14 @@ Private.format_types = {
         end
 
         if cast then
-          local _, _, _, _, endTime = UnitCastingInfo("player")
+          local _, _, _, _, endTime = WeakAuras.UnitCastingInfo("player")
           local castExpirationTime = endTime and endTime > 0 and (endTime / 1000) or 0
           if castExpirationTime > 0 then
             result = min(result, now + value - castExpirationTime)
           end
         end
         if channel then
-          local _, _, _, _, endTime = UnitChannelInfo("player")
+          local _, _, _, _, endTime = WeakAuras.UnitChannelInfo("player")
           local castExpirationTime = endTime and endTime > 0 and (endTime / 1000) or 0
           if castExpirationTime > 0 then
             result = min(result, now + value - castExpirationTime)
@@ -1215,7 +1214,7 @@ Private.player_target_events = {
 ---@type table<string, string>
 local target_unit_types = {
   target = L["Target"],
-  focus = L["Focus"],
+  focus = L["Focus"]
 }
 ---@type table<string, string>
 Private.unit_types = Private.Mixin({
@@ -1225,6 +1224,7 @@ Private.unit_types = Private.Mixin({
   pet = L["Pet"],
   multi = L["Multi-target"]
 }, target_unit_types)
+
 ---@type table<string, string>
 Private.unit_types_bufftrigger_2 = Private.Mixin({
   player = L["Player"],
@@ -1233,24 +1233,25 @@ Private.unit_types_bufftrigger_2 = Private.Mixin({
   party = L["Party"],
   boss = L["Boss"],
   arena = L["Arena"],
+  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
   pet = L["Pet"],
   member = L["Specific Unit"],
   multi = L["Multi-target"]
 }, target_unit_types)
-if WeakAuras.IsAwesomeEnabled() then
-  Private.unit_types_bufftrigger_2.nameplate = L["Nameplate"]
-end
+
 ---@type table<string, string>
 Private.actual_unit_types = Private.Mixin({
   player = L["Player"],
   pet = L["Pet"],
 }, target_unit_types)
+
 ---@type table<string, string>
 Private.actual_unit_types_with_specific = Private.Mixin({
   player = L["Player"],
   pet = L["Pet"],
   member = L["Specific Unit"]
 }, target_unit_types)
+
 ---@type table<string, string>
 Private.actual_unit_types_cast = Private.Mixin({
   player = L["Player"],
@@ -1259,24 +1260,22 @@ Private.actual_unit_types_cast = Private.Mixin({
   raid = L["Raid"],
   boss = L["Boss"],
   arena = L["Arena"],
+  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
   pet = L["Pet"],
   member = L["Specific Unit"],
 }, target_unit_types)
-if WeakAuras.IsAwesomeEnabled() then
-  Private.actual_unit_types_cast.nameplate = L["Nameplate"]
-end
 
 ---@type string
 Private.actual_unit_types_cast_tooltip = L["• |cff00ff00Player|r, |cff00ff00Target|r, |cff00ff00Focus|r, and |cff00ff00Pet|r correspond directly to those individual unitIDs.\n• |cff00ff00Specific Unit|r lets you provide a specific valid unitID to watch.\n|cffff0000Note|r: The game will not fire events for all valid unitIDs, making some untrackable by this trigger.\n• |cffffff00Party|r, |cffffff00Raid|r, |cffffff00Boss|r, |cffffff00Arena|r, and |cffffff00Nameplate|r can match multiple corresponding unitIDs.\n• |cffffff00Smart Group|r adjusts to your current group type, matching just the \"player\" when solo, \"party\" units (including \"player\") in a party or \"raid\" units in a raid.\n\n|cffffff00*|r Yellow Unit settings will create clones for each matching unit while this trigger is providing Dynamic Info to the Aura."]
+
 ---@type table<string, string>
 Private.threat_unit_types = Private.Mixin({
+  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
   boss = L["Boss"],
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
 }, target_unit_types)
-if WeakAuras.IsAwesomeEnabled() then
-  Private.threat_unit_types.nameplate = L["Nameplate"]
-end
+
 ---@type table<string, string>
 Private.unit_types_range_check = Private.Mixin({
   pet = L["Pet"],
@@ -1340,7 +1339,7 @@ local function update_forms()
       Private.form_types[i] = i.." - "..name
     end
   end
-  if Private.OptionsFrame and not tCompare(oldForms, Private.form_types) then
+  if Private.OptionsFrame and not Private.tCompare(oldForms, Private.form_types) then
     Private.OptionsFrame():ReloadOptions()
   end
 end
@@ -1429,12 +1428,10 @@ Private.anchor_frame_types = {
   UIPARENT = L["Screen"],
   MOUSE = L["Mouse Cursor"],
   SELECTFRAME = L["Select Frame"],
+  NAMEPLATE = WeakAuras.IsAwesomeEnabled() and L["Nameplates"] or nil,
   UNITFRAME = L["Unit Frames"],
   CUSTOM = L["Custom"]
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.anchor_frame_types.NAMEPLATE = L["Nameplates"]
-end
 
 Private.anchor_frame_types_group = {
   SCREEN = L["Screen/Parent Group"],
@@ -1713,8 +1710,8 @@ local function InitializeCurrencies()
   Private.discovered_currencies_sorted = {}
   ---@type table<string, boolean>
   Private.discovered_currencies_headers = {}
-
   local expanded = {}
+
   for index = GetCurrencyListSize(), 1, -1 do
   local name, isHeader, isExpanded = GetCurrencyListInfo(index)
     if isHeader and not isExpanded then
@@ -1754,6 +1751,7 @@ local function InitializeCurrencies()
   Private.discovered_currencies_sorted["member"] = -1;
 end
 
+---@type function
 Private.ExecEnv.GetDiscoveredCurrencies = function()
   InitializeCurrencies()
   return Private.discovered_currencies
@@ -2733,7 +2731,6 @@ Private.TocToExpansion = {
   [11] = L["The War Within"]
 }
 
-
 ---@type table<string, string>
 Private.group_types = {
   solo = L["Not in Group"],
@@ -2776,11 +2773,10 @@ Private.classification_types = {
   elite = L["Elite"],
   rare = L["Rare"],
   normal = L["Normal"],
-  trivial = L["Trivial (Low Level)"]
+  trivial = L["Trivial (Low Level)"],
+  minus = WeakAuras.IsAwesomeEnabled() and L["Minus (Small Nameplate)"] or nil
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.classification_types.minus = L["Minus (Small Nameplate)"]
-end
+
   ---@type table<number, string>
 Private.creature_type_types = {
   [1] = L["Beast"],
@@ -3222,6 +3218,8 @@ Private.pet_behavior_types = {
   passive = PET_MODE_PASSIVE,
   defensive = PET_MODE_DEFENSIVE
 }
+
+Private.pet_spec_types = {}
 
 ---@type table<string, string>
 Private.cooldown_progress_behavior_types = {
@@ -3740,6 +3738,7 @@ Private.baseUnitId = {
 
 ---@type table<string, boolean>
 Private.multiUnitId = {
+  ["nameplate"] = WeakAuras.IsAwesomeEnabled() and true or nil,
   ["boss"] = true,
   ["arena"] = true,
   ["group"] = true,
@@ -3750,20 +3749,15 @@ Private.multiUnitId = {
   ["partypetsonly"] = true,
   ["raid"] = true,
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.multiUnitId["nameplate"] = true
-end
 
 Private.multiUnitUnits = {
+  ["nameplate"] = WeakAuras.IsAwesomeEnabled() and {} or nil,
   ["boss"] = {},
   ["arena"] = {},
   ["group"] = {},
   ["party"] = {},
   ["raid"] = {}
 }
-if WeakAuras.IsAwesomeEnabled() then
-  Private.multiUnitUnits["nameplate"] = {}
-end
 
 Private.multiUnitUnits.group["player"] = true
 Private.multiUnitUnits.party["player"] = true
@@ -3780,7 +3774,7 @@ for i = 1, 4 do
   Private.multiUnitUnits.party["partypet"..i] = true
 end
 
-for i = 1, MAX_BOSS_FRAMES do
+for i = 1, 5 do
   Private.baseUnitId["boss"..i] = true
   Private.multiUnitUnits.boss["boss"..i] = true
 end

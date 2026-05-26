@@ -6,6 +6,24 @@ local Private = select(2, ...)
 
 local L = WeakAuras.L;
 
+--- @class StopMotionRegion : WARegion
+--- @field background StopMotionBaseInstance
+--- @field foreground StopMotionBaseInstance
+--- @field width number
+--- @field height number
+--- @field scalex number
+--- @field scaley number
+--- @field mirror_h boolean
+--- @field mirror_v boolean
+--- @field color_r number
+--- @field color_g number
+--- @field color_b number
+--- @field color_a number
+--- @field color_anim_r number
+--- @field color_anim_g number
+--- @field color_anim_b number
+--- @field color_anim_a number
+
 local default = {
     progressSource = {-1, "" },
     adjustedMax = "",
@@ -104,6 +122,7 @@ local function create(parent)
   frame:SetResizable(true)
   frame:SetMinResize(1, 1)
 
+  --- @cast frame StopMotionRegion
   frame.background = Private.StopMotionBase.create(frame, "BACKGROUND")
   frame.foreground = Private.StopMotionBase.create(frame, "ARTWORK")
 
@@ -114,6 +133,7 @@ local function create(parent)
 end
 
 local FrameTickFunctions = {
+  --- @type fun(self: StopMotionRegion)
   progressTimer = function(self)
     Private.StartProfileSystem("stopmotion")
     Private.StartProfileAura(self.id)
@@ -126,6 +146,7 @@ local FrameTickFunctions = {
     Private.StopProfileAura(self.id)
     Private.StopProfileSystem("stopmotion")
   end,
+  --- @type fun(self: StopMotionRegion)
   timed = function(self)
     if (not self.foreground.startTime) then return end
 
@@ -207,6 +228,8 @@ local function modify(parent, region, data)
     region.scalex = 1;
     region.scaley = 1;
 
+    --- @class StopMotionRegion
+    --- @field Scale fun(self: StopMotionRegion, scalex: number, scaley: number)
     function region:Scale(scalex, scaley)
       self.scalex = scalex
       self.scaley = scaley
@@ -230,14 +253,20 @@ local function modify(parent, region, data)
     region.background:SetColor(data.backgroundColor[1], data.backgroundColor[2],
                                data.backgroundColor[3], data.backgroundColor[4])
 
+    --- @class StopMotionRegion
+    --- @field SetBackgroundColor fun(self: StopMotionRegion, r: number, g: number, b: number, a: number)
     function region:SetBackgroundColor(r, g, b, a)
       self.background:SetColor(r, g, b, a)
     end
 
+    --- @class StopMotionRegion
+    --- @field GetColor fun(self: StopMotionRegion): number, number, number, number
     function region:GetColor()
       return region.color_r, region.color_g, region.color_b, region.color_a
     end
 
+    --- @class StopMotionRegion
+    --- @field Color fun(self: StopMotionRegion, r: number, g: number, b: number, a: number)
     function region:Color(r, g, b, a)
       region.color_r = r;
       region.color_g = g;
@@ -249,6 +278,8 @@ local function modify(parent, region, data)
       region.foreground:SetColor(region.color_anim_r or r, region.color_anim_g or g, region.color_anim_b or b, region.color_anim_a or a);
     end
 
+    --- @class StopMotionRegion
+    --- @field ColorAnim fun(self: StopMotionRegion, r: number, g: number, b: number, a: number)
     function region:ColorAnim(r, g, b, a)
       region.color_anim_r = r;
       region.color_anim_g = g;
@@ -262,6 +293,8 @@ local function modify(parent, region, data)
 
     region:Color(data.foregroundColor[1], data.foregroundColor[2], data.foregroundColor[3], data.foregroundColor[4]);
 
+    --- @class StopMotionRegion
+    --- @field PreShow fun(self: StopMotionRegion)
     function region:PreShow()
       region.foreground:SetStartTime(GetTime())
       if region.FrameTick then
@@ -314,21 +347,28 @@ local function modify(parent, region, data)
         end
       end
     end
-
+    --- @class StopMotionRegion
+    --- @field SetRegionWidth fun(self: StopMotionRegion, width: number)
     function region:SetRegionWidth(width)
       self.width = width
       self:Scale(self.scalex, self.scaley)
     end
 
+    --- @class StopMotionRegion
+    --- @field SetRegionHeight fun(self: StopMotionRegion, height: number)
     function region:SetRegionHeight(height)
       self.height = height
       self:Scale(self.scalex, self.scaley)
     end
 
+    --- @class StopMotionRegion
+    --- @field SetForegroundDesaturated fun(self: StopMotionRegion, b: boolean)
     function region:SetForegroundDesaturated(b)
       self.foreground:SetDesaturated(b)
     end
 
+    --- @class StopMotionRegion
+    --- @field SetBackgroundDesaturated fun(self: StopMotionRegion, b: boolean)
     function region:SetBackgroundDesaturated(b)
       self.background:SetDesaturated(b)
     end

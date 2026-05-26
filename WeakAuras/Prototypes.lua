@@ -927,6 +927,7 @@ function WeakAuras.GetEffectiveAttackPower()
   return base + pos + neg
 end
 
+--- @type fun(): number
 function WeakAuras.GetEffectiveSpellPower()
   -- Straight from the PaperDoll
   local spellPower = 0
@@ -1036,7 +1037,7 @@ Private.load_prototype = {
     },
     {
       name = "encounter",
-      display = WeakAuras.newFeatureString .. L["In Encounter"],
+      display = L["In Encounter"],
       desc = constants.encounterDBMDesc,
       type = "tristate",
       width = WeakAuras.normalWidth,
@@ -1388,7 +1389,7 @@ Private.load_prototype = {
     },
     {
       name = "encounterid",
-      display = WeakAuras.newFeatureString .. L["Encounter ID(s)"],
+      display = L["Encounter ID(s)"],
       type = "string",
       init = "arg",
       multiline = true,
@@ -1876,7 +1877,7 @@ Private.event_prototypes = {
       },
       {
         name = "role",
-        display = L["Spec Role"],
+        display = L["Assigned Role"],
         type = "select",
         init = "WeakAuras.LGT:GetUnitRole(unit)",
         values = "role_types",
@@ -2571,7 +2572,7 @@ Private.event_prototypes = {
       },
       {
         name = "role",
-        display = L["Spec Role"],
+        display = L["Assigned Role"],
         type = "select",
         init = "WeakAuras.LGT:GetUnitRole(unit)",
         values = "role_types",
@@ -3051,7 +3052,7 @@ Private.event_prototypes = {
       },
       {
         name = "role",
-        display = L["Spec Role"],
+        display = L["Assigned Role"],
         type = "select",
         init = "WeakAuras.LGT:GetUnitRole(unit)",
         values = "role_types",
@@ -3196,7 +3197,7 @@ Private.event_prototypes = {
     args = {
       {}, -- timestamp ignored with _ argument
       {}, -- messageType ignored with _ argument (it is checked before the dynamic function)
-      -- {}, -- we don't have hideCaster
+      -- {}, -- hideCaster ignored with _ argument -- we do not have hideCaster
       {
         type = "header",
         name = "sourceHeader",
@@ -3446,8 +3447,8 @@ Private.event_prototypes = {
             or trigger.subeventPrefix:find("SPELL"))
 
             or trigger.subeventSuffix and (
-            -- trigger.subeventSuffix == "_ABSORBED" -- we don't have that
-            trigger.subeventSuffix == "_INTERRUPT"
+              -- trigger.subeventSuffix == "_ABSORBED" -- we don't have that
+              trigger.subeventSuffix == "_INTERRUPT"
               or trigger.subeventSuffix == "_DISPEL"
               or trigger.subeventSuffix == "_DISPEL_FAILED"
               or trigger.subeventSuffix == "_STOLEN"
@@ -3542,6 +3543,7 @@ Private.event_prototypes = {
         conditionType = "select",
         store = true
       },
+      -- we dont have SPELL_ABSORBED
       {
         name = "extraSpellId",
         display = WeakAuras.newFeatureString .. L["Extra Spell Id"],
@@ -3549,7 +3551,7 @@ Private.event_prototypes = {
         enable = function(trigger)
           return trigger.subeventSuffix and (trigger.subeventSuffix == "_INTERRUPT" or trigger.subeventSuffix == "_DISPEL" or trigger.subeventSuffix == "_DISPEL_FAILED" or trigger.subeventSuffix == "_STOLEN" or trigger.subeventSuffix == "_AURA_BROKEN_SPELL")
         end,
-        test = "GetSpellInfo(%q or '') == extraSpellName",
+        test = "GetSpellInfo(%q or '') == extraSpellName", -- !! Needs review if needed
         type = "spell",
         showExactOption = false,
         store = true,
@@ -7292,7 +7294,7 @@ Private.event_prototypes = {
       },
       {
         name = "role",
-        display = L["Spec Role"],
+        display = L["Assigned Role"],
         type = "select",
         init = "WeakAuras.LGT:GetUnitRole(unit)",
         values = "role_types",
@@ -7754,7 +7756,7 @@ Private.event_prototypes = {
       },
       {
         name = "armorpenpercent",
-        display = L["Armor Peneration (%)"],
+        display = L["Armor Peneration Percent"],
         type = "number",
         init = "GetArmorPenetration()",
         store = true,
@@ -7763,11 +7765,10 @@ Private.event_prototypes = {
           operator = "and",
           limit = 2
         },
-        formatter = "Number",
       },
       {
         name = "spellpenpercent",
-        display = L["Spell Peneration (%)"],
+        display = L["Spell Peneration Percent"],
         type = "number",
         init = "GetSpellPenetration()",
         store = true,
@@ -7934,7 +7935,6 @@ Private.event_prototypes = {
         name = "defensiveStatsHeader",
         display = L["Defensive Stats"],
       },
-
       {
         name = "defense",
         display = L["Defense"],
@@ -8111,7 +8111,7 @@ Private.event_prototypes = {
     internal_events = function(trigger, untrigger)
       local events = { "CONDITIONS_CHECK"};
 
-      if trigger.use_ismoving ~= nil then
+      if (trigger.use_ismoving ~= nil) then
         tinsert(events, "PLAYER_MOVING_UPDATE");
       end
 
@@ -8123,7 +8123,7 @@ Private.event_prototypes = {
       end
 
       if (trigger.use_HasPet ~= nil) then
-        AddUnitChangeInternalEvents("pet", events);
+        AddUnitChangeInternalEvents("pet", events)
       end
 
       return events;
@@ -8170,7 +8170,7 @@ Private.event_prototypes = {
         name = "vehicle",
         display = L["In Vehicle"],
         type = "tristate",
-        init = "UnitInVehicle('player')",
+        init = "UnitInVehicle('player') or UnitOnTaxi('player')",
       },
       {
         name = "resting",
@@ -8208,17 +8208,15 @@ Private.event_prototypes = {
         type = "multiselect",
         values = "group_types",
         init = "Private.ExecEnv.GroupType()",
-        events = {"PARTY_MEMBERS_CHANGED", "RAID_ROSTER_UPDATE"}
       },
       {
         name = "instance_size",
-        display = L["Instance Type"].." "..L["|cffff0000deprecated|r"],
+        display = L["Instance Size Type"].." "..L["|cffff0000deprecated|r"],
         desc = constants.instanceFilterDeprecated,
         type = "multiselect",
         values = "instance_types",
         sorted = true,
         init = "WeakAuras.InstanceType()",
-        events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA"}
       },
       {
         name = "instance_difficulty",
@@ -8384,6 +8382,12 @@ Private.event_prototypes = {
         enable = function(trigger) return trigger.use_behavior end
       },
       {
+        name = "petspec",
+        display = L["Pet Specialization"],
+        type = "select",
+        values = "pet_spec_types",
+      },
+      {
         hidden = true,
         name = "icon",
         init = "activeIcon",
@@ -8432,8 +8436,7 @@ Private.event_prototypes = {
       },
     },
     iconFunc = function(trigger)
-      local _, _, icon = GetSpellInfo(trigger.spellName or 0);
-      return icon;
+      return select(3, GetSpellInfo(trigger.spellName or 0));
     end,
     automaticrequired = true,
     progressType = "none"
@@ -8640,7 +8643,7 @@ Private.event_prototypes = {
         sortOrder = function()
           local discovered_currencies_sorted = Private.GetDiscoveredCurrenciesSorted()
           local sortOrder = {}
-          for key, value in pairs(Private.ExecEnv.GetDiscoveredCurrencies()) do
+          for key in pairs(Private.ExecEnv.GetDiscoveredCurrencies()) do
             tinsert(sortOrder, key)
           end
           table.sort(sortOrder, function(aKey, bKey)
@@ -8845,7 +8848,7 @@ Private.event_prototypes = {
 --[[
 Disable any event here
 if () then
-  Private.event_prototypes[] = nil
+  Private.event_prototypes[""] = nil
   end
 ]]
 

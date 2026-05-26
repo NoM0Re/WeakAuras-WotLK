@@ -5,14 +5,9 @@ local AddonName = ...
 local Private = select(2, ...)
 
 local L = WeakAuras.L
-local MSQ, MSQ_Version = LibStub("Masque", true);
+local MSQ = LibStub("Masque", true);
 if MSQ then
-  if MSQ_Version <= 80100 then
-    MSQ = nil
-   WeakAuras.prettyPrint(L["Please upgrade your Masque version"])
-  else
-    MSQ:AddType("WA_Aura", {"Icon", "Cooldown"})
-  end
+  MSQ:AddType("WA_Aura", {"Icon", "Cooldown"})
 end
 
 -- WoW API
@@ -38,7 +33,10 @@ local default = {
   keepAspectRatio = false,
   frameStrata = 1,
   cooldown = true,
-  cooldownEdge = false
+  cooldownTextDisabled = false,
+  cooldownSwipe = true,
+  cooldownEdge = false,
+  useCooldownModRate = true
 };
 
 Private.regionPrototype.AddProgressSourceToDefault(default)
@@ -251,6 +249,7 @@ local function create(parent, data)
   local font = "GameFontHighlight";
 
   local region = CreateFrame("Frame", nil, parent);
+  --- @cast region table|Frame
   region.regionType = "icon"
   region:SetMovable(true);
   region:SetResizable(true);
@@ -282,6 +281,7 @@ local function create(parent, data)
   local button
   if MSQ then
     button = CreateFrame("Button", nil, region)
+    --- @cast button table|Button
     button.data = data
     region.button = button;
     button:EnableMouse(false);
@@ -290,6 +290,9 @@ local function create(parent, data)
   end
 
   local icon = region:CreateTexture(nil, "BACKGROUND");
+  Private.FixTextureDesaturation(icon)
+  -- icon:SetSnapToPixelGrid(false)
+  -- icon:SetTexelSnappingBias(0)
   if MSQ then
     icon:SetAllPoints(button);
     button:SetScript("OnSizeChanged", region.UpdateInnerOuterSize);
@@ -299,8 +302,6 @@ local function create(parent, data)
   end
   region.icon = icon;
   icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark");
-
-  Private.FixTextureDesaturation(icon)
 
   --This section creates a unique frame id for the cooldown frame so that it can be created with a global reference
   --The reason is so that WeakAuras cooldown frames can interact properly with OmniCC
@@ -399,12 +400,7 @@ local function modify(parent, region, data)
     end
 
     if region.MSQGroup then
-      if region.MSQGroup.ReSkin then
         region.MSQGroup:ReSkin(button)
-      else
-        region.MSQGroup:RemoveButton(button)
-        region.MSQGroup:AddButton(button, {Icon = icon, Cooldown = cooldown}, "WA_Aura", true)
-      end
     end
 
     local ulx, uly, llx, lly, urx, ury, lrx, lry
@@ -548,7 +544,7 @@ local function modify(parent, region, data)
     end
 
     iconPath = iconPath or self.displayIcon or "Interface\\Icons\\INV_Misc_QuestionMark"
-    Private.SetTextureOrAtlas(icon, iconPath)
+    Private.SetTextureOrAtlas(self.icon, iconPath)
   end
 
   function region:Scale(scalex, scaley)

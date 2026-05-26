@@ -9,8 +9,6 @@ local WeakAuras = WeakAuras
 local L = WeakAuras.L
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
-local tIndexOf = Private.tIndexOf
-
 local default = {
   controlledChildren = {},
   border = false,
@@ -674,6 +672,8 @@ local growers = {
         end
         local x, y = midX - totalWidth/2, midY - (stagger * (numVisible - 1)/2)
         newPositions[frame] = {}
+
+        --- @type integer?
         local i = FirstIndex(numVisible)
         while i do
           local regionData = regionDatas[i]
@@ -1237,7 +1237,7 @@ local function modify(parent, region, data)
     if self.controlledChildren[childID] and self.controlledChildren[childID][cloneID] then
       return
     end
-    local dataIndex = tIndexOf(data.controlledChildren, childID)
+    local dataIndex = Private.tIndexOf(data.controlledChildren, childID)
     if not dataIndex then return end
     local childData = WeakAuras.GetData(childID)
     local childRegion = WeakAuras.GetRegion(childID, cloneID)

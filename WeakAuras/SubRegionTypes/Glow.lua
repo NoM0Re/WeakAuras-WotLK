@@ -192,13 +192,23 @@ local funcs = {
     local color
     self.glow = visible
 
+    local left, bottom, width, height = self:GetRect()
+    if not (left and bottom and width and height and width > 0 and height > 0) then
+      -- This ensures that WoW tries to make the rect valid
+      -- which helps the glow lib to apply the glow in the right size
+      -- See Ticket: #2818
+      self:GetWidth()
+    end
+
     if self.useGlowColor then
       color = self.glowColor
     end
 
     if MSQ and self.parentType == "icon" then
       if (visible) then
-        self.__MSQ_Shape = self:GetParent().button.__MSQ_Shape
+        local button = self:GetParent().button
+        self._MSQ_CFG = button._MSQ_CFG
+        self.__MSQ_Shape = button.__MSQ_Shape
         self:Show()
         glowStart(self, self, color)
       else

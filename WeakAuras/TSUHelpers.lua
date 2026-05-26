@@ -7,6 +7,8 @@ local Private = select(2, ...)
 
 ---@alias key string | integer
 ---@alias states table<key, state>
+
+----@type fun(state: state)
 local function fixMissingFields(state)
   if type(state) ~= "table" then return end
   -- set show
@@ -14,6 +16,7 @@ local function fixMissingFields(state)
     state.show = true
   end
 end
+
 
 ---@type fun(states: states, key: key): boolean
 local remove = function(states, key)
@@ -112,6 +115,7 @@ local createOrUpdate = function(states, key, newState)
 end
 
 ---@type fun(states: states, key: key, field: any?): any
+---return a state for a key, or a field of a state for a key/field
 local get = function(states, key, field)
   key = key or ""
   local state = states[key]
