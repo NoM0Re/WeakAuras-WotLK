@@ -32,6 +32,7 @@ local default = function(parentType)
       text_shadowColor = { 0, 0, 0, 1},
       text_shadowXOffset = 0,
       text_shadowYOffset = 0,
+      rotateText = "NONE",
 
       text_automaticWidth = "Auto",
       text_fixedWidth = 64,
@@ -56,6 +57,7 @@ local default = function(parentType)
       text_shadowColor = { 0, 0, 0, 1},
       text_shadowXOffset = 1,
       text_shadowYOffset = -1,
+      rotateText = "NONE",
 
       text_automaticWidth = "Auto",
       text_fixedWidth = 64,
@@ -142,15 +144,17 @@ local function modify(parent, region, parentData, data, first)
   local text = region.text;
 
   local fontPath = SharedMedia:Fetch("font", data.text_font);
-  text:SetFont(fontPath, data.text_fontSize < 33 and data.text_fontSize or 33, data.text_fontType);
+  local fontSize = data.text_fontSize < 33 and data.text_fontSize or 33
+  local fontType = data.text_fontType == "None" and "" or data.text_fontType
+  text:SetFont(fontPath, fontSize, fontType);
   if not text:GetFont() and fontPath then -- workaround font not loading correctly
     local objectName = "WeakAuras-Font-" .. data.text_font
     local fontObject = _G[objectName] or CreateFont(objectName)
-    fontObject:SetFont(fontPath, data.text_fontSize < 33 and data.text_fontSize or 33, data.text_fontType == "None" and "" or data.text_fontType)
+    fontObject:SetFont(fontPath, fontSize, fontType)
     text:SetFontObject(fontObject)
   end
   if not text:GetFont() then -- Font invalid, set the font but keep the setting
-    text:SetFont(STANDARD_TEXT_FONT, data.text_fontSize < 33 and data.text_fontSize or 33, data.text_fontType);
+    text:SetFont(STANDARD_TEXT_FONT, fontSize, fontType);
   end
   if text:GetFont() then
     text:SetText(WeakAuras.ReplaceRaidMarkerSymbols(data.text_text));
@@ -451,6 +455,8 @@ local function addDefaultsForNewAura(data)
       text_shadowColor = { 0, 0, 0, 1},
       text_shadowXOffset = 1,
       text_shadowYOffset = -1,
+
+      rotateText = "NONE",
     });
 
     tinsert(data.subRegions, {
@@ -471,6 +477,8 @@ local function addDefaultsForNewAura(data)
       text_shadowColor = { 0, 0, 0, 1},
       text_shadowXOffset = 1,
       text_shadowYOffset = -1,
+
+      rotateText = "NONE",
     });
   elseif data.regionType == "icon" then
     tinsert(data.subRegions, {
@@ -491,6 +499,8 @@ local function addDefaultsForNewAura(data)
       text_shadowColor = { 0, 0, 0, 1},
       text_shadowXOffset = 0,
       text_shadowYOffset = 0,
+
+      rotateText = "NONE",
     });
   end
 end

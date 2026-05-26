@@ -1,4 +1,6 @@
-if not WeakAuras.IsLibsOK() then return end
+if not WeakAuras.IsLibsOK() then
+  return
+end
 ---@type string
 local AddonName = ...
 ---@class Private
@@ -45,15 +47,14 @@ table_to_string = function(tbl, depth)
       elseif type(v) == "function" then
         v = "function"
       elseif type(v) == "string" then
-        v = '"'.. v ..'"'
+        v = '"' .. v .. '"'
       end
 
       if type(k) == "string" then
-        k = '"' .. k ..'"'
+        k = '"' .. k .. '"'
       end
 
-      str = (str and str .. "|cff999999,|r " or "|cff999999{|r ") .. "|cffffff99["
-            .. tostring(k) .. "]|r |cff999999=|r |cffffffff" .. tostring(v) .. "|r"
+      str = (str and str .. "|cff999999,|r " or "|cff999999{|r ") .. "|cffffff99[" .. tostring(k) .. "]|r |cff999999=|r |cffffffff" .. tostring(v) .. "|r"
     end
   end
   return (str or "{ ") .. " }"
@@ -194,12 +195,14 @@ function Private.ProfileRenameAura(oldid, id)
 end
 
 local RegisterProfile = function(startType)
-  if startType == "boss" then startType = "encounter" end
+  if startType == "boss" then
+    startType = "encounter"
+  end
   local delayedStart
   if startType == "encounter" then
     RealTimeProfilingWindow:UnregisterAllEvents()
-    prettyPrint(L["Your next instance of combat will automatically be profiled."])
-    RealTimeProfilingWindow:RegisterEvent("PLAYER_REGEN_DISABLED")
+    prettyPrint(L["Your next encounter will automatically be profiled."])
+    RealTimeProfilingWindow:RegisterEvent("PLAYER_REGEN_DISABLED") -- !! TODO use DBM Events
     RealTimeProfilingWindow:RegisterEvent("PLAYER_REGEN_ENABLED")
     currentProfileState = startType
     delayedStart = true
@@ -244,6 +247,7 @@ function WeakAuras.StartProfile(startType)
   profileData.auras = {}
   profileData.systems.time = {}
   profileData.systems.time.start = debugprofilestop()
+  profileData.systems.time.elapsed = nil
   profileData.systems.time.count = 1
 
   Private.StartProfileSystem = StartProfileSystem
@@ -255,12 +259,11 @@ function WeakAuras.StartProfile(startType)
   LGF.StartProfile()
 end
 
-local function doNothing()
-end
+local function doNothing() end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function WeakAuras.StopProfile()
-  if (currentProfileState ~= "profiling") then
+  if currentProfileState ~= "profiling" then
     prettyPrint(L["Profiling not running."])
     return
   end
@@ -288,7 +291,7 @@ function WeakAuras.StopProfile()
 end
 
 function WeakAuras.ToggleProfile()
-  if (not profileData.systems.time or profileData.systems.time.count ~= 1) then
+  if not profileData.systems.time or profileData.systems.time.count ~= 1 then
     WeakAuras.StartProfile()
   else
     WeakAuras.StopProfile()
@@ -313,10 +316,25 @@ local function AutoStartStopProfiling(frame, event)
 end
 RealTimeProfilingWindow:SetScript("OnEvent", AutoStartStopProfiling)
 
+local function ColoredSpike(spike)
+  local r, g, b
+  if spike < 2 then
+    r, g, b = WeakAuras.GetHSVTransition(spike / 2, 0, 1, 0, 1, 1, 1, 0, 1)
+  elseif spike < 2.5 then
+    r, g, b = WeakAuras.GetHSVTransition((spike - 2) * 2, 1, 1, 0, 1, 1, 0.65, 0, 1)
+  elseif spike < 3 then
+    r, g, b = WeakAuras.GetHSVTransition((spike - 2.5) * 2, 1, 0.65, 0, 1, 1, 0, 0, 1)
+  else
+    r, g, b = 1, 0, 0
+  end
+  return ("|cff%02x%02x%02x%.2fms|r"):format(r * 255, g * 255, b * 255, spike)
+end
+
 local function PrintOneProfile(popup, name, map, total)
   if map.count ~= 0 then
     popup:AddText(name .. "  ERROR: count is not zero:" .. " " .. map.count)
   end
+
   local percent = ""
   if total then
     percent = (", %.2f%%"):format(100 * map.elapsed / total)
@@ -324,25 +342,15 @@ local function PrintOneProfile(popup, name, map, total)
 
   local spikeInfo = ""
   if map.spike then
-    local r, g, b
-    if map.spike < 2 then
-      r, g, b = WeakAuras.GetHSVTransition(map.spike / 2, 0, 1, 0, 1, 1, 1, 0, 1)
-    elseif map.spike < 2.5 then
-      r, g, b = WeakAuras.GetHSVTransition((map.spike - 2) * 2, 1, 1, 0, 1, 1, 0.65, 0, 1)
-    elseif map.spike < 3 then
-      r, g, b = WeakAuras.GetHSVTransition((map.spike - 2.5) * 2, 1, 0.65, 0, 1, 1, 0, 0, 1)
-    else
-      r, g, b = 1, 0, 0
-    end
-    spikeInfo = ("|cff%02x%02x%02x(%.2fms)|r"):format(r * 255, g * 255, b * 255, map.spike)
+    spikeInfo = ColoredSpike(map.spike)
   end
 
-  popup:AddText(("%s |cff999999%.2fms%s %s|r"):format(name, map.elapsed, percent, spikeInfo))
+  popup:AddText(("%s |cff999999%.2fms%s (%s)|r"):format(name, map.elapsed, percent, spikeInfo))
 end
 
 local function SortProfileMap(map)
   local result = {}
-  for k, v in pairs(map) do
+  for k in pairs(map) do
     tinsert(result, k)
   end
 
@@ -350,6 +358,7 @@ local function SortProfileMap(map)
     if map[a].spike and map[b].spike then
       return map[a].spike > map[b].spike
     end
+
     return map[a].elapsed > map[b].elapsed
   end)
 
@@ -367,17 +376,29 @@ end
 local function unitEventToMultiUnit(event)
   local count
   event, count = event:gsub("nameplate%d+$", "nameplate")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("boss%d$", "boss")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("arena%d$", "arena")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("raid%d+$", "group")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("raidpet%d+$", "group")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("party%d$", "party")
-  if count == 1 then return event end
+  if count == 1 then
+    return event
+  end
   event, count = event:gsub("partypet%d$", "party")
   return event
 end
@@ -411,8 +432,7 @@ function WeakAuras.PrintProfile()
 
   PrintOneProfile(popup, "|cff9900ffTotal time:|r", profileData.systems.time)
   PrintOneProfile(popup, "|cff9900ffTime inside WA:|r", profileData.systems.wa)
-  popup:AddText(string.format("|cff9900ffTime spent inside WA:|r %.2f%%",
-                              100 * profileData.systems.wa.elapsed / profileData.systems.time.elapsed))
+  popup:AddText(string.format("|cff9900ffTime spent inside WA:|r %.2f%%", 100 * profileData.systems.wa.elapsed / profileData.systems.time.elapsed))
 
   popup:AddText("")
   popup:AddText("Note: Not every aspect of each aura can be tracked.")
@@ -421,8 +441,8 @@ function WeakAuras.PrintProfile()
   popup:AddText("")
   popup:AddText("|cff9900ffAuras:|r")
   local total = TotalProfileTime(profileData.auras)
-  popup:AddText("Total time attributed to auras: ", floor(total) .."ms")
-  for i, k in ipairs(SortProfileMap(profileData.auras)) do
+  popup:AddText("Total time attributed to auras: ", floor(total) .. "ms")
+  for _, k in ipairs(SortProfileMap(profileData.auras)) do
     PrintOneProfile(popup, k, profileData.auras[k], total)
   end
 

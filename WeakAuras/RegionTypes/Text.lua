@@ -58,6 +58,30 @@ local properties = {
 
 Private.regionPrototype.AddProperties(properties, default);
 
+--- @class TextRegion : Region
+--- @field displayText string
+--- @field text FontString
+--- @field width number
+--- @field height number
+--- @field color_r number
+--- @field color_g number
+--- @field color_b number
+--- @field color_a number
+--- @field color_anim_r number
+--- @field color_anim_g number
+--- @field color_anim_b number
+--- @field color_anim_a number
+--- @field tooltipFrame Frame
+--- @field ConfigureTextUpdate fun(self: TextRegion)
+--- @field Update fun(self: TextRegion)
+--- @field FrameTick fun(self: TextRegion)
+--- @field ConfigureSubscribers fun(self: TextRegion)
+--- @field Color fun(self: TextRegion, r : number, g: number, a : number)
+--- @field ColorAnim fun(self: TextRegion, r : number, g: number, a : number)
+--- @field GetColor fun(self: TextRegion): number, number, number, number
+--- @field SetTextHeight fun(self: TextRegion, size: number)
+--- @field ChangeText fun(self: TextRegion, msg: string)
+
 local function create(parent)
   local region = CreateFrame("Frame", nil, parent);
   region.regionType = "text"
@@ -73,20 +97,23 @@ local function create(parent)
   return region;
 end
 
+--- @type fun(parent: Frame, region: TextRegion, data: AuraData)
 local function modify(parent, region, data)
   Private.regionPrototype.modify(parent, region, data);
   local text = region.text;
 
   local fontPath = SharedMedia:Fetch("font", data.font);
-  text:SetFont(fontPath, data.fontSize < 33 and data.fontSize or 33, data.outline == "None" and "" or data.outline);
+  local fontSize = data.fontSize < 33 and data.fontSize or 33
+  local outline = data.outline == "None" and "" or data.outline
+  text:SetFont(fontPath, fontSize, outline);
   if not text:GetFont() and fontPath then -- workaround font not loading correctly
     local objectName = "WeakAuras-Font-" .. data.font
     local fontObject = _G[objectName] or CreateFont(objectName)
-    fontObject:SetFont(fontPath, data.fontSize < 33 and data.fontSize or 33, data.outline == "None" and "" or data.outline)
+    fontObject:SetFont(fontPath, fontSize, outline)
     text:SetFontObject(fontObject)
   end
   if not text:GetFont() then -- Font invalid, set the font but keep the setting
-    text:SetFont(STANDARD_TEXT_FONT, data.fontSize < 33 and data.fontSize or 33, data.outline == "None" and "" or data.outline);
+    text:SetFont(STANDARD_TEXT_FONT, fontSize, outline);
   end
 
   text:SetJustifyH(data.justify);
@@ -339,7 +366,7 @@ local function modify(parent, region, data)
 
   function region:SetTextHeight(size)
     local fontPath = SharedMedia:Fetch("font", data.font);
-    region.text:SetFont(fontPath, size < 33 and size or 33, data.outline);
+    region.text:SetFont(fontPath, size < 33 and size or 33, data.outline == "None" and "" or data.outline);
     region.text:SetTextHeight(size)
   end
 
@@ -367,7 +394,7 @@ local function fallbackmodify(parent, region, data)
   Private.regionPrototype.modify(parent, region, data);
   local text = region.text;
 
-  text:SetFont(STANDARD_TEXT_FONT, data.fontSize, data.outline and "OUTLINE" or nil);
+  text:SetFont(STANDARD_TEXT_FONT, data.fontSize, data.outline and "OUTLINE" or "");
   if text:GetFont() then
     text:SetText(WeakAuras.L["Region type %s not supported"]:format(data.regionType));
   end

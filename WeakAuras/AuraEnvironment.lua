@@ -188,6 +188,10 @@ local blockedFunctions = {
   ChatEdit_ActivateChat = true,
   ChatEdit_ParseText = true,
   ChatEdit_OnEnterPressed = true,
+  -- GetButtonMetatable = true,
+  -- GetEditBoxMetatable = true,
+  -- GetFontStringMetatable = true,
+  -- GetFrameMetatable = true,
 }
 
 local blockedTables = {
@@ -490,7 +494,7 @@ local FakeWeakAurasMixin = {
     loaded = true
   },
   override = {
-    me = UnitName("player"),
+    me = GetUnitName("player", true),
     myGUID = UnitGUID("player"),
     GetData = function(id)
       if current_uid then
@@ -683,6 +687,7 @@ local function CreateFunctionCache(exec_env)
         end
         return nil, errorString
       elseif loadedFunction then
+        --- @cast loadedFunction -nil
         setfenv(loadedFunction, exec_env)
         local success, func = pcall(assert(loadedFunction))
         if success then

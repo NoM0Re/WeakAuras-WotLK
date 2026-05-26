@@ -4,11 +4,20 @@ local AddonName = ...
 ---@class Private
 local Private = select(2, ...)
 
+--- @alias AuraWarningSeverity
+--- | "info"
+--- | "sound"
+--- | "tts"
+--- | "warning"
+--- | "error"
+
 ---@class WeakAuras
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
+--- @type table<uid, table<string, {severity: AuraWarningSeverity, message: string}>>
 local warnings = {}
+--- @type table<uid, table<string, boolean>>
 local printedWarnings = {}
 
 local function OnDelete(event, uid)
@@ -17,7 +26,16 @@ local function OnDelete(event, uid)
 end
 
 Private.callbacks:RegisterCallback("Delete", OnDelete)
-Private.AuraWarnings = {}
+
+--- @class AuraWarnings
+--- @field UpdateWarning fun(uid: uid, key: string, severity: AuraWarningSeverity?, message: string?, printOnConsole: boolean?)
+--- @field FormatWarnings fun(uid: uid): string?, string?, string?
+Private.AuraWarnings = {
+  UpdateWarning = function(uid, key, severity, message, printOnConsole)
+  end,
+  FormatWarnings = function(uid)
+  end
+}
 
 function Private.AuraWarnings.UpdateWarning(uid, key, severity, message, printOnConsole)
   if not uid then
@@ -50,6 +68,7 @@ function Private.AuraWarnings.UpdateWarning(uid, key, severity, message, printOn
   end
 end
 
+--- @type table<AuraWarningSeverity, number>
 local severityLevel = {
   info = 0,
   sound = 1,
@@ -58,6 +77,7 @@ local severityLevel = {
   error = 4
 }
 
+--- @type table<AuraWarningSeverity, string>
 local icons = {
   info = [[Interface\FriendsFrame\InformationIcon]],
   sound = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ChatFrame",
@@ -66,6 +86,7 @@ local icons = {
   error = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\HelpIcon-Bug",
 }
 
+--- @type table<AuraWarningSeverity, string>
 local titles = {
   info = L["Information"],
   sound = L["Sound"],
@@ -100,7 +121,9 @@ function Private.AuraWarnings.FormatWarnings(uid)
     return
   end
 
+  --- @type AuraWarningSeverity
   local maxSeverity
+  --- @type boolean
   local mixedSeverity = false
 
   ---@type table<AuraWarningSeverity, string[]>
@@ -122,6 +145,7 @@ function Private.AuraWarnings.FormatWarnings(uid)
     return
   end
 
+  --- @type string
   local result = ""
   result = AddMessages(result, messagePerSeverity["error"], icons["error"], mixedSeverity)
   result = AddMessages(result, messagePerSeverity["warning"], icons["warning"], mixedSeverity)
