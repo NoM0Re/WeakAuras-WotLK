@@ -264,7 +264,7 @@ local function ConstructTexturePicker(frame)
         pickedwidget = widget;
       end
     end
-    local width, height
+    local width, height = nil, nil
     if(pickedwidget) then
       pickedwidget:Pick();
     end

@@ -1701,8 +1701,8 @@ function WeakAuras.UpdateThumbnail(data)
   button:UpdateThumbnail()
 end
 
-function OptionsPrivate.OpenTexturePicker(baseObject, paths, properties, textures, SetTextureFunc)
-  OptionsPrivate.TexturePicker(frame):Open(baseObject, paths, properties, textures, SetTextureFunc)
+function OptionsPrivate.OpenTexturePicker(baseObject, paths, properties, textures, SetTextureFunc, adjustSize)
+   OptionsPrivate.TexturePicker(frame):Open(baseObject, paths, properties, textures, SetTextureFunc, adjustSize)
 end
 
 function OptionsPrivate.OpenIconPicker(baseObject, paths, groupIcon)
