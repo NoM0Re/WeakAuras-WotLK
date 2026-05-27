@@ -116,11 +116,11 @@ local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 
 	if canExpand then
 		if not isExpanded then
-			toggle:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-UP")
-			toggle:SetPushedTexture("Interface\\Buttons\\UI-PlusButton-DOWN")
+			toggle:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-UP") -- 130838
+			toggle:SetPushedTexture("Interface\\Buttons\\UI-PlusButton-DOWN") -- 130836
 		else
-			toggle:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-UP")
-			toggle:SetPushedTexture("Interface\\Buttons\\UI-MinusButton-DOWN")
+			toggle:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-UP") -- 130821
+			toggle:SetPushedTexture("Interface\\Buttons\\UI-MinusButton-DOWN") -- 130820
 		end
 		toggle:Show()
 	else
@@ -663,7 +663,7 @@ local function Constructor()
 	treeframeBG:SetBackdropBorderColor(0.4, 0.4, 0.4)
 	treeframeBG:SetAllPoints(treeframe)
 
-	local dragger = CreateFrame("Button", nil, treeframe)
+	local dragger = CreateFrame("Frame", nil, treeframe)
 	dragger:SetWidth(8)
 	dragger:SetPoint("TOP", treeframe, "TOPRIGHT")
 	dragger:SetPoint("BOTTOM", treeframe, "BOTTOMRIGHT")

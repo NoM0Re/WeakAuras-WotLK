@@ -60,9 +60,8 @@ local function ConstructModelPicker(frame)
   group.frame:Hide();
   group:SetLayout("flow");
 
-  local filterInput = CreateFrame("EditBox", "WeakAurasFilterInput", nil)
+  local filterInput = CreateFrame("EditBox", "WeakAurasFilterInput", group.frame)
   WeakAuras.XMLTemplates["SearchBoxTemplate"](filterInput)
-  filterInput:SetParent(group.frame)
   filterInput:SetScript("OnTextChanged", function(self)
     WA_SearchBoxTemplate_OnTextChanged(self)
     local filterText = filterInput:GetText()
@@ -73,9 +72,10 @@ local function ConstructModelPicker(frame)
   filterInput:SetHeight(15)
   filterInput:SetPoint("BOTTOMRIGHT", group.frame, "TOPRIGHT", -3, 5)
   filterInput:SetWidth(200)
-  filterInput:SetFont(STANDARD_TEXT_FONT, 10)
+  filterInput:SetFont(STANDARD_TEXT_FONT, 10, "")
   group.frame.filterInput = filterInput
 
+  -- Old X Y Z controls
   local modelPickerZ = AceGUI:Create("Slider");
   modelPickerZ:SetSliderValues(-20, 20, 0.05);
   modelPickerZ:SetLabel(L["Z Offset"]);
@@ -113,7 +113,6 @@ local function ConstructModelPicker(frame)
   group.frame:SetScript("OnSizeChanged", function()
     local frameWidth = frame:GetWidth();
     local sliderWidth = (frameWidth - 50) / 4;
-    local narrowSliderWidth = (frameWidth - 50) / 7;
 
     modelTree:SetTreeWidth(frameWidth - 370);
 
@@ -134,12 +133,13 @@ local function ConstructModelPicker(frame)
   modelTree:SetCallback("OnGroupSelected", function(self, event, value, fileId)
     local path = string.gsub(value, "\001", "/");
     if(string.lower(string.sub(path, -3, -1)) == ".m2") then
-      group:Pick(path, fileId);
+      group:Pick(fileId or path); -- !! FIX ME: ModelPaths should have paths upgraded to fileIds
     end
   end);
   group:AddChild(modelTree);
 
   local model = CreateFrame("PlayerModel", nil, group.content);
+  -- model.SetTransformFixed = OptionsPrivate.Private.ModelSetTransformFixed
   model:SetAllPoints(modelTree.content);
   model:SetFrameStrata("FULLSCREEN");
   group.model = model;
@@ -163,9 +163,9 @@ local function ConstructModelPicker(frame)
     group:Pick(nil, nil, nil, nil, rotation)
   end)
 
-  local function SetOnObject(object, model_path, model_z, model_x, model_y, rotation)
-    if model_path then
-      object.model_path = model_path
+  local function SetOnObject(object, model_fileId, model_z, model_x, model_y, rotation)
+    if model_fileId then
+      object.model_fileId = model_fileId
     end
     if model_z then
       object.model_z = model_z
@@ -181,24 +181,25 @@ local function ConstructModelPicker(frame)
     end
   end
 
-  function group.Pick(self, model_path, model_z, model_x, model_y, rotation)
+  function group.Pick(self, model_fileId, model_z, model_x, model_y, rotation)
     local valueFromPath = OptionsPrivate.Private.ValueFromPath
 
-    self.selectedValues.model_path = model_path or self.selectedValues.model_path
+    self.selectedValues.model_fileId = model_fileId or self.selectedValues.model_fileId
     self.selectedValues.model_x = model_x or self.selectedValues.model_x
     self.selectedValues.model_y = model_y or self.selectedValues.model_y
     self.selectedValues.model_z = model_z or self.selectedValues.model_z
     self.selectedValues.rotation = rotation or self.selectedValues.rotation
 
-    WeakAuras.SetModel(self.model, self.selectedValues.model_path)
+    WeakAuras.SetModel(self.model, nil, self.selectedValues.model_fileId)
 
+    -- self.model:ClearTransform();
     self.model:SetPosition(self.selectedValues.model_z, self.selectedValues.model_x, self.selectedValues.model_y);
     self.model:SetFacing(rad(self.selectedValues.rotation));
 
     for child in OptionsPrivate.Private.TraverseLeafsOrAura(self.baseObject) do
       local object = valueFromPath(child, self.path)
       if(object) then
-        SetOnObject(object, model_path, model_z, model_x, model_y, rotation)
+        SetOnObject(object, model_fileId, model_z, model_x, model_y, rotation)
         WeakAuras.Add(child)
         WeakAuras.UpdateThumbnail(child)
       end
@@ -212,15 +213,16 @@ local function ConstructModelPicker(frame)
     self.path = path
     self.selectedValues = {}
 
-    self.selectedValues.model_path = GetAll(baseObject, path, "model_path", "spells/arcanepower_state_chest.m2")
+    self.selectedValues.model_fileId = GetAll(baseObject, path, "model_fileId", "Creature/Arthaslichking/arthaslichking.m2")
 
-    WeakAuras.SetModel(self.model, self.selectedValues.model_path)
+    WeakAuras.SetModel(self.model, nil, self.selectedValues.model_fileId)
 
     self.selectedValues.model_x = GetAll(baseObject, path, "model_x", 0)
     self.selectedValues.model_y = GetAll(baseObject, path, "model_y", 0)
     self.selectedValues.model_z = GetAll(baseObject, path, "model_z", 0)
     self.selectedValues.rotation = GetAll(baseObject, path, "rotation", 0)
 
+    -- self.model:ClearTransform();
     self.model:SetPosition(self.selectedValues.model_z, self.selectedValues.model_x, self.selectedValues.model_y);
     self.model:SetFacing(rad(self.selectedValues.rotation));
     modelPickerZ:SetValue(self.selectedValues.model_z);
@@ -232,8 +234,13 @@ local function ConstructModelPicker(frame)
     modelPickerRotation:SetValue(self.selectedValues.rotation);
     modelPickerRotation.editbox:SetText(("%.2f"):format(self.selectedValues.rotation));
 
+    modelPickerZ.frame:Show();
+    modelPickerY.frame:Show();
+    modelPickerX.frame:Show();
+    modelPickerRotation.frame:Show();
+
     if(baseObject.controlledChildren) then
-      self.givenModel = {};
+      self.givenModelId = {};
       self.givenZ = {};
       self.givenX = {};
       self.givenY = {};
@@ -242,7 +249,7 @@ local function ConstructModelPicker(frame)
         local childId = child.id
         local object = valueFromPath(child, path)
         if(object) then
-          self.givenModel[childId] = object.model_path;
+          self.givenModelId[childId] = object.model_fileId;
           self.givenZ[childId] = object.model_z;
           self.givenX[childId] = object.model_x;
           self.givenY[childId] = object.model_y;
@@ -252,7 +259,7 @@ local function ConstructModelPicker(frame)
     else
       local object = valueFromPath(baseObject, path)
 
-      self.givenModel = object.model_path;
+      self.givenModelId = object.model_fileId;
       self.givenZ = object.model_z;
       self.givenX = object.model_x;
       self.givenY = object.model_y;
@@ -275,7 +282,7 @@ local function ConstructModelPicker(frame)
         local childId = child.id
         local object = valueFromPath(child, group.path)
         if(object) then
-          object.model_path = group.givenModel[childId];
+          object.model_fileId = group.givenModelId[childId];
           object.model_z = group.givenZ[childId];
           object.model_x = group.givenX[childId];
           object.model_y = group.givenY[childId];
@@ -288,7 +295,7 @@ local function ConstructModelPicker(frame)
       local object = valueFromPath(group.baseObject, group.path)
 
       if(object) then
-        object.model_path = group.givenModel
+        object.model_fileId = group.givenModelId
         object.model_z = group.givenZ
         object.model_x = group.givenX
         object.model_y = group.givenY
