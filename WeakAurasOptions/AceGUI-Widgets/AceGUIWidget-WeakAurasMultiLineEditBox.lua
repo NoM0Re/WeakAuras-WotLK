@@ -1,5 +1,8 @@
 if not WeakAuras.IsLibsOK() then return end
 
+---@class OptionsPrivate
+local OptionsPrivate = select(2, ...)
+
 local Type, Version = "WeakAurasMultiLineEditBox", 39
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end

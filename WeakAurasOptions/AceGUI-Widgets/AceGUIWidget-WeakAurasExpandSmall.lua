@@ -194,7 +194,7 @@ local function Constructor()
 
   local label = frame:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
   label:SetJustifyH("LEFT")
-  label:SetJustifyV("CENTER")
+  label:SetJustifyV("MIDDLE")
   label:SetPoint("RIGHT")
   label:SetPoint("TOP")
   label:SetPoint("BOTTOM")

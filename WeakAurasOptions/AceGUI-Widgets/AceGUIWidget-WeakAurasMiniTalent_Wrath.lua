@@ -102,7 +102,6 @@ end
 local function Button_ShowToolTip(self)
   if self.spellId then
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    --DEPRECATED GameTooltip:SetSpellByID(self.spellId)
     GameTooltip:SetHyperlink("spell:"..(self.spellId or 0))
   end
 end
@@ -132,6 +131,7 @@ local function TalentFrame_Update(self)
         button:ClearAllPoints()
         button:SetScript("OnEnter", Button_ShowToolTip)
         button:SetScript("OnLeave", Button_HideToolTip)
+        -- button:SetMotionScriptsWhileDisabled(true)
         if self.open then
           button:SetPoint("TOPLEFT", button.obj, "TOPLEFT", buttonSizePadded * (column - 1) + (button.tab - 1) * buttonSizePadded * 4 + 5, -buttonSizePadded * (tier - 1) - 5)
           button:Enable()

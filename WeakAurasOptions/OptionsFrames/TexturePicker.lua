@@ -64,13 +64,18 @@ local function GetAll(baseObject, paths, property, default)
   return result
 end
 
-local function SetAll(baseObject, paths, property, value)
+local function SetAll(baseObject, paths, property, value, width, height, adjustSize)
   local valueFromPath = OptionsPrivate.Private.ValueFromPath
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(baseObject) do
     local object = valueFromPath(child, paths[child.id])
       if object then
         object[property] = value
+        if adjustSize and width and height then
+          child.width = width
+          child.height = height
+        end
         WeakAuras.Add(child)
+        WeakAuras.ClearAndUpdateOptions(child.id)
         WeakAuras.UpdateThumbnail(child)
       end
   end
@@ -86,6 +91,8 @@ local function ConstructTexturePicker(frame)
   group.frame:Hide();
   group.children = {};
   group.categories = {};
+  group.textureWidgets = {}
+  group.selectedGroupSorted = {}
 
   local dropdown = AceGUI:Create("DropdownGroup");
   dropdown:SetLayout("fill");
@@ -96,52 +103,150 @@ local function ConstructTexturePicker(frame)
   dropdown.list = {};
   dropdown:SetGroupList(dropdown.list);
 
-  local scroll = AceGUI:Create("ScrollFrame");
+  local scroll = AceGUI:Create("WeakAurasScrollArea");
   scroll:SetWidth(540);
-  scroll:SetLayout("flow");
   dropdown:AddChild(scroll);
 
-  local function texturePickerGroupSelected(widget, event, uniquevalue)
-    scroll:ReleaseChildren();
-    for texturePath, textureName in pairs(group.textures[uniquevalue]) do
-      local textureWidget = AceGUI:Create("WeakAurasTextureButton");
-      if (group.SetTextureFunc) then
-        group.SetTextureFunc(textureWidget, texturePath, textureName);
-      else
-        textureWidget:SetTexture(texturePath, textureName);
-        local d = group.textureData;
-        textureWidget:ChangeTexture(d.r, d.g, d.b, d.a, d.rotate, d.discrete_rotation, d.rotation, d.mirror, d.blendMode);
-      end
+  local function UpdateShownWidgets()
+    if not group.selectedGroupSorted then
+      return
+    end
 
-      if group.selectedTextures[texturePath] then
-        textureWidget:Pick()
-      end
+    -- Acquires/Releases widgets based on the scroll position
+    local viewportWidth, viewportHeight = scroll:GetViewportSize()
 
-      textureWidget:SetClick(function()
-        group:Pick(texturePath);
-      end);
-      scroll:AddChild(textureWidget);
-      table.sort(scroll.children, function(a, b)
-        local aPath, bPath = a:GetTexturePath(), b:GetTexturePath();
-        local aNum, bNum = tonumber(aPath:match("%d+")), tonumber(bPath:match("%d+"));
-        local aNonNumber, bNonNumber = aPath:match("[^%d]+"), bPath:match("[^%d]+")
-        if(aNum and bNum and aNonNumber == bNonNumber) then
-          return aNum < bNum;
+    local texturesPerRow = floor(viewportWidth / 128)
+    if texturesPerRow == 0 then
+      texturesPerRow = 1
+    end
+
+    local topRow = floor(scroll:GetContentOffset() / 128)
+    local bottomRow = topRow + ceil(viewportHeight / 128)
+
+    local first = topRow * texturesPerRow + 1
+    local last = first + (bottomRow - topRow + 1) * texturesPerRow - 1
+
+    if group.visibleFirst == first
+        and group.visibleLast == last
+        and group.visibleTexturesPerRow == texturesPerRow then
+      return
+    end
+
+    group.visibleFirst = first
+    group.visibleLast = last
+    group.visibleTexturesPerRow = texturesPerRow
+
+    for _, widget in ipairs(group.textureWidgets) do
+      widget.frame:Hide()
+      widget:Release()
+    end
+    wipe(group.textureWidgets)
+
+    for i = first, last do
+      local data = group.selectedGroupSorted[i]
+      if data then
+        local texturePath, textureName = data[1], data[2]
+        local textureWidget = AceGUI:Create("WeakAurasTextureButton");
+        tinsert(group.textureWidgets, textureWidget)
+        if (group.SetTextureFunc) then
+          group.SetTextureFunc(textureWidget, texturePath, textureName);
         else
-          return aPath < bPath;
+          textureWidget:SetTexture(texturePath, textureName);
+          local d = group.textureData;
+          textureWidget:ChangeTexture(d.r, d.g, d.b, d.a, d.texRotation, d.auraRotation, d.mirror, d.blendMode)
         end
-      end);
+        if group.selectedTextures[texturePath] then
+          textureWidget:Pick()
+        end
+        textureWidget:SetClick(function()
+          group:Pick(texturePath);
+        end);
+
+        local index = i - 1 -- Math is easier if we start counting at 0
+        local textureY = floor(index / texturesPerRow) * -128
+        local textureX = (index % texturesPerRow) * 128
+
+        textureWidget.frame:Show()
+        textureWidget.frame:SetParent(scroll.content)
+        textureWidget.frame:SetPoint("TOPLEFT", textureX, textureY)
+      end
     end
   end
 
-  dropdown:SetCallback("OnGroupSelected", texturePickerGroupSelected)
+  scroll:SetCallback("ContentScrolled", function(self)
+    UpdateShownWidgets()
+  end)
+
+  local function texturePickerGroupSelected(widget, event, uniquevalue, filter)
+    group.selectedGroupSorted = {}
+    group.visibleFirst = nil
+    group.visibleLast = nil
+    group.visibleTexturesPerRow = nil
+    if filter then
+      filter = filter:lower()
+    end
+    local category = group.textures[uniquevalue]
+    local cat = type(category) == "function" and category() or category
+    for texturePath, textureName in pairs(cat) do
+      if filter == nil or filter == "" or textureName:lower():find(filter, 1, true) then
+        tinsert(group.selectedGroupSorted, {texturePath, textureName})
+      end
+    end
+
+    table.sort(group.selectedGroupSorted, function(a, b)
+      local aPath, bPath = a[1], b[1]
+      local aNum, bNum = tonumber(aPath:match("%d+")), tonumber(bPath:match("%d+"));
+      local aNonNumber, bNonNumber = aPath:match("[^%d]+"), bPath:match("[^%d]+")
+      if(aNum and bNum and aNonNumber == bNonNumber) then
+        return aNum < bNum;
+      else
+        return aPath < bPath;
+      end
+    end)
+
+    local viewportWidth = scroll:GetViewportSize()
+    local texturesPerRow = floor(viewportWidth / 128)
+    if texturesPerRow == 0 then
+      texturesPerRow = 1
+    end
+    local totalHeight = ceil(#group.selectedGroupSorted / texturesPerRow) * 128
+    scroll:SetContentHeight(totalHeight)
+
+    UpdateShownWidgets()
+  end
+
+  local input = CreateFrame("EditBox", "TexturePickerFilterInput", group.frame);
+  WeakAuras.XMLTemplates["SearchBoxTemplate"](input)
+  input:SetParent(group.frame);
+  input:SetScript("OnTextChanged", function(self, ...)
+    WA_SearchBoxTemplate_OnTextChanged(self)
+    local status = dropdown.status or dropdown.localstatus
+    texturePickerGroupSelected(nil, nil, status.selected, input:GetText())
+  end);
+  input:SetScript("OnEnterPressed", function(...)
+    local status = dropdown.status or dropdown.localstatus
+    texturePickerGroupSelected(nil, nil, status.selected, input:GetText())
+  end);
+  input:SetScript("OnEscapePressed", function(...)
+    input:SetText("");
+    local status = dropdown.status or dropdown.localstatus
+    texturePickerGroupSelected(nil, nil, status.selected, input:GetText())
+  end);
+  input:SetWidth(200);
+  input:SetHeight(15);
+  input:SetPoint("TOPRIGHT", group.frame, "TOPRIGHT", -3, -6);
+
+  dropdown:SetCallback("OnGroupSelected", function(widget, event, uniquevalue)
+    texturePickerGroupSelected(widget, event, uniquevalue, input:GetText())
+  end)
 
   function group.UpdateList(self)
     dropdown.dropdown.pullout:Close()
     wipe(dropdown.list);
     for categoryName, category in pairs(self.textures) do
       local match = false;
-      for texturePath, textureName in pairs(category) do
+      local cat = type(category) == "function" and category() or category
+      for texturePath, textureName in pairs(cat) do
         if(self.selectedTextures[texturePath]) then
           match = true;
           break;
@@ -154,12 +259,13 @@ local function ConstructTexturePicker(frame)
 
   function group.Pick(self, texturePath)
     local pickedwidget;
-    for index, widget in ipairs(scroll.children) do
+    for index, widget in ipairs(group.textureWidgets) do
       widget:ClearPick();
       if(widget:GetTexturePath() == texturePath) then
         pickedwidget = widget;
       end
     end
+    local width, height
     if(pickedwidget) then
       pickedwidget:Pick();
     end
@@ -167,14 +273,14 @@ local function ConstructTexturePicker(frame)
     wipe(group.selectedTextures)
     group.selectedTextures[texturePath] = true
 
-    SetAll(self.baseObject, self.paths, self.properties.texture, texturePath)
+    SetAll(self.baseObject, self.paths, self.properties.texture, texturePath, width, height, self.adjustSize)
 
     group:UpdateList();
     local status = dropdown.status or dropdown.localstatus
     dropdown.dropdown:SetText(dropdown.list[status.selected]);
   end
 
-  function group.Open(self, baseObject, paths, properties, textures, SetTextureFunc)
+  function group.Open(self, baseObject, paths, properties, textures, SetTextureFunc, adjustSize)
     local valueFromPath = OptionsPrivate.Private.ValueFromPath
     self.baseObject = baseObject
     self.paths = paths
@@ -183,6 +289,7 @@ local function ConstructTexturePicker(frame)
     self.SetTextureFunc = SetTextureFunc
     self.givenPath = {};
     self.selectedTextures = {}
+    self.adjustSize = adjustSize
 
     for child in OptionsPrivate.Private.TraverseLeafsOrAura(baseObject) do
       local object = valueFromPath(child, paths[child.id])
@@ -201,9 +308,8 @@ local function ConstructTexturePicker(frame)
       g = colorAll[2] or 1,
       b = colorAll[3] or 1,
       a = colorAll[4] or 1,
-      rotate = GetAll(baseObject, paths, properties.rotate, true),
-      discrete_rotation = GetAll(baseObject, paths, properties.discrete_rotation, 0),
-      rotation = GetAll(baseObject, paths, properties.rotation, 0),
+      auraRotation = GetAll(baseObject, paths, properties.auraRotation, 0),
+      texRotation = GetAll(baseObject, paths, properties.rotation, 0),
       mirror = GetAll(baseObject, paths, properties.mirror, false),
       blendMode = GetAll(baseObject, paths, properties.blendMode, "ADD")
     }
@@ -214,7 +320,8 @@ local function ConstructTexturePicker(frame)
     local picked = false;
     for categoryName, category in pairs(self.textures) do
       if not(picked) then
-        for texturePath, textureName in pairs(category) do
+        local cat = type(category) == "function" and category() or category
+        for texturePath, textureName in pairs(cat) do
           if(self.selectedTextures[texturePath]) then
             dropdown:SetGroup(categoryName);
             picked = true;
@@ -229,6 +336,7 @@ local function ConstructTexturePicker(frame)
         dropdown:SetGroup(categoryName);
       end
     end
+    UpdateShownWidgets()
   end
 
   function group.Close()

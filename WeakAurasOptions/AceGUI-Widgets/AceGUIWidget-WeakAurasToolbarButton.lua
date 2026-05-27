@@ -59,7 +59,7 @@ local methods = {
   ["SetText"] = function(self, text)
     self.text:SetText(text)
     if text ~= "" then
-      self:SetWidth(self.text:GetStringWidth() + 28)
+      self:SetWidth(self.text:GetStringWidth() + 24)
     else
       self:SetWidth(16)
     end
@@ -158,6 +158,7 @@ local function Constructor()
   frame:SetPushedTexture(pTex)
 
 
+  --- @type table<string, any>
   local widget = {
     text  = text,
     icon = icon,
