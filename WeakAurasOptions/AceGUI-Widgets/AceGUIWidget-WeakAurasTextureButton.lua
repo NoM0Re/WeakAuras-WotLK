@@ -1,6 +1,10 @@
 if not WeakAuras.IsLibsOK() then return end
+---@type string
+local AddonName = ...
+---@class OptionsPrivate
+local OptionsPrivate = select(2, ...)
 
-local Type, Version = "WeakAurasTextureButton", 25
+local Type, Version = "WeakAurasTextureButton", 26
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -27,40 +31,32 @@ local methods = {
   end,
   ["OnRelease"] = function(self)
     self:ClearPick();
+    self:SetOnUpdate(nil)
     self.texture:SetTexture();
   end,
-  ["SetTexture"] = function(self, texturePath, name)
+  ["SetTexture"] = function(self, texturePath, name, IsStopMotion)
+    self.texture:SetTexCoord(0, 1, 0, 1)
+    self.texture:SetSize(120, 120)
     self.texture:SetTexture(texturePath);
+    self.texture.IsAtlas = nil
     self.texture.path = texturePath;
     self.texture.name = name;
-    self.texture:SetSize(120, 120);
+    self.texture.IsStopMotion = IsStopMotion
   end,
-  ["ChangeTexture"] = function(self, r, g, b, a, rotate, discrete_rotation, rotation, mirror, blendMode)
+  ["ChangeTexture"] = function(self, r, g, b, a, texRotation, auraRotation, mirror, blendMode)
     local ulx,uly , llx,lly , urx,ury , lrx,lry;
-    if(rotate) then
-      local angle = rad(135 - rotation);
+      local angle = rad(135 - texRotation)
       local vx = math.cos(angle);
       local vy = math.sin(angle);
-
       ulx,uly , llx,lly , urx,ury , lrx,lry = 0.5+vx,0.5-vy , 0.5-vy,0.5-vx , 0.5+vy,0.5+vx , 0.5-vx,0.5+vy;
-    else
-      if(discrete_rotation == 0 or discrete_rotation == 360) then
-        ulx,uly , llx,lly , urx,ury , lrx,lry = 0,0 , 0,1 , 1,0 , 1,1;
-      elseif(discrete_rotation == 90) then
-        ulx,uly , llx,lly , urx,ury , lrx,lry = 1,0 , 0,0 , 1,1 , 0,1;
-      elseif(discrete_rotation == 180) then
-        ulx,uly , llx,lly , urx,ury , lrx,lry = 1,1 , 1,0 , 0,1 , 0,0;
-      elseif(discrete_rotation == 270) then
-        ulx,uly , llx,lly , urx,ury , lrx,lry = 0,1 , 1,1 , 0,0 , 1,0;
-      end
-    end
     if(mirror) then
       self.texture:SetTexCoord(urx,ury , lrx,lry , ulx,uly , llx,lly);
     else
       self.texture:SetTexCoord(ulx,uly , llx,lly , urx,ury , lrx,lry);
-    end
-    self.texture:SetVertexColor(r, g, b, a);
-    self.texture:SetBlendMode(blendMode);
+      end
+      self.texture:SetVertexColor(r, g, b, a);
+      self.texture:SetBlendMode(blendMode);
+      self.texture:SetRotation(auraRotation / 180 * math.pi)
   end,
   ["SetTexCoord"] = function(self, left, right, top, bottom)
     self.texture:SetTexCoord(left, right, top, bottom);

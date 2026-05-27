@@ -1,5 +1,4 @@
 if not WeakAuras.IsLibsOK() then return end
-
 ---@type string
 local AddonName = ...
 ---@class OptionsPrivate
@@ -233,6 +232,7 @@ local function Constructor()
   update:Hide()
   updateLogo:Hide()
 
+  --- @type table<string, any>
   local widget = {
     frame = button,
     title = title,

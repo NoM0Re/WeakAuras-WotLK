@@ -297,12 +297,10 @@ local function Constructor()
   icon:SetHeight(32)
   icon:SetPoint("LEFT", button, "LEFT")
 
-  button.description = {}
-
   -- follow link button
   local followLink = CreateFrame("Button", nil, button)
   button.followLink = followLink
-  followLink:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\loottoast-arrow-green")
+  followLink:SetNormalTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\loottoast-arrow-green") -- "loottoast-arrow-green"
   followLink:GetNormalTexture():SetRotation(math.rad(-90))
   followLink:SetWidth(32)
   followLink:SetHeight(32)
@@ -373,6 +371,8 @@ local function Constructor()
   title:SetPoint("RIGHT", updateLogo, "LEFT", -2, 0)
   title:SetVertexColor(0.6, 0.6, 0.6)
 
+  button.description = {}
+  --- @type table<string, any>
   local widget = {
     frame = button,
     title = title,

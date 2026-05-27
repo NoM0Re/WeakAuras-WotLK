@@ -19,7 +19,6 @@ local tonumber, pairs = tonumber, pairs
 -- WoW APIs
 local PlaySound = PlaySound
 local CreateFrame, UIParent = CreateFrame, UIParent
-local Clamp = OptionsPrivate.Clamp
 
 local progressLeftOffset = -3
 local progressExtraWidth = 0
@@ -40,7 +39,7 @@ end
 
 local function UpdateButtons(self)
   local value = self:GetValue() or 0
-  --   self.leftbutton:SetEnabled(value > self.min)
+  -- self.leftbutton:SetEnabled(value > self.min)
   if value > self.min then
     self.leftbutton:Enable()
   else
@@ -62,7 +61,7 @@ local function UpdateProgressBar(self)
       p = (value - self.min) / (self.max - self.min)
     end
   end
-  p = Clamp(p, 0, 1)
+  p = OptionsPrivate.Clamp(p, 0, 1)
   local w = p * (self.frame:GetWidth() - 45 + progressExtraWidth)
   self.progressBar:SetWidth(max(w, 1))
   self.progressBar:SetTexCoord(0, p , 0, 1)
@@ -96,7 +95,7 @@ local function SpinBox_OnValueDown(frame)
   local value = self.value or 0
   local step = self.step or 1
   value = math_max(self.min, value - step)
-  PlaySound("igMainMenuOptionCheckBoxOn")
+  PlaySound("igMainMenuOptionCheckBoxOn") -- 856 / SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
   self:SetValue(value, true)
 end
 
@@ -106,7 +105,7 @@ local function SpinBox_OnValueUp(frame)
   local value = self.value or 0
   local step = self.step or 1
   value = math_min(self.max, value + step)
-  PlaySound("igMainMenuOptionCheckBoxOn")
+  PlaySound("igMainMenuOptionCheckBoxOn") -- 856 / SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
   self:SetValue(value, true)
 end
 
@@ -125,7 +124,7 @@ local function EditBox_OnEnterPressed(frame)
   end
 
   if value then
-    PlaySound("igMainMenuOptionCheckBoxOn")
+    PlaySound("igMainMenuOptionCheckBoxOn") -- 856 / SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
     self:SetValue(value, true)
   end
   frame:ClearFocus()
@@ -169,7 +168,7 @@ local function ProgressBarHandle_OnUpdate(frame, elapsed)
       local step = frame.obj.step
       local v = frame.originalValue + delta
       v = v - v % step
-      v = Clamp(v, frame.obj.min, frame.obj.max)
+      v = OptionsPrivate.Clamp(v, frame.obj.min, frame.obj.max)
       frame.obj:SetValue(v, false)
       frame.timeElapsed = 0
     end

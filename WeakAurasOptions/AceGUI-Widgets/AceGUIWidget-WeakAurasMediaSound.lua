@@ -45,9 +45,9 @@ local function onClick(frame)
   if self.disabled then return end
   self.value = not self.value
   if self.value then
-    PlaySound("igMainMenuOptionCheckBoxOn")
+    PlaySound("igMainMenuOptionCheckBoxOn") -- 856 / SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
   else
-    PlaySound("igMainMenuOptionCheckBoxOff")
+    PlaySound("igMainMenuOptionCheckBoxOff") -- 857 / SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
   end
   updateToggle(self)
   self:Fire("OnValueChanged", self.value)
@@ -85,11 +85,11 @@ local function constructor()
   frame.sndButton = sndButton
 
   local icon = sndButton:CreateTexture(nil, "BACKGROUND")
-  icon:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\VoiceChat-Speaker") --"Interface\\Common\\VoiceChat-Speaker"
+  icon:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\VoiceChat-Speaker") -- 130979
   icon:SetAllPoints(sndButton)
 
   local highlight = sndButton:CreateTexture(nil, "HIGHLIGHT")
-  highlight:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\VoiceChat-On") --"Interface\\Common\\VoiceChat-On"
+  highlight:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\VoiceChat-On") -- 130977
   highlight:SetAllPoints(sndButton)
 
   AceGUI:RegisterAsWidget(self)

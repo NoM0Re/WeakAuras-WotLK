@@ -8,8 +8,6 @@ local tinsert, tremove = table.insert, table.remove
 local select, pairs, type, unpack = select, pairs, type, unpack
 local error = error
 
-local tIndexOf = OptionsPrivate.tIndexOf
-
 local Type, Version = "WeakAurasDisplayButton", 60
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
@@ -424,16 +422,6 @@ local function Show_DropIndicator(id)
   end
 end
 
-local function IsParentRecursive(needle, parent)
-  if needle.id == parent.id then
-    return true
-  end
-  if needle.parent then
-    local needleParent = WeakAuras.GetData(needle.parent)
-    return IsParentRecursive(needleParent, parent)
-  end
-end
-
 local tabsForWarning = {
   tts_condition = "conditions",
   sound_condition = "conditions",
@@ -472,16 +460,18 @@ local methods = {
           if (not fullName) then
             local name, realm = UnitName("player")
             if realm then
-              fullName = name.."-"..realm
+              fullName = name.."-".. realm
             else
               fullName = name
             end
           end
+
           local url = ""
           if self.data.url then
             url = " ".. self.data.url
           end
           editbox:Insert("[WeakAuras: "..fullName.." - "..self.data.id.."]"..url)
+
           OptionsPrivate.Private.linked = OptionsPrivate.Private.linked or {}
           OptionsPrivate.Private.linked[self.data.id] = GetTime()
         elseif not self.data.controlledChildren then
@@ -1070,7 +1060,7 @@ local methods = {
     if (WeakAuras.IsImporting()) then return end;
     local parentData = WeakAuras.GetData(self.data.parent);
     if not parentData then return end;
-    local index = tIndexOf(parentData.controlledChildren, self.data.id);
+    local index = OptionsPrivate.tIndexOf(parentData.controlledChildren, self.data.id);
     if(index) then
       tremove(parentData.controlledChildren, index);
       WeakAuras.Add(parentData);
@@ -1082,7 +1072,7 @@ local methods = {
 
     local newParent = parentData.parent and WeakAuras.GetData(parentData.parent)
     if newParent then
-      local insertIndex = tIndexOf(newParent.controlledChildren, parentData.id)
+      local insertIndex = OptionsPrivate.tIndexOf(newParent.controlledChildren, parentData.id)
       if not insertIndex then
         error("Parent Display thinks it is a member of a group which does not control it");
       end
@@ -1148,12 +1138,12 @@ local methods = {
       -- mark as being dragged, attach to mouse and raise frame strata
       self.dragging = true
       self.frame:StartMoving()
-      --self.frame:ClearAllPoints()
+      -- self.frame:ClearAllPoints()
       self.frame.temp = {
         parent = self.frame:GetParent(),
         strata = self.frame:GetFrameStrata(),
       }
-      --self.frame:SetParent(UIParent)
+      -- self.frame:SetParent(UIParent)
       self.frame:SetFrameStrata("FULLSCREEN_DIALOG")
       if self.data.id == mainAura.id then
         self.frame:SetPoint("Center", UIParent, "BOTTOMLEFT", (x+w/2)*scale/uiscale, y/uiscale)
@@ -1837,7 +1827,7 @@ local function Constructor()
   renamebox:SetPoint("TOP", button, "TOP");
   renamebox:SetPoint("LEFT", icon, "RIGHT", 6, 0);
   renamebox:SetPoint("RIGHT", button, "RIGHT", -4, 0);
-  renamebox:SetFont(STANDARD_TEXT_FONT, 10);
+  renamebox:SetFont(STANDARD_TEXT_FONT, 10, "");
   renamebox:Hide();
 
   renamebox.func = function() --[[By default, do nothing!]] end;

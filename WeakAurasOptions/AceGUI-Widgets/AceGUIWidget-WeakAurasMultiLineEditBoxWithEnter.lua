@@ -177,6 +177,10 @@ local function OnEditFocusGained(frame)
   AceGUI:SetFocus(frame.obj)
   frame.obj:Fire("OnEditFocusGained")
   frame.obj.scrollFrame:EnableMouseWheel(true);
+  local option = frame.obj.userdata.option
+  if option and option.LAAC then
+    LAAC:enable(frame, option.LAAC)
+  end
 end
 
 --[[-----------------------------------------------------------------------------
