@@ -1,5 +1,4 @@
 if not WeakAuras.IsLibsOK() then return end
-
 ---@type string
 local AddonName = ...
 ---@class OptionsPrivate
@@ -17,9 +16,6 @@ local pairs = pairs
 
 -- WoW APIs
 local IsShiftKeyDown, CreateFrame = IsShiftKeyDown, CreateFrame
-local Round = OptionsPrivate.Round
-local tIndexOf = OptionsPrivate.tIndexOf
-local CreateLine = OptionsPrivate.CreateLine
 
 ---@class WeakAuras
 local WeakAuras = WeakAuras
@@ -372,6 +368,43 @@ local function ConstructSizer(frame)
   return top, topright, right, bottomright, bottom, bottomleft, left, topleft
 end
 
+--- @class AlignmentLineReference
+--- @field id auraId
+--- @field side "LEFT"|"RIGHT"|"TOP"|"BOTTOM"|"CENTERX"|"CENTERY" The side the reference
+--- @field pos1 number The bottom position for vertical or the left position for horizontal lines
+--- @field pos2 number The top position for vertical or the right position for horizontal lines
+
+--- @class AlignmentLine
+--- @field SetStartPoint fun(self: AlignmentLine, relativePoint: AnchorPoint, relativeTo: Region, offsetX: number?, offsetY: number?)
+--- @field SetEndPoint fun(self: AlignmentLine, relativePoint: AnchorPoint, relativeTo: Region, offsetX: number?, offsetY: number?)
+--- @field SetThickness fun(self: AlignmentLine, thickness: number)
+--- @field SetHighlighted fun(self: AlignmentLine, highlight: boolean)
+
+--- @class LineObjectPool
+--- @field Acquire fun(self: LineObjectPool): AlignmentLine
+--- @field Release fun(self: LineObjectPool, line: AlignmentLine)
+
+--- @class LineInformation
+--- @field position number
+--- @field delta number
+--- @field gridLine boolean
+--- @field references AlignmentLineReference[]
+--- @field highlightTextures Texture[]
+--- @field line AlignmentLine?
+--- @field SetStartPoint fun(self: LineInformation, relativePoint: AnchorPoint, relativeTo: Region, offsetX: number?, offsetY: number?)
+--- @field SetEndPoint fun(self: LineInformation, relativePoint: AnchorPoint, relativeTo: Region, offsetX: number?, offsetY: number?)
+--- @field SetThickness fun(self: LineInformation, thickness: number)
+--- @field SetHighlighted fun(self: LineInformation, highlight: boolean)
+--- @field Hide fun(self: LineInformation)
+--- @field Show fun(self: LineInformation)
+--- @field UpdateColor fun(self: LineInformation)
+--- @field UpdateHighlight fun(self: LineInformation)
+--- @field AcquireLine fun(self: LineInformation)
+--- @field ReleaseLine fun(self: LineInformation)
+--- @field Release fun(self: LineInformation)
+--- @field Score fun(self: LineInformation, positions: table<"LEFT"|"RIGHT"|"TOP"|"BOTTOM"|"CENTERX"|"CENTERY", number>): number
+
+--- @class AlignmentLines
 local AlignmentLines = CreateFrame("Frame", nil, UIParent) --[[@as AlignmentLines]]
 AlignmentLines:SetAllPoints(UIParent)
 AlignmentLines:SetFrameStrata("BACKGROUND")
@@ -380,9 +413,10 @@ local HighlightFrame = CreateFrame("Frame", nil, UIParent)
 HighlightFrame:SetAllPoints(UIParent)
 HighlightFrame:SetFrameStrata("TOOLTIP")
 
+--- @type LineObjectPool
 AlignmentLines.linePool = CreateObjectPool(
   function(self)
-    return CreateLine(AlignmentLines)
+    return OptionsPrivate.CreateLine(AlignmentLines)
   end,
   function(self, line)
     line:Hide()
@@ -400,6 +434,7 @@ HighlightFrame.texturePool = CreateObjectPool(
     texture:ClearAllPoints()
   end)
 
+--- @type fun(side: "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"): "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"
 local function MirrorSide(side)
   if side == "LEFT" then
     return "RIGHT"
@@ -414,6 +449,7 @@ local function MirrorSide(side)
   end
 end
 
+--- @type fun(side: "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"): "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"|nil
 local function Pos1Side(side)
   if side == "LEFT" or side == "RIGHT" or side == "CENTERX" then
     return "BOTTOM"
@@ -422,6 +458,7 @@ local function Pos1Side(side)
   end
 end
 
+--- @type fun(side: "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"): "LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY"|nil
 local function Pos2Side(side)
   if side == "LEFT" or side == "RIGHT" or side == "CENTERX" then
     return "TOP"
@@ -430,6 +467,7 @@ local function Pos2Side(side)
   end
 end
 
+--- @class LineInformation
 local LineInformationFuncs = {
   SetStartPoint = function(self, relativePoint, relativeTo, offsetX, offsetY)
     self.startPoint = {relativePoint, relativeTo, offsetX, offsetY}
@@ -530,6 +568,7 @@ local LineInformationFuncs = {
   AddReference = function(self, id, side, pos1, pos2)
     tinsert(self.references, {id = id, side = side, pos1 = pos1, pos2 = pos2})
   end,
+  --- @type fun(self: LineInformation, positions: table<"LEFT"|"RIGHT"|"BOTTOM"|"TOP"|"CENTERX"|"CENTERY", number>) : number
   Score = function(self, positions)
     if self.gridLine then
       return 0 -- Prefer aura lines
@@ -571,6 +610,7 @@ local LineInformationFuncs = {
 
 }
 
+--- @type fun(position: number, gridLine: boolean): LineInformation
 local function CreateLineInformation(position, gridLine)
   local line = {}
   for k, f in pairs(LineInformationFuncs) do
@@ -584,23 +624,28 @@ local function CreateLineInformation(position, gridLine)
   return line
 end
 
+--- @type table<number, LineInformation>
 AlignmentLines.horizontalLines = {}
+--- @type table<number, LineInformation>
 AlignmentLines.verticalLines = {}
 
+--- @type fun(input: number): number
 local function RoundSmallDifference(input)
-  local r = Round(input)
+  local r = OptionsPrivate.Round(input)
   if (abs(r - input) < 0.1) then
     return r
   end
   return input
 end
 
+--- @type fun(input: number): number
 local function AlignToPixelX(virX)
-  return Round(virX * 1)
+  return OptionsPrivate.Round(virX * 1)
 end
 
+--- @type fun(input: number): number
 local function AlignToPixelY(virY)
-  return Round(virY * 1)
+  return OptionsPrivate.Round(virY * 1)
 end
 
 ---@param self AlignmentLines
@@ -630,11 +675,14 @@ AlignmentLines.CreateMiddleLines = function(self, sizerPoint)
   end
 end
 
+--- @type fun(self: AlignmentLines, data: auraData, sizerPoint: AnchorPoint?): LineInformation, LineInformation
 AlignmentLines.CreateLineInformation = function(self, data, sizerPoint)
   local addVertical = not sizerPoint or sizerPoint:find("LEFT", 1) or sizerPoint:find("RIGHT", 1)
   local addHorizontal = not sizerPoint or sizerPoint:find("BOTTOM", 1) or sizerPoint:find("TOP", 1)
 
+  --- @type LineInformation, LineInformation
   local horizontalLines, verticalLines = {}, {}
+  --- @type table<auraId, boolean>
   local skipIds = {}
   for child in OptionsPrivate.Private.TraverseAll(data) do
     skipIds[child.id] = true
@@ -713,12 +761,14 @@ AlignmentLines.CreateLineInformation = function(self, data, sizerPoint)
   return self:MergeLineInformation(verticalLines), self:MergeLineInformation(horizontalLines)
 end
 
+--- @type fun(self: AlignmentLines, lines: LineInformation): LineInformation
 AlignmentLines.MergeLineInformation = function(self, lines)
   local startIndex
   local startPos
   -- Add a line at infinity at the end, this makes the loop easier
   tinsert(lines, {position = math.huge})
 
+  --- @type LineInformation
   local result = {}
   for index, line in ipairs(lines) do
     if not startPos then
@@ -810,7 +860,10 @@ end
 
 ---@param lines AlignmentLine[]
 ---@param positions table<"LEFT"|"RIGHT"|"TOP"|"BOTTOM"|"CENTERX"|"CENTERY", number>
+---       The positions of the aura, that are used to score lines
 ---@param auraSize number?
+---       The size of the aura, this is used to highlight additional lines that exactly
+---       auraSize away
 ---@return number? -- The delta
 local function SelectLines(lines, positions, auraSize)
   if #lines == 0 then
@@ -819,7 +872,9 @@ local function SelectLines(lines, positions, auraSize)
     lines[1]:SetHighlighted(true)
     return lines[1].delta
   else
+    --- @type number
     local bestScore = -1
+    --- @type AlignmentLine?
     local bestLine = nil
     for _, line in ipairs(lines) do
       local lineScore = line:Score(positions)
@@ -835,6 +890,7 @@ local function SelectLines(lines, positions, auraSize)
       elseif bestLine then
         local diffBetweenLines = distance(line.position, bestLine.position)
         if auraSize and distance(diffBetweenLines, auraSize) < 1 then
+          -- Other line is the as far away as the aura is wide
           line:SetHighlighted(true)
         else
           line:SetHighlighted(false)
@@ -1148,7 +1204,7 @@ local function ConstructMoverSizer(parent)
     frame:ScaleCorners(region:GetWidth(), region:GetHeight())
     local regionStrata = region:GetFrameStrata()
     if regionStrata then
-      local strata = math.min(tIndexOf(OptionsPrivate.Private.frame_strata_types, regionStrata) + 1, 9)
+      local strata = math.min(OptionsPrivate.tIndexOf(OptionsPrivate.Private.frame_strata_types, regionStrata) + 1, 9)
       frame:SetFrameStrata(OptionsPrivate.Private.frame_strata_types[strata])
       mover:SetFrameStrata(OptionsPrivate.Private.frame_strata_types[strata])
       frame:SetFrameLevel(region:GetFrameLevel() + 1)

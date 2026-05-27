@@ -6,7 +6,7 @@ local OptionsPrivate = select(2, ...)
 
 -- Lua APIs
 local tinsert, tremove, wipe = table.insert, table.remove, wipe
-local pairs, type, error = pairs, type, error
+local pairs, type = pairs, type
 local _G = _G
 
 -- WoW APIs
@@ -320,6 +320,8 @@ function OptionsPrivate.CreateFrame()
     end
   end
 
+
+
   local minimizebutton = CreateFrame("Button", nil, frame)
   WeakAuras.XMLTemplates["MaximizeMinimizeButtonFrameTemplate"](minimizebutton)
   minimizebutton:SetPoint("RIGHT", frame.CloseButton, "LEFT", 0, 0)
@@ -374,7 +376,7 @@ function OptionsPrivate.CreateFrame()
   local tipPopupLabel = tipPopup:CreateFontString(nil, "BACKGROUND", "GameFontWhite")
   local fontPath = SharedMedia:Fetch("font", "Fira Sans Medium")
   if (fontPath) then
-    tipPopupLabel:SetFont(fontPath, 12)
+    tipPopupLabel:SetFont(fontPath, 12, "")
   end
   tipPopupLabel:SetPoint("TOPLEFT", tipPopupTitle, "BOTTOMLEFT", 0, -6)
   tipPopupLabel:SetPoint("TOPRIGHT", tipPopupTitle, "BOTTOMRIGHT", 0, -6)
@@ -382,14 +384,14 @@ function OptionsPrivate.CreateFrame()
   tipPopupLabel:SetJustifyV("TOP")
 
   local tipPopupLabelCJ = tipPopup:CreateFontString(nil, "BACKGROUND", "GameFontWhite")
-  tipPopupLabelCJ:SetFont("Fonts\\ARKai_T.ttf", 12)
+  tipPopupLabelCJ:SetFont("Fonts\\ARKai_T.ttf", 12, "")
   tipPopupLabelCJ:SetPoint("TOPLEFT", tipPopupLabel, "BOTTOMLEFT", 0, 0)
   tipPopupLabelCJ:SetPoint("TOPRIGHT", tipPopupLabel, "BOTTOMRIGHT", 0, 0)
   tipPopupLabelCJ:SetJustifyH("LEFT")
   tipPopupLabelCJ:SetJustifyV("TOP")
 
   local tipPopupLabelK = tipPopup:CreateFontString(nil, "BACKGROUND", "GameFontWhite")
-  tipPopupLabelK:SetFont("Fonts\\K_Pagetext.TTF", 12)
+  tipPopupLabelK:SetFont("Fonts\\K_Pagetext.TTF", 12, "")
   tipPopupLabelK:SetPoint("TOPLEFT", tipPopupLabelCJ, "BOTTOMLEFT", 0, 0)
   tipPopupLabelK:SetPoint("TOPRIGHT", tipPopupLabelCJ, "BOTTOMRIGHT", 0, 0)
   tipPopupLabelK:SetJustifyH("LEFT")
@@ -397,7 +399,7 @@ function OptionsPrivate.CreateFrame()
 
   local urlWidget = CreateFrame("EditBox", nil, tipPopup)
   WeakAuras.XMLTemplates["InputBoxTemplate"](urlWidget)
-  urlWidget:SetFont(STANDARD_TEXT_FONT, 12)
+  urlWidget:SetFont(STANDARD_TEXT_FONT, 12, "")
   urlWidget:SetPoint("TOPLEFT", tipPopupLabelK, "BOTTOMLEFT", 6, 0)
   urlWidget:SetPoint("TOPRIGHT", tipPopupLabelK, "BOTTOMRIGHT", 0, 0)
   urlWidget:SetScript("OnChar", function() urlWidget:SetText(urlWidget.text); urlWidget:HighlightText(); end);
@@ -412,6 +414,7 @@ function OptionsPrivate.CreateFrame()
   tipPopupCtrlC:SetJustifyV("TOP")
   tipPopupCtrlC:SetText(L["Press Ctrl+C to copy the URL"])
 
+  --- @type fun(referenceWidget: frame, title: string, texture: string, url: string, description: string, descriptionCJ: string?, descriptionK: string?, rightAligned: boolean?, width: number?)
   local function ToggleTip(referenceWidget, url, title, description, descriptionCJ, descriptionK, rightAligned, width)
     width = width or 400
     if tipPopup:IsVisible() and urlWidget.text == url then
@@ -447,6 +450,7 @@ function OptionsPrivate.CreateFrame()
 
   OptionsPrivate.ToggleTip = ToggleTip
 
+  --- @type fun(title: string, texture: string, url: string, description: string, descriptionCJ: string?, descriptionK: string?, rightAligned: boolean?, width: number?)
   local addFooter = function(title, texture, url, description, descriptionCJ, descriptionK, rightAligned, width)
     local button = AceGUI:Create("WeakAurasToolbarButton")
     button:SetSmallFont(true)
@@ -498,7 +502,7 @@ function OptionsPrivate.CreateFrame()
   local thanksListK = lineWrapDiscordList(OptionsPrivate.Private.DiscordListK)
 
   local discordButton = addFooter(L["Discord"], [[Interface\AddOns\WeakAuras\Media\Textures\discord.tga]], "https://discord.gg/UXSc7nt",
-                                  L["Chat with WeakAuras experts on our Discord server."])
+            L["Chat with WeakAuras experts on our Discord server."])
   discordButton:SetParent(tipFrame)
   discordButton:SetPoint("LEFT", tipFrame, "LEFT")
 
@@ -536,12 +540,12 @@ function OptionsPrivate.CreateFrame()
   end
 
   local reportbugButton = addFooter(L["Found a Bug?"], [[Interface\AddOns\WeakAuras\Media\Textures\bug_report.tga]], "https://github.com/NoM0Re/WeakAuras-WotLK/issues",
-                                    L["Report bugs on our issue tracker."], nil, nil, true)
+            L["Report bugs on our issue tracker."], nil, nil, true)
   reportbugButton:SetParent(tipFrame)
   reportbugButton:SetPoint("RIGHT", tipFrame, "RIGHT")
 
   local wagoButton = addFooter(L["Find Auras"], [[Interface\AddOns\WeakAuras\Media\Textures\wago.tga]], "https://wago.io/search/imports/wow/all?q=3.3.5",
-                                L["Browse Wago, the largest collection of auras."], nil, nil, true)
+            L["Browse Wago, the largest collection of auras."], nil, nil, true)
   wagoButton:SetParent(tipFrame)
   wagoButton:SetPoint("RIGHT", reportbugButton, "LEFT", -footerSpacing, 0)
 
@@ -571,6 +575,7 @@ function OptionsPrivate.CreateFrame()
   container.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 10)
   container.frame:SetPoint("TOPLEFT", frame, "TOPRIGHT", -63 - WeakAuras.normalWidth * 340, 0)
   container.frame:Show()
+  -- container.frame:SetClipsChildren(true)
   container.titletext:Hide()
   -- Hide the border
   container.content:GetParent():SetBackdrop(nil)
@@ -590,7 +595,7 @@ function OptionsPrivate.CreateFrame()
   filterInput:SetPoint("TOP", frame, "TOP", 0, -65)
   filterInput:SetPoint("LEFT", frame, "LEFT", 24, 0)
   filterInput:SetPoint("RIGHT", container.frame, "LEFT", -2, 0)
-  filterInput:SetFont(STANDARD_TEXT_FONT, 10)
+  filterInput:SetFont(STANDARD_TEXT_FONT, 10, "")
   frame.filterInput = filterInput
   filterInput:Hide()
 
@@ -625,6 +630,7 @@ function OptionsPrivate.CreateFrame()
     undo.frame:Hide()
   end
   undo:SetPoint("LEFT")
+  -- undo.frame:SetCollapsesLayout(true) -- !! FIX ME: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
 
   local redo = AceGUI:Create("WeakAurasToolbarButton")
   redo:SetText(L["Redo"])
@@ -645,6 +651,7 @@ function OptionsPrivate.CreateFrame()
   else
     redo.frame:Disable()
   end
+  -- redo.frame:SetCollapsesLayout(true) -- !! FIX ME: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
   OptionsPrivate.Private.Features:Subscribe("undo",
     function()
       undo.frame:Show()
@@ -673,7 +680,6 @@ function OptionsPrivate.CreateFrame()
   end
   tmControls:Step()
   OptionsPrivate.Private.TimeMachine.sub:AddSubscriber("Step", tmControls)
-
 
   local newButton = AceGUI:Create("WeakAurasToolbarButton")
   newButton:SetText(L["New Aura"])
@@ -1374,8 +1380,7 @@ function OptionsPrivate.CreateFrame()
     containerScroll:SetLayout("flow")
     border:AddChild(containerScroll)
 
-    local enabled = select(4, GetAddOnInfo("WeakAurasTemplates"))
-    if enabled then
+    if GetAddOnInfo("WeakAurasTemplates") ~= "MISSING" then
       local simpleLabel = AceGUI:Create("Label")
       simpleLabel:SetFont(STANDARD_TEXT_FONT, 24, "OUTLINE")
       simpleLabel:SetColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)

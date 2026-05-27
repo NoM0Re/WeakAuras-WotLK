@@ -179,7 +179,7 @@ local function createDistributeAlignOptions(id, data)
               end
             elseif(v == "LEFT") then
               if(childData.selfPoint:find("BOTTOM")) then
-                childData.yOffset = 0 - getHeight(childData, childRegion);
+                childData.yOffset = 0 - ( childData.height or childRegion.height);
               elseif(childData.selfPoint:find("TOP")) then
                 childData.yOffset = 0;
               else

@@ -25,6 +25,7 @@ local function ConstructImportExport(frame)
 
   local input = AceGUI:Create("MultiLineEditBox");
   input:DisableButton(true)
+  -- input.frame:SetClipsChildren(true);
   input:SetFullWidth(true)
   input:SetFullHeight(true)
   group:AddChild(input);
