@@ -2170,11 +2170,10 @@ function WeakAuras.Rename(data, newid)
 
   Private.ProfileRenameAura(oldid, newid);
 
-
-  Private.callbacks:Fire("Rename", data.uid, oldid, newid)
-
   -- TODO: This should not be necessary
   WeakAuras.Add(data)
+
+  Private.callbacks:Fire("Rename", data.uid, oldid, newid)
 end
 
 function Private.Convert(data, newType)
