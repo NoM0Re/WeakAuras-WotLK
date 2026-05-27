@@ -87,7 +87,7 @@ else
   WeakAuras.GetName = function(name) return name end
   WeakAuras.UnitName = UnitName
   WeakAuras.GetUnitName = GetUnitName
-  WeakAuras.UnitFullName = UnitFullName
+  WeakAuras.UnitFullName = UnitName
 end
 
 local timer = WeakAurasTimers
@@ -6146,18 +6146,18 @@ do
 end
 
 do
-  local ownRealm = select(2, UnitFullName("player"))
+  local ownRealm = select(2, UnitName("player"))
   ---@param unit UnitToken
   ---@return string name
   ---@return string realm
   function WeakAuras.UnitNameWithRealm(unit)
-    ownRealm = ownRealm or select(2, UnitFullName("player"))
-    local name, realm = UnitFullName(unit)
+    ownRealm = ownRealm or select(2, UnitName("player"))
+    local name, realm = UnitName(unit)
     return name or "", realm or ownRealm or ""
   end
 
   function WeakAuras.UnitNameWithRealmCustomName(unit)
-    ownRealm = ownRealm or select(2, UnitFullName("player"))
+    ownRealm = ownRealm or select(2, UnitName("player"))
     local name, realm =  WeakAuras.UnitFullName(unit)
     return name or "", realm or ownRealm or ""
   end

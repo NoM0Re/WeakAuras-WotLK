@@ -124,19 +124,19 @@ local function ConfigureModel(region, model, data)
   model:ClearAllPoints()
   model:SetAllPoints(region)
   model:SetParent(region)
-  --model:SetKeepModelOnHide(true)
+  -- model:SetKeepModelOnHide(true)
   model:Show()
 
   -- Adjust model
   WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
-  model:SetPortraitZoom(data.portraitZoom and 1 or 0);
-  --model:ClearTransform()
+  -- model:SetPortraitZoom(data.portraitZoom and 1 or 0);
+  -- model:ClearTransform()
   model:SetPosition(data.model_z, data.model_x, data.model_y);
   model:SetFacing(rad(region.rotation));
 
   model:SetScript("OnShow", function()
     WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
-    --model:ClearTransform()
+    -- model:ClearTransform()
     model:SetPosition(data.model_z, data.model_x, data.model_y);
     model:SetFacing(rad(region.rotation));
   end)
@@ -200,7 +200,7 @@ end
 
 local function ReleaseModel(model)
   model:SetAlpha(1)
-  --model:SetKeepModelOnHide(false)
+  -- model:SetKeepModelOnHide(false)
   model:Hide()
   model:UnregisterEvent("UNIT_MODEL_CHANGED");
   model:UnregisterEvent("PLAYER_TARGET_CHANGED");
