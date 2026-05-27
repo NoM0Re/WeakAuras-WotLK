@@ -168,9 +168,10 @@ local function ConstructTextEditor(frame)
   editor:DisableButton(true)
   local fontPath = SharedMedia:Fetch("font", "Fira Mono Medium")
   if (fontPath) then
-    editor.editBox:SetFont(fontPath, WeakAurasSaved.editor_font_size)
+    editor.editBox:SetFont(fontPath, WeakAurasSaved.editor_font_size, "")
   end
   group:AddChild(editor)
+  -- editor.frame:SetClipsChildren(true)
 
   local originalOnCursorChanged = editor.editBox:GetScript("OnCursorChanged")
   editor.editBox:SetScript("OnCursorChanged", function(self, ...)
@@ -233,6 +234,7 @@ local function ConstructTextEditor(frame)
   helpButton:SetText(L["Help"])
 
   local dropdown = CreateFrame("Frame", "SettingsMenuFrame", settings_frame, "UIDropDownMenuTemplate")
+
 
   local function settings_dropdown_initialize(frame, level, menu)
     if level == 1 then
@@ -540,7 +542,7 @@ local function ConstructTextEditor(frame)
   filterInput:SetHeight(15)
   filterInput:SetPoint("TOPLEFT", apiSearchFrame, "TOPLEFT", 17, -30)
   filterInput:SetPoint("TOPRIGHT", apiSearchFrame, "TOPRIGHT", -10, -30)
-  filterInput:SetFont(STANDARD_TEXT_FONT, 10)
+  filterInput:SetFont(STANDARD_TEXT_FONT, 10, "")
 
   local apiSearchScrollContainer = AceGUI:Create("SimpleGroup")
   apiSearchScrollContainer:SetFullWidth(true)
@@ -833,7 +835,7 @@ local function ConstructTextEditor(frame)
   )
 
   local editorError = group.frame:CreateFontString(nil, "OVERLAY")
-  editorError:SetFont(STANDARD_TEXT_FONT, 12)
+  editorError:SetFont(STANDARD_TEXT_FONT, 12, "")
   editorError:SetJustifyH("LEFT")
   editorError:SetJustifyV("TOP")
   editorError:SetTextColor(1, 0, 0)
@@ -845,7 +847,7 @@ local function ConstructTextEditor(frame)
   WeakAuras.XMLTemplates["InputBoxTemplate"](editorLine)
   -- Set script on enter pressed..
   editorLine:SetPoint("RIGHT", snippetsButton, "LEFT", -10, 0)
-  editorLine:SetFont(STANDARD_TEXT_FONT, 10)
+  editorLine:SetFont(STANDARD_TEXT_FONT, 10, "")
   editorLine:SetJustifyH("RIGHT")
   editorLine:SetWidth(30)
   editorLine:SetHeight(20)
@@ -854,7 +856,7 @@ local function ConstructTextEditor(frame)
   editorLine:SetAutoFocus(false)
 
   local editorLineText = group.frame:CreateFontString(nil, "OVERLAY")
-  editorLineText:SetFont(STANDARD_TEXT_FONT, 10)
+  editorLineText:SetFont(STANDARD_TEXT_FONT, 10, "")
   editorLineText:SetTextColor(1, 1, 1)
   editorLineText:SetText(L["Line"])
   editorLineText:SetPoint("RIGHT", editorLine, "LEFT", -8, 0)

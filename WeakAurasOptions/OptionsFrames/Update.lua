@@ -13,9 +13,6 @@ local L = WeakAuras.L
 -- Lua APIs
 local ipairs_reverse = OptionsPrivate.ipairs_reverse
 
--- WoW APIs
-local tIndexOf = OptionsPrivate.tIndexOf
-
 -- Scam Check
 local function notEmptyString(str)
   return str and str ~= "" and string.find(str, "%S")
@@ -378,6 +375,7 @@ local function BuildUidMap(data, children, type)
         uidMap.map[data.uid].anchorFrameFrame = idToUid[target]
       end
     end
+
   end
 
   local function handleSortHybridTable(data)
@@ -817,7 +815,7 @@ local function BuildUidMap(data, children, type)
       local parent = self.map[uid].parent
       if parent then
         local parentChildren = self:GetChildren(parent)
-        local index = tIndexOf(parentChildren, uid)
+        local index = OptionsPrivate.tIndexOf(parentChildren, uid)
 
         if otherList.before then
           for _, otherUid in ipairs(otherList.before) do

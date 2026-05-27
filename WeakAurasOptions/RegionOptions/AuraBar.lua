@@ -487,10 +487,10 @@ local function createOptions(id, data)
     for id, display in ipairs(overlayInfo) do
       options["overlaytexture" .. id] = {
         type = "select",
-        dialogControl = "LSM30_Statusbar",
+        dialogControl = "WA_LSM30_StatusbarAtlas",
         width = WeakAuras.doubleWidth,
         name = string.format(L["%s Texture"], display),
-        values = AceGUIWidgetLSMlists.statusbar,
+        values = statusbarList,
         order = 58.1 + index,
         set = function(info, texture)
           if (not data.overlaysTexture) then
@@ -613,7 +613,7 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, width, hei
   end
 
   -- Fake status-bar style
-  texture:SetTexture(SharedMedia:Fetch("statusbar", data.texture));
+  OptionsPrivate.Private.SetTextureOrAtlas(texture, SharedMedia:Fetch("statusbar", data.texture))
   texture:SetVertexColor(data.barColor[1], data.barColor[2], data.barColor[3], data.barColor[4]);
 
   -- Fake icon size
@@ -697,8 +697,11 @@ local function modifyThumbnail(parent, borderframe, data, fullModify, width, hei
         iconPath = path or data.displayIcon
       end
 
-      OptionsPrivate.Private.SetTextureOrAtlas(icon,
-        iconPath and iconPath ~= "" and iconPath or "Interface\\Icons\\INV_Misc_QuestionMark")
+      if iconPath and iconPath ~= "" then
+        OptionsPrivate.Private.SetTextureOrAtlas(self.icon, iconPath)
+      else
+        OptionsPrivate.Private.SetTextureOrAtlas(self.icon, "Interface\\Icons\\INV_Misc_QuestionMark")
+      end
     end
 
     if data then

@@ -217,7 +217,6 @@ local function ConstructTexturePicker(frame)
 
   local input = CreateFrame("EditBox", "TexturePickerFilterInput", group.frame);
   WeakAuras.XMLTemplates["SearchBoxTemplate"](input)
-  input:SetParent(group.frame);
   input:SetScript("OnTextChanged", function(self, ...)
     WA_SearchBoxTemplate_OnTextChanged(self)
     local status = dropdown.status or dropdown.localstatus
