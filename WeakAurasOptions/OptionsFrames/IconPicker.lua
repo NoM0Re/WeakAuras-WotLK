@@ -30,6 +30,7 @@ local function ConstructIconPicker(frame)
 
   local scroll = AceGUI:Create("ScrollFrame");
   scroll:SetLayout("flow");
+  -- scroll.frame:SetClipsChildren(true);
   group:AddChild(scroll);
 
   local function iconPickerFill(subname, doSort)
@@ -71,7 +72,7 @@ local function ConstructIconPicker(frame)
       for name, icons in pairs(spellCache.Get()) do
         if(name:lower():find(subname, 1, true)) then
           if icons.spells then
-            for spell, icon in icons.spells:gmatch("(%d+)=([%w_\\-]+),?") do
+            for spell, icon in icons.spells:gmatch("(%d+)=([^,]+)") do
               local iconId = icon
               if (not usedIcons[iconId]) then
                 AddButton(name, iconId)
@@ -82,7 +83,7 @@ local function ConstructIconPicker(frame)
               end
             end
           elseif icons.achievements then
-            for spell, icon in icons.achievements:gmatch("(%d+)=([%w_\\-]+),?") do
+            for spell, icon in icons.achievements:gmatch("(%d+)=([^,]+)") do
               local iconId = icon
               if (not usedIcons[iconId]) then
                 AddButton(name, iconId)
