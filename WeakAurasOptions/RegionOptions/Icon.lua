@@ -247,11 +247,10 @@ local function createOptions(id, data)
     cooldownSwipe = {
       type = "toggle",
       width = WeakAuras.normalWidth,
-      name = L["Show \"Swipe\""],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Show \"Swipe\""]),
       order = 11.3,
-      desc = "|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\swipe-example:30|t\n"..L["Enable \"swipe\" part of the overlay"],
+      desc = "|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\swipe-example:30|t\n"..L["Enable \"swipe\" part of the overlay"] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
       hidden = function() return not data.cooldown end,
-      disabled = function() return true end,
     },
     cooldownEdge = {
       type = "toggle",
@@ -264,29 +263,27 @@ local function createOptions(id, data)
     cooldownTextDisabled = {
       type = "toggle",
       width = WeakAuras.normalWidth,
-      name = L["Hide Timer Text"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Hide Timer Text"]),
       order = 11.5,
-      desc = L["A timer will automatically be displayed according to default Interface Settings (overridden by some addons).\nEnable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer"],
+      desc = L["A timer will automatically be displayed according to default Interface Settings (overridden by some addons).\nEnable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer"] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
       hidden = function() return not data.cooldown end,
-      disabled = function() return true end,
     },
     useCooldownModRate = {
       type = "toggle",
       width = WeakAuras.normalWidth,
-      name = L["Blizzard Cooldown Reduction"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Blizzard Cooldown Reduction"]),
       order = 11.6,
-      desc = L["Cooldown Reduction changes the duration of seconds instead of showing the real time seconds."],
+      desc = L["Cooldown Reduction changes the duration of seconds instead of showing the real time seconds."] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
       hidden = function() return not data.cooldown end,
-      disabled = function() return true end,
     },
     ccWarning = {
       type = "description",
       width = WeakAuras.doubleWidth,
       name = function()
         if OmniCC then
-          return L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"]
+          return L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."]
         elseif ElvUI then
-          return L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"]
+          return L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."]
         else
           return L["Cooldown Numbers might be added by WoW. You can configure these in the game settings."]
         end
