@@ -10,7 +10,9 @@ local L = WeakAuras.L
 ---@param data auraData
 ---@return table
 function OptionsPrivate.GetInformationOptions(data)
+  --- @type boolean
   local isGroup = data.controlledChildren and true or false
+  --- @type boolean
   local isTmpGroup = type(data.id) == "table"
 
   local options = {
@@ -22,6 +24,7 @@ function OptionsPrivate.GetInformationOptions(data)
     }
   }
 
+  --- @type number
   local order = 1
   local args = options.args
 
@@ -50,8 +53,11 @@ function OptionsPrivate.GetInformationOptions(data)
   -- URL
   -- One Aura: Edit URL of the aura
   -- Group/Multi-selection: Edit URLs of both parent and children
+  --- @type boolean
   local sameURL = true
+  --- @type string|nil
   local commonURL
+  --- @type string
   local desc = ""
 
   local traverseForUrl = isTmpGroup and OptionsPrivate.Private.TraverseAllChildren or OptionsPrivate.Private.TraverseAll
@@ -168,6 +174,7 @@ function OptionsPrivate.GetInformationOptions(data)
     end
   end
 
+
   -- Squelch Action
   local sameSquelch = true
   local commonSquelch
@@ -256,6 +263,7 @@ function OptionsPrivate.GetInformationOptions(data)
     }
   }
 
+  --- @type table<string, boolean>
   local same = {
     ignoreOptionsEventErrors = true,
     showNilIsFalse = true,
@@ -263,10 +271,12 @@ function OptionsPrivate.GetInformationOptions(data)
     groupOffset = true
   }
 
+  --- @type table<string, boolean>
   local common = {
 
   }
 
+  --- @type table<string, string>
   local mergedDesc = {
 
   }
@@ -345,6 +355,7 @@ function OptionsPrivate.GetInformationOptions(data)
   end
 
   -- Saved Data
+  --- @type number
   local savedDataCount = 0
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(data) do
     OptionsPrivate.Private.SaveAuraEnvironment(data.id)
@@ -406,8 +417,12 @@ function OptionsPrivate.GetInformationOptions(data)
     order = order,
   }
   order = order + 1
+
+  --- @type boolean
   local sameDebugLog = true
+  --- @type boolean|nil
   local commonDebugLog
+  --- @type string
   local debugLogDesc = ""
 
   if isGroup and not isTmpGroup then
@@ -456,7 +471,7 @@ function OptionsPrivate.GetInformationOptions(data)
           })
         end
         OptionsPrivate.Private.TimeMachine:Commit()
-        end
+      end
     end
   }
   order = order + 1
@@ -468,13 +483,16 @@ function OptionsPrivate.GetInformationOptions(data)
       width = WeakAuras.normalWidth,
       order = order,
       func = function()
+        --- @type string
         local fullMessage = L["WeakAuras %s on WoW %s"]:format(WeakAuras.versionString, WeakAuras.BuildInfo) .. "\n\n"
+        --- @type boolean
         local haveLogs = false
         if isGroup and not isTmpGroup then
           local auraLog = OptionsPrivate.Private.DebugLog.GetLogs(data.uid)
           if auraLog then
             haveLogs = true
             fullMessage = fullMessage .. L["Aura: '%s'"]:format(data.id)
+            --- @type string|nil
             local version = data.semver or data.version
             if (version) then
               fullMessage = fullMessage .. "\n" .. L["Version: %s"]:format(version)
@@ -483,10 +501,12 @@ function OptionsPrivate.GetInformationOptions(data)
           end
         else
           for child in OptionsPrivate.Private.TraverseLeafsOrAura(data) do
+            --- @type string
             local auraLog = OptionsPrivate.Private.DebugLog.GetLogs(child.uid)
             if auraLog then
               haveLogs = true
               fullMessage = fullMessage .. L["Aura: '%s'"]:format(child.id)
+              --- @type string|nil
               local version = child.semver or child.version
               if (version) then
                 fullMessage = fullMessage .. "\n" .. L["Version: %s"]:format(version)

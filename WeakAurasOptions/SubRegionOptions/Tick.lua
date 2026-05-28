@@ -37,6 +37,7 @@ local function createOptions(parentData, data, index, subIndex)
       softMax = 20,
       step = 1,
     },
+
     tick_progress_source_space = {
       type = "description",
       name = "",
@@ -51,6 +52,7 @@ local function createOptions(parentData, data, index, subIndex)
       order = 3.1,
       values = OptionsPrivate.Private.tick_placement_modes,
     },
+
 
     tick_progress_source_space_2 = {
       type = "description",

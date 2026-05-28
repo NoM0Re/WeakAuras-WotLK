@@ -186,6 +186,7 @@ end
 local frame;
 local db;
 local odb;
+--- @type boolean?
 local reopenAfterCombat = false;
 local loadedFrame = CreateFrame("Frame");
 loadedFrame:RegisterEvent("ADDON_LOADED");

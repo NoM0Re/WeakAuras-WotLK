@@ -1461,13 +1461,7 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
     xOffset = {
       type = "range",
       control = "WeakAurasSpinBox",
-      name = function()
-        if data.anchor_mode == "area" then
-          return L["Extra Width"]
-        else
-          return L["X Offset"]
-        end
-      end,
+      name = L["X Offset"],
       order = 79,
       width = WeakAuras.normalWidth,
       softMin = (-1 * screenWidth),
@@ -1487,13 +1481,7 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
     yOffset = {
       type = "range",
       control = "WeakAurasSpinBox",
-      name = function()
-        if data.anchor_mode == "area" then
-          return L["Extra Height"]
-        else
-          return L["Y Offset"]
-        end
-      end,
+      name = L["Y Offset"],
       order = 80,
       width = WeakAuras.normalWidth,
       softMin = (-1 * screenHeight),
@@ -1536,6 +1524,7 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
   return positionOptions;
 end
 
+--- @type fun(data: auraData, options: table, startOrder: number, areaAnchors: table, pointAnchors: table)
 local function PositionOptionsForSubElement(data, options, startOrder, areaAnchors, pointAnchors)
   options.anchor_mode = {
     name = L["Anchor Mode"],
@@ -1621,7 +1610,13 @@ local function PositionOptionsForSubElement(data, options, startOrder, areaAncho
   options.xOffset = {
     type = "range",
     control = "WeakAurasSpinBox",
-    name = L["X Offset"],
+    name = function()
+      if data.anchor_mode == "area" then
+        return L["Extra Width"]
+      else
+        return L["X Offset"]
+      end
+    end,
     order = startOrder + 0.7,
     width = WeakAuras.normalWidth,
     softMin = -200,
@@ -1632,7 +1627,13 @@ local function PositionOptionsForSubElement(data, options, startOrder, areaAncho
   options.yOffset = {
     type = "range",
     control = "WeakAurasSpinBox",
-    name = L["Y Offset"],
+    name = function()
+      if data.anchor_mode == "area" then
+        return L["Extra Height"]
+      else
+        return L["Y Offset"]
+      end
+    end,
     order = startOrder + 0.8,
     width = WeakAuras.normalWidth,
     softMin = -200,
@@ -1641,6 +1642,7 @@ local function PositionOptionsForSubElement(data, options, startOrder, areaAncho
   }
 end
 
+--- @type fun(parentData: auraData, data: table, options: table, startOrder: number)
 local function ProgressOptionsForSubElement(parentData, data, options, startOrder, progressSourceHidden)
   options.progress_source = {
     type = "select",

@@ -20,6 +20,7 @@ local RestrictedChannelCheck = function(data)
   return data.message_type == "SAY" or data.message_type == "YELL" or data.message_type == "SMARTRAID"
 end
 
+--- @type number? the time at which the last sound was played, so that we don't play
 ---  a sound from each setter
 local lastPlayedSoundFromSet
 
@@ -904,7 +905,6 @@ function OptionsPrivate.GetActionOptions(data)
         width = WeakAuras.doubleWidth,
         name = L["Stop Sound"],
         order = 29.1,
-        hidden = function() return not StopSound end,
         disabled = function() return not StopSound end,
       },
       finish_do_sound_fade = {
@@ -912,7 +912,6 @@ function OptionsPrivate.GetActionOptions(data)
         width = WeakAuras.normalWidth,
         name = L["Fadeout Sound"],
         order = 29.2,
-        hidden = function() return not StopSound end,
         disabled = function() return not StopSound or not data.actions.finish.stop_sound end,
       },
       finish_stop_sound_fade = {
@@ -932,7 +931,6 @@ function OptionsPrivate.GetActionOptions(data)
         width = WeakAuras.doubleWidth,
         order = 29.4,
         name = "",
-        hidden = function() return not StopSound end,
         disabled = function() return not StopSound end,
       },
       finish_do_glow = {

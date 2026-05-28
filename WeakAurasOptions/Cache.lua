@@ -41,6 +41,17 @@ function spellCache.Build()
     holes[285224] = 301088
     holes[301101] = 324269
     holes[474742] = 1213143
+  elseif WeakAuras.IsTBC() then
+    holes = {}
+    holes[81748] = 158262
+    holes[158263] = 186402
+    holes[186403] = 219002
+    holes[219004] = 243805
+    holes[243806] = 261127
+    holes[262591] = 281624
+    holes[308395] = 324269
+    holes[385807] = 1244001
+    holes[1244002] = 1265708
   elseif WeakAuras.IsCataClassic() then
     holes = {}
     holes[121820] = 158262
@@ -50,14 +61,30 @@ function spellCache.Build()
     holes[243806] = 261127
     holes[262591] = 281624
     holes[301101] = 324269
-  end]]
+  elseif WeakAuras.IsMists() then
+    holes = {}
+    holes[171557] = 186402
+    holes[186403] = 219002
+    holes[219004] = 243805
+    holes[243819] = 261127
+    holes[262591] = 281624
+    holes[301101] = 324269
+    holes[473745] = 1214175
+  elseif WeakAuras.IsRetail() then
+    holes = {}
+    holes[474771] = 556604
+    holes[556606] = 936050
+    holes[936051] = 1049295
+    holes[1049296] = 1213133
+  end
+  ]]
   wipe(cache)
   local co = coroutine.create(function()
     metaData.rebuilding = true
     local id = 0
     local misses = 0
 
-    while misses < 53000 do
+    while misses < 53000 do -- validated
       id = id + 1
       local name, _, icon = GetSpellInfo(id)
 
@@ -268,7 +295,7 @@ function spellCache.BestKeyMatch(nearkey)
       partialMatches[key] = value;
     end
   end
-  for key, value in pairs(partialMatches) do
+  for key in pairs(partialMatches) do
     local distance = Lev(nearkey, key);
     if(distance < bestDistance) then
       bestKey = key;

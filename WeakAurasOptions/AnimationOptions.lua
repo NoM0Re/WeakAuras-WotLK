@@ -644,7 +644,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         order = 68.2,
         hidden = function()
           return (data.animation.main.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).Color)
-         end
+        end
       },
       main_colorType = {
         type = "select",
@@ -892,7 +892,7 @@ function OptionsPrivate.GetAnimationOptions(data)
         order = 87,
         values = anim_rotate_types,
         hidden = function()
-           return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
+          return (data.animation.finish.type ~= "custom" or not OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
         end
       },
       -- texteditor added below
@@ -994,7 +994,7 @@ function OptionsPrivate.GetAnimationOptions(data)
 
   local function hideStartRotateFunc()
     return data.animation.start.type ~= "custom"
-            or data.animation.start.rotateType ~= "custom"
+           or data.animation.start.rotateType ~= "custom"
            or not (data.animation.start.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "start_rotateFunc",
@@ -1041,7 +1041,7 @@ function OptionsPrivate.GetAnimationOptions(data)
 
   local function hideMainRotateFunc()
     return data.animation.main.type ~= "custom"
-            or data.animation.main.rotateType ~= "custom"
+           or data.animation.main.rotateType ~= "custom"
            or not (data.animation.main.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "main_rotateFunc",
@@ -1087,7 +1087,7 @@ function OptionsPrivate.GetAnimationOptions(data)
 
   local function hideFinishRotateFunc()
     return data.animation.finish.type ~= "custom"
-            or data.animation.finish.rotateType ~= "custom"
+           or data.animation.finish.rotateType ~= "custom"
            or not (data.animation.finish.use_rotate and OptionsPrivate.Private.EnsureRegion(id).SetAnimRotation)
   end
   OptionsPrivate.commonOptions.AddCodeOption(animation.args, data, L["Custom Function"], "finish_rotateFunc",

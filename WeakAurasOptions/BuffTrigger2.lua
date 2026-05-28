@@ -39,7 +39,7 @@ local function getAuraMatchesList(name, showSpellIdRecommendation)
     end
 
     local function addSpellToDesc(id)
-      local icon = select(3,GetSpellInfo(id))
+      local icon = select(3, GetSpellInfo(id))
       if icon then
         if descText == "" then
           descText = "|T"..icon..":0|t: "..id
@@ -131,9 +131,9 @@ local function CanHaveMatchCheck(trigger)
   return trigger.showClones
 end
 
-
 local function CreateNameOptions(aura_options, data, triggernum, size, isExactSpellId, isIgnoreList, prefix, baseOrder, useKey, optionKey, name, desc, inverse)
   local trigger = data.triggers[triggernum].trigger
+
   local spellCache = WeakAuras.spellCache
 
   for i = 1, size do

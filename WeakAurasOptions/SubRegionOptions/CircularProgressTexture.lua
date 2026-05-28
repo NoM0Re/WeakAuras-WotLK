@@ -4,16 +4,14 @@ local AddonName = ...
 ---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
-local Mixin = OptionsPrivate.Mixin
-
 local L = WeakAuras.L;
 
 local function createOptions(parentData, data, index, subIndex)
   local pointAnchors = {}
   local areaAnchors = {}
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(parentData) do
-    Mixin(pointAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "point"))
-    Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
+    OptionsPrivate.Mixin(pointAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "point"))
+    OptionsPrivate.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
   end
 
   local options = {
@@ -113,7 +111,7 @@ local function createOptions(parentData, data, index, subIndex)
       min = 0,
       max = 360,
       bigStep = 1,
-    },
+     },
     circularTextureCrop_x = {
       type = "range",
       control = "WeakAurasSpinBox",
