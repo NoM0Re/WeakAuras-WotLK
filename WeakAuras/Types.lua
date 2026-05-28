@@ -70,10 +70,9 @@ Private.character_types = {
 }
 
 ---@type table<string, string>
---!! FIX ME
 Private.spec_position_types = {
-  caster = L["Ranged"],
-  melee = L["Melee"]
+  RANGED = L["Ranged"],
+  MELEE = L["Melee"]
 }
 
 ---@type table<string, string>

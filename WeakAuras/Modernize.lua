@@ -2352,6 +2352,13 @@ function Private.Modernize(data, oldSnapshot)
     if data.model_path and data.modelIsUnit then
       data.model_fileId = data.model_path
     end
+    -- migrate spec_position to retail format
+    local specPosition = data.load.spec_position
+    if specPosition == "caster" then
+      data.load.spec_position = "RANGED"
+    elseif specPosition == "melee" then
+      data.load.spec_position = "MELEE"
+    end
   end
 
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
