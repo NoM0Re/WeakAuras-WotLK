@@ -264,7 +264,7 @@ local function ConstructTexturePicker(frame)
         pickedwidget = widget;
       end
     end
-    local width, height = nil, nil
+
     if(pickedwidget) then
       pickedwidget:Pick();
     end
@@ -272,7 +272,7 @@ local function ConstructTexturePicker(frame)
     wipe(group.selectedTextures)
     group.selectedTextures[texturePath] = true
 
-    SetAll(self.baseObject, self.paths, self.properties.texture, texturePath, width, height, self.adjustSize)
+    SetAll(self.baseObject, self.paths, self.properties.texture, texturePath, nil, nil, self.adjustSize)
 
     group:UpdateList();
     local status = dropdown.status or dropdown.localstatus
