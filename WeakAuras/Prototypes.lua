@@ -18,7 +18,6 @@ local GetShapeshiftFormInfo, GetShapeshiftForm = GetShapeshiftFormInfo, GetShape
 local GetRuneCooldown, UnitCastingInfo, UnitChannelInfo = GetRuneCooldown, UnitCastingInfo, UnitChannelInfo
 local UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 40
-local Round = Private.Round
 
 ---@class WeakAuras
 local WeakAuras = WeakAuras
@@ -29,6 +28,7 @@ function WeakAuras.IsSpellInRange(spellId, unit)
   return SpellRange.IsSpellInRange(spellId, unit)
 end
 
+-- TODO: Backport LibRangeCheck 3.0 to WotLK, currently 2.0 is the same as 3.0 so there is no urge, there will be changes in the future, until then it doesn't matter.
 local LibRangeCheck = LibStub("LibRangeCheck-2.0")
 
 function WeakAuras.GetRange(unit, checkVisible)
@@ -701,7 +701,7 @@ Private.tinySecondFormat = function(value)
      end
      local negSign = negative and "-" or ""
      if fraction > 0 then
-        return negSign .. ret .. tostring(Round(fraction * 100) / 100):sub(2)
+        return negSign .. ret .. tostring(Private.Round(fraction * 100) / 100):sub(2)
      else
         return negSign .. ret
      end
