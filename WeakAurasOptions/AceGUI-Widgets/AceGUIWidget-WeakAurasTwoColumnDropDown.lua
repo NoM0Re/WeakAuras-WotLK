@@ -1,6 +1,6 @@
 if not WeakAuras.IsLibsOK() then return end
 
-local AddonName = ...
+---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 
 local Type, Version = "WeakAurasTwoColumnDropdown", 6
