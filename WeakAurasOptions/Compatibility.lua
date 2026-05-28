@@ -85,6 +85,10 @@ do
   end
 end
 
+function OptionsPrivate.SetOptionTextDisabled(text)
+  return "|cff808080" .. text .. "|r"
+end
+
 -- Frame Line Mixin Backport used in MoverSizer
 local LineMethods = {}
 

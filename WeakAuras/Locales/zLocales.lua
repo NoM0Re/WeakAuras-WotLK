@@ -15,6 +15,7 @@ if (locale == "enUS" or locale == "enGB") then
   L["Please install it."] = "Please install it."
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
@@ -204,6 +205,7 @@ elseif (locale == "deDE") then
   L["Please install it."] = "Bitte installiere es."
   L["Please enable it in your AddOn list."] = "Bitte aktiviere es in deiner AddOn-Liste."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation wurde nicht korrekt geladen."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Hinweis:|r Diese Option bleibt für Auren aus anderen WoW-Versionen erhalten.\nIn WotLK 3.3.5a hat sie keinen Effekt."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -395,6 +397,7 @@ elseif (locale == "esES") then
   L["Please install it."] = "Por favor, instálalo."
   L["Please enable it in your AddOn list."] = "Por favor, actívalo en tu lista de AddOns."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation no se ha cargado correctamente."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
@@ -585,6 +588,7 @@ elseif (locale == "esMX") then
   L["Please install it."] = "Por favor, instálalo."
   L["Please enable it in your AddOn list."] = "Por favor, actívalo en tu lista de AddOns."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation no se ha cargado correctamente."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
@@ -775,6 +779,7 @@ elseif (locale == "frFR") then
   L["Please install it."] = "Veuillez l'installer."
   L["Please enable it in your AddOn list."] = "Veuillez l'activer dans votre liste d'Addons."
   L["AddOn: APIDocumentation is not loaded correctly."] = "Addon: APIDocumentation n'a pas été chargé correctement."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -968,6 +973,7 @@ elseif (locale == "itIT") then
   L["Please install it."] = "Please install it."
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -1161,6 +1167,7 @@ elseif (locale == "koKR") then
   L["Please install it."] = "설치해 주십시오."
   L["Please enable it in your AddOn list."] = "애드온 목록에서 활성화해 주십시오."
   L["AddOn: APIDocumentation is not loaded correctly."] = "애드온: APIDocumentation이(가) 제대로 로드되지 않았습니다."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "LibGroupTalents을 통해 전문화를 동기화해야 합니다."
   L["Affliction"] = "고통"
@@ -1353,6 +1360,7 @@ elseif (locale == "ptBR") then
   L["Please install it."] = "Please install it."
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -1544,6 +1552,7 @@ elseif (locale == "ruRU") then
   L["Please install it."] = "Пожалуйста, установите его."
   L["Please enable it in your AddOn list."] = "Пожалуйста, включите его в вашем списке аддонов."
   L["AddOn: APIDocumentation is not loaded correctly."] = "Аддон: APIDocumentation загружен некорректно."
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Требуется синхронизация специализации через LibGroupTalents."
   L["Affliction"] = "Колдовство"
@@ -1734,6 +1743,7 @@ elseif (locale == "zhCN") then
   L["Please install it."] = "请安装它。"
   L["Please enable it in your AddOn list."] = "请在你的插件列表中启用它。"
   L["AddOn: APIDocumentation is not loaded correctly."] = "插件：APIDocumentation 未正确加载。"
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要通过LibGroupTalents同步专精。"
   L["Affliction"] = "痛苦"
@@ -1924,6 +1934,7 @@ elseif (locale == "zhTW") then
   L["Please install it."] = "請安裝它。"
   L["Please enable it in your AddOn list."] = "請在你的插件清單中啟用它。"
   L["AddOn: APIDocumentation is not loaded correctly."] = "插件：APIDocumentation 未正確載入。"
+  L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要透由LibGroupTalents同步專精。"
   L["Affliction"] = "痛苦"
