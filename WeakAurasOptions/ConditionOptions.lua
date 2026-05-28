@@ -145,6 +145,10 @@ local function blueIfNoValue2(data, object, variable, subvariable, blueString, n
   return normalString or "";
 end
 
+local function blueIfNoValue2OrCompatibilityDisabled(data, object, variable, subvariable, text, check)
+  return blueIfNoValue2(data, object, variable, subvariable, text, OptionsPrivate.SetOptionTextDisabled(text, check))
+end
+
 local function descIfSubset(data, reference, totalAuraCount)
   if (isSubset(data, reference, totalAuraCount)) then
     local desc = L["Used in auras:"];
@@ -209,6 +213,15 @@ local function descIfNoValue2(data, object, variable, subvariable, type, values)
     end
   end
   return nil;
+end
+
+local function descIfNoValue2WithCompatibilityNote(data, object, variable, subvariable, check, type, values)
+  local desc = descIfNoValue2(data, object, variable, subvariable, type, values)
+  if check then
+    return desc
+  end
+  desc = desc or ""
+  return desc .. (desc ~= "" and "\n\n" or "") .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]
 end
 
 local function filterUsedProperties(indexToProperty, allDisplays, usedProperties, ownProperty)
@@ -857,14 +870,14 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
       min = 0,
       softMax = 10,
       bigStep = 1,
-      name = blueIfNoValue2(data, conditions[i].changes[j], "value", "sound_fade", L["Fadeout Time (seconds)"], L["Fadeout Time (seconds)"]),
-      desc = descIfNoValue2(data, conditions[i].changes[j], "value", "sound_fade", propertyType),
+      name = blueIfNoValue2OrCompatibilityDisabled(data, conditions[i].changes[j], "value", "sound_fade", L["Fadeout Time (seconds)"], StopSound),
+      desc = descIfNoValue2WithCompatibilityNote(data, conditions[i].changes[j], "value", "sound_fade", StopSound, propertyType),
       order = order,
       get = function()
         return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.sound_fade;
       end,
       set = setValueComplex("sound_fade"),
-      disabled = function() return not StopSound or not anySoundType("Stop") end,
+      disabled = function() return not anySoundType("Stop") end,
       hidden = function() return not (anySoundType("Stop")) end
     }
     order = order + 1;
@@ -874,7 +887,6 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
       width = WeakAuras.normalWidth,
       name = "",
       order = order,
-      disabled = function() return not StopSound end,
       hidden = function() return not (anySoundType("Stop")) end
     }
     order = order + 1;

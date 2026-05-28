@@ -85,8 +85,11 @@ do
   end
 end
 
-function OptionsPrivate.SetOptionTextDisabled(text)
-  return "|cff808080" .. text .. "|r"
+function OptionsPrivate.SetOptionTextDisabled(text, check)
+  if check == nil or not check then
+    return "|cff808080" .. text .. "|r"
+  end
+  return text
 end
 
 -- Frame Line Mixin Backport used in MoverSizer
