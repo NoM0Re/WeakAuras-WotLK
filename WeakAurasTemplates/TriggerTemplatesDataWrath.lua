@@ -9,25 +9,25 @@ local GetSpellInfo, tinsert = GetSpellInfo, tinsert
 -- The templates tables are created on demand
 local templates =
   {
-  class = { },
-  race = {
-    Human = {},
-    NightElf = {},
-    Dwarf = {},
-    Gnome = {},
-    Draenei = {},
-    Orc = {},
-    Scourge = {},
-    Tauren = {},
-    Troll = {},
-    BloodElf = {},
-  },
-  general = {
-    title = L["General"],
-    icon = [[Interface/Icons/Spell_Nature_WispSplode]],
-    args = {}
-  },
-}
+    class = { },
+    race = {
+      Human = {},
+      NightElf = {},
+      Dwarf = {},
+      Gnome = {},
+      Draenei = {},
+      Orc = {},
+      Scourge = {},
+      Tauren = {},
+      Troll = {},
+      BloodElf = {},
+    },
+    general = {
+      title = L["General"],
+      icon = [[Interface/Icons/Spell_Nature_WispSplode]], -- 136116
+      args = {}
+    },
+  }
 
 local manaIcon = "Interface\\Icons\\spell_frost_manarecharge.blp"
 local rageIcon = "Interface\\Icons\\ability_racial_bloodrage.blp"
@@ -62,7 +62,7 @@ templates.class.WARRIOR = {
         { spell = 23920, type = "buff", unit = "player"}, -- Spell Reflection
         { spell = 46913, type = "buff", unit = "player"}, -- Bloodsurge
       },
-      icon = [[Interface/Icons/Ability_Warrior_BattleShout]]
+      icon = [[Interface/Icons/Ability_Warrior_BattleShout]] -- 132333
     },
     [2] = {
       title = L["Debuffs"],
@@ -81,7 +81,7 @@ templates.class.WARRIOR = {
         { spell = 12797, type = "debuff", unit = "target"}, -- Improved Revenge
         { spell = 12809, type = "debuff", unit = "target"}, -- Concussion Blow
       },
-      icon = [[Interface/Icons/Ability_Warrior_WarCry]]
+      icon = [[Interface/Icons/Ability_Warrior_WarCry]] -- 132366
     },
     [3] = {
       title = L["Abilities"],
@@ -134,7 +134,7 @@ templates.class.WARRIOR = {
         { spell = 60970, type = "ability", talent = 65}, -- Heroic Fury
         { spell = 64382, type = "ability", requiresTarget = true, debuff = true, form = 1}, -- Shattering Throw
       },
-      icon = [[Interface/Icons/Ability_Warrior_SavageBlow]]
+      icon = [[Interface/Icons/Ability_Warrior_SavageBlow]] -- 132355
     },
     [4] = {},
     [5] = {},
@@ -160,14 +160,14 @@ templates.class.PALADIN = {
         { spell = 1044, type = "buff", unit = "group"}, -- Blessing of Freedom
         { spell = 6940, type = "buff", unit = "group"}, -- Blessing of Sacrifice
       },
-      icon = [[Interface/Icons/Spell_Holy_SealOfProtection]]
+      icon = [[Interface/Icons/Spell_Holy_SealOfProtection]] -- 135964
     },
     [2] = {
       title = L["Debuffs"],
       args = {
         { spell = 853, type = "debuff", unit = "target"}, -- Hammer of Justice
       },
-      icon = [[Interface/Icons/Spell_Holy_RemoveCurse]]
+      icon = [[Interface/Icons/Spell_Holy_RemoveCurse]] -- 135952
     },
     [3] = {
       title = L["Abilities"],
@@ -209,7 +209,7 @@ templates.class.PALADIN = {
         { spell = 53585, type = "ability", talent = 104}, -- Divine Storm
         { spell = 53595, type = "ability", talent = 61}, -- Hammer of the Righteous
       },
-      icon = [[Interface/Icons/Spell_Holy_SearingLight]]
+      icon = [[Interface/Icons/Spell_Holy_SearingLight]] -- 135972
     },
     [4] = {},
     [5] = {},
@@ -236,7 +236,7 @@ templates.class.HUNTER = {
         { spell = 19621, type = "buff", unit = "pet"}, -- Frenzy
         { spell = 24450, type = "buff", unit = "pet"}, -- Prowl
       },
-      icon = [[Interface/Icons/Ability_Mount_JungleTiger]]
+      icon = [[Interface/Icons/Ability_Mount_JungleTiger]] -- 132242
     },
     [2] = {
       title = L["Debuffs"],
@@ -252,7 +252,7 @@ templates.class.HUNTER = {
         { spell = 5116, type = "debuff", unit = "target"}, -- Concussive Shot
         { spell = 24394, type = "debuff", unit = "target"}, -- Intimidation
       },
-      icon = [[Interface/Icons/Spell_Frost_Stun]]
+      icon = [[Interface/Icons/Spell_Frost_Stun]] -- 135860
     },
     [3] = {
       title = L["Abilities"],
@@ -297,7 +297,7 @@ templates.class.HUNTER = {
         { spell = 53301, type = "ability", requiresTarget = true, talent = 106}, -- Explosive Shot
         { spell = 53351, type = "ability", requiresTarget = true, usable = true}, -- Kill Shot
       },
-      icon = [[Interface/Icons/INV_Spear_07]]
+      icon = [[Interface/Icons/INV_Spear_07]] -- 135130
     },
     [4] = {},
     [5] = {},
@@ -326,7 +326,7 @@ templates.class.ROGUE = {
         { spell = 14149, type = "buff", unit = "player"}, -- Remorseless
         { spell = 14278, type = "buff", unit = "player"}, -- Ghostly Strike
       },
-      icon = [[Interface/Icons/Ability_Rogue_DualWeild]]
+      icon = [[Interface/Icons/Ability_Rogue_DualWeild]] -- 132290
     },
     [2] = {
       title = L["Debuffs"],
@@ -339,7 +339,7 @@ templates.class.ROGUE = {
         { spell = 17348, type = "debuff", unit = "target"}, -- Hemorrhage
         { spell = 14183, type = "debuff", unit = "target"}, -- Premeditation
       },
-      icon = [[Interface/Icons/Ability_Rogue_Rupture]]
+      icon = [[Interface/Icons/Ability_Rogue_Rupture]] -- 132302
     },
     [3] = {
       title = L["Abilities"],
@@ -378,7 +378,7 @@ templates.class.ROGUE = {
         { spell = 51723, type = "ability"}, -- Fan of Knives
         { spell = 57934, type = "ability", buff = true}, -- Tricks of the Trade
       },
-      icon = [[Interface/Icons/Ability_Warrior_PunishingBlow]]
+      icon = [[Interface/Icons/Ability_Warrior_PunishingBlow]] -- 132350
     },
     [4] = {},
     [5] = {},
@@ -404,7 +404,7 @@ templates.class.PRIEST = {
         { spell = 2096, type = "buff", unit = "player"}, -- Mind Vision
         { spell = 1706, type = "buff", unit = "player"}, -- Levitate
       },
-      icon = [[Interface/Icons/Spell_Holy_PowerWordShield]]
+      icon = [[Interface/Icons/Spell_Holy_PowerWordShield]] -- 135940
     },
     [2] = {
       title = L["Debuffs"],
@@ -415,7 +415,7 @@ templates.class.PRIEST = {
         { spell = 9484, type = "debuff", unit = "multi" }, -- Shackle Undead
         { spell = 34914, type = "debuff", unit = "target", talent = 101}, -- Vampiric Touch
       },
-      icon = [[Interface/Icons/Spell_Shadow_ShadowWordPain]]
+      icon = [[Interface/Icons/Spell_Shadow_ShadowWordPain]] -- 136207
     },
     [3] = {
       title = L["Abilities"],
@@ -434,6 +434,7 @@ templates.class.PRIEST = {
         { spell = 8122, type = "ability"}, -- Psychic Scream
         { spell = 8129, type = "ability", requireTarget = true}, -- Mana Burn
         { spell = 10060, type = "ability", buff = true, talent = 19}, -- Power Infusion
+        { spell = 8129, type = "ability", requireTarget = true}, -- Mana Burn
         { spell = 10947, type = "ability", requireTarget = true}, -- Mind Flay
         { spell = 10951, type = "ability", buff = true}, -- Inner Fire
         { spell = 14751, type = "ability", buff = true, talent = 8}, -- Inner Focus
@@ -453,7 +454,7 @@ templates.class.PRIEST = {
         { spell = 64843, type = "ability"}, -- Divine Hymn
         { spell = 64901, type = "ability"}, -- Hymn of Hope
       },
-      icon = [[Interface/Icons/Spell_Shadow_UnholyFrenzy]]
+      icon = [[Interface/Icons/Spell_Shadow_UnholyFrenzy]] -- 136224
     },
     [4] = {},
     [5] = {},
@@ -476,14 +477,14 @@ templates.class.SHAMAN = {
         { spell = 546, type = "buff", unit = "player"}, -- Water Walking
         { spell = 16256, type = "buff", unit = "player", talent = 50}, -- Flurry
       },
-      icon = [[Interface/Icons/Spell_Frost_WindWalkOn]]
+      icon = [[Interface/Icons/Spell_Frost_WindWalkOn]] -- 135863
     },
     [2] = {
       title = L["Debuffs"],
       args = {
         { spell = 3600, type = "debuff", unit = "target"}, -- Earthbind
       },
-      icon = [[Interface/Icons/Spell_Fire_FlameShock]]
+      icon = [[Interface/Icons/Spell_Fire_FlameShock]] -- 135813
     },
     [3] = {
       title = L["Abilities"],
@@ -547,7 +548,7 @@ templates.class.SHAMAN = {
         { spell = 51533, type = "ability", buff = true, talent = 65}, -- Feral Spirit
         { spell = 61295, type = "ability", talent = 105}, -- Riptide
       },
-      icon = [[Interface/Icons/Spell_Holy_SealOfMight]]
+      icon = [[Interface/Icons/Spell_Holy_SealOfMight]] -- 135963
     },
     [4] = {},
     [5] = {},
@@ -557,7 +558,7 @@ templates.class.SHAMAN = {
       title = L["Resources"],
       args = {
       },
-      icon = [[Interface/Icons/Spell_Lightning_LightningBolt01]],
+      icon = [[Interface/Icons/Spell_Lightning_LightningBolt01]], -- 135990
     },
   }
 }
@@ -578,7 +579,7 @@ templates.class.MAGE = {
         { spell = 12536, type = "buff", unit = "player"}, -- Clearcasting
         { spell = 45438, type = "buff", unit = "player"}, -- Ice Block
       },
-      icon = [[Interface/Icons/Spell_Nature_StarFall]]
+      icon = [[Interface/Icons/Spell_Nature_StarFall]] -- 136096
     },
     [2] = {
       title = L["Debuffs"],
@@ -589,7 +590,7 @@ templates.class.MAGE = {
         { spell = 11103, type = "debuff", unit = "target"}, -- Impact
         { spell = 11180, type = "debuff", unit = "target"}, -- Winter's Chill
       },
-      icon = [[Interface/Icons/Spell_Frost_FrostNova]]
+      icon = [[Interface/Icons/Spell_Frost_FrostNova]] -- 135848
     },
     [3] = {
       title = L["Abilities"],
@@ -637,7 +638,7 @@ templates.class.MAGE = {
         { spell = 44425, type = "ability", requiresTarget = true, talent = 27}, -- Arcane Barrage
         { spell = 44572, type = "ability", requiresTarget = true, debuff = true, usable = true, talent = 107}, -- Deep Freeze
       },
-      icon = [[Interface/Icons/Spell_Nature_Purge]]
+      icon = [[Interface/Icons/Spell_Nature_Purge]] -- 136075
     },
     [4] = {},
     [5] = {},
@@ -667,7 +668,7 @@ templates.class.WARLOCK = {
         { spell = 19028, type = "buff", unit = "player", talent = 59}, -- Soul Link
         { spell = 20707, type = "buff", unit = "group"}, -- Soulstone
       },
-      icon = [[Interface/Icons/Spell_Shadow_SoulGem]]
+      icon = [[Interface/Icons/Spell_Shadow_SoulGem]] -- 136210
     },
     [2] = {
       title = L["Debuffs"],
@@ -691,7 +692,7 @@ templates.class.WARLOCK = {
         { spell = 30108, type = "debuff", unit = "target", talent = 21}, -- Unstable Affliction
         { spell = 48181, type = "debuff", unit = "target", talent = 26}, -- Haunt
       },
-      icon = [[Interface/Icons/Spell_Shadow_CurseOfSargeras]]
+      icon = [[Interface/Icons/Spell_Shadow_CurseOfSargeras]] -- 136139
     },
     [3] = {
       title = L["Abilities"],
@@ -729,7 +730,7 @@ templates.class.WARLOCK = {
         { spell = 47897, type = "ability"}, -- Shadowflame
         { spell = 48020, type = "ability"}, -- Demonic Circle: Teleport
       },
-      icon = [[Interface/Icons/Spell_Fire_Fireball02]]
+      icon = [[Interface/Icons/Spell_Fire_Fireball02]] -- 135808
     },
     [4] = {},
     [5] = {},
@@ -760,7 +761,7 @@ templates.class.DRUID = {
         { spell = 29166, type = "buff", unit = "group"}, -- Innervate
         { spell = 33763, type = "buff", unit = "player"}, -- Lifebloom
       },
-      icon = [[Interface/Icons/Spell_Nature_StoneClawTotem]]
+      icon = [[Interface/Icons/Spell_Nature_StoneClawTotem]] -- 136097
     },
     [2] = {
       title = L["Debuffs"],
@@ -774,7 +775,7 @@ templates.class.DRUID = {
         { spell = 5570, type = "debuff", unit = "target", talent = 8}, -- Insect Swarm
         { spell = 8921, type = "debuff", unit = "target"}, -- Moonfire
       },
-      icon = [[Interface/Icons/Ability_Druid_Bash]]
+      icon = [[Interface/Icons/Ability_Druid_Bash]] -- 132114
     },
     [3] = {
       title = L["Abilities"],
@@ -831,7 +832,7 @@ templates.class.DRUID = {
         { spell = 48505, type = "ability", talent = 24}, -- Starfall
         { spell = 50334, type = "ability", buff = true, talent = 67}, -- Berserk
       },
-      icon = [[Interface/Icons/Ability_Druid_Mangle.tga]] -- check
+      icon = [[Interface/Icons/Ability_Druid_Mangle.tga]] -- 132134
     },
     [4] = {},
     [5] = {},
@@ -868,7 +869,7 @@ templates.class.DEATHKNIGHT = {
         { spell = 59052, type = "buff", unit = "player"}, -- Rime
         { spell = 66799, type = "buff", unit = "player", talent = 111}, -- Desolation
       },
-      icon = [[Interface/Icons/Spell_DeathKnight_Butcher2]]
+      icon = [[Interface/Icons/Spell_DeathKnight_Butcher2]] -- 237517
     },
     [2] = {
       title = L["Debuffs"],
@@ -884,7 +885,7 @@ templates.class.DEATHKNIGHT = {
         { spell = 56222, type = "debuff", unit = "target"}, -- Dark Command
         { spell = 59879, type = "debuff", unit = "target"}, -- Blood Plague
       },
-      icon = [[Interface/Icons/Spell_DeathKnight_BloodPlague]]
+      icon = [[Interface/Icons/Spell_DeathKnight_BloodPlague]] -- 237514
     },
     [3] = {
       title = L["Abilities"],
@@ -917,7 +918,7 @@ templates.class.DEATHKNIGHT = {
         { spell = 63560, type = "ability", unit = "pet", buff = true, talent = 105}, -- Ghoul Frenzy
         { spell = 66198, type = "ability", requiresTarget = true}, -- Obliterate
       },
-      icon = [[Interface/Icons/Spell_Shadow_AntiMagicShell]]
+      icon = [[Interface/Icons/Spell_Shadow_AntiMagicShell]] -- 136120
     },
     [4] = {},
     [5] = {},
@@ -940,7 +941,7 @@ tinsert(templates.general.args, {
 });
 tinsert(templates.general.args, {
   title = L["Cast"],
-  icon = [[Interface/Icons/Spell_Shadow_SoothingKiss]],
+  icon = [[Interface/Icons/Spell_Shadow_SoothingKiss]], -- 136209
   type = "cast"
 });
 tinsert(templates.general.args, {
@@ -997,7 +998,7 @@ end
 -- Warrior
 tinsert(templates.class.WARRIOR[1][8].args, {
   title = L["Stance"],
-  icon = [[Interface/Icons/Ability_Warrior_OffensiveStance]],
+  icon = [[Interface/Icons/Ability_Warrior_OffensiveStance]], -- 132349
   triggers = {[1] = { trigger = {
     type = WeakAuras.GetTriggerCategoryFor("Stance/Form/Aura"),
     event = "Stance/Form/Aura"}}}
@@ -1039,7 +1040,7 @@ tinsert(templates.class.DRUID[1][8].args, createSimplePowerTemplate(4));
 -- Shapeshift Form
 tinsert(templates.class.DRUID[1][8].args, {
   title = L["Shapeshift Form"],
-  icon = [[Interface/Icons/Ability_Racial_BearForm]],
+  icon = [[Interface/Icons/Ability_Racial_BearForm]], -- 132276
   triggers = {[1] = { trigger = {
     type = WeakAuras.GetTriggerCategoryFor("Stance/Form/Aura"),
     event = "Stance/Form/Aura"}}}
@@ -1149,7 +1150,7 @@ local function handleItem(item)
     else
       item.load.talent = {
         single = item.talent,
-				multi = {},
+        multi = {};
       };
       item.load.use_talent = true;
     end
@@ -1159,7 +1160,7 @@ local function handleItem(item)
     item.load.use_pvptalent = true;
     item.load.pvptalent = {
       single = item.pvptalent,
-			multi = {},
+      multi = {};
     }
   end
   if (item.covenant) then

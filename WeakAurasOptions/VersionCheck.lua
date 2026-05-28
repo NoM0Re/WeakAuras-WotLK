@@ -16,4 +16,5 @@ if optionsVersion ~= WeakAuras.versionString then
   WeakAuras.ToggleOptions = function()
        WeakAuras.prettyPrint(message)
   end
+
 end

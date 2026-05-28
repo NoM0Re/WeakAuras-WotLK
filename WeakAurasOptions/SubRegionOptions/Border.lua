@@ -11,6 +11,7 @@ local function createOptions(parentData, data, index, subIndex)
   for child in OptionsPrivate.Private.TraverseLeafsOrAura(parentData) do
     OptionsPrivate.Mixin(areaAnchors, OptionsPrivate.Private.GetAnchorsForData(child, "area"))
   end
+
   local options = {
     __title = L["Border %s"]:format(subIndex),
     __order = 1,
@@ -58,6 +59,7 @@ local function createOptions(parentData, data, index, subIndex)
     anchor_area = {
       type = "select",
       width = WeakAuras.normalWidth,
+      control = "WeakAurasTwoColumnDropdown",
       name = L["Border Anchor"],
       order = 7,
       values = areaAnchors,

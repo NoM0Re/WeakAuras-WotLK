@@ -129,6 +129,13 @@ local function createOptions(parentData, data, index, subIndex)
           textJustify = " " ..  L["and aligned right"]
         end
 
+        local textRotate = ""
+        if data.rotateText == "LEFT" then
+          textRotate = " " .. L["and rotated left"]
+        elseif data.rotateText == "RIGHT" then
+          textRotate = " " .. L["and rotated right"]
+        end
+
         local textWidth = ""
         if data.text_automaticWidth == "Fixed" then
           local wordWarp = ""
@@ -140,7 +147,10 @@ local function createOptions(parentData, data, index, subIndex)
           textWidth = " "..L["and with width |cFFFF0000%s|r and %s"]:format(data.text_fixedWidth, wordWarp)
         end
 
-        local secondline = L["|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s%s"]:format(textFlags, color, data.text_shadowXOffset, data.text_shadowYOffset, "", textJustify, textWidth)
+        local secondline
+          = L["|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r%s%s%s"]
+            :format(textFlags, color, data.text_shadowXOffset, data.text_shadowYOffset,
+                    textRotate, textJustify, textWidth)
 
         return secondline
       end,
@@ -223,12 +233,21 @@ local function createOptions(parentData, data, index, subIndex)
       hidden = hiddenFontExtra,
       width = indentWidth
     },
-    text_justify = {
+    rotateText = {
       type = "select",
       width = WeakAuras.normalWidth - indentWidth,
+      name = L["Rotate Text"],
+      values = OptionsPrivate.Private.text_rotate_types,
+      order = 50,
+      hidden = hiddenFontExtra,
+      disabled = function() return true end
+    },
+    text_justify = {
+      type = "select",
+      width = WeakAuras.normalWidth,
       name = L["Alignment"],
       values = OptionsPrivate.Private.justify_types,
-      order = 50,
+      order = 50.5,
       hidden = hiddenFontExtra
     },
     text_font_space5 = {
@@ -319,15 +338,18 @@ local function createOptions(parentData, data, index, subIndex)
 
       if selfPoint then
         if xOffset == 0 and yOffset == 0 then
-          return L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"]:format(selfPoint, anchorPoint)
+          return L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"]
+                 :format(selfPoint, anchorPoint)
         else
-          return L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"]:format(selfPoint, anchorPoint, xOffset, yOffset)
+          return L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"]
+                 :format(selfPoint, anchorPoint, xOffset, yOffset)
         end
       else
         if xOffset == 0 and yOffset == 0 then
           return L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"]:format(anchorPoint)
         else
-          return L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"]:format(anchorPoint, xOffset, yOffset)
+          return L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"]
+                 :format(anchorPoint, xOffset, yOffset)
         end
       end
     end,
@@ -498,7 +520,8 @@ local function createOptions(parentData, data, index, subIndex)
     }
   }
 
-  OptionsPrivate.commonOptions.AddCodeOption(commonTextOptions, parentData, L["Custom Function"], "customText", "https://github.com/WeakAuras/WeakAuras2/wiki/Custom-Code-Blocks#custom-text",
+  OptionsPrivate.commonOptions.AddCodeOption(commonTextOptions, parentData, L["Custom Function"], "customText",
+                          "https://github.com/WeakAuras/WeakAuras2/wiki/Custom-Code-Blocks#custom-text",
                           4,  hideCustomTextOption, {"customText"}, false)
 
   -- Add Text Format Options
@@ -574,4 +597,5 @@ local function createOptions(parentData, data, index, subIndex)
   return options, commonTextOptions
 end
 
-WeakAuras.RegisterSubRegionOptions("subtext", createOptions, L["Shows one or more lines of text, which can include dynamic information such as progress or stacks"])
+WeakAuras.RegisterSubRegionOptions("subtext", createOptions,
+ L["Shows one or more lines of text, which can include dynamic information such as progress or stacks"])

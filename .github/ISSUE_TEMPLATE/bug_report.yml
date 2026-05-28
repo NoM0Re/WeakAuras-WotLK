@@ -1,6 +1,7 @@
 name: "Bug Report"
 description: Create a report to help us improve
 labels: ['🐛 Bug']
+type: Bug
 body:
 - type: checkboxes
   attributes:
@@ -65,14 +66,15 @@ body:
   validations:
     required: true
 
-- type: checkboxes
+- type: dropdown
   id: testing
   attributes:
     label: Tested with only WeakAuras
     description: Sometimes, other addons can interfere with WeakAuras. We recommend testing with only WeakAuras enabled to see if the issue persists.
     options:
-    - label: I got this issue with only WeakAuras enabled
-      required: true
+      - I got this issue with only WeakAuras enabled
+  validations:
+    required: true
 
 - type: textarea
   attributes:

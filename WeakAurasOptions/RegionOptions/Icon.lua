@@ -244,6 +244,15 @@ local function createOptions(id, data)
       get = function() return data.inverse and data.cooldown; end,
       hidden = function() return not data.cooldown end
     },
+    cooldownSwipe = {
+      type = "toggle",
+      width = WeakAuras.normalWidth,
+      name = L["Show \"Swipe\""],
+      order = 11.3,
+      desc = "|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\swipe-example:30|t\n"..L["Enable \"swipe\" part of the overlay"],
+      hidden = function() return not data.cooldown end,
+      disabled = function() return true end,
+    },
     cooldownEdge = {
       type = "toggle",
       width = WeakAuras.normalWidth,
@@ -251,6 +260,24 @@ local function createOptions(id, data)
       order = 11.4,
       desc = "|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\edge-example:30|t\n"..L["Enable \"Edge\" part of the overlay"],
       hidden = function() return not data.cooldown end,
+    },
+    cooldownTextDisabled = {
+      type = "toggle",
+      width = WeakAuras.normalWidth,
+      name = L["Hide Timer Text"],
+      order = 11.5,
+      desc = L["A timer will automatically be displayed according to default Interface Settings (overridden by some addons).\nEnable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer"],
+      hidden = function() return not data.cooldown end,
+      disabled = function() return true end,
+    },
+    useCooldownModRate = {
+      type = "toggle",
+      width = WeakAuras.normalWidth,
+      name = L["Blizzard Cooldown Reduction"],
+      order = 11.6,
+      desc = L["Cooldown Reduction changes the duration of seconds instead of showing the real time seconds."],
+      hidden = function() return not data.cooldown end,
+      disabled = function() return true end,
     },
     ccWarning = {
       type = "description",
@@ -303,9 +330,11 @@ local function modifyThumbnail(parent, frame, data)
     else
       iconPath = path or data.displayIcon
     end
-
-    OptionsPrivate.Private.SetTextureOrAtlas(self.icon,
-      iconPath and iconPath ~= "" and iconPath or "Interface\\Icons\\INV_Misc_QuestionMark")
+    if iconPath and iconPath ~= "" then
+      OptionsPrivate.Private.SetTextureOrAtlas(self.icon, iconPath)
+    else
+      OptionsPrivate.Private.SetTextureOrAtlas(self.icon, "Interface\\Icons\\INV_Misc_QuestionMark")
+    end
   end
 
   if data then
