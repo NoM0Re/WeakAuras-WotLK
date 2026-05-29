@@ -2777,32 +2777,6 @@ local function validateUserConfig(data, options, config)
   end
 end
 
--- !! TODO: DONT LIKE IT DONT WANT THIS
-local function removeNameplateUnitsAndAnchors(data)
-  -- Dynamic Group Anchor
-  if data.useAnchorPerUnit == true and data.anchorPerUnit == "NAMEPLATE" then
-    data.useAnchorPerUnit = false
-    data.anchorPerUnit = "CUSTOM"
-  end
-  -- Aura Anchor
-  if data.anchorFrameType == "NAMEPLATE" then
-    data.anchorFrameType = "SCREEN"
-  end
-  -- Action Glow Anchor
-  if data.actions and data.actions.start and data.actions.start.glow_frame_type == "NAMEPLATE" then
-    data.actions.start.glow_frame_type = "FRAMESELECTOR"
-  end
-  -- Trigger units
-  for _, triggerData in ipairs(data.triggers) do
-    local trigger = triggerData.trigger
-    if trigger and trigger.type == "unit" then
-      if trigger.unit == "nameplate" then
-        trigger.unit = "target"
-      end
-    end
-  end
-end
-
 local oldDataStub = {
   -- note: this is the minimal data stub which prevents false positives in diff upon reimporting an aura.
   -- pending a refactor of other code which adds unnecessary fields, it is possible to shrink it
@@ -2948,7 +2922,11 @@ function Private.UpdateSoundIcon(data)
   end
 
   -- tts
-  if WeakAuras.IsAwesomeEnabled() ~= 2 then return end
+  if WeakAuras.IsAwesomeEnabled() ~= 2 then
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_action")
+    Private.AuraWarnings.UpdateWarning(data.uid, "tts_condition")
+    return
+  end
   if (data.actions.start.do_message and data.actions.start.message_type == "TTS")
   or (data.actions.finish.do_message and data.actions.finish.message_type == "TTS")
   then
@@ -3050,9 +3028,6 @@ function WeakAuras.PreAdd(data, snapshot)
     end
   end
   validateUserConfig(data, data.authorOptions, data.config)
-  if not(WeakAuras.IsAwesomeEnabled()) then
-    removeNameplateUnitsAndAnchors(data)
-  end
   data.init_started = nil
   data.init_completed = nil
   data.expanded = nil
@@ -3690,7 +3665,7 @@ function Private.HandleGlowAction(actions, region)
     elseif actions.glow_frame_type == "UNITFRAME" and region.state.unit then
       glow_frame = WeakAuras.GetUnitFrame(region.state.unit)
       should_glow_frame = true
-    elseif actions.glow_frame_type == "NAMEPLATE" and region.state.unit then
+    elseif actions.glow_frame_type == "NAMEPLATE" and WeakAuras.IsAwesomeEnabled() and region.state.unit then
       glow_frame = WeakAuras.GetNamePlateForUnit(region.state.unit)
       should_glow_frame = true
     elseif actions.glow_frame_type == "PARENTFRAME" then
@@ -5874,6 +5849,8 @@ local function GetAnchorFrame(data, region, parent)
       Private.ensurePRDFrame()
       personalRessourceDisplayFrame:anchorFrame(id, anchorFrameType)
       return personalRessourceDisplayFrame
+    elseif not WeakAuras.IsAwesomeEnabled() then
+      return WeakAuras.HiddenFrames
     end
   end
 
@@ -5949,7 +5926,9 @@ function Private.AnchorFrame(data, region, parent, force)
     local anchorParent = GetAnchorFrame(data, region, parent);
     if not anchorParent then return end
     if (data.anchorFrameParent or data.anchorFrameParent == nil
-        or data.anchorFrameType == "SCREEN" or data.anchorFrameType == "UIPARENT" or data.anchorFrameType == "MOUSE") then
+        or data.anchorFrameType == "SCREEN" or data.anchorFrameType == "UIPARENT" or data.anchorFrameType == "MOUSE"
+        or (data.anchorFrameType == "NAMEPLATE"
+            and not WeakAuras.IsAwesomeEnabled())) then
       local ok = pcall(region.SetParent, region, anchorParent);
       if not ok then
         Private.GetErrorHandlerId(data.id, L["Anchoring"])
@@ -6445,4 +6424,3 @@ do
     return data.regionType == "group" or data.regionType == "dynamicgroup"
   end
 end
-

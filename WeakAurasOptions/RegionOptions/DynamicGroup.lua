@@ -164,7 +164,7 @@ local function createOptions(id, data)
       order = 1.5,
       width = WeakAuras.normalWidth,
       name = L["Group by Frame"],
-      desc = L["Group and anchor each auras by frame.\n\n- Nameplates: attach to nameplates per unit.\n- Unit Frames: attach to unit frame buttons per unit.\n- Custom Frames: choose which frame each region should be anchored to."],
+      desc = OptionsPrivate.AddCompatibilityNote(L["Group and anchor each auras by frame.\n\n- Nameplates: attach to nameplates per unit.\n- Unit Frames: attach to unit frame buttons per unit.\n- Custom Frames: choose which frame each region should be anchored to."], WeakAuras.IsAwesomeEnabled(), L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."]),
       hidden = function() return data.grow == "CUSTOM" end,
     },
     anchorPerUnit = {
@@ -174,9 +174,14 @@ local function createOptions(id, data)
       order = 1.6,
       values = {
         ["UNITFRAME"] = L["Unit Frames"],
-        ["NAMEPLATE"] = WeakAuras.IsAwesomeEnabled() and L["Nameplates"] or nil,
+        ["NAMEPLATE"] = OptionsPrivate.SetOptionTextDisabled(L["Nameplates"], WeakAuras.IsAwesomeEnabled()),
         ["CUSTOM"] = L["Custom Frames"],
       },
+      desc = function()
+        return data.anchorPerUnit == "NAMEPLATE" and not WeakAuras.IsAwesomeEnabled()
+          and OptionsPrivate.AddCompatibilityNote(nil, false, L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+          or nil
+      end,
       hidden = function() return data.grow == "CUSTOM" end,
       disabled = function() return not data.useAnchorPerUnit end
     },
@@ -558,7 +563,7 @@ local function createOptions(id, data)
       type = "toggle",
       width = WeakAuras.normalWidth,
       name = OptionsPrivate.SetOptionTextDisabled(L["Flat Framelevels"]),
-      desc = L["The group and all direct children will share the same base frame level."] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] .. "\n" .. L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."],
+      desc = OptionsPrivate.AddCompatibilityNote(L["The group and all direct children will share the same base frame level."], false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]) .. "\n" .. L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."],
       order = 30,
       get = function()
         return true

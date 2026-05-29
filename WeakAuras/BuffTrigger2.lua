@@ -1086,6 +1086,9 @@ local function GetAllUnits(unit, allUnits, includePets)
       end
     end
   elseif unit == "boss" or unit == "arena" or unit == "nameplate" then
+    if unit == "nameplate" and not WeakAuras.IsAwesomeEnabled() then
+      return function() end
+    end
     local i = 1
     local max
     if unit == "boss" then
@@ -1301,6 +1304,13 @@ end
 local function UpdateTriggerState(time, id, triggernum)
   local triggerStates = WeakAuras.GetTriggerStateForTrigger(id, triggernum)
   local triggerInfo = triggerInfos[id][triggernum]
+  if triggerInfo.unit == "nameplate" and not WeakAuras.IsAwesomeEnabled() then
+    local updated
+    for cloneId in pairs(triggerStates) do
+      updated = RemoveState(triggerStates, cloneId) or updated
+    end
+    return updated
+  end
   local updated
   local nextCheck
   local matchCount = 0

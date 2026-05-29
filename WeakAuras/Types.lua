@@ -32,7 +32,7 @@ Private.glow_action_types = {
 ---@type table<string, string>
 Private.glow_frame_types = {
   UNITFRAME = L["Unit Frame"],
-  NAMEPLATE = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
+  NAMEPLATE = Private.SetOptionTextDisabled(L["Nameplate"], WeakAuras.IsAwesomeEnabled()),
   FRAMESELECTOR = L["Frame Selector"],
   PARENTFRAME = L["Parent Frame"]
 }
@@ -1232,7 +1232,7 @@ Private.unit_types_bufftrigger_2 = Private.Mixin({
   party = L["Party"],
   boss = L["Boss"],
   arena = L["Arena"],
-  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
+  nameplate = Private.SetOptionTextDisabled(L["Nameplate"], WeakAuras.IsAwesomeEnabled()),
   pet = L["Pet"],
   member = L["Specific Unit"],
   multi = L["Multi-target"]
@@ -1259,7 +1259,7 @@ Private.actual_unit_types_cast = Private.Mixin({
   raid = L["Raid"],
   boss = L["Boss"],
   arena = L["Arena"],
-  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
+  nameplate = Private.SetOptionTextDisabled(L["Nameplate"], WeakAuras.IsAwesomeEnabled()),
   pet = L["Pet"],
   member = L["Specific Unit"],
 }, target_unit_types)
@@ -1269,7 +1269,7 @@ Private.actual_unit_types_cast_tooltip = L["• |cff00ff00Player|r, |cff00ff00Ta
 
 ---@type table<string, string>
 Private.threat_unit_types = Private.Mixin({
-  nameplate = WeakAuras.IsAwesomeEnabled() and L["Nameplate"] or nil,
+  nameplate = Private.SetOptionTextDisabled(L["Nameplate"], WeakAuras.IsAwesomeEnabled()),
   boss = L["Boss"],
   member = L["Specific Unit"],
   none = L["At Least One Enemy"]
@@ -1427,7 +1427,7 @@ Private.anchor_frame_types = {
   UIPARENT = L["Screen"],
   MOUSE = L["Mouse Cursor"],
   SELECTFRAME = L["Select Frame"],
-  NAMEPLATE = WeakAuras.IsAwesomeEnabled() and L["Nameplates"] or nil,
+  NAMEPLATE = Private.SetOptionTextDisabled(L["Nameplates"], WeakAuras.IsAwesomeEnabled()),
   UNITFRAME = L["Unit Frames"],
   CUSTOM = L["Custom"]
 }
@@ -1437,6 +1437,7 @@ Private.anchor_frame_types_group = {
   UIPARENT = L["Screen"],
   MOUSE = L["Mouse Cursor"],
   SELECTFRAME = L["Select Frame"],
+  NAMEPLATE = Private.SetOptionTextDisabled(L["Nameplates"], WeakAuras.IsAwesomeEnabled()),
   CUSTOM = L["Custom"]
 }
 
@@ -2773,7 +2774,7 @@ Private.classification_types = {
   rare = L["Rare"],
   normal = L["Normal"],
   trivial = L["Trivial (Low Level)"],
-  minus = WeakAuras.IsAwesomeEnabled() and L["Minus (Small Nameplate)"] or nil
+  minus = Private.SetOptionTextDisabled(L["Minus (Small Nameplate)"], WeakAuras.IsAwesomeEnabled())
 }
 
   ---@type table<number, string>
@@ -2995,11 +2996,9 @@ Private.send_chat_message_types = {
   BATTLEGROUND = L["Battleground"],
   COMBAT = L["Blizzard Combat Text"],
   PRINT = L["Chat Frame"],
-  ERROR = L["Error Frame"]
+  ERROR = L["Error Frame"],
+  TTS = Private.SetOptionTextDisabled(L["Text-to-speech"], WeakAuras.IsAwesomeEnabled() == 2)
 }
-if WeakAuras.IsAwesomeEnabled() == 2 then
-  Private.send_chat_message_types.TTS = L["Text-to-speech"]
-end
 
 ---@type table<string, string>
 Private.group_aura_name_info_types = {
@@ -3737,7 +3736,7 @@ Private.baseUnitId = {
 
 ---@type table<string, boolean>
 Private.multiUnitId = {
-  ["nameplate"] = WeakAuras.IsAwesomeEnabled() and true or nil,
+  ["nameplate"] = true,
   ["boss"] = true,
   ["arena"] = true,
   ["group"] = true,
@@ -3750,7 +3749,7 @@ Private.multiUnitId = {
 }
 
 Private.multiUnitUnits = {
-  ["nameplate"] = WeakAuras.IsAwesomeEnabled() and {} or nil,
+  ["nameplate"] = {},
   ["boss"] = {},
   ["arena"] = {},
   ["group"] = {},

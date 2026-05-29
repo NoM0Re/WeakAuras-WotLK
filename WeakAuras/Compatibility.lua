@@ -182,6 +182,23 @@ local function FrameDeltaLerp(startValue, endValue, amount, elapsed)
   return DeltaLerp(startValue, endValue, amount, elapsed)
 end
 
+---@private
+function Private.SetOptionTextDisabled(text, check)
+  if check == nil or not check then
+    return "|cff808080" .. text .. "|r"
+  end
+  return text
+end
+
+---@private
+function Private.AddCompatibilityNote(desc, check, note)
+  if check then
+    return desc
+  end
+  desc = desc or ""
+  return desc .. (desc ~= "" and "\n\n" or "") .. note
+end
+
 local function setDesaturated(self, desaturated, ...)
   self.isDesaturated = desaturated and 1 or 0
   return self._SetDesaturated(self, desaturated, ...)
@@ -199,6 +216,7 @@ end
 --- Keep the last SetDesaturated value on the texture object and
 --- re-apply it after every SetTexture call.
 --- @param texture Texture
+--- @private
 function Private.FixTextureDesaturation(texture)
   texture._SetDesaturated = texture.SetDesaturated
   texture._SetTexture = texture.SetTexture

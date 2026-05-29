@@ -383,6 +383,13 @@ end
 local anchorers = {
   ["NAMEPLATE"] = function(data)
     return function(frames, activeRegions)
+      if not WeakAuras.IsAwesomeEnabled() and not WeakAuras.IsOptionsOpen() then
+        frames[WeakAuras.HiddenFrames] = frames[WeakAuras.HiddenFrames] or {}
+        for _, regionData in ipairs(activeRegions) do
+          tinsert(frames[WeakAuras.HiddenFrames], regionData)
+        end
+        return
+      end
       for _, regionData in ipairs(activeRegions) do
         local unit = regionData.region.state and regionData.region.state.unit
         local found

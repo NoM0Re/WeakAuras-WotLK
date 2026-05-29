@@ -133,7 +133,7 @@ local function ConstructModelPicker(frame)
   modelTree:SetCallback("OnGroupSelected", function(self, event, value, fileId)
     local path = string.gsub(value, "\001", "/");
     if(string.lower(string.sub(path, -3, -1)) == ".m2") then
-      group:Pick(fileId or path); -- !! FIX ME: ModelPaths should have paths upgraded to fileIds
+      group:Pick(fileId or path);
     end
   end);
   group:AddChild(modelTree);

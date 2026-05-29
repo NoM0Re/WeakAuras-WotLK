@@ -141,6 +141,11 @@ function OptionsPrivate.GetActionOptions(data)
         type = "select",
         width = WeakAuras.normalWidth,
         name = L["Message Type"],
+        desc = function()
+          return data.actions.start.message_type == "TTS" and WeakAuras.IsAwesomeEnabled() ~= 2
+            and OptionsPrivate.AddCompatibilityNote(nil, false, L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+            or nil
+        end,
         order = 2,
         values = OptionsPrivate.Private.send_chat_message_types,
         sorting = OptionsPrivate.Private.SortOrderForValues(OptionsPrivate.Private.send_chat_message_types),
@@ -256,7 +261,7 @@ function OptionsPrivate.GetActionOptions(data)
         name = "",
         order = 3.19,
         image = function() return "", 0, 0 end,
-        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.start.message_type ~= "TTS" end,
+        hidden = function() return data.actions.start.message_type ~= "TTS" end,
       },
       start_message_tts_settings = {
         type = "execute",
@@ -271,7 +276,7 @@ function OptionsPrivate.GetActionOptions(data)
         name = L["Voice Settings"],
         order = 3.2,
         disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.start.do_message end,
-        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.start.message_type ~= "TTS" end,
+        hidden = function() return data.actions.start.message_type ~= "TTS" end,
       },
       start_message = {
         type = "input",
@@ -398,11 +403,15 @@ function OptionsPrivate.GetActionOptions(data)
         type = "select",
         width = WeakAuras.normalWidth,
         desc = function()
-          return (
+          local desc = (
             data.actions.start.glow_frame_type == "UNITFRAME"
             or data.actions.start.glow_frame_type == "NAMEPLATE"
           )
           and L["Require unit from trigger"] or nil
+          if data.actions.start.glow_frame_type == "NAMEPLATE" and not WeakAuras.IsAwesomeEnabled() then
+            desc = OptionsPrivate.AddCompatibilityNote(desc, false, L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+          end
+          return desc
         end,
         name = L["Glow Frame Type"],
         order = 10.3,
@@ -687,6 +696,11 @@ function OptionsPrivate.GetActionOptions(data)
         type = "select",
         width = WeakAuras.normalWidth,
         name = L["Message Type"],
+        desc = function()
+          return data.actions.finish.message_type == "TTS" and WeakAuras.IsAwesomeEnabled() ~= 2
+            and OptionsPrivate.AddCompatibilityNote(nil, false, L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+            or nil
+        end,
         order = 22,
         values = OptionsPrivate.Private.send_chat_message_types,
         sorting = OptionsPrivate.Private.SortOrderForValues(OptionsPrivate.Private.send_chat_message_types),
@@ -802,7 +816,7 @@ function OptionsPrivate.GetActionOptions(data)
         name = "",
         order = 23.19,
         image = function() return "", 0, 0 end,
-        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.finish.message_type ~= "TTS" end,
+        hidden = function() return data.actions.finish.message_type ~= "TTS" end,
       },
       finish_message_tts_settings = {
         type = "execute",
@@ -817,7 +831,7 @@ function OptionsPrivate.GetActionOptions(data)
         name = L["Voice Settings"],
         order = 23.2,
         disabled = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or not data.actions.finish.do_message end,
-        hidden = function() return WeakAuras.IsAwesomeEnabled() ~= 2 or data.actions.finish.message_type ~= "TTS" end,
+        hidden = function() return data.actions.finish.message_type ~= "TTS" end,
       },
       finish_message = {
         type = "input",
@@ -904,14 +918,14 @@ function OptionsPrivate.GetActionOptions(data)
         type = "toggle",
         width = WeakAuras.doubleWidth,
         name = OptionsPrivate.SetOptionTextDisabled(L["Stop Sound"], StopSound),
-        desc = not StopSound and L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+        desc = OptionsPrivate.AddCompatibilityNote(nil, StopSound, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
         order = 29.1,
       },
       finish_do_sound_fade = {
         type = "toggle",
         width = WeakAuras.normalWidth,
         name = OptionsPrivate.SetOptionTextDisabled(L["Fadeout Sound"], StopSound),
-        desc = not StopSound and L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+        desc = OptionsPrivate.AddCompatibilityNote(nil, StopSound, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
         order = 29.2,
         disabled = function() return not data.actions.finish.stop_sound end,
       },
@@ -920,7 +934,7 @@ function OptionsPrivate.GetActionOptions(data)
         control = "WeakAurasSpinBox",
         width = WeakAuras.normalWidth,
         name = OptionsPrivate.SetOptionTextDisabled(L["Fadeout Time (seconds)"], StopSound),
-        desc = not StopSound and L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+        desc = OptionsPrivate.AddCompatibilityNote(nil, StopSound, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
         order = 29.3,
         hidden = function() return not data.actions.finish.do_sound_fade end,
         disabled = function() return not data.actions.finish.stop_sound end,
@@ -952,11 +966,15 @@ function OptionsPrivate.GetActionOptions(data)
         type = "select",
         width = WeakAuras.normalWidth,
         desc = function()
-          return (
+          local desc = (
             data.actions.finish.glow_frame_type == "UNITFRAME"
             or data.actions.finish.glow_frame_type == "NAMEPLATE"
           )
           and L["Require unit from trigger"] or nil
+          if data.actions.finish.glow_frame_type == "NAMEPLATE" and not WeakAuras.IsAwesomeEnabled() then
+            desc = OptionsPrivate.AddCompatibilityNote(desc, false, L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+          end
+          return desc
         end,
         name = L["Glow Frame Type"],
         order = 30.3,

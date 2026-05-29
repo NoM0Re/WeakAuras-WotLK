@@ -1334,6 +1334,11 @@ local function PositionOptions(id, data, _, hideWidthHeight, disableSelfPoint, g
                 (data.regionType == "group" or data.regionType == "dynamicgroup")
                 and OptionsPrivate.Private.anchor_frame_types_group
                 or OptionsPrivate.Private.anchor_frame_types),
+      desc = function()
+        return data.anchorFrameType == "NAMEPLATE" and not WeakAuras.IsAwesomeEnabled()
+          and OptionsPrivate.AddCompatibilityNote(nil, false, L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+          or nil
+      end,
     },
     anchorFrameParent = {
       type = "toggle",

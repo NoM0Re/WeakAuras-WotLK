@@ -630,7 +630,8 @@ function OptionsPrivate.CreateFrame()
     undo.frame:Hide()
   end
   undo:SetPoint("LEFT")
-  -- undo.frame:SetCollapsesLayout(true) -- !! FIX ME: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
+  -- TODO: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
+  -- undo.frame:SetCollapsesLayout(true)
 
   local redo = AceGUI:Create("WeakAurasToolbarButton")
   redo:SetText(L["Redo"])
@@ -651,7 +652,8 @@ function OptionsPrivate.CreateFrame()
   else
     redo.frame:Disable()
   end
-  -- redo.frame:SetCollapsesLayout(true) -- !! FIX ME: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
+  -- TODO: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
+  -- redo.frame:SetCollapsesLayout(true)
   OptionsPrivate.Private.Features:Subscribe("undo",
     function()
       undo.frame:Show()

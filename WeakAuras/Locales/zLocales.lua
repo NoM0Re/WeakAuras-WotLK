@@ -16,6 +16,11 @@ if (locale == "enUS" or locale == "enGB") then
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Affliction"] = "Affliction"
@@ -207,6 +212,11 @@ elseif (locale == "deDE") then
   L["Please enable it in your AddOn list."] = "Bitte aktiviere es in deiner AddOn-Liste."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation wurde nicht korrekt geladen."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Hinweis:|r Diese Option bleibt für Auren aus anderen WoW-Versionen erhalten.\nIn WotLK 3.3.5a hat sie keinen Effekt."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Hinweis:|r Startwinkel funktioniert auf WotLK 3.3.5a aufgrund von Client-Einschränkungen nicht wie erwartet. Verwende Endwinkel zusammen mit Texturrotation, um einen ähnlichen Effekt zu erzielen."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Framelevels sind begrenzt, daher erhöht WeakAuras sie nach Gruppentiefe statt fortlaufend."
 
   --[[Translation missing --]]
@@ -400,6 +410,11 @@ elseif (locale == "esES") then
   L["Please enable it in your AddOn list."] = "Por favor, actívalo en tu lista de AddOns."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation no se ha cargado correctamente."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
@@ -592,6 +607,11 @@ elseif (locale == "esMX") then
   L["Please enable it in your AddOn list."] = "Por favor, actívalo en tu lista de AddOns."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation no se ha cargado correctamente."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
@@ -784,6 +804,11 @@ elseif (locale == "frFR") then
   L["Please enable it in your AddOn list."] = "Veuillez l'activer dans votre liste d'Addons."
   L["AddOn: APIDocumentation is not loaded correctly."] = "Addon: APIDocumentation n'a pas été chargé correctement."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   --[[Translation missing --]]
@@ -979,6 +1004,11 @@ elseif (locale == "itIT") then
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   --[[Translation missing --]]
@@ -1174,6 +1204,11 @@ elseif (locale == "koKR") then
   L["Please enable it in your AddOn list."] = "애드온 목록에서 활성화해 주십시오."
   L["AddOn: APIDocumentation is not loaded correctly."] = "애드온: APIDocumentation이(가) 제대로 로드되지 않았습니다."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "LibGroupTalents을 통해 전문화를 동기화해야 합니다."
@@ -1368,6 +1403,11 @@ elseif (locale == "ptBR") then
   L["Please enable it in your AddOn list."] = "Please enable it in your AddOn list."
   L["AddOn: APIDocumentation is not loaded correctly."] = "AddOn: APIDocumentation is not loaded correctly."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   --[[Translation missing --]]
@@ -1561,6 +1601,11 @@ elseif (locale == "ruRU") then
   L["Please enable it in your AddOn list."] = "Пожалуйста, включите его в вашем списке аддонов."
   L["AddOn: APIDocumentation is not loaded correctly."] = "Аддон: APIDocumentation загружен некорректно."
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Требуется синхронизация специализации через LibGroupTalents."
@@ -1753,6 +1798,11 @@ elseif (locale == "zhCN") then
   L["Please enable it in your AddOn list."] = "请在你的插件列表中启用它。"
   L["AddOn: APIDocumentation is not loaded correctly."] = "插件：APIDocumentation 未正确加载。"
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要通过LibGroupTalents同步专精。"
@@ -1945,6 +1995,11 @@ elseif (locale == "zhTW") then
   L["Please enable it in your AddOn list."] = "請在你的插件清單中啟用它。"
   L["AddOn: APIDocumentation is not loaded correctly."] = "插件：APIDocumentation 未正確載入。"
   L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] = "|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."
+  L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
+  L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要透由LibGroupTalents同步專精。"

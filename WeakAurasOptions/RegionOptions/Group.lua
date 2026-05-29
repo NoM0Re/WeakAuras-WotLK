@@ -605,7 +605,7 @@ local function createOptions(id, data)
       type = "toggle",
       width = WeakAuras.normalWidth,
       name = OptionsPrivate.SetOptionTextDisabled(L["Flat Framelevels"]),
-      desc = L["The group and all direct children will share the same base frame level."] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."] .. "\n" .. L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."],
+      desc = OptionsPrivate.AddCompatibilityNote(L["The group and all direct children will share the same base frame level."], false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]) .. "\n" .. L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."],
       order = 47,
       get = function()
         return true
