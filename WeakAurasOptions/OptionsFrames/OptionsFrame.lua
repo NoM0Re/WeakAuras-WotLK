@@ -630,8 +630,6 @@ function OptionsPrivate.CreateFrame()
     undo.frame:Hide()
   end
   undo:SetPoint("LEFT")
-  -- TODO: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
-  -- undo.frame:SetCollapsesLayout(true)
 
   local redo = AceGUI:Create("WeakAurasToolbarButton")
   redo:SetText(L["Redo"])
@@ -652,18 +650,6 @@ function OptionsPrivate.CreateFrame()
   else
     redo.frame:Disable()
   end
-  -- TODO: Could be done: Frames that have CollapsesLayout set to true don't leave behind a visual gap when a frame in a line of frames is hidden.
-  -- redo.frame:SetCollapsesLayout(true)
-  OptionsPrivate.Private.Features:Subscribe("undo",
-    function()
-      undo.frame:Show()
-      redo.frame:Show()
-    end,
-    function()
-      undo.frame:Hide()
-      redo.frame:Hide()
-    end
-  )
 
   local tmControls = {
     undo = undo,
@@ -688,8 +674,28 @@ function OptionsPrivate.CreateFrame()
   newButton:SetTexture("Interface\\AddOns\\WeakAuras\\Media\\Textures\\newaura")
   newButton.frame:SetParent(toolbarContainer)
   newButton.frame:Show()
-  newButton:SetPoint("LEFT", redo.frame, "RIGHT", 10, 0)
   frame.toolbarContainer = toolbarContainer
+
+  if OptionsPrivate.Private.Features:Enabled("undo") then
+    newButton:SetPoint("LEFT", redo.frame, "RIGHT", 10, 0)
+  else
+    newButton.frame:ClearAllPoints()
+    newButton:SetPoint("LEFT")
+  end
+  OptionsPrivate.Private.Features:Subscribe("undo",
+    function()
+      undo.frame:Show()
+      redo.frame:Show()
+      newButton.frame:ClearAllPoints()
+      newButton:SetPoint("LEFT", redo.frame, "RIGHT", 10, 0)
+    end,
+    function()
+      undo.frame:Hide()
+      redo.frame:Hide()
+      newButton.frame:ClearAllPoints()
+      newButton:SetPoint("LEFT")
+    end
+  )
 
   newButton:SetCallback("OnClick", function()
     frame:NewAura()
