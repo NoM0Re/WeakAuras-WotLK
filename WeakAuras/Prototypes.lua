@@ -8059,9 +8059,6 @@ Private.event_prototypes = {
         tinsert(events, "PLAYER_REGEN_DISABLED")
         tinsert(events, "PLAYER_ENTERING_WORLD")
       end
-      if trigger.use_pvpflagged ~= nil or trigger.use_afk ~= nil then
-        tinsert(events, "PLAYER_FLAGS_CHANGED")
-      end
       if trigger.use_pvpflagged ~= nil then
         tinsert(events, "UNIT_FACTION")
         tinsert(events, "ZONE_CHANGED")
@@ -8081,6 +8078,11 @@ Private.event_prototypes = {
       end
       local unit_events = {}
       local pet_unit_events = {}
+      if trigger.use_pvpflagged ~= nil
+         or trigger.use_afk ~= nil
+      then
+        tinsert(unit_events, "PLAYER_FLAGS_CHANGED")
+      end
       if trigger.use_vehicle ~= nil then
         tinsert(unit_events, "UNIT_ENTERED_VEHICLE")
         tinsert(unit_events, "UNIT_EXITED_VEHICLE")
@@ -8094,7 +8096,7 @@ Private.event_prototypes = {
         tinsert(events, "RAID_ROSTER_UPDATE")
       end
       if trigger.use_instance_difficulty ~= nil
-          or trigger.use_instance_size ~= nil
+         or trigger.use_instance_size ~= nil
       then
         tinsert(events, "PLAYER_DIFFICULTY_CHANGED")
       end
