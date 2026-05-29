@@ -2348,12 +2348,40 @@ function Private.Modernize(data, oldSnapshot)
     if data.regionType == "aurabar" then
       data.toolTipArea = "ICON"
     end
-    -- Migrate model fileId
+
+    -- Migrate model fileId again
     if data.model_path and data.modelIsUnit then
       data.model_fileId = data.model_path
     end
-    -- migrate spec_position to retail format
-    local specPosition = data.load.spec_position
+
+    if data.subRegions then
+      for index, subRegionData in ipairs(data.subRegions) do
+        -- Migrate submodel fields again
+        if subRegionData.type == "submodel" then
+          if subRegionData.model_path and not subRegionData.model_fileId then
+            subRegionData.model_fileId = subRegionData.model_path
+            subRegionData.model_path = nil
+          end
+          if subRegionData.bar_model_clip ~= nil then
+            subRegionData.bar_model_attach = subRegionData.bar_model_clip
+            subRegionData.bar_model_clip = nil
+            if subRegionData.bar_model_attach then
+              subRegionData.bar_model_stretch = true
+            end
+          end
+        end
+        -- Migrate subcirculartexture again
+        if subRegionData.type == "subcirculartexture"
+          and subRegionData.progressSource == nil
+          and subRegionData.progressSources ~= nil
+        then
+          subRegionData.progressSource = subRegionData.progressSources
+          subRegionData.progressSources = nil
+        end
+      end
+    end
+    -- Migrate spec_position to retail format
+    local specPosition = data.load and data.load.spec_position
     if specPosition == "caster" then
       data.load.spec_position = "RANGED"
     elseif specPosition == "melee" then
