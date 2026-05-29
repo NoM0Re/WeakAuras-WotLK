@@ -236,11 +236,11 @@ local function createOptions(parentData, data, index, subIndex)
     rotateText = {
       type = "select",
       width = WeakAuras.normalWidth - indentWidth,
-      name = L["Rotate Text"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Rotate Text"]),
+      desc = OptionsPrivate.AddCompatibilityNote(nil, nil, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
       values = OptionsPrivate.Private.text_rotate_types,
       order = 50,
-      hidden = hiddenFontExtra,
-      disabled = function() return true end
+      hidden = hiddenFontExtra
     },
     text_justify = {
       type = "select",

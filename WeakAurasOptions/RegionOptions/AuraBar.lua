@@ -108,6 +108,12 @@ local function createOptions(id, data)
           data.width = data.height;
           data.height = temp;
           data.icon_side = data.icon_side == "LEFT" and "RIGHT" or "LEFT";
+
+          if(data.rotateText == "LEFT" or data.rotateText == "RIGHT") then
+            data.rotateText = "NONE";
+          elseif(data.rotateText == "NONE") then
+            data.rotateText = "LEFT"
+          end
         end
 
         data.orientation = v;
@@ -754,6 +760,7 @@ local templates = {
       width = 30,
       height = 200,
       barColor = { 0, 1, 0, 1},
+      rotateText = "LEFT",
       orientation = "VERTICAL_INVERSE",
       inverse = true,
       smoothProgress = true,
