@@ -1560,7 +1560,7 @@ function GenericTrigger.LoadDisplays(toLoad, loadEvent, ...)
         frame.unitFrames[unit].unit = unit
         frame.unitFrames[unit]:SetScript("OnEvent", HandleUnitEvent);
       end
-      pcall(frame.unitFrames[unit].RegisterEvent, frame.unitFrames[unit], event, unit)
+      pcall(frame.unitFrames[unit].RegisterEvent, frame.unitFrames[unit], event)
       genericTriggerRegisteredUnitEvents[unit] = genericTriggerRegisteredUnitEvents[unit] or {};
       genericTriggerRegisteredUnitEvents[unit][event] = true;
     end
