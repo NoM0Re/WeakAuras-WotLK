@@ -3551,7 +3551,6 @@ Private.event_prototypes = {
         enable = function(trigger)
           return trigger.subeventSuffix and (trigger.subeventSuffix == "_INTERRUPT" or trigger.subeventSuffix == "_DISPEL" or trigger.subeventSuffix == "_DISPEL_FAILED" or trigger.subeventSuffix == "_STOLEN" or trigger.subeventSuffix == "_AURA_BROKEN_SPELL")
         end,
-        test = "GetSpellInfo(%q or '') == extraSpellName", -- !! Needs review if needed
         type = "spell",
         showExactOption = false,
         store = true,
@@ -7481,8 +7480,8 @@ Private.event_prototypes = {
       },
       {
         name = "onUpdateUnitTarget",
-        display = WeakAuras.newFeatureString .. L["Advanced Caster's Target Check"],
-        desc = L["Check nameplate's target every 0.2s"],
+        display = WeakAuras.newFeatureString .. Private.SetOptionTextDisabled(L["Advanced Caster's Target Check"], WeakAuras.IsAwesomeEnabled()),
+        desc = Private.AddCompatibilityNote(L["Check nameplate's target every 0.2s"], WeakAuras.IsAwesomeEnabled(), L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."]),
         type = "toggle",
         test = "true",
         enable = function(trigger)
@@ -8416,6 +8415,7 @@ Private.event_prototypes = {
       else
         spellName = type(trigger.spellName) == "number" and GetSpellInfo(trigger.spellName) or trigger.spellName
       end
+      spellName = spellName or ""
       local ret = [=[
         local spellname = %q
       ]=]

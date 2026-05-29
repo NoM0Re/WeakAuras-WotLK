@@ -249,7 +249,7 @@ local function createOptions(id, data)
       width = WeakAuras.normalWidth,
       name = OptionsPrivate.SetOptionTextDisabled(L["Show \"Swipe\""]),
       order = 11.3,
-      desc = "|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\swipe-example:30|t\n"..L["Enable \"swipe\" part of the overlay"] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+      desc = OptionsPrivate.AddCompatibilityNote("|TInterface\\AddOns\\WeakAuras\\Media\\Textures\\swipe-example:30|t\n"..L["Enable \"swipe\" part of the overlay"], false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
       hidden = function() return not data.cooldown end,
     },
     cooldownEdge = {
@@ -265,7 +265,7 @@ local function createOptions(id, data)
       width = WeakAuras.normalWidth,
       name = OptionsPrivate.SetOptionTextDisabled(L["Hide Timer Text"]),
       order = 11.5,
-      desc = L["A timer will automatically be displayed according to default Interface Settings (overridden by some addons).\nEnable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer"] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+      desc = OptionsPrivate.AddCompatibilityNote(L["A timer will automatically be displayed according to default Interface Settings (overridden by some addons).\nEnable this setting if you want this timer to be hidden, or when using a WeakAuras text to display the timer"], false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
       hidden = function() return not data.cooldown end,
     },
     useCooldownModRate = {
@@ -273,7 +273,7 @@ local function createOptions(id, data)
       width = WeakAuras.normalWidth,
       name = OptionsPrivate.SetOptionTextDisabled(L["Blizzard Cooldown Reduction"]),
       order = 11.6,
-      desc = L["Cooldown Reduction changes the duration of seconds instead of showing the real time seconds."] .. "\n\n" .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."],
+      desc = OptionsPrivate.AddCompatibilityNote(L["Cooldown Reduction changes the duration of seconds instead of showing the real time seconds."], false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
       hidden = function() return not data.cooldown end,
     },
     ccWarning = {

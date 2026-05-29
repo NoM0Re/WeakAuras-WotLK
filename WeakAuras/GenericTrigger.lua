@@ -1381,6 +1381,9 @@ local function MultiUnitLoop(Func, unit, includePets, ...)
       Func(unit..i, ...)
     end
   elseif unit == "nameplate" then
+    if not WeakAuras.IsAwesomeEnabled() then
+      return
+    end
     for i = 1, 100 do
       Func(unit..i, ...)
     end
@@ -3910,6 +3913,9 @@ do
   Private.frames["Nameplate Target Handler"] = nameplateTargetFrame
   ---@private
   function WeakAuras.WatchForNameplateTargetChange()
+    if not WeakAuras.IsAwesomeEnabled() then
+      return
+    end
     if not nameplateTargetFrame then
       nameplateTargetFrame = CreateFrame("Frame")
       nameplateTargetFrame:SetScript("OnUpdate", nameplateTargetOnUpdate)

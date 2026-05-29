@@ -68,6 +68,21 @@ local function Clamp(value, min, max)
   return value
 end
 
+local function SetOptionTextDisabled(text, check)
+  if check == nil or not check then
+    return "|cff808080" .. text .. "|r"
+  end
+  return text
+end
+
+local function AddCompatibilityNote(desc, check, note)
+  if check then
+    return desc
+  end
+  desc = desc or ""
+  return desc .. (desc ~= "" and "\n\n" or "") .. note
+end
+
 -- Export into OptionsPrivate namespace
 do
   local exports = {
@@ -78,18 +93,13 @@ do
     tIndexOf = tIndexOf,
     tAppendAll = tAppendAll,
     Clamp = Clamp,
+    SetOptionTextDisabled = SetOptionTextDisabled,
+    AddCompatibilityNote = AddCompatibilityNote,
   }
 
   for name, value in pairs(exports) do
     OptionsPrivate[name] = value
   end
-end
-
-function OptionsPrivate.SetOptionTextDisabled(text, check)
-  if check == nil or not check then
-    return "|cff808080" .. text .. "|r"
-  end
-  return text
 end
 
 -- Frame Line Mixin Backport used in MoverSizer

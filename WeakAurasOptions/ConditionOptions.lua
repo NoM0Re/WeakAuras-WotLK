@@ -220,8 +220,7 @@ local function descIfNoValue2WithCompatibilityNote(data, object, variable, subva
   if check then
     return desc
   end
-  desc = desc or ""
-  return desc .. (desc ~= "" and "\n\n" or "") .. L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]
+  return OptionsPrivate.AddCompatibilityNote(desc, false, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."])
 end
 
 local function filterUsedProperties(indexToProperty, allDisplays, usedProperties, ownProperty)
@@ -899,7 +898,14 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
       values = OptionsPrivate.Private.send_chat_message_types,
       sorting = OptionsPrivate.Private.SortOrderForValues(OptionsPrivate.Private.send_chat_message_types),
       name = blueIfNoValue2(data, conditions[i].changes[j], "value", "message_type", L["Differences"]),
-      desc = descIfNoValue2(data, conditions[i].changes[j], "value", "message_type", propertyType, OptionsPrivate.Private.send_chat_message_types),
+      desc = function()
+        local desc = descIfNoValue2(data, conditions[i].changes[j], "value", "message_type", propertyType, OptionsPrivate.Private.send_chat_message_types) or ""
+        local messageType = type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.message_type
+        if messageType == "TTS" and WeakAuras.IsAwesomeEnabled() ~= 2 then
+          desc = OptionsPrivate.AddCompatibilityNote(desc, false, L["|cFFff0000Note:|r Text-to-speech requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+        end
+        return desc
+      end,
       order = order,
       get = function()
         return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.message_type;
@@ -1363,7 +1369,14 @@ local function addControlsForChange(args, order, data, conditionVariable, totalA
       values = OptionsPrivate.Private.glow_frame_types,
       width = WeakAuras.normalWidth,
       name = blueIfNoValue2(data, conditions[i].changes[j], "value", "glow_frame_type", L["Glow Frame Type"], L["Glow Frame Type"]),
-      desc = descIfNoValue2(data, conditions[i].changes[j], "value", "glow_frame_type", propertyType, OptionsPrivate.Private.glow_frame_types),
+      desc = function()
+        local desc = descIfNoValue2(data, conditions[i].changes[j], "value", "glow_frame_type", propertyType, OptionsPrivate.Private.glow_frame_types) or ""
+        local glowFrameType = type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.glow_frame_type
+        if glowFrameType == "NAMEPLATE" and not WeakAuras.IsAwesomeEnabled() then
+          desc = OptionsPrivate.AddCompatibilityNote(desc, false, L["|cFFff0000Note:|r Nameplate anchoring requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."])
+        end
+        return desc
+      end,
       order = order,
       get = function()
         return type(conditions[i].changes[j].value) == "table" and conditions[i].changes[j].value.glow_frame_type;
@@ -2143,12 +2156,16 @@ local function addControlsForIfLine(args, order, data, conditionVariable, totalA
         type = "select",
         width = normalWidth,
         name = blueIfNoValue(data, conditions[i].check, "type", L["Differences"]),
-        desc = descIfNoValue(data, conditions[i].check, "type", currentConditionTemplate.type),
         order = order,
         values = {
           group = L["Group player(s) found"],
-          enemies = WeakAuras.IsAwesomeEnabled() and L["Enemy nameplate(s) found"] or nil
+          enemies = OptionsPrivate.SetOptionTextDisabled(L["Enemy nameplate(s) found"], WeakAuras.IsAwesomeEnabled())
         },
+        desc = function()
+          return check.type == "enemies" and not WeakAuras.IsAwesomeEnabled()
+            and OptionsPrivate.AddCompatibilityNote(nil, false, L["|cFFff0000Note:|r Nameplate units require Awesome WotLK and are kept only for compatibility.\nThey have no effect without Awesome WotLK."])
+            or descIfNoValue(data, conditions[i].check, "type", currentConditionTemplate.type)
+        end,
         get = function()
           return check.type
         end,

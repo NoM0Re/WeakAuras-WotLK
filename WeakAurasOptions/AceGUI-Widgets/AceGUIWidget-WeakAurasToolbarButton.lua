@@ -59,7 +59,7 @@ local methods = {
   ["SetText"] = function(self, text)
     self.text:SetText(text)
     if text ~= "" then
-      self:SetWidth(self.text:GetStringWidth() + 24)
+      self:SetWidth(self.text:GetStringWidth() + 28)
     else
       self:SetWidth(16)
     end
