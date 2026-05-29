@@ -1741,7 +1741,6 @@ loadFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 loadFrame:RegisterEvent("PLAYER_DEAD")
 loadFrame:RegisterEvent("PLAYER_ALIVE")
 loadFrame:RegisterEvent("PLAYER_UNGHOST")
-loadFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
 loadFrame:RegisterEvent("PARTY_LEADER_CHANGED")
 loadFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 
@@ -1753,6 +1752,7 @@ unitLoadFrame:RegisterEvent("UNIT_FLAGS");
 unitLoadFrame:RegisterEvent("UNIT_ENTERED_VEHICLE");
 unitLoadFrame:RegisterEvent("UNIT_EXITED_VEHICLE");
 unitLoadFrame:RegisterEvent("UNIT_FACTION");
+unitLoadFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
 
 function Private.RegisterLoadEvents()
   loadFrame:SetScript("OnEvent", function(frame, ...)
