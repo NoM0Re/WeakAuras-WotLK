@@ -72,6 +72,10 @@ function Private.callbacks:Fire(event, ...)
   end
 end
 
+Private.callbacks:RegisterCallback("DBMEncounterEvent", function(_, event)
+  Private.ProfileEncounterEvent(event)
+end)
+
 local LDB = LibStub("LibDataBroker-1.1")
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local LCG = LibStub("LibCustomGlow-1.0")

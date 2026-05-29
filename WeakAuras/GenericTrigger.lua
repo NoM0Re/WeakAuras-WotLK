@@ -4173,6 +4173,7 @@ if WeakAuras.IsDBMRegistered() then
     local difficultyID, groupSize = DBM:GetCurrentDifficulty(), DBM:GetGroupSize()
     local eventName, success = map[event][1], map[event][2]
 
+    Private.callbacks:Fire("DBMEncounterEvent", eventName)
     Private.ScanForLoads(nil, eventName, encounterID, encounterName, difficultyID, groupSize, success)
     WeakAuras.ScanEvents(event, mod, ...)
     WeakAuras.ScanEvents(eventName, encounterID, encounterName, difficultyID, groupSize, success)
