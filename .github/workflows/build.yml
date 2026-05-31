@@ -1,0 +1,95 @@
+name: build
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        run: git fetch --tags --force
+
+      - name: Prepare changelog
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          changelog=".release-changelog.md"
+          previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
+
+          if [[ -f CHANGELOG.md ]]; then
+            awk -v version="$version" '
+              BEGIN { capture = 0 }
+              /^## / {
+                heading = $0
+                gsub(/^\#\# +/, "", heading)
+                gsub(/^\[/, "", heading)
+                gsub(/\].*$/, "", heading)
+                gsub(/^v/, "", heading)
+                split(heading, parts, /[ (]/)
+                heading = parts[1]
+                if (heading == version) {
+                  capture = 1
+                  next
+                }
+                if (capture) {
+                  exit
+                }
+              }
+              capture { print }
+            ' CHANGELOG.md > "$changelog"
+          fi
+
+          if [[ ! -s "$changelog" ]]; then
+            {
+              echo "## Changes"
+              echo
+              if [[ -n "$previous_tag" ]]; then
+                git log --pretty=format:"- %s" "${previous_tag}..${GITHUB_REF_NAME}"
+              else
+                git log --pretty=format:"- %s" "${GITHUB_REF_NAME}"
+              fi
+            } > "$changelog"
+          fi
+
+          {
+            echo
+            if [[ -n "$previous_tag" ]]; then
+              echo "[Full Changelog](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/${previous_tag}...${GITHUB_REF_NAME}) [Previous Releases](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases)"
+              commit_range="${previous_tag}..${GITHUB_REF_NAME}"
+            else
+              echo "[Full Changelog](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commits/${GITHUB_REF_NAME}) [Previous Releases](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases)"
+              commit_range="${GITHUB_REF_NAME}"
+            fi
+            echo
+
+            git log --reverse --format='%H%x1f%s' "$commit_range" | while IFS=$'\x1f' read -r sha subject; do
+              short_sha="$(git rev-parse --short "$sha")"
+              echo "- [${short_sha}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${sha}) ${subject}"
+              git log -1 --format='%(trailers:key=Co-authored-by,valueonly)' "$sha" | sed '/^$/d; s/^/  Co-authored-by: /'
+            done
+          } >> "$changelog"
+
+      - name: Update build date
+        shell: bash
+        run: |
+          timestamp="$(date +%Y%m%d%H%M%S)"
+          grep -rl "@build-time@" APIDocumentation WeakAuras WeakAurasOptions WeakAurasArchive WeakAurasModelPaths WeakAurasStopMotion WeakAurasTemplates | xargs -r sed -i "s/@build-time@/${timestamp}/g"
+
+      - name: Create package
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -l -g 3.3.5 -n "WeakAuras2"
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
