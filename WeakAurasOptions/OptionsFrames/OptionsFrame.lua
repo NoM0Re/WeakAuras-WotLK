@@ -557,13 +557,32 @@ function OptionsPrivate.CreateFrame()
     companionButton:SetPoint("RIGHT", wagoButton, "LEFT", -footerSpacing, 0)
   end
 
+  local function UpdateFooterLayout()
+    if not awesomeWotlkButton then return end
+    local leftWidth = discordButton:GetWidth() + documentationButton:GetWidth() + thanksButton:GetWidth() + footerSpacing * 2
+    if changelogButton then
+      leftWidth = leftWidth + changelogButton:GetWidth() + footerSpacing
+    end
+    leftWidth = leftWidth + awesomeWotlkButton:GetWidth() + footerSpacing
+
+    local rightWidth = reportbugButton:GetWidth() + wagoButton:GetWidth() + companionButton:GetWidth() + footerSpacing * 2
+    if leftWidth >= tipFrame:GetWidth() - rightWidth then
+      awesomeWotlkButton:Hide()
+    else
+      awesomeWotlkButton:Show()
+    end
+  end
+
   frame.ShowTip = function(self)
     self.tipFrame:Show()
     self.buttonsContainer.frame:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 17, 30)
     self.container.frame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -17, 28)
+    self.tipFrame:SetScript("OnSizeChanged", UpdateFooterLayout)
+    UpdateFooterLayout()
   end
 
   frame.HideTip = function(self)
+    self.tipFrame:SetScript("OnSizeChanged", nil)
     self.tipFrame:Hide()
     self.buttonsContainer.frame:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 17, 12)
     self.container.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 10)
