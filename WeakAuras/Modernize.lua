@@ -2344,7 +2344,7 @@ function Private.Modernize(data, oldSnapshot)
     data.information.showNilIsFalse = true
   end
 
-  if data.internalVersion < 90 then
+  if data.internalVersion < 89.5 then
     if data.regionType == "aurabar" then
       data.toolTipArea = "ICON"
     end
