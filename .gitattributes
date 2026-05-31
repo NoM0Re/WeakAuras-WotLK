@@ -1,9 +1,16 @@
 .github             export-ignore
+.codex              export-ignore
+.vscode             export-ignore
 .gitattributes      export-ignore
 .gitignore          export-ignore
 .luacheckrc         export-ignore
+.luarc.json         export-ignore
 .travis.yml         export-ignore
 .editorconfig       export-ignore
+cspell.json         export-ignore
+stylua.toml         export-ignore
+AGENTS.md           export-ignore
+prompt.txt          export-ignore
 *ISSUE_TEMPLATE.md  export-ignore
 *readme.md          export-ignore
 *README.md          export-ignore
