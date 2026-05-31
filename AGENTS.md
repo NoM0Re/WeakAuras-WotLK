@@ -70,7 +70,7 @@ Important files:
 
 * `WeakAuras.toc`: load order and addon metadata.
 * `Init.lua`, `WeakAuras.lua`, `DefaultOptions.lua`: initialization and core state.
-* `Types_ClassicPlus.lua`, `Types_WrathReborn.lua`, `Types_Wrath.lua`, `Types.lua`: type and option data. Load order matters.
+* `Types_ClassicPlus.lua`, `Types_Wrath.lua`, `Types.lua`: type and option data. Load order matters.
 * `BuffTrigger2.lua`, `GenericTrigger.lua`: trigger/event evaluation.
 * `Conditions.lua`: conditional display logic.
 * `AuraEnvironment.lua`, `AuraEnvironmentWrappedSystems.lua`: custom code environment and exposed APIs.
@@ -120,6 +120,7 @@ Follow the existing style and upstream WeakAuras conventions.
 * Use Unix line endings.
 * `stylua.toml` sets `column_width = 180`.
 * Avoid semicolons in new code.
+* Preserve existing semicolons when editing code that already uses them; they are useful for comparing against upstream/developer code.
 * Match surrounding style when editing older code that already uses semicolons.
 * Keep Lua 5.1 compatibility.
 * Avoid unnecessary churn and broad reformatting.
