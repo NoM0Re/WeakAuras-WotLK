@@ -5,7 +5,7 @@ local AddonName = ...
 local Private = select(2, ...)
 
 -- Talent Data for normal Wrath Realms
-if not WeakAuras.IsWrath() or WeakAuras.IsWrathReborn() then
+if not WeakAuras.IsWrath() then
   return
 end
 

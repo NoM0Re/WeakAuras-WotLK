@@ -395,8 +395,6 @@ local isDBMRegistered = (DBM and type(DBM.Revision) == "number" and DBM.Revision
 local flavor
 if GetRealmName() == "Kezan" or GetRealmName() == "Menethil" or GetRealmName() == "Gurubashi" then
   flavor = "ClassicPlus"
-elseif GetRealmName():find("Frostmourne", 1, true) and ((GetCVar("realmList") or ""):lower():find("stormforge", 1, true)) then
-  flavor = "WrathReborn"
 else
   flavor = "Wrath"
 end
@@ -419,11 +417,7 @@ function WeakAuras.IsCorrectVersion()
 end
 
 function WeakAuras.IsWrath()
-  return flavor == "Wrath" or flavor == "WrathReborn"
-end
-
-function WeakAuras.IsWrathReborn()
-  return flavor == "WrathReborn"
+  return flavor == "Wrath"
 end
 
 function WeakAuras.IsClassicPlus()
@@ -536,4 +530,3 @@ function WeakAuras.CountWagoUpdates()
   -- XXX this is to work around the Companion app trying to use our stuff!
   return 0
 end
-
