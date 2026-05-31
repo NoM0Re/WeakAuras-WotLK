@@ -2350,13 +2350,14 @@ function Private.Modernize(data, oldSnapshot)
     end
 
     -- Migrate model fileId again
-    if data.model_path and data.modelIsUnit then
+    if not data.model_fileId and data.model_path then
       data.model_fileId = data.model_path
+      data.model_path = nil
     end
 
     if data.subRegions then
       for index, subRegionData in ipairs(data.subRegions) do
-        -- Migrate submodel fields again
+        -- Migrate submodel fields
         if subRegionData.type == "submodel" then
           if subRegionData.model_path and not subRegionData.model_fileId then
             subRegionData.model_fileId = subRegionData.model_path
