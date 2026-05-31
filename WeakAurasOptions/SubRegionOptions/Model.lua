@@ -6,6 +6,8 @@ local OptionsPrivate = select(2, ...)
 
 local L = WeakAuras.L;
 
+local compatibilityNote = L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]
+
 local function createOptions(parentData, data, index, subIndex)
   local options = {
     __title = L["Model %s"]:format(subIndex),
@@ -51,7 +53,7 @@ local function createOptions(parentData, data, index, subIndex)
         return parentData.regionType ~= "aurabar" or not data.bar_model_attach
       end
     },
-    bar_model_spacer ={
+    bar_model_spacer = {
       type = "description",
       width = WeakAuras.normalWidth,
       name = "",
@@ -94,7 +96,8 @@ local function createOptions(parentData, data, index, subIndex)
     },
     api = {
       type = "toggle",
-      name = L["Use SetTransform"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Use SetTransform"]),
+      desc = compatibilityNote,
       order = 14,
       width = WeakAuras.normalWidth,
     },
@@ -151,7 +154,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["X Offset"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["X Offset"]),
+      desc = compatibilityNote,
       softMin = -1000,
       softMax = 1000,
       step = 1,
@@ -163,7 +167,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["Y Offset"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Y Offset"]),
+      desc = compatibilityNote,
       softMin = -1000,
       softMax = 1000,
       step = 1,
@@ -175,7 +180,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["Z Offset"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Z Offset"]),
+      desc = compatibilityNote,
       softMin = -1000,
       softMax = 1000,
       step = 1,
@@ -187,7 +193,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["X Rotation"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["X Rotation"]),
+      desc = compatibilityNote,
       min = 0,
       max = 360,
       step = 1,
@@ -199,7 +206,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["Y Rotation"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Y Rotation"]),
+      desc = compatibilityNote,
       min = 0,
       max = 360,
       step = 1,
@@ -211,7 +219,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["Z Rotation"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Z Rotation"]),
+      desc = compatibilityNote,
       min = 0,
       max = 360,
       step = 1,
@@ -223,7 +232,8 @@ local function createOptions(parentData, data, index, subIndex)
       type = "range",
       control = "WeakAurasSpinBox",
       width = WeakAuras.normalWidth,
-      name = L["Scale"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Scale"]),
+      desc = compatibilityNote,
       min = 5,
       max = 1000,
       step = 0.1,

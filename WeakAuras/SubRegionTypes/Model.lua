@@ -50,7 +50,7 @@ local properties = {
 
 local function PreShow(self)
   local data = self.data
-  --self:SetKeepModelOnHide(true)
+  -- self:SetKeepModelOnHide(true)
   self:Show()
 
   -- Adjust model
@@ -59,8 +59,8 @@ local function PreShow(self)
     pcall(self.SetModel, self, modelId)
   end
 
-  --self:ClearTransform()
-  self:SetPosition(data.model_z, data.model_x, data.model_y);
+  -- self:ClearTransform()
+  self:SetPosition(data.model_x, data.model_y, data.model_z);
   self:SetFacing(rad(data.rotation))
   self:SetAlpha(self.region.alpha)
 end
@@ -72,16 +72,12 @@ local function CreateModel()
 end
 
 -- Keep the two model apis separate
-local poolOldApi = CreateObjectPool(CreateModel)
-local poolNewApi = CreateObjectPool(CreateModel)
-
+local pool = CreateObjectPool(CreateModel)
 
 local function AcquireModel(region, data)
-  local pool = data.api and poolNewApi or poolOldApi
   local model = pool:Acquire()
   model.data = data
   Private.barmodels[model] = true
-  model.api = data.api
 
   local anchor
   if region.parentType == "aurabar" then
@@ -110,7 +106,7 @@ local function AcquireModel(region, data)
   model:SetPoint("BOTTOMRIGHT", anchor ,"BOTTOMRIGHT", extra_width/2, -extra_height/2)
 
   model:SetParent(region)
-  --model:SetKeepModelOnHide(true)
+  -- model:SetKeepModelOnHide(true)
   model:Show()
 
   -- Adjust model
@@ -119,16 +115,15 @@ local function AcquireModel(region, data)
     pcall(model.SetModel, model, modelId)
   end
 
-  --model:ClearTransform()
-  model:SetPosition(data.model_z, data.model_x, data.model_y);
+  -- model:ClearTransform()
+  model:SetPosition(data.model_x, data.model_y, data.model_z);
   model:SetFacing(rad(data.rotation))
   return model
 end
 
 local function ReleaseModel(model)
-  --model:SetKeepModelOnHide(false)
+  -- model:SetKeepModelOnHide(false)
   model:Hide()
-  local pool = model.api and poolNewApi or poolOldApi
   pool:Release(model)
   Private.barmodels[model] = nil
 end
