@@ -115,12 +115,9 @@ local function CreateModel()
 end
 
 -- Keep the two model apis separate
-local poolOldApi = CreateObjectPool(CreateModel)
-local poolNewApi = CreateObjectPool(CreateModel)
+local pool = CreateObjectPool(CreateModel)
 
 local function ConfigureModel(region, model, data)
-  model.api = data.api
-
   model:ClearAllPoints()
   model:SetAllPoints(region)
   model:SetParent(region)
@@ -131,13 +128,13 @@ local function ConfigureModel(region, model, data)
   WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
   -- model:SetPortraitZoom(data.portraitZoom and 1 or 0);
   -- model:ClearTransform()
-  model:SetPosition(data.model_z, data.model_x, data.model_y);
+  model:SetPosition(data.model_x, data.model_y, data.model_z);
   model:SetFacing(rad(region.rotation));
 
   model:SetScript("OnShow", function()
     WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
     -- model:ClearTransform()
-    model:SetPosition(data.model_z, data.model_x, data.model_y);
+    model:SetPosition(data.model_x, data.model_y, data.model_z);
     model:SetFacing(rad(region.rotation));
   end)
 
@@ -192,7 +189,6 @@ local function ConfigureModel(region, model, data)
 end
 
 local function AcquireModel(region, data)
-  local pool = data.api and poolNewApi or poolOldApi
   local model = pool:Acquire()
   ConfigureModel(region, model, data)
   return model
@@ -206,7 +202,6 @@ local function ReleaseModel(model)
   model:UnregisterEvent("PLAYER_TARGET_CHANGED");
   model:UnregisterEvent("PLAYER_FOCUS_CHANGED");
   model:SetScript("OnEvent", nil);
-  local pool = model.api and poolNewApi or poolOldApi
   pool:Release(model)
 end
 
