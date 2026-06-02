@@ -5787,7 +5787,7 @@ local function tryAnchorAgain()
   postPonedAnchors = {};
   anchorTimer = nil;
 
-  for id, _ in pairs(delayed) do
+  for id in pairs(delayed) do
     local data = WeakAuras.GetData(id);
     local region = WeakAuras.GetRegion(id);
     if (data and region) then

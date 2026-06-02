@@ -239,7 +239,7 @@ function spellCache.Load(data)
   local version = WeakAuras.versionString
 
   local num = 0;
-  for i,v in pairs(cache) do
+  for _ in pairs(cache) do
     num = num + 1;
   end
 

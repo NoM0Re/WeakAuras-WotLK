@@ -211,7 +211,7 @@ function TestForMultiSelect(trigger, arg)
     test = "(";
     local any = false;
     if trigger[name] and trigger[name].multi then
-      for value, _ in pairs(trigger[name].multi) do
+      for value in pairs(trigger[name].multi) do
         if not arg.test then
           test = test..name.."=="..(tonumber(value) or ("[["..value.."]]")).." or ";
         else
@@ -2315,7 +2315,7 @@ do
 
   local function GetRuneDuration()
     local runeDuration = -100;
-    for id, _ in pairs(runes) do
+    for id in pairs(runes) do
       local _, duration = GetRuneCooldown(id);
       duration = duration or 0;
       runeDuration = duration > 0 and duration or runeDuration
@@ -2519,7 +2519,7 @@ do
   --- @field private spellCdsOnlyCooldownRune SpellCDHandler
   --- @field private spellCdsCharges SpellCDHandler
   --- @field private AddEffectiveSpellId fun(self: SpellDetails, effectiveSpellId: number, userSpellId: number)
-  --- @field CheckSpellKnown fun(self: SpellDetails) Handles the SPELLS_CHANGED event (and intial setup)
+  --- @field CheckSpellKnown fun(self: SpellDetails) Handles the SPELLS_CHANGED event (and initial setup)
   --- @field CheckSpellCooldowns fun(self: SpellDetails, runeDuration: number?)
   --- @field CheckSpellCooldown fun(self: SpellDetails, effectiveSpellId: number, runeDuration: number?)
   --- @field SendEventsForSpell fun(self: SpellDetails, effectiveSpellId: number, event: string, ...: any[])
@@ -2595,7 +2595,7 @@ do
     end,
 
     CheckSpellCooldowns = function(self, runeDuration)
-      for id, _ in pairs(self.data) do
+      for id in pairs(self.data) do
         self:CheckSpellCooldown(id, runeDuration)
       end
     end,
@@ -2956,7 +2956,7 @@ do
   ---@return number
   function Private.CheckRuneCooldown()
     local runeDuration = -100;
-    for id, _ in pairs(runes) do
+    for id in pairs(runes) do
       local startTime, duration = GetRuneCooldown(id);
       startTime = startTime or 0;
       duration = duration or 0;
@@ -3064,7 +3064,7 @@ do
 
   ---@type fun()
   function Private.CheckItemCooldowns()
-    for id, _ in pairs(items) do
+    for id in pairs(items) do
       Private.CheckItemCooldown(id)
     end
   end
