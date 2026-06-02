@@ -5,7 +5,14 @@ Use :WALurk: or when in June :WALurkPride:
 
 ## 5.21.7
 
-:WALurk: 5.21.7
+:WALurkPride: 5.21.7
+
+WeakAuras WotLK is out of beta!
+
+This release marks the addon as officially released for Wrath of the Lich King 3.3.5a.
+The port is now roughly 97% backported from the modern WeakAuras2 codebase,
+with the remaining differences being mostly intentional WotLK compatibility work,
+unsupported Retail-era systems, and client-specific API limitations.
 
 New Features:
 - Add an option to squelch auras on load
