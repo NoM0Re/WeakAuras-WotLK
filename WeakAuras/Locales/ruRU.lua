@@ -120,6 +120,8 @@ L["Anetheron"] = "Anetheron"
 L["Angle and Radius"] = "Угол и радиус"
 L["Animations"] = "Анимация"
 L["Anticlockwise"] = "Против часовой стрелки"
+--[[Translation missing --]]
+L["Anub'arak"] = "Anub'arak"
 L["Anub'Rekhan"] = "Ануб'Рекан"
 L["Any"] = "Любая"
 L["Any Triggers"] = "Любые триггеры"
@@ -204,6 +206,10 @@ L["Back and Forth"] = "Назад и вперед"
 L["Background"] = "Задний план"
 L["Background Color"] = "Цвет заднего плана"
 L["Balnazzar"] = "Балназзар"
+--[[Translation missing --]]
+L["Bar"] = "Bar"
+--[[Translation missing --]]
+L["Bar and Icon"] = "Bar and Icon"
 L["Bar Color/Gradient Start"] = "Цвет полосы / Начало градиента"
 --[[Translation missing --]]
 L["Bar enabled in BigWigs settings"] = "Bar enabled in BigWigs settings"
@@ -582,6 +588,8 @@ L["Extra Attacks"] = "Дополнительные атаки"
 L["Extra Spell Id"] = "Доп-й ID заклинания"
 L["Extra Spell Name"] = "Доп-е название заклинания"
 L["Faction"] = "Фракция"
+--[[Translation missing --]]
+L["Faction Champions"] = "Faction Champions"
 L["Faction Name"] = "Название фракции"
 L["Faction Reputation"] = "Репутация с фракцией"
 L["Fade Animation"] = "Анимация прозрачности"
@@ -880,6 +888,8 @@ L["Loot Specialization"] = "Специализация добычи"
 L["Loot Specialization Id"] = "Идентификатор специализации добычи"
 L["Loot Specialization Name"] = "Название специализации добычи"
 --[[Translation missing --]]
+L["Lord Jaraxxus"] = "Lord Jaraxxus"
+--[[Translation missing --]]
 L["Lord Kazzak"] = "Lord Kazzak"
 --[[Translation missing --]]
 L["Lorewalking"] = "Lorewalking"
@@ -1019,6 +1029,8 @@ L["None"] = "Нет"
 L["Non-player Character"] = "Неигровой персонаж (NPC)"
 L["Normal"] = "Обычный"
 L["Normal Party"] = "Группа (обычная)"
+--[[Translation missing --]]
+L["Northrend Beasts"] = "Northrend Beasts"
 L["Not in Group"] = "Не в группе"
 L["Not in Smart Group"] = "Сторонний обьект"
 L["Not on Cooldown"] = "Не восстанавливается"
@@ -1614,6 +1626,8 @@ L["Tracking Charge %i"] = "Показать восстановление %i-го
 L["Tracking Charge CDs"] = "Отслеживание зарядов"
 L["Tracking Only Cooldown"] = "Отслеживание восстановления"
 L["Transmission error"] = "Ошибка передачи данных"
+--[[Translation missing --]]
+L["Trial of the Crusader"] = "Trial of the Crusader"
 L["Trigger"] = "Триггер"
 L["Trigger %i"] = "Триггер %i"
 L["Trigger %s"] = "Триггер %s"
@@ -1666,6 +1680,8 @@ L["Using WeakAuras.clones is deprecated. Use WeakAuras.GetRegion(id, cloneId) in
 L["Using WeakAuras.regions is deprecated. Use WeakAuras.GetRegion(id) instead."] = "WeakAuras.regions объявлено устаревшим. Используйте функцию WeakAuras.GetRegion(id)."
 L["Vaelastrasz the Corrupt"] = "Валестраз Порочный"
 --[[Translation missing --]]
+L["Val'kyr Twins"] = "Val'kyr Twins"
+--[[Translation missing --]]
 L["Vault of Archavon"] = "Vault of Archavon"
 L["Versatility (%)"] = "Универсальность (%)"
 L["Versatility Rating"] = "Показатель универсальности"
@@ -1693,7 +1709,8 @@ L["Warning: Full Scan auras checking for both name and spell id can't be convert
 L["Warning: Name info is now available via %affected, %unaffected. Number of affected group members via %unitCount. Some options behave differently now. This is not automatically adjusted."] = "|cFFFFCC00Примечение.|r Теперь имена задействованных и незадействованных игроков доступны посредством %affected и %unaffected; количество задействованных участников группы - %unitCount. Некоторые параметры работают иначе. Эти изменения автоматически не применяются."
 L["Warning: Tooltip values are now available via %tooltip1, %tooltip2, %tooltip3 instead of %s. This is not automatically adjusted."] = "|cFFFFCC00Примечение.|r Теперь значения из текста подсказки доступны посредством %tooltip1, %tooltip2 и %tooltip3. Это изменение автоматически не применяется."
 L["WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"] = "WeakAuras (встроенный):  63:42 | 3:07 | 10 | 2.4"
-L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."] = "WeakAuras обнаружил пустые настройки. Если это произошло неожиданно, обратитесь за помощью на https://discord.gg/weakauras."
+--[[Translation missing --]]
+L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."
 L[ [=[WeakAuras has detected that it has been downgraded.
 Your saved auras may no longer work properly.
 Would you like to run the |cffff0000EXPERIMENTAL|r repair tool? This will overwrite any changes you have made since the last database upgrade.

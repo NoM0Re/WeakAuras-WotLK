@@ -1274,6 +1274,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Spells found:"] = "Spells found:"
 	--[[Translation missing --]]
+	L["Squelch Sounds/Actions on Load"] = "Squelch Sounds/Actions on Load"
+	--[[Translation missing --]]
+	L["Squelched"] = "Squelched"
+	--[[Translation missing --]]
 	L["Stack Info"] = "Stack Info"
 	--[[Translation missing --]]
 	L["Stacks - The number of stacks of an aura (usually)"] = "Stacks - The number of stacks of an aura (usually)"
@@ -1336,9 +1340,9 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Thanks"] = "Thanks"
 	--[[Translation missing --]]
-	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"
+	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."
 	--[[Translation missing --]]
-	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"
+	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."
 	--[[Translation missing --]]
 	L["The duration of the animation in seconds."] = "The duration of the animation in seconds."
 	--[[Translation missing --]]

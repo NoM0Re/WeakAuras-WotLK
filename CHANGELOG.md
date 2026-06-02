@@ -7,12 +7,17 @@ Use :WALurk: or when in June :WALurkPride:
 
 :WALurkPride: 5.21.7
 
-WeakAuras WotLK is out of beta!
+# WeakAuras WotLK is out of Beta!
 
-This release marks the addon as officially released for Wrath of the Lich King 3.3.5a.
-The port is now roughly 97% backported from the modern WeakAuras2 codebase,
-with the remaining differences being mostly intentional WotLK compatibility work,
-unsupported Retail-era systems, and client-specific API limitations.
+This release marks WeakAuras WotLK as officially released for Wrath of the Lich King 3.3.5a.
+
+It all started with a simple goal: getting WeakAuras working for Awesome WotLK. Over a year of development and 500+ commits later, WeakAuras WotLK has reached roughly 97% parity with the modern WeakAuras2 codebase.
+
+The remaining differences are mostly intentional WotLK compatibility work, unsupported Retail-era systems, and client-specific API limitations.
+
+A big thank you to everyone who used the addon during the beta, reported bugs, opened issues, shared feedback, or helped others in the community.
+
+Thank you all for being part of the journey.
 
 New Features:
 - Add an option to squelch auras on load
@@ -21,6 +26,7 @@ New Features:
 - Progress Bar: Make tooltip area configurable
 
 Fixes:
+- Fix Pride logo time check
 - Further fix SetFont with the "None" flag
 - Fix SetFont error with the "None" flag
 - Fix Item Cooldown Trigger if item is on cooldown on first login
@@ -44,6 +50,7 @@ Backport New Features:
 - Remove the `Beta` suffix from the displayed WeakAuras and Options versions
 
 Backport Fixes:
+- Block newer auras importing, as it caused enough issues
 - Preserve unsupported imported options with compatibility warnings
 - Rework Modernize handling for newer imports
 - Backport ProgressTexture and Model code paths from upstream

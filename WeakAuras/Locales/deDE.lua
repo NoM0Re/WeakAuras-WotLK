@@ -165,6 +165,8 @@ L["Angle and Radius"] = "Angle and Radius"
 L["Animations"] = "Animationen"
 L["Anticlockwise"] = "Im Gegenuhrzeigersinn"
 --[[Translation missing --]]
+L["Anub'arak"] = "Anub'arak"
+--[[Translation missing --]]
 L["Anub'Rekhan"] = "Anub'Rekhan"
 --[[Translation missing --]]
 L["Any"] = "Any"
@@ -272,6 +274,10 @@ L["Background"] = "Hintergrund"
 L["Background Color"] = "Hintergrundfarbe"
 --[[Translation missing --]]
 L["Balnazzar"] = "Balnazzar"
+--[[Translation missing --]]
+L["Bar"] = "Bar"
+--[[Translation missing --]]
+L["Bar and Icon"] = "Bar and Icon"
 --[[Translation missing --]]
 L["Bar Color/Gradient Start"] = "Bar Color/Gradient Start"
 --[[Translation missing --]]
@@ -831,6 +837,8 @@ L["Extra Attacks"] = "Extraangriffe (EXTRA_ATTACKS)"
 L["Extra Spell Id"] = "Extra Spell Id"
 L["Extra Spell Name"] = "Extra-Zaubername"
 L["Faction"] = "Fraktion"
+--[[Translation missing --]]
+L["Faction Champions"] = "Faction Champions"
 L["Faction Name"] = "Fraktionsname"
 L["Faction Reputation"] = "Fraktionsruf"
 --[[Translation missing --]]
@@ -1276,6 +1284,8 @@ L["Loot Specialization Id"] = "Loot Specialization Id"
 --[[Translation missing --]]
 L["Loot Specialization Name"] = "Loot Specialization Name"
 --[[Translation missing --]]
+L["Lord Jaraxxus"] = "Lord Jaraxxus"
+--[[Translation missing --]]
 L["Lord Kazzak"] = "Lord Kazzak"
 --[[Translation missing --]]
 L["Lorewalking"] = "Lorewalking"
@@ -1477,6 +1487,8 @@ L["Non-player Character"] = "Nicht-Spieler-Charakter (NPC)"
 L["Normal"] = "Normal"
 --[[Translation missing --]]
 L["Normal Party"] = "Normal Party"
+--[[Translation missing --]]
+L["Northrend Beasts"] = "Northrend Beasts"
 L["Not in Group"] = "In keiner Gruppe"
 --[[Translation missing --]]
 L["Not in Smart Group"] = "Not in Smart Group"
@@ -2397,6 +2409,8 @@ L["Tracking Charge CDs"] = "Tracking Charge CDs"
 --[[Translation missing --]]
 L["Tracking Only Cooldown"] = "Tracking Only Cooldown"
 L["Transmission error"] = "Übertragungsfehler"
+--[[Translation missing --]]
+L["Trial of the Crusader"] = "Trial of the Crusader"
 L["Trigger"] = "Auslöser"
 --[[Translation missing --]]
 L["Trigger %i"] = "Trigger %i"
@@ -2481,6 +2495,8 @@ L["Using WeakAuras.regions is deprecated. Use WeakAuras.GetRegion(id) instead."]
 --[[Translation missing --]]
 L["Vaelastrasz the Corrupt"] = "Vaelastrasz the Corrupt"
 --[[Translation missing --]]
+L["Val'kyr Twins"] = "Val'kyr Twins"
+--[[Translation missing --]]
 L["Vault of Archavon"] = "Vault of Archavon"
 L["Versatility (%)"] = "Vielseitigkeit (%)"
 L["Versatility Rating"] = "Vielseitigkeitswertung"
@@ -2522,7 +2538,7 @@ L["Warning: Tooltip values are now available via %tooltip1, %tooltip2, %tooltip3
 --[[Translation missing --]]
 L["WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"] = "WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"
 --[[Translation missing --]]
-L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."
+L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."
 --[[Translation missing --]]
 L[ [=[WeakAuras has detected that it has been downgraded.
 Your saved auras may no longer work properly.
