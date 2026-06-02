@@ -1399,7 +1399,6 @@ local methods = {
     self:ReleaseChildren()
     self:AddBasicInformationWidgets(data, sender)
 
-    --[[ Let people install auras that are newer than their version of WeakAuras, even tho it is bad
     do
       local highestVersion = data.internalVersion or 0
       if children then
@@ -1423,7 +1422,6 @@ local methods = {
         self.importButton:Show()
       end
     end
-    ]]
 
     local matchInfoResult = AceGUI:Create("Label")
     matchInfoResult:SetFontObject(GameFontHighlight)
@@ -1564,24 +1562,6 @@ local methods = {
       linkedAurasText:SetColor(1, 0, 0)
       self:AddChild(linkedAurasText)
     end
-
-    -- Let people install auras that are newer than their version of WeakAuras, even tho it is bad
-    local highestVersion = data.internalVersion or 0
-    if children then
-      for _, child in ipairs(children) do
-        highestVersion = max(highestVersion, child.internalVersion or 0)
-      end
-    end
-
-    if (highestVersion > WeakAuras.InternalVersion()) then
-      local highestVersionWarning = AceGUI:Create("Label")
-      highestVersionWarning:SetFontObject(GameFontHighlight)
-      highestVersionWarning:SetFullWidth(true)
-      highestVersionWarning:SetText(L["This aura was created with a newer version of WeakAuras.\nIt might not work correctly with your version!"])
-      highestVersionWarning:SetColor(1, 0, 0)
-      self:AddChild(highestVersionWarning)
-    end
-
 
     local currentBuild = floor(WeakAuras.BuildInfo / 10000)
     local importBuild = data.tocversion and floor(data.tocversion / 10000)
