@@ -117,10 +117,7 @@ function OptionsPrivate.CreateFrame()
   frame:SetMinResize(minWidth, minHeight)
   frame:SetFrameStrata("DIALOG")
 
-  local now = time()
-  local y = date("*t", now).year
-  local inJune = now >= time{year=y, month=6, day=1, hour=0} and now < time{year=y, month=7, day=1, hour=0}
-  if inJune then
+  if date("*t", time()).month == 6 then
     frame.PortraitContainer.portrait:SetTexture([[Interface\AddOns\WeakAuras\Media\Textures\logo_256_round_pride.tga]])
   else
     frame.PortraitContainer.portrait:SetTexture([[Interface\AddOns\WeakAuras\Media\Textures\logo_256_round.tga]])
