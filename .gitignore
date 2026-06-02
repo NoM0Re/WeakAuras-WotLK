@@ -1,3 +1,4 @@
 .release/
 .env
 .release-changelog.md
+prompt.txt
