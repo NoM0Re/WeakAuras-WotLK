@@ -83,7 +83,7 @@ local methods = {
           end
         end
         local secondList = {}
-        for displayName, _ in pairs(treeValue) do
+        for displayName in pairs(treeValue) do
           tinsert(secondList, displayName)
         end
         table.sort(secondList)
@@ -223,7 +223,7 @@ local methods = {
     self.userdata.tree = tree
 
     local firstList = {}
-    for displayName, _ in pairs(tree) do
+    for displayName in pairs(tree) do
       tinsert(firstList, displayName)
     end
     table.sort(firstList)
