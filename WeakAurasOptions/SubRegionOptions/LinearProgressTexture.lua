@@ -64,10 +64,10 @@ local function createOptions(parentData, data, index, subIndex)
     linearTextureWrapMode = {
       type = "select",
       width = WeakAuras.normalWidth,
-      name = L["Texture Wrap"],
+      name = OptionsPrivate.SetOptionTextDisabled(L["Texture Wrap"]),
+      desc = OptionsPrivate.AddCompatibilityNote(nil, nil, L["|cFFff0000Note:|r This option is kept for compatibility with auras from other WoW versions.\nIt has no effect in WotLK 3.3.5a."]),
       order = 5,
       values = OptionsPrivate.Private.texture_wrap_types,
-      disabled = function() return true end
     },
     linearTextureInverse = {
       type = "toggle",
