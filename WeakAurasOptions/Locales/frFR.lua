@@ -1019,6 +1019,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	L["Spell Selection Filters"] = "Spell Selection Filters"
 	--[[Translation missing --]]
 	L["Spells found:"] = "Spells found:"
+	--[[Translation missing --]]
+	L["Squelch Sounds/Actions on Load"] = "Squelch Sounds/Actions on Load"
+	--[[Translation missing --]]
+	L["Squelched"] = "Squelched"
 	L["Stack Info"] = "Info de Piles"
 	--[[Translation missing --]]
 	L["Stacks - The number of stacks of an aura (usually)"] = "Stacks - The number of stacks of an aura (usually)"
@@ -1069,9 +1073,9 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Thanks"] = "Thanks"
 	--[[Translation missing --]]
-	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"
+	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."
 	--[[Translation missing --]]
-	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"
+	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."
 	L["The duration of the animation in seconds."] = "La durée de l'animation en secondes."
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = "La durée de l'animation en secondes. L'animation de fin ne commence qu'après le moment où l'affichage est normalement caché."
 	--[[Translation missing --]]

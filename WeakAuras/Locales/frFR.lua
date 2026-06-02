@@ -126,6 +126,8 @@ L["Anetheron"] = "Anetheron"
 L["Angle and Radius"] = "Angle et rayon"
 L["Animations"] = "Animations"
 L["Anticlockwise"] = "Sens anti-horaire"
+--[[Translation missing --]]
+L["Anub'arak"] = "Anub'arak"
 L["Anub'Rekhan"] = "Anub'Rekhan"
 L["Any"] = "N'importe lequel"
 L["Any Triggers"] = "Au moins un déclencheur"
@@ -208,6 +210,10 @@ L["Back and Forth"] = "D'avant en arrière"
 L["Background"] = "Arrière-plan"
 L["Background Color"] = "Couleur d'arrière-plan"
 L["Balnazzar"] = "Balnazzar"
+--[[Translation missing --]]
+L["Bar"] = "Bar"
+--[[Translation missing --]]
+L["Bar and Icon"] = "Bar and Icon"
 L["Bar Color/Gradient Start"] = "Couleur/gradient de départ de la barre"
 L["Bar enabled in BigWigs settings"] = "Barre activée dans les paramètres de BigWigs"
 L["Bar enabled in Boss Mod addon settings"] = "Barre activée dans les paramètres de l’addon de boss mod"
@@ -726,6 +732,8 @@ L["Extra Attacks"] = "Attaques supplémentaires"
 L["Extra Spell Id"] = "Extra Spell Id"
 L["Extra Spell Name"] = "Nom de Sort supplémentaire"
 L["Faction"] = "Faction"
+--[[Translation missing --]]
+L["Faction Champions"] = "Faction Champions"
 L["Faction Name"] = "Nom de la Faction"
 L["Faction Reputation"] = "Réputation envers la Faction"
 --[[Translation missing --]]
@@ -1140,6 +1148,8 @@ L["Loot Specialization Id"] = "Loot Specialization Id"
 --[[Translation missing --]]
 L["Loot Specialization Name"] = "Loot Specialization Name"
 --[[Translation missing --]]
+L["Lord Jaraxxus"] = "Lord Jaraxxus"
+--[[Translation missing --]]
 L["Lord Kazzak"] = "Lord Kazzak"
 --[[Translation missing --]]
 L["Lorewalking"] = "Lorewalking"
@@ -1318,6 +1328,8 @@ L["Non-player Character"] = "Personnage non-joueur"
 L["Normal"] = "Normal"
 --[[Translation missing --]]
 L["Normal Party"] = "Normal Party"
+--[[Translation missing --]]
+L["Northrend Beasts"] = "Northrend Beasts"
 L["Not in Group"] = "N'est pas en groupe"
 L["Not in Smart Group"] = "N'est pas dans un petit groupe"
 L["Not on Cooldown"] = "Pas en recharge"
@@ -2145,6 +2157,8 @@ L["Tracking Charge %i"] = "Suivi de charge %i"
 L["Tracking Charge CDs"] = "Suivi des CD de charge"
 L["Tracking Only Cooldown"] = "Suivi du temps de recharge"
 L["Transmission error"] = "Erreur de transmission"
+--[[Translation missing --]]
+L["Trial of the Crusader"] = "Trial of the Crusader"
 L["Trigger"] = "Déclencheur"
 --[[Translation missing --]]
 L["Trigger %i"] = "Trigger %i"
@@ -2221,6 +2235,8 @@ L["Using WeakAuras.clones is deprecated. Use WeakAuras.GetRegion(id, cloneId) in
 L["Using WeakAuras.regions is deprecated. Use WeakAuras.GetRegion(id) instead."] = "L'utilisation de WeakAuras.regions est obsolète. Utilisez plutôt WeakAuras.GetRegion(id)."
 L["Vaelastrasz the Corrupt"] = "Vaelastrasz le Corrompu"
 --[[Translation missing --]]
+L["Val'kyr Twins"] = "Val'kyr Twins"
+--[[Translation missing --]]
 L["Vault of Archavon"] = "Vault of Archavon"
 L["Versatility (%)"] = "Polyvalence (%)"
 L["Versatility Rating"] = "Score de Polyvalence"
@@ -2254,7 +2270,7 @@ L["Warning: Tooltip values are now available via %tooltip1, %tooltip2, %tooltip3
 --[[Translation missing --]]
 L["WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"] = "WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"
 --[[Translation missing --]]
-L["WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assitance on https://discord.gg/weakauras."
+L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."
 --[[Translation missing --]]
 L[ [=[WeakAuras has detected that it has been downgraded.
 Your saved auras may no longer work properly.

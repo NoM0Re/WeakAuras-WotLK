@@ -434,8 +434,7 @@ Con |cFF00CC00>= 0|r se activará siempre.]=]
 	L["Hawk"] = "Halcón"
 	L["Help"] = "Ayuda"
 	L["Hide After"] = "Ocultar después"
-	--[[Translation missing --]]
-	L["Hide auras on setting show to nil in custom triggers"] = "Hide auras on setting show to nil in custom triggers"
+	L["Hide auras on setting show to nil in custom triggers"] = "Ocultar auras al establecer mostrar en nil en los disparadores personalizados"
 	L["Hide Background"] = "Ocultar fondo"
 	L["Hide Glows applied by this aura"] = "Ocultar resplandor aplicado por esta aura"
 	L["Hide on"] = "Ocultar en"
@@ -760,6 +759,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Specific Currency ID"] = "ID de moneda específica"
 	L["Spell Selection Filters"] = "Filtros de selección de hechizo"
 	L["Spells found:"] = "Hechizos encontrados:"
+	--[[Translation missing --]]
+	L["Squelch Sounds/Actions on Load"] = "Squelch Sounds/Actions on Load"
+	--[[Translation missing --]]
+	L["Squelched"] = "Squelched"
 	L["Stack Info"] = "Información de Acumulaciones"
 	L["Stacks - The number of stacks of an aura (usually)"] = "Acumulaciones - El número de acumulaciones de un aura (usualmente)"
 	L["Standby"] = "En espera"
@@ -791,8 +794,10 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Texture X Offset"] = "Desplazmiento X de textura"
 	L["Texture Y Offset"] = "Desplazmiento Y de textura"
 	L["Thanks"] = "Gracias"
-	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings"] = "El addon ElvUI está activado. Podría agregar números de tiempo de reutilización al barrido. Puedes configurarlos en la configuración de ElvUI."
-	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings"] = "El addon OmniCC está activado. Podría agregar números de tiempo de reutilización al barrido. Puedes configurarlos en la configuración de OmniCC."
+	--[[Translation missing --]]
+	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."
+	--[[Translation missing --]]
+	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."
 	L["The duration of the animation in seconds."] = "Duración de la animación (en segundos)."
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = [=[La duración de la animación en segundos. La animación de finalización no comienza a reproducirse hasta que la visualización normalmente estaría oculta.
 ]=]
