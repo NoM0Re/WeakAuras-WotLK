@@ -544,8 +544,7 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     return nil, "Invalid import data."
   end
 
-  -- Let people install auras that are newer than their version of WeakAuras, even tho it is bad
-  --[[local highestVersion = data.internalVersion or 0
+  local highestVersion = data.internalVersion or 0
   if children then
     for _, child in ipairs(children) do
       highestVersion = max(highestVersion, child.internalVersion or 0)
@@ -555,7 +554,7 @@ function WeakAuras.Import(inData, target, callbackFunc, linkedAuras)
     -- Do not run PreAdd but still show Import Window
     tooltipLoading = nil;
     return ImportNow(data, children, target, linkedAuras, nil, callbackFunc)
-  end]]
+  end
 
   if version < 2000 then
     if children then
@@ -637,17 +636,17 @@ local function HandleProgressComm(prefix, message, distribution, sender)
           {2, L["Receiving %s Bytes"]:format(total)}
         })
       elseif total >= done then
-      local red = min(255, (1 - done / total) * 511)
-      local green = min(255, (done / total) * 511)
-      ShowTooltip({
-        {2, "WeakAuras", displayName, 0.5, 0, 1, 1, 1, 1},
-        {1, L["Receiving display information"]:format(sender), 1, 0.82, 0},
-        {2, " ", ("|cFF%2x%2x00"):format(red, green)..done.."|cFF00FF00/"..total}
-      })
-    end
+        local red = min(255, (1 - done / total) * 511)
+        local green = min(255, (done / total) * 511)
+        ShowTooltip({
+          {2, "WeakAuras", displayName, 0.5, 0, 1, 1, 1, 1},
+          {1, L["Receiving display information"]:format(sender), 1, 0.82, 0},
+          {2, " ", ("|cFF%2x%2x00"):format(red, green)..done.."|cFF00FF00/"..total}
+        })
       end
     end
   end
+end
 
 local function HandleComm(prefix, message, distribution, sender)
   local linkValidityDuration = 60 * 5
