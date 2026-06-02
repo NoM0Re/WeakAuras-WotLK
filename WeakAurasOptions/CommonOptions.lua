@@ -569,7 +569,7 @@ local function replaceNameDescFuncs(intable, data, subOption)
         local childOptions = OptionsPrivate.EnsureOptions(child, subOption)
         local get = getValueFor(childOptions, info, "get");
         if (combinedKeys) then
-          for key, _ in pairs(combinedKeys) do
+          for key in pairs(combinedKeys) do
             local values = {};
             if (get) then
               values = { get(info, key) };
