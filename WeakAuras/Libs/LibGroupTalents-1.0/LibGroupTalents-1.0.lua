@@ -751,10 +751,6 @@ local function ReadTalentGroup(isnotplayer, group, class)
 	local numTabs = GetNumTalentTabs(isnotplayer)
 	if (numTabs and numTabs >= 3 and GetNumTalents(1, isnotplayer) > 0) then
 		local ctd = lib.classTalentData[class]
---[===[@debug@
-assert(ctd and ctd[1] and ctd[2] and ctd[3])
-assert(ctd[1].list and ctd[2].list and ctd[3].list)
---@end-debug@]===]
 
 		local n = new()
 		for tab = 1, numTabs do
