@@ -37,7 +37,7 @@ jobs:
               BEGIN { capture = 0 }
               /^## / {
                 heading = $0
-                gsub(/^\#\# +/, "", heading)
+                gsub(/^## +/, "", heading)
                 gsub(/^\[/, "", heading)
                 gsub(/\].*$/, "", heading)
                 gsub(/^v/, "", heading)
@@ -95,6 +95,18 @@ jobs:
             echo "DISCORD_CHANGELOG_EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Prepare Discord webhook URL
+        id: discord_webhook
+        if: env.RELEASE_WEBHOOK_URL != ''
+        shell: bash
+        run: |
+          webhook_url="${RELEASE_WEBHOOK_URL%/github}"
+          {
+            echo "url<<DISCORD_WEBHOOK_URL_EOF"
+            echo "$webhook_url"
+            echo "DISCORD_WEBHOOK_URL_EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Update build date
         shell: bash
         run: |
@@ -113,7 +125,9 @@ jobs:
         if: success() && env.RELEASE_WEBHOOK_URL != ''
         continue-on-error: true
         with:
-          webhook-url: ${{ env.RELEASE_WEBHOOK_URL }}
+          webhook-url: ${{ steps.discord_webhook.outputs.url }}
+          username: WeakAuras
+          avatar-url: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/.github/assets/WeakAuras.png
           embed-title: New WeakAuras Release
           embed-url: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
           embed-description: ${{ steps.discord_changelog.outputs.text }}
