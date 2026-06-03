@@ -81,7 +81,9 @@ jobs:
           from pathlib import Path
 
           text = Path(".release-changelog.md").read_text(encoding="utf-8")
-          Path(".discord-release.md").write_text(text[:1996] + "\n...", encoding="utf-8")
+          if len(text) > 2000:
+              text = text[:1996] + "\n..."
+          Path(".discord-release.md").write_text(text, encoding="utf-8")
           PY
 
       - name: Read Discord changelog
