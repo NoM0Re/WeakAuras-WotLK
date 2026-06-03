@@ -555,11 +555,16 @@ function OptionsPrivate.CreateFrame()
   end
 
   local function UpdateFooterLayout()
-    if not awesomeWotlkButton then return end
-    local leftWidth = discordButton:GetWidth() + documentationButton:GetWidth() + thanksButton:GetWidth() + footerSpacing * 2
-    if changelogButton then
-      leftWidth = leftWidth + changelogButton:GetWidth() + footerSpacing
+    -- Only hide the Awesome WotLK button when all footer buttons are available
+    if not (awesomeWotlkButton and discordButton
+            and documentationButton and thanksButton
+            and changelogButton and reportbugButton
+            and wagoButton and companionButton) then
+      return
     end
+
+    local leftWidth = discordButton:GetWidth() + documentationButton:GetWidth() + thanksButton:GetWidth() + footerSpacing * 2
+    leftWidth = leftWidth + changelogButton:GetWidth() + footerSpacing
     leftWidth = leftWidth + awesomeWotlkButton:GetWidth() + footerSpacing
 
     local rightWidth = reportbugButton:GetWidth() + wagoButton:GetWidth() + companionButton:GetWidth() + footerSpacing * 2
