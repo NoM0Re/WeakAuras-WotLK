@@ -1,5 +1,5 @@
 local MAJOR_VERSION = "LibGetFrame-1.0"
-local MINOR_VERSION = 69
+local MINOR_VERSION = 74
 if not LibStub then
   error(MAJOR_VERSION .. " requires LibStub.")
 end
@@ -97,6 +97,11 @@ local defaultFramePriorities = {
   "^AshToAshUnit%d+Unit%d+", -- AshToAsh
   "^Cell", -- Cell
   "^XPerl_Raid_Grp", -- xperl
+  "^DandersRaidGroup%dHeader$", -- Danders
+  "^DandersRaidGroup%dHeaderUnitButton%d+$", -- Danders
+  "^DandersFlatRaidHeader$", -- Danders (alternative style name)
+  "^DandersFlatRaidHeaderUnitButton%d+$", -- Danders (alternative style name)
+  "^DandersRaidFrame", -- Danders
   -- party frames
   "^AleaUI_GroupHeader", -- Alea
   "^SUFHeaderparty", --suf
@@ -105,6 +110,10 @@ local defaultFramePriorities = {
   "^oUF_.-Party", -- generic oUF
   "^PitBull4_Groups_Party", -- pitbull4
   "^XPerl_party%d", -- xperl
+  "^DandersPartyHeader$", -- Danders
+  "^DandersPartyHeaderUnitButton%d$", -- Danders
+  "^DandersFrames_Party", -- Danders
+  "^DandersFrames_Player$", -- Danders (used for party frames)
   "^CompactRaid", -- blizz
   "^CompactParty", -- blizz
   "^PartyFrame", -- blizz
@@ -189,6 +198,10 @@ local defaultPartyFrames = {
   "^oUF_.-Party",
   "^PitBull4_Groups_Party",
   "^XPerl_party%d",
+  "^DandersPartyHeader",
+  "^DandersPartyHeaderUnitButton%d$",
+  "^DandersFrames_Player$", -- depricated?
+  "^DandersFrames_Party", -- depricated?
   "^PartyFrame",
   "^CompactParty",
   "^PartyMemberFrame",
@@ -237,6 +250,11 @@ local defaultRaidFrames = {
   "^SUFHeaderraid",
   "^LUFHeaderraid",
   "^XPerl_Raid_Grp",
+  "^DandersRaidGroup%dHeader$", -- New Danders format
+  "^DandersRaidGroup%dHeaderUnitButton%d+$", -- New Danders format
+  "^DandersFlatRaidHeader$", -- alternative style name
+  "^DandersFlatRaidHeaderUnitButton%d+$", -- alternative style name
+  "^DandersRaidFrame", -- depricated
   "^CompactRaid",
   "^RaidPullout",
 }
@@ -256,16 +274,6 @@ local getDefaultBossFrames = function()
 end
 lib.getDefaultBossFrames = getDefaultBossFrames
 
-local copyTableCache = {}
-
-local function CopyTableCached(src)
-  wipe(copyTableCache)
-  for i = 1, #src do
-    copyTableCache[i] = src[i]
-  end
-  return copyTableCache
-end
-
 --
 local CacheMonitorMixin = {}
 function CacheMonitorMixin:Init(makeDiff)
@@ -279,18 +287,36 @@ function CacheMonitorMixin:Init(makeDiff)
   end
 end
 -- fill cache, added, updated
-function CacheMonitorMixin:Add(key, value)
-  if self.makeDiff then
-    local old = self.data[key]
-    if old ~= value then
-      if old == nil then
-        self.added[key] = true
+function CacheMonitorMixin:Add(key, ...)
+  local args = select("#", ...)
+  if args > 1 then
+    if self.makeDiff then
+      if type(self.data[key]) == "table" then
+        for i = 1, args do
+          local arg = select(i, ...)
+          if self.data[key][i] ~= arg then
+            self.updated[key] = self.data[key]
+            break
+          end
+        end
       else
-        self.updated[key] = old
+        self.added[key] = true
       end
     end
+    self.cache[key] = {...}
+  else
+    local value = ...
+    if self.makeDiff then
+      if self.data[key] ~= value then
+        if self.data[key] == nil then
+          self.added[key] = true
+        else
+          self.updated[key] = self.data[key]
+        end
+      end
+    end
+    self.cache[key] = value
   end
-  self.cache[key] = value
 end
 function CacheMonitorMixin:CalcRemoved()
   if not self.makeDiff then return end
@@ -301,8 +327,10 @@ function CacheMonitorMixin:CalcRemoved()
   end
 end
 function CacheMonitorMixin:WriteCache()
-  wipe(self.data)
-  self.data, self.cache = self.cache, {}
+  local tmp = self.data
+  self.data = self.cache
+  self.cache = tmp
+  wipe(self.cache)
 end
 function CacheMonitorMixin:Reset()
   if self.makeDiff then
@@ -311,7 +339,7 @@ function CacheMonitorMixin:Reset()
     wipe(self.added)
   end
 end
-
+--
 local FrameToFrameName = {}   -- frame adress => frame name
 local FrameToUnit = {}        -- frame adress => unitToken
 Mixin(FrameToFrameName, CacheMonitorMixin)
@@ -390,17 +418,10 @@ local function recurseGetName(frame)
   end
   local parent = frame.GetParent and frame:GetParent()
   if parent then
-    local parentKey = frame.GetParentKey and frame:GetParentKey()
-    if not parentKey then
-      for key, child in pairs(parent) do
-        if child == frame then
-          parentKey = key
-          break
-        end
+    for key, child in pairs(parent) do
+      if child == frame then
+        return (recurseGetName(parent) or "") .. "." .. key
       end
-    end
-    if parentKey then
-      return (recurseGetName(parent) or "") .. "." .. parentKey
     end
   end
 end
@@ -408,8 +429,6 @@ end
 --local notAUnitFrameTypeAttribute = {
 --  cancelaura = true
 --}
-
-local frameNameCache = setmetatable({}, { __mode = "k" })
 
 local function ScanFrames(depth, frame, ...)
   coroutine.yield()
@@ -426,11 +445,7 @@ local function ScanFrames(depth, frame, ...)
       --if not notAUnitFrameTypeAttribute[typeAttribute] then
         local unit = SecureButton_GetUnit(frame)
         if unit and frame:IsVisible() then
-          local name = frameNameCache[frame]
-          if not name then
-            name = recurseGetName(frame)
-            frameNameCache[frame] = name
-          end
+          local name = recurseGetName(frame)
           if name then
             FrameToFrameName:Add(frame, name)
             FrameToUnit:Add(frame, unit)
@@ -502,7 +517,6 @@ coroutineFrame:SetScript("OnUpdate", function()
     else
       status = "ready"
     end
-    wipe(frameNameCache)
   end
 end)
 
@@ -539,8 +553,8 @@ local function GetUnitFrames(target, ignoredFrames)
     if type(target) ~= "string" then
       return
     end
-    if target:match("^0x") then
-      target = select(6, GetPlayerInfoByGUID(target))
+    if target:sub(1, 2) == "0x" then
+      target = select(6, GetPlayerInfoByGUID(target)) or target
     end
     if not UnitExists(target) then
       return
@@ -685,7 +699,7 @@ function lib.GetUnitFrame(target, opt)
     return
   end
 
-  local ignoredFrames = CopyTableCached(opt.ignoreFrames)
+  local ignoredFrames = CopyTable(opt.ignoreFrames)
   if opt.ignorePlayerFrame then
     for _, v in pairs(opt.playerFrames) do
       tinsert(ignoredFrames, v)
