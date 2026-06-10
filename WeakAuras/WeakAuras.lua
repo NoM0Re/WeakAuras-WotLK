@@ -3564,6 +3564,9 @@ local anchor_unitframe_monitor
 Private.dyngroup_unitframe_monitor = {}
 do
   local function frame_monitor_callback(event, frame, unit, previousUnit)
+    if not unit then
+      return
+    end
     local new_frame
     local FRAME_UNIT_UPDATE = event == "FRAME_UNIT_UPDATE"
     local FRAME_UNIT_ADDED = event == "FRAME_UNIT_ADDED"
