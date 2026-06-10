@@ -8,10 +8,6 @@ local Private = select(2, ...)
 local WeakAuras = WeakAuras
 local L = WeakAuras.L
 
-local IsInRaid = Private.IsInRaid
-local GetNumSubgroupMembers = Private.GetNumSubgroupMembers
-local GetNumGroupMembers = Private.GetNumGroupMembers
-
 local LibSerialize = LibStub("LibSerialize")
 local LibDeflate = LibStub:GetLibrary("LibDeflate")
 
@@ -42,8 +38,8 @@ end
 
 -- Function to assist iterating group members whether in a party or raid.
 local WA_IterateGroupMembers = function(reversed, forceParty)
-  local unit = (not forceParty and IsInRaid()) and 'raid' or 'party'
-  local numGroupMembers = unit == 'party' and GetNumSubgroupMembers() or GetNumGroupMembers()
+  local unit = (not forceParty and Private.IsInRaid()) and 'raid' or 'party'
+  local numGroupMembers = unit == 'party' and Private.GetNumSubgroupMembers() or Private.GetNumGroupMembers()
   local i = reversed and numGroupMembers or (unit == 'party' and 0 or 1)
   return function()
     local ret

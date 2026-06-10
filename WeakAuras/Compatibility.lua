@@ -134,7 +134,12 @@ local function GetNumSubgroupMembers()
 end
 
 local function GetNumGroupMembers()
-  return IsInRaid() and GetNumRaidMembers() or GetNumPartyMembers()
+  local raid = GetNumRaidMembers()
+  if raid > 0 then
+    return raid
+  end
+  local party = GetNumPartyMembers()
+  return party > 0 and party + 1 or 0
 end
 
 local function WrapTextInColorCode(text, colorHexString)
