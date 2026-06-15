@@ -1261,6 +1261,8 @@ function HandleEvent(frame, event, arg1, arg2, ...)
       Private.ScanForLoads(nil, "WA_DELAYED_PLAYER_ENTERING_WORLD")
       Private.StartProfileSystem("generictrigger WA_DELAYED_PLAYER_ENTERING_WORLD");
       Private.CheckCooldownReady();
+      Private.CheckItemCooldowns()
+      Private.CheckItemSlotCooldowns()
       Private.StopProfileSystem("generictrigger WA_DELAYED_PLAYER_ENTERING_WORLD");
       Private.PreShowModels()
     end,
@@ -2775,20 +2777,28 @@ do
         if mark_PLAYER_ENTERING_WORLD then
           SpellDetails:CheckSpellKnown()
           Private.CheckCooldownReady()
+          Private.CheckItemCooldowns()
           Private.CheckItemSlotCooldowns()
           mark_PLAYER_ENTERING_WORLD = nil
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil
         elseif mark_ACTIONBAR_UPDATE_COOLDOWN then
           Private.CheckCooldownReady()
+          Private.CheckItemCooldowns()
+          Private.CheckItemSlotCooldowns()
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil
         end
-      elseif(event == "SPELL_UPDATE_COOLDOWN" or event == "SPELL_UPDATE_USABLE"
-        or event == "RUNE_POWER_UPDATE" or event == "RUNE_TYPE_UPDATE"
-        or event == "PLAYER_TALENT_UPDATE" or event == "CHARACTER_POINTS_CHANGED")
+      elseif event == "SPELL_UPDATE_USABLE" then
+        Private.CheckItemCooldowns()
+        Private.CheckItemSlotCooldowns()
+      elseif event == "SPELL_UPDATE_COOLDOWN" or event == "RUNE_POWER_UPDATE"
+        or event == "PLAYER_TALENT_UPDATE"
+        or event == "CHARACTER_POINTS_CHANGED" or event == "RUNE_TYPE_UPDATE"
       then
         if event == "SPELL_UPDATE_COOLDOWN" then
           mark_ACTIONBAR_UPDATE_COOLDOWN = nil
         end
+        Private.CheckItemCooldowns()
+        Private.CheckItemSlotCooldowns()
         Private.CheckCooldownReady()
       elseif(event == "SPELLS_CHANGED") then
         SpellDetails:CheckSpellKnown()
@@ -3201,12 +3211,11 @@ do
     end
   end
 
+  ---@type fun()
   function Private.CheckCooldownReady()
     CheckGCD();
     local runeDuration = Private.CheckRuneCooldown();
     SpellDetails:CheckSpellCooldowns(runeDuration);
-    Private.CheckItemCooldowns();
-    Private.CheckItemSlotCooldowns();
   end
 
   ---@private
@@ -3261,7 +3270,7 @@ do
       items[id] = true;
       itemCdDurs[id] = 0
       itemCdExps[id] = 0
-      itemCdEnabled[id] = 1
+
       -- TODO: In 10.2.6 the apis return values changed from 1,0 for enabled to true, false
       -- We should adjust once its on all versions
       local startTime, duration, enabled = GetItemCooldown(id);
@@ -3280,10 +3289,6 @@ do
         if not(itemCdHandles[id]) then
           itemCdHandles[id] = timer:ScheduleTimer(ItemCooldownFinished, endTime - time, id);
         end
-
-        if not WeakAuras.IsPaused() then
-          Private.ScanEventsByID("ITEM_COOLDOWN_CHANGED", id)
-        end
       end
     end
   end
@@ -3297,11 +3302,7 @@ do
     if not id or id == 0 then return end
 
     if not(itemSlots[id]) then
-      itemSlots[id] = GetInventoryItemID("player", id);
-      itemSlotsCdDurs[id] = 0
-      itemSlotsCdExps[id] = 0
-      itemSlotsEnable[id] = 1
-
+      itemSlots[id] = GetInventoryItemID("player", id)
       local startTime, duration, enable = GetInventoryItemCooldown("player", id);
       itemSlotsEnable[id] = enable;
 
