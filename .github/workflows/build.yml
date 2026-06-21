@@ -32,6 +32,13 @@ jobs:
           release_date="$(git log -1 --format=%cs "${GITHUB_REF_NAME}")"
           previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
 
+          if [[ "$version" != *-* ]]; then
+            previous_release_tag="$(git describe --tags --abbrev=0 --match "[0-9]*" --match "v[0-9]*" --exclude "*-*" HEAD^ 2>/dev/null || true)"
+            if [[ -n "$previous_release_tag" ]]; then
+              previous_tag="$previous_release_tag"
+            fi
+          fi
+
           if [[ -f CHANGELOG.md ]]; then
             awk -v version="$version" '
               BEGIN { capture = 0 }
