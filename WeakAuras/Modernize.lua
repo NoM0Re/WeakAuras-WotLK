@@ -2392,11 +2392,13 @@ function Private.Modernize(data, oldSnapshot)
 
   if data.internalVersion < 90 then
     if data.load then
-      if data.load.zoneIds == nil and data.load.zoneId ~= nil then
+      if data.load.zoneId ~= nil then
         data.load.zoneIds = data.load.zoneId
+        data.load.zoneId = nil
       end
-      if data.load.use_zoneIds == nil and data.load.use_zoneId ~= nil then
+      if data.load.use_zoneId ~= nil then
         data.load.use_zoneIds = data.load.use_zoneId
+        data.load.use_zoneId = nil
       end
     end
   end
