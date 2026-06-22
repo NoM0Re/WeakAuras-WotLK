@@ -2390,6 +2390,17 @@ function Private.Modernize(data, oldSnapshot)
     end
   end
 
+  if data.internalVersion < 90 then
+    if data.load then
+      if data.load.zoneIds == nil and data.load.zoneId ~= nil then
+        data.load.zoneIds = data.load.zoneId
+      end
+      if data.load.use_zoneIds == nil and data.load.use_zoneId ~= nil then
+        data.load.use_zoneIds = data.load.use_zoneId
+      end
+    end
+  end
+
   data.internalVersion = max(data.internalVersion or 0, WeakAuras.InternalVersion())
 end
 

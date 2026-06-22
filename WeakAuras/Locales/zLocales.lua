@@ -22,6 +22,7 @@ if (locale == "enUS" or locale == "enGB") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."
 
   L["Affliction"] = "Affliction"
   L["Arcane"] = "Arcane"
@@ -218,6 +219,7 @@ elseif (locale == "deDE") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Hinweis:|r Startwinkel funktioniert auf WotLK 3.3.5a aufgrund von Client-Einschränkungen nicht wie erwartet. Verwende Endwinkel zusammen mit Texturrotation, um einen ähnlichen Effekt zu erzielen."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Framelevels sind begrenzt, daher erhöht WeakAuras sie nach Gruppentiefe statt fortlaufend."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "WeakAuras.GetNamePlateForUnit ist veraltet. Verwende stattdessen WeakAuras.GetUnitNameplate."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -416,6 +418,7 @@ elseif (locale == "esES") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "Usar WeakAuras.GetNamePlateForUnit está obsoleto. Usa WeakAuras.GetUnitNameplate en su lugar."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
@@ -613,6 +616,7 @@ elseif (locale == "esMX") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "Usar WeakAuras.GetNamePlateForUnit está obsoleto. Usa WeakAuras.GetUnitNameplate en su lugar."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Requiere sincronizar la especialización mediante LibGroupTalents."
   L["Affliction"] = "Aflicción"
@@ -810,6 +814,7 @@ elseif (locale == "frFR") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "L’utilisation de WeakAuras.GetNamePlateForUnit est obsolète. Utilisez WeakAuras.GetUnitNameplate à la place."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -1010,6 +1015,7 @@ elseif (locale == "itIT") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "L'uso di WeakAuras.GetNamePlateForUnit è deprecato. Usa WeakAuras.GetUnitNameplate al suo posto."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -1210,6 +1216,7 @@ elseif (locale == "koKR") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "WeakAuras.GetNamePlateForUnit 사용은 중단되었습니다. 대신 WeakAuras.GetUnitNameplate를 사용하세요."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "LibGroupTalents을 통해 전문화를 동기화해야 합니다."
   L["Affliction"] = "고통"
@@ -1409,6 +1416,7 @@ elseif (locale == "ptBR") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "Usar WeakAuras.GetNamePlateForUnit está obsoleto. Use WeakAuras.GetUnitNameplate em vez disso."
 
   --[[Translation missing --]]
   L["Requires syncing the specialization via LibGroupTalents."] = "Requires syncing the specialization via LibGroupTalents."
@@ -1607,6 +1615,7 @@ elseif (locale == "ruRU") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "WeakAuras.GetNamePlateForUnit устарела. Используйте вместо неё WeakAuras.GetUnitNameplate."
 
   L["Requires syncing the specialization via LibGroupTalents."] = "Требуется синхронизация специализации через LibGroupTalents."
   L["Affliction"] = "Колдовство"
@@ -1804,6 +1813,7 @@ elseif (locale == "zhCN") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "WeakAuras.GetNamePlateForUnit 已弃用。请改用 WeakAuras.GetUnitNameplate。"
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要通过LibGroupTalents同步专精。"
   L["Affliction"] = "痛苦"
@@ -2001,6 +2011,7 @@ elseif (locale == "zhTW") then
   L["|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."] = "|cFFff0000Note:|r This option requires Awesome WotLK and is kept only for compatibility.\nIt has no effect without Awesome WotLK."
   L["|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."] = "|cFFff0000Note:|r Start Angle does not work as expected on WotLK 3.3.5a due to client limitations. Use End Angle together with Texture Rotation to achieve a similar effect."
   L["Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."] = "Frame levels are limited, so WeakAuras increases them by group depth instead of continuously."
+  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."] = "WeakAuras.GetNamePlateForUnit 已棄用。請改用 WeakAuras.GetUnitNameplate。"
 
   L["Requires syncing the specialization via LibGroupTalents."] = "需要透由LibGroupTalents同步專精。"
   L["Affliction"] = "痛苦"

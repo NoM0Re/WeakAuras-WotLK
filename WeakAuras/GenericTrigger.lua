@@ -476,7 +476,7 @@ local function RunOverlayFuncs(event, state, id, errorHandler)
     local additionalProgress = state.additionalProgress[i];
     local ok, a, b, c = pcall(overlayFunc, event.trigger, state);
     if (not ok) then
-      if errorHandler then errorHandler(a) else Private.GetErrorHandlerId(id, L["Overlay %s"]:format(i)) end
+      if errorHandler then errorHandler(a) else Private.GetErrorHandlerId(id, L["Overlay %s"]:format(i))(a) end
       additionalProgress.min = nil;
       additionalProgress.max = nil;
       additionalProgress.direction = nil;
@@ -561,10 +561,11 @@ function Private.ActivateEvent(id, triggernum, data, state, errorHandler)
     state.autoHide = autoHide;
   elseif (data.durationFunc) then
     local ok, arg1, arg2, arg3, inverse = pcall(data.durationFunc, data.trigger);
+    local err = arg1
     arg1 = ok and type(arg1) == "number" and arg1 or 0;
     arg2 = ok and type(arg2) == "number" and arg2 or 0;
     if not ok then
-      if errorHandler then errorHandler(arg1) else Private.GetErrorHandlerId(id, L["Duration Function"]) end
+      if errorHandler then errorHandler(err) else Private.GetErrorHandlerId(id, L["Duration Function"])(err) end
     end
 
     if (state.inverse ~= inverse) then
@@ -4097,7 +4098,7 @@ do
   end
 
   local resultNameplates = {}
-  function WeakAuras.GetUnitNameplate(name, results)
+  function Private.GetUnitNameplate(name, results)
     if not name or name == "" then return end
     results = results or resultNameplates
     wipe(results)
@@ -4730,21 +4731,21 @@ function GenericTrigger.CreateFallbackState(data, triggernum, state)
     state.name = ok and name or nil;
     state.icon = ok and icon or nil;
     if not ok then
-      Private.GetErrorHandlerUid(data.uid, L["GetNameAndIcon Function (fallback state)"])
+      Private.GetErrorHandlerUid(data.uid, L["GetNameAndIcon Function (fallback state)"])(name)
     end
   else
     if (event.nameFunc) then
       local ok, name = pcall(event.nameFunc, trigger);
       state.name = ok and name or nil;
       if not ok then
-        Private.GetErrorHandlerUid(data.uid, L["Name Function (fallback state)"])
+        Private.GetErrorHandlerUid(data.uid, L["Name Function (fallback state)"])(name)
       end
     end
     if (event.iconFunc) then
       local ok, icon = pcall(event.iconFunc, trigger);
       state.icon = ok and icon or nil;
       if not ok then
-        Private.GetErrorHandlerUid(data.uid, L["Icon Function (fallback state)"])
+        Private.GetErrorHandlerUid(data.uid, L["Icon Function (fallback state)"])(icon)
       end
     end
   end
@@ -4753,7 +4754,7 @@ function GenericTrigger.CreateFallbackState(data, triggernum, state)
     local ok, texture = pcall(event.textureFunc, trigger);
     state.texture = ok and texture or nil;
     if not ok then
-      Private.GetErrorHandlerUid(data.uid, L["Texture Function (fallback state)"])
+      Private.GetErrorHandlerUid(data.uid, L["Texture Function (fallback state)"])(texture)
     end
   end
 
@@ -4761,14 +4762,14 @@ function GenericTrigger.CreateFallbackState(data, triggernum, state)
     local ok, stacks = pcall(event.stacksFunc, trigger);
     state.stacks = ok and stacks or nil;
     if not ok then
-      Private.GetErrorHandlerUid(data.uid, L["Stacks Function (fallback state)"])
+      Private.GetErrorHandlerUid(data.uid, L["Stacks Function (fallback state)"])(stacks)
     end
   end
 
   if (event.durationFunc) then
     local ok, arg1, arg2, arg3, inverse = pcall(event.durationFunc, trigger);
     if (not ok) then
-      Private.GetErrorHandlerUid(data.uid, L["Duration Function (fallback state)"])
+      Private.GetErrorHandlerUid(data.uid, L["Duration Function (fallback state)"])(arg1)
       state.progressType = "timed";
       state.duration = 0;
       state.expirationTime = math.huge;
