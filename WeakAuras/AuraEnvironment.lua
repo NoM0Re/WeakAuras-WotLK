@@ -145,11 +145,15 @@ WeakAuras.HideOverlayGlow = LCG.ButtonGlow_Stop
 
 local LGF = LibStub("LibGetFrame-1.0")
 WeakAuras.GetUnitFrame = LGF.GetUnitFrame
-WeakAuras.GetNamePlateForUnit = function(unit)
+WeakAuras.GetUnitNameplate = function(unit, ...)
   if WeakAuras.IsAwesomeEnabled() and Private.multiUnitUnits.nameplate[unit] then
-    return LGF.GetUnitNameplate(unit)
+    return LGF.GetUnitNameplate(unit) or Private.GetUnitNameplate(unit, ...)
+  else
+    return Private.GetUnitNameplate(unit, ...)
   end
 end
+-- ! deprecated
+WeakAuras.GetNamePlateForUnit = WeakAuras.GetUnitNameplate
 
 local blockedFunctions = {
   -- Lua functions that may allow breaking out of the environment
@@ -508,6 +512,11 @@ local FakeWeakAurasMixin = {
                 L["Using WeakAuras.clones is deprecated. Use WeakAuras.GetRegion(id, cloneId) instead."]),
     regions = MakeDeprecated(Private.regions, "regions",
                 L["Using WeakAuras.regions is deprecated. Use WeakAuras.GetRegion(id) instead."]),
+    GetNamePlateForUnit = function(...)
+      Private.AuraWarnings.UpdateWarning(current_uid, "Deprecated_GetNamePlateForUnit", "warning",
+                  L["Using WeakAuras.GetNamePlateForUnit is deprecated. Use WeakAuras.GetUnitNameplate instead."])
+      return WeakAuras.GetNamePlateForUnit(...)
+    end,
     GetAllDBMTimers = function() return Private.ExecEnv.BossMods.DBM:GetAllTimers() end,
     GetDBMTimerById = function(...) return Private.ExecEnv.BossMods.DBM:GetTimerById(...) end,
     GetDBMTimer = function(...) return Private.ExecEnv.BossMods.DBM:GetTimer(...) end,

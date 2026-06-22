@@ -346,7 +346,7 @@ local sorters = {
       if ok then
         return result
       else
-        Private.GetErrorHandlerId(data.id, L["Custom Sort"])
+        Private.GetErrorHandlerId(data.id, L["Custom Sort"])(result)
       end
     end, sortOn
   end
@@ -394,7 +394,7 @@ local anchorers = {
         local unit = regionData.region.state and regionData.region.state.unit
         local found
         if unit then
-          local frame = WeakAuras.GetNamePlateForUnit(unit)
+          local frame = WeakAuras.GetUnitNameplate(unit)
           if frame then
             frames[frame] = frames[frame] or {}
             tinsert(frames[frame], regionData)
@@ -439,9 +439,9 @@ local anchorers = {
 
     return function(frames, activeRegions)
       Private.ActivateAuraEnvironment(data.id)
-      local ok = pcall(anchorFunc, frames, activeRegions)
+      local ok, err = pcall(anchorFunc, frames, activeRegions)
       if not ok then
-        Private.GetErrorHandlerUid(data.uid, L["Custom Anchor"])
+        Private.GetErrorHandlerUid(data.uid, L["Custom Anchor"])(err)
       end
       Private.ActivateAuraEnvironment()
     end, anchorOn
@@ -995,10 +995,10 @@ local growers = {
     end
     return function(newPositions, activeRegions)
       Private.ActivateAuraEnvironment(data.id)
-      local ok = pcall(growFunc, newPositions, activeRegions)
+      local ok, err = pcall(growFunc, newPositions, activeRegions)
       Private.ActivateAuraEnvironment()
       if not ok then
-        Private.GetErrorHandlerId(data.id, L["Custom Grow"])
+        Private.GetErrorHandlerId(data.id, L["Custom Grow"])(err)
         wipe(newPositions)
       end
     end, growOn

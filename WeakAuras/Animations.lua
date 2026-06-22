@@ -63,7 +63,8 @@ local function RunAnimation(key, anim, elapsed, time)
     if (anim.region.SetOffsetAnim) then
       local ok, x, y = pcall(anim.translateFunc, progress, 0, 0, anim.dX, anim.dY)
       if not ok then
-        errorHandler()
+        errorHandler(x)
+        x, y = nil, nil
       end
       anim.region:SetOffsetAnim(x, y)
     else
@@ -72,7 +73,7 @@ local function RunAnimation(key, anim, elapsed, time)
       if (ok) then
         anim.region:SetPoint(anim.selfPoint, anim.anchor, anim.anchorPoint, x, y)
       else
-        errorHandler()
+        errorHandler(x)
       end
     end
   end
@@ -86,7 +87,7 @@ local function RunAnimation(key, anim, elapsed, time)
         anim.region:SetAlpha(alpha)
       end
     else
-      errorHandler()
+      errorHandler(alpha)
     end
   end
   if(anim.scaleFunc) then
@@ -101,7 +102,7 @@ local function RunAnimation(key, anim, elapsed, time)
         anim.region:SetHeight(anim.startHeight * scaleY)
       end
     else
-      errorHandler()
+      errorHandler(scaleX)
     end
   end
   if(anim.rotateFunc and anim.region.SetAnimRotation) then
@@ -111,7 +112,7 @@ local function RunAnimation(key, anim, elapsed, time)
     if (ok) then
       anim.region:SetAnimRotation(rotate)
     else
-      errorHandler()
+      errorHandler(rotate)
     end
   end
   if(anim.colorFunc and anim.region.ColorAnim) then
@@ -123,12 +124,12 @@ local function RunAnimation(key, anim, elapsed, time)
                                   anim.colorR, anim.colorG, anim.colorB, anim.colorA)
     if (ok) then
       local errorHandler = Private.GetErrorHandlerId(anim.region.id, "Custom Color")
-      local success = pcall(anim.region.ColorAnim, anim.region, r, g, b, a)
+      local success, err = pcall(anim.region.ColorAnim, anim.region, r, g, b, a)
       if not success then
-        errorHandler()
+        errorHandler(err)
       end
     else
-      errorHandler()
+      errorHandler(r)
     end
   end
   Private.ActivateAuraEnvironment(nil)

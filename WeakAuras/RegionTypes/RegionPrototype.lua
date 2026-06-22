@@ -266,9 +266,9 @@ local function UpdatePosition(self)
   local yOffset = self.yOffset + (self.yOffsetAnim or 0) + (self.yOffsetRelative or 0)
   self:RealClearAllPoints();
 
-  local ok = pcall(self.SetPoint, self, self.anchorPoint, self.relativeTo, self.relativePoint, xOffset, yOffset);
+  local ok, err = pcall(self.SetPoint, self, self.anchorPoint, self.relativeTo, self.relativePoint, xOffset, yOffset);
   if not ok then
-    Private.GetErrorHandlerId(self.id, L["Update Position"])
+    Private.GetErrorHandlerId(self.id, L["Update Position"])(err)
   end
 end
 
@@ -652,14 +652,14 @@ local function SetAnimAlpha(self, alpha)
   self.animAlpha = alpha;
   local errorHandler = Private.GetErrorHandlerId(self.id, L["Custom Fade Animation"])
   if (WeakAuras.IsOptionsOpen()) then
-    local ok = pcall(self.SetAlpha, self, max(self.animAlpha or self.alpha or 1, 0.5))
+    local ok, err = pcall(self.SetAlpha, self, max(self.animAlpha or self.alpha or 1, 0.5))
     if not ok then
-      errorHandler()
+      errorHandler(err)
     end
   else
-    local ok = pcall(self.SetAlpha, self, self.animAlpha or self.alpha or 1)
+    local ok, err = pcall(self.SetAlpha, self, self.animAlpha or self.alpha or 1)
     if not ok then
-      errorHandler()
+      errorHandler(err)
     end
   end
   self.subRegionEvents:Notify("AlphaChanged")

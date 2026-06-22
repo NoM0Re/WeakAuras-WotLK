@@ -3,7 +3,7 @@ local AddonName = ...
 ---@class Private
 local Private = select(2, ...)
 
-local internalVersion = 89.5
+local internalVersion = 90
 
 -- Lua APIs
 local insert = table.insert
@@ -2534,9 +2534,9 @@ function Private.AddMany(tbl, takeSnapshots)
       bads[data.id] = true
     else
       local oldSnapshot = oldSnapshots[data.uid] or nil
-      local ok = pcall(WeakAuras.PreAdd, data, oldSnapshot)
+      local ok, err = pcall(WeakAuras.PreAdd, data, oldSnapshot)
       if not ok then
-        Private.GetErrorHandlerUid(data.uid, "PreAdd")
+        Private.GetErrorHandlerUid(data.uid, "PreAdd")(err)
         prettyPrint(L["Unable to modernize aura '%s'. This is probably due to corrupt data or a bad migration, please report this to the WeakAuras team."]:format(data.id))
         if data.regionType == "dynamicgroup" or data.regionType == "group" then
           prettyPrint(L["All children of this aura will also not be loaded, to minimize the chance of further corruption."])
@@ -2554,9 +2554,9 @@ function Private.AddMany(tbl, takeSnapshots)
       if data.parent and bads[data.parent] then
         bads[data.id] = true
       else
-        local ok = pcall(pAdd, data)
+        local ok, err = pcall(pAdd, data)
         if not ok then
-          Private.GetErrorHandlerUid(data.uid, "pAdd")
+          Private.GetErrorHandlerUid(data.uid, "pAdd")(err)
           bads[data.id] = true
         end
       end
@@ -2998,9 +2998,9 @@ function WeakAuras.PreAdd(data, snapshot)
     Private.validate(data, oldDataStub2)
   end
 
-  local ok = pcall(Private.Modernize, data, snapshot)
+  local ok, err = pcall(Private.Modernize, data, snapshot)
   if not ok then
-    Private.GetErrorHandlerId(data.id, L["Modernize"])
+    Private.GetErrorHandlerId(data.id, L["Modernize"])(err)
   end
 
   local default = data.regionType and Private.regionTypes[data.regionType] and Private.regionTypes[data.regionType].default
@@ -3207,11 +3207,11 @@ function Private.Add(data, simpleChange)
   if (data.internalVersion or 0) < internalVersion then
     Private.SetMigrationSnapshot(data.uid, data)
   end
-  local ok = pcall(WeakAuras.PreAdd, data, oldSnapshot)
+  local ok, err = pcall(WeakAuras.PreAdd, data, oldSnapshot)
   if ok then
     pAdd(data, simpleChange)
   else
-    Private.GetErrorHandlerUid(data.uid, "PreAdd")
+    Private.GetErrorHandlerUid(data.uid, "PreAdd")(err)
   end
 end
 
@@ -3674,7 +3674,7 @@ function Private.HandleGlowAction(actions, region)
       glow_frame = WeakAuras.GetUnitFrame(region.state.unit)
       should_glow_frame = true
     elseif actions.glow_frame_type == "NAMEPLATE" and WeakAuras.IsAwesomeEnabled() and region.state.unit then
-      glow_frame = WeakAuras.GetNamePlateForUnit(region.state.unit)
+      glow_frame = WeakAuras.GetUnitNameplate(region.state.unit)
       should_glow_frame = true
     elseif actions.glow_frame_type == "PARENTFRAME" then
       glow_frame = region:GetParent()
@@ -4755,7 +4755,7 @@ local function evaluateTriggerStateTriggers(id)
       if ok then
         result = returnValue
       else
-        Private.GetErrorHandlerId(id, L["Custom Trigger Combination"])
+        Private.GetErrorHandlerId(id, L["Custom Trigger Combination"])(returnValue)
         result = false
       end
     end
@@ -4985,7 +4985,8 @@ function Private.RunCustomTextFunc(region, customFunc)
 
   local custom = {pcall(customFunc, expirationTime or math.huge, duration or 0, progress, dur, name, icon, stacks)}
   if not custom[1] then
-    Private.GetErrorHandlerId(region.id, L["Custom Text Function"])
+    Private.GetErrorHandlerId(region.id, L["Custom Text Function"])(custom[2])
+    custom = {}
   else
     table.remove(custom, 1)
   end
@@ -5850,7 +5851,7 @@ local function GetAnchorFrame(data, region, parent)
   if (anchorFrameType == "NAMEPLATE") then
     local unit = region.state and region.state.unit
     if unit then
-      local frame = unit and WeakAuras.GetNamePlateForUnit(unit)
+      local frame = unit and WeakAuras.GetUnitNameplate(unit)
       if frame then return frame end
     end
     if WeakAuras.IsOptionsOpen() then
@@ -5937,9 +5938,9 @@ function Private.AnchorFrame(data, region, parent, force)
         or data.anchorFrameType == "SCREEN" or data.anchorFrameType == "UIPARENT" or data.anchorFrameType == "MOUSE"
         or (data.anchorFrameType == "NAMEPLATE"
             and not WeakAuras.IsAwesomeEnabled())) then
-      local ok = pcall(region.SetParent, region, anchorParent);
+      local ok, err = pcall(region.SetParent, region, anchorParent);
       if not ok then
-        Private.GetErrorHandlerId(data.id, L["Anchoring"])
+        Private.GetErrorHandlerId(data.id, L["Anchoring"])(err)
       end
     else
       region:SetParent(parent or WeakAurasFrame);
@@ -6237,17 +6238,60 @@ function Private.ExecEnv.ParseZoneCheck(input)
   if not input then return end
 
   local matcher = {
-    Check = function(self, zoneId)
+    Check = function(self)
+      return false
+    end,
+    CheckBoth = function(self, zoneId)
+      return self:CheckPositive(zoneId)
+             and self:CheckNegative(zoneId)
+    end,
+    CheckPositive = function(self, zoneId)
       return self.zoneIds[zoneId]
     end,
-    AddId = function(self, id)
-      self.zoneIds[id] = true
+    CheckNegative = function(self, zoneId)
+      return not self.negZoneIds[zoneId]
+    end,
+    AddId = function(self, input, start, last)
+      local id = tonumber(strtrim(input:sub(start, last)))
+      if id then
+        local prevChar = input:sub(start - 1, start - 1)
+        if prevChar == 'g' or prevChar == 'G' then
+        elseif prevChar == 'c' or prevChar == 'C' then
+        elseif prevChar == 'a' or prevChar == 'A' then
+        elseif prevChar == 'i' or prevChar == 'I' then
+        else
+          if prevChar == "-" then
+            self.negZoneIds[id] = true
+          else
+            self.zoneIds[id] = true
+          end
+        end
+      end
     end,
     zoneIds = {},
+    negZoneIds = {},
   }
 
-  for id in string.gmatch(input, "%d+") do
-    matcher:AddId(tonumber(id))
+  local start = input:find('%d', 1)
+  if start then
+    local last = input:find('%D', start)
+    while (last) do
+      matcher:AddId(input, start, last - 1)
+      start = input:find('%d', last + 1) or #input + 1
+      last = input:find('%D', start)
+    end
+
+    last = #input
+    matcher:AddId(input, start, last)
+  end
+  local hasPositive = next(matcher.zoneIds)
+  local hasNegative = next(matcher.negZoneIds)
+  if hasPositive and hasNegative then
+    matcher.Check = matcher.CheckBoth
+  elseif hasPositive then
+    matcher.Check = matcher.CheckPositive
+  elseif hasNegative then
+    matcher.Check = matcher.CheckNegative
   end
   return matcher
 end

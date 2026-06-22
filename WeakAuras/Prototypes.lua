@@ -1337,6 +1337,7 @@ Private.load_prototype = {
       type = "multiselect",
       init = "arg",
       events = {"PARTY_LEADER_CHANGED", "PLAYER_FLAGS_CHANGED", "RAID_ROSTER_UPDATE"},
+      width = WeakAuras.doubleWidth,
       values = "group_member_types",
       test = "Private.ExecEnv.CheckGroupMemberType(%s, group_leader)",
       optional = true,
@@ -1362,15 +1363,22 @@ Private.load_prototype = {
     },
     {
       name = "zoneId",
+      enable = false,
+      hidden = true,
+      init = "arg",
+      optional = true,
+    },
+    {
+      name = "zoneIds",
       display = L["Player Location ID(s)"],
       type = "string",
       multiline = true,
-      init = "arg",
-      test = "WeakAuras.CheckNumericIds(%q, zoneId)",
       events = {"ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "VEHICLE_UPDATE", "WA_DELAYED_PLAYER_ENTERING_WORLD" },
       desc = function()
 	    return ("\n|cffffd200%s|r%s: %d\n\n%s"):format(L["Current Zone\n"], GetRealZoneText(), GetCurrentMapAreaID(), L["Supports multiple entries, separated by commas. Prefix with '-' for negation."])
 	    end,
+      preamble = "local zoneChecker = Private.ExecEnv.ParseZoneCheck(%q)",
+      test = "zoneChecker:Check(zoneId)",
       optional = true,
     },
     {
@@ -8764,7 +8772,7 @@ Private.event_prototypes = {
         type = "string",
         multiline = true,
         preamble = "local zoneChecker = Private.ExecEnv.ParseZoneCheck(%q)",
-        test = "zoneChecker:Check(MapId)",
+        test = "zoneChecker:Check(uiMapId)",
         conditionType = "string",
         conditionPreamble = function(input)
           return Private.ExecEnv.ParseZoneCheck(input)
