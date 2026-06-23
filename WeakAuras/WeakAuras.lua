@@ -4257,12 +4257,14 @@ local function SetFrameLevel(id, frameLevel)
 end
 
 -- DepthBasedFrameLevels:
--- Root Group (0)
--- ├─ Aura (4)
--- ├─ Child Group (4)
--- │  ├─ Aura (8)
--- │  └─ Aura (8)
--- Root Aura (0)
+-- Start at 4 instead of 0, since root auras at frame level 0 can be too low
+-- relative to addon-managed frames and force users to change frame strata.
+-- Root Group (4)
+--   Aura (8)
+--   Child Group (8)
+--     Aura (12)
+--     Aura (12)
+-- Root Aura (4)
 local function ApplyDepthBasedFrameLevels(data, depth)
   local frameLevel = depth * 4
   SetFrameLevel(data.id, frameLevel)
@@ -4283,7 +4285,7 @@ function Private.FixGroupChildrenOrderForGroup(data)
   if data.parent then
     return
   end
-  ApplyDepthBasedFrameLevels(data, 0)
+  ApplyDepthBasedFrameLevels(data, 1)
 end
 
 local function GetFrameLevelFor(id)
