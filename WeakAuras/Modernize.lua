@@ -2344,13 +2344,13 @@ function Private.Modernize(data, oldSnapshot)
     data.information.showNilIsFalse = true
   end
 
-  if data.internalVersion < 89.5 then
+  if data.internalVersion < 90 then
     if data.regionType == "aurabar" then
       data.toolTipArea = "ICON"
     end
 
-    -- Migrate model fileId again
-    if not data.model_fileId and data.model_path then
+    -- Migrate model_path to model_fileId for model region
+    if data.model_path and (not data.model_fileId or type(data.model_fileId) == "number" or (type(data.model_fileId) == "string" and tonumber(data.model_fileId) ~= nil)) then
       data.model_fileId = data.model_path
       data.model_path = nil
     end
@@ -2359,7 +2359,14 @@ function Private.Modernize(data, oldSnapshot)
       for index, subRegionData in ipairs(data.subRegions) do
         -- Migrate submodel fields
         if subRegionData.type == "submodel" then
-          if subRegionData.model_path and not subRegionData.model_fileId then
+          if
+            subRegionData.model_path
+            and (
+              not subRegionData.model_fileId
+              or type(subRegionData.model_fileId) == "number"
+              or (type(subRegionData.model_fileId) == "string" and tonumber(subRegionData.model_fileId) ~= nil)
+            )
+          then
             subRegionData.model_fileId = subRegionData.model_path
             subRegionData.model_path = nil
           end
@@ -2372,15 +2379,13 @@ function Private.Modernize(data, oldSnapshot)
           end
         end
         -- Migrate subcirculartexture again
-        if subRegionData.type == "subcirculartexture"
-          and subRegionData.progressSource == nil
-          and subRegionData.progressSources ~= nil
-        then
+        if subRegionData.type == "subcirculartexture" and subRegionData.progressSource == nil and subRegionData.progressSources ~= nil then
           subRegionData.progressSource = subRegionData.progressSources
           subRegionData.progressSources = nil
         end
       end
     end
+
     -- Migrate spec_position to retail format
     local specPosition = data.load and data.load.spec_position
     if specPosition == "caster" then
@@ -2388,9 +2393,8 @@ function Private.Modernize(data, oldSnapshot)
     elseif specPosition == "melee" then
       data.load.spec_position = "MELEE"
     end
-  end
 
-  if data.internalVersion < 90 then
+    -- Migrate zoneId to zoneIds
     if data.load then
       if data.load.zoneId ~= nil then
         data.load.zoneIds = data.load.zoneId
