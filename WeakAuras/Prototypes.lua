@@ -1723,6 +1723,9 @@ Private.event_prototypes = {
       if trigger.use_inRange then
         AddUnitEventForEvents(result, unit, "UNIT_IN_RANGE_UPDATE")
       end
+      if trigger.use_resurrectPending ~= nil then
+        AddUnitEventForEvents(result, unit, "INCOMING_RESURRECT_CHANGED")
+      end
       return result;
     end,
     internal_events = function(trigger)
@@ -1927,6 +1930,15 @@ Private.event_prototypes = {
         type = "tristate",
         width = WeakAuras.doubleWidth,
         init = "UnitIsDeadOrGhost(unit)",
+        store = true,
+        conditionType = "bool",
+      },
+      {
+        name = "resurrectPending",
+        display = L["Resurrect Pending"],
+        type = "tristate",
+        width = WeakAuras.doubleWidth,
+        init = "UnitHasIncomingResurrection(unit)",
         store = true,
         conditionType = "bool",
       },
@@ -8998,6 +9010,7 @@ Private.dynamic_texts = {
 
 -- Events in that list can be filtered by unitID
 Private.UnitEventList = {
+  INCOMING_RESURRECT_CHANGED = true,
   PLAYER_GUILD_UPDATE = true,
   MINIMAP_PING = true,
   PARTY_MEMBER_DISABLE = true,

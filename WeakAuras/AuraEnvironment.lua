@@ -545,6 +545,9 @@ local overridden = {
   WA_Utf8Sub = WA_Utf8Sub,
   ActionButton_ShowOverlayGlow = WeakAuras.ShowOverlayGlow,
   ActionButton_HideOverlayGlow = WeakAuras.HideOverlayGlow,
+  UnitHasIncomingResurrection = function(unit)
+    return WeakAuras.UnitHasIncomingResurrection(unit)
+  end,
   WeakAuras = FakeWeakAuras
 }
 for k, v in pairs(Private.AuraEnvOverrides) do
