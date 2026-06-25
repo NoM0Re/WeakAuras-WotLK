@@ -22,7 +22,7 @@ jobs:
       uses: actions/checkout@v7
 
     - name: Cache Lua
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: luacache
       with:
         path: .lua
@@ -31,7 +31,7 @@ jobs:
           ${{ runner.os }}-lua-${{ env.LUA_VERSION }}
 
     - name: Cache LuaRocks
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: luarockscache
       with:
         path: .luarocks
