@@ -4036,6 +4036,33 @@ do
   end
 end
 
+-- Incoming Resurrection
+do
+  ---@param unit UnitToken
+  ---@return boolean? hasIncomingResurrection
+  function WeakAuras.UnitHasIncomingResurrection(unit)
+    local name = unit and UnitName(unit) or unit
+    return name and WeakAuras.LRC:IsUnitBeingRessed(name)
+  end
+
+  local function ResCommUpdate(event, _, arg2, arg3)
+    Private.StartProfileSystem("generictrigger rescomm")
+    local target = event == "ResComm_ResStart" and arg3 or arg2
+    if target then
+      for unit in pairs(Private.baseUnitId) do
+        if UnitExists(unit) and UnitName(unit) == target then
+          Private.ScanUnitEvents("INCOMING_RESURRECT_CHANGED", unit)
+          Private.ScanEvents("INCOMING_RESURRECT_CHANGED", unit)
+        end
+      end
+    end
+    Private.StopProfileSystem("generictrigger rescomm")
+  end
+
+  WeakAuras.LRC.RegisterCallback(WeakAuras, "ResComm_ResStart", ResCommUpdate)
+  WeakAuras.LRC.RegisterCallback(WeakAuras, "ResComm_ResEnd", ResCommUpdate)
+end
+
 -- Nameplates
 do
   local watchNameplates

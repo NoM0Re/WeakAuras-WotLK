@@ -45,6 +45,10 @@ WeakAuras.LGT = LibStub("LibGroupTalents-1.0") or {
   GetUnitTalentSpec = function(_) end,
   GetUnitRole = function(_) end,
 }
+WeakAuras.LRC = LibStub("LibResComm-1.0") or {
+  RegisterCallback = function(_, _, _) end,
+  IsUnitBeingRessed = function(_) end,
+}
 
 Private.maxTimerDuration = 604800; -- A week, in seconds
 
