@@ -27,8 +27,8 @@ To open the options window, type `/wa` or `/weakauras` into your chat and hit en
 
 ## Install
 
-1. [Download the package](https://github.com/NoM0Re/WeakAuras-WotLK/archive/refs/heads/master.zip).
-2. Open the archive, then open folder `WeakAuras-WotLK-master`, extract all folders to `Interface\AddOns`.
+1. [Download the latest release package](https://github.com/NoM0Re/WeakAuras-WotLK/releases/latest/download/WeakAuras2.zip).
+2. Open the archive and extract all addon folders to `Interface\AddOns`.
 
 ## Client Extensions
 
