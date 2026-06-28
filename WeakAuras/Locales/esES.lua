@@ -111,7 +111,6 @@ L["Anetheron"] = "Anetheron"
 L["Angle and Radius"] = "Ángulo y radio"
 L["Animations"] = "Animaciones"
 L["Anticlockwise"] = "Sentido antihorario"
---[[Translation missing --]]
 L["Anub'arak"] = "Anub'arak"
 L["Anub'Rekhan"] = "Anub'Rekhan"
 L["Any"] = "Cualquiera"
@@ -185,10 +184,8 @@ L["Back and Forth"] = "De Atrás a Adelante"
 L["Background"] = "Fondo"
 L["Background Color"] = "Color de fondo"
 L["Balnazzar"] = "Balnazzar"
---[[Translation missing --]]
-L["Bar"] = "Bar"
---[[Translation missing --]]
-L["Bar and Icon"] = "Bar and Icon"
+L["Bar"] = "Barra"
+L["Bar and Icon"] = "Barra e icono"
 L["Bar Color/Gradient Start"] = "Inicio de color de barra/gradiente"
 L["Bar enabled in BigWigs settings"] = "Barra activada en la configuración de BigWigs"
 L["Bar enabled in Boss Mod addon settings"] = "Barra activada en la configuración del addon del módulo de jefe"
@@ -536,8 +533,7 @@ L["Extra Attacks"] = "Ataques Adicional"
 L["Extra Spell Id"] = "ID de hechizo extra"
 L["Extra Spell Name"] = "Nombre del Hechizo Extra"
 L["Faction"] = "Facción"
---[[Translation missing --]]
-L["Faction Champions"] = "Faction Champions"
+L["Faction Champions"] = "Campeones de la facción"
 L["Faction Name"] = "Nombre de facción "
 L["Faction Reputation"] = "Reputación de facción"
 L["Fade Animation"] = "Animación de fundido"
@@ -808,7 +804,6 @@ L["Loot"] = "Botín"
 L["Loot Specialization"] = "Especialización de botín"
 L["Loot Specialization Id"] = "ID de especialización de botín"
 L["Loot Specialization Name"] = "Nombre de especialización de botín"
---[[Translation missing --]]
 L["Lord Jaraxxus"] = "Lord Jaraxxus"
 L["Lord Kazzak"] = "Lord Kazzak"
 L["Lorewalking"] = "Paseo por la historia"
@@ -931,8 +926,7 @@ L["None"] = "Nada"
 L["Non-player Character"] = "Personaje No Jugador"
 L["Normal"] = "Normal"
 L["Normal Party"] = "Grupo normal"
---[[Translation missing --]]
-L["Northrend Beasts"] = "Northrend Beasts"
+L["Northrend Beasts"] = "Bestias de Rasganorte"
 L["Not in Group"] = "No en grupo"
 L["Not in Smart Group"] = "No en grupo inteligente"
 L["Not on Cooldown"] = "No en reutilización"
@@ -1477,8 +1471,7 @@ L["Tracking Charge %i"] = "Carga de seguimiento %i"
 L["Tracking Charge CDs"] = "Seguimiento de reutilización de carga"
 L["Tracking Only Cooldown"] = "Seguimiento de sola reutilización"
 L["Transmission error"] = "Error de transmisión"
---[[Translation missing --]]
-L["Trial of the Crusader"] = "Trial of the Crusader"
+L["Trial of the Crusader"] = "Prueba del Cruzado"
 L["Trigger"] = "Activador"
 L["Trigger %i"] = "Activador %i"
 L["Trigger %s"] = "Activador %s"
@@ -1531,8 +1524,7 @@ L["Using WeakAuras.clones is deprecated. Use WeakAuras.GetRegion(id, cloneId) in
 ]=]
 L["Using WeakAuras.regions is deprecated. Use WeakAuras.GetRegion(id) instead."] = "El uso de WeakAuras.regions está en desuso. Utilice WeakAuras.GetRegion(id) en su lugar."
 L["Vaelastrasz the Corrupt"] = "Vaelastrasz el Corrupto"
---[[Translation missing --]]
-L["Val'kyr Twins"] = "Val'kyr Twins"
+L["Val'kyr Twins"] = "Gemelas Val'kyr"
 L["Vault of Archavon"] = "La Cámara de Archavon"
 L["Versatility (%)"] = "Versatilidad (%)"
 L["Versatility Rating"] = "Índice de versatilidad"
@@ -1557,8 +1549,7 @@ L["Warning: Name info is now available via %affected, %unaffected. Number of aff
 L["Warning: Tooltip values are now available via %tooltip1, %tooltip2, %tooltip3 instead of %s. This is not automatically adjusted."] = [=[Aviso: Los valores de tooltip ahora están disponibles a través de %tooltip1, %tooltip2, %tooltip3 en lugar de %s. Esto no se ajusta automáticamente.
 ​]=]
 L["WeakAuras Built-In (63:42 | 3:07 | 10 | 2.4)"] = "WeakAuras incorporado (63:42 | 3:07 | 10 | 2.4)"
---[[Translation missing --]]
-L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."] = "WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."
+L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/weakauras."] = "WeakAuras ha detectado una configuración vacía. Si esto es inesperado, solicita ayuda en https://discord.gg/weakauras."
 L[ [=[WeakAuras has detected that it has been downgraded.
 Your saved auras may no longer work properly.
 Would you like to run the |cffff0000EXPERIMENTAL|r repair tool? This will overwrite any changes you have made since the last database upgrade.

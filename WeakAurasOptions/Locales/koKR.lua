@@ -840,10 +840,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Texture X Offset"] = "텍스처 X 위치 조정"
 	L["Texture Y Offset"] = "텍스처 Y 위치 조정"
 	L["Thanks"] = "감사 인사"
-	--[[Translation missing --]]
-	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."
-	--[[Translation missing --]]
-	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."
+	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "ElvUI 애드온이 활성화되어 있습니다. 이로 인해 회전 표시에 재사용 대기시간 숫자가 표시될 수 있습니다. ElvUI 설정에서 이를 조정할 수 있습니다."
+	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "OmniCC 애드온이 활성화되어 있습니다. 이 애드온은 회전 표시에 재사용 대기시간 숫자를 표시할 수 있습니다. OmniCC 설정에서 이를 구성할 수 있습니다."
 	L["The duration of the animation in seconds."] = "애니메이션 지속시간 (초)"
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = "애니메이션의 초단위 지속시간입니다. 종료 애니메이션은 일반적으로는 디스플레이가 숨겨지기 전까진 재생을 시작하지 않습니다."
 	L["The group and all direct children will share the same base frame level."] = "이 그룹과 모든 직속 자식 위크오라는 같은 기반의 프레임 레벨을 공유합니다."

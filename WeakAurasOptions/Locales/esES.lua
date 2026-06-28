@@ -759,10 +759,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Specific Currency ID"] = "ID de moneda específica"
 	L["Spell Selection Filters"] = "Filtros de selección de hechizo"
 	L["Spells found:"] = "Hechizos encontrados:"
-	--[[Translation missing --]]
-	L["Squelch Sounds/Actions on Load"] = "Squelch Sounds/Actions on Load"
-	--[[Translation missing --]]
-	L["Squelched"] = "Squelched"
+	L["Squelch Sounds/Actions on Load"] = "Suprimir sonidos/acciones al cargar"
+	L["Squelched"] = "Suprimido"
 	L["Stack Info"] = "Información de Acumulaciones"
 	L["Stacks - The number of stacks of an aura (usually)"] = "Acumulaciones - El número de acumulaciones de un aura (usualmente)"
 	L["Standby"] = "En espera"
@@ -794,10 +792,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Texture X Offset"] = "Desplazmiento X de textura"
 	L["Texture Y Offset"] = "Desplazmiento Y de textura"
 	L["Thanks"] = "Gracias"
-	--[[Translation missing --]]
-	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."
-	--[[Translation missing --]]
-	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."
+	L["The addon ElvUI is enabled. It might add cooldown numbers to the swipe. You can configure these in the ElvUI settings."] = "El addon ElvUI está activado. Puede que añada números de tiempo de reutilización al indicador de recarga. Puedes configurarlos en los ajustes de ElvUI."
+	L["The addon OmniCC is enabled. It might add cooldown numbers to the swipe. You can configure these in the OmniCC settings."] = "El addon OmniCC está activado. Puede que añada números de tiempo de reutilización al indicador de recarga. Puedes configurarlos en los ajustes de OmniCC."
 	L["The duration of the animation in seconds."] = "Duración de la animación (en segundos)."
 	L["The duration of the animation in seconds. The finish animation does not start playing until after the display would normally be hidden."] = [=[La duración de la animación en segundos. La animación de finalización no comienza a reproducirse hasta que la visualización normalmente estaría oculta.
 ]=]
