@@ -4,67 +4,42 @@ local AddonName = ...
 ---@class OptionsPrivate
 local OptionsPrivate = select(2, ...)
 OptionsPrivate.changelog = {
-  versionString = '5.21.7',
-  dateString = '2026-06-03',
-  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.21.6...5.21.7',
+  versionString = '5.21.8',
+  dateString = '2026-06-29',
+  fullChangeLogUrl = 'https://github.com/WeakAuras/WeakAuras2/compare/5.21.7...5.21.8',
   highlightText = [==[
-Fix Pride logo time check]==],  commitText = [==[InfusOnWoW (15):
+TOC bumps and regression fixes]==],  commitText = [==[InfusOnWoW (7):
 
-- Fix Pride logo time check
-- Custom Options: Fix regression in changing user settings on a group
-- Create a font string for each font on options first load
-- Fix lua error on creating a icon in a dynamic group
+- Adjust Code options on Action tab to TimeMachine
 - Update Discord List
-- Fix Item Cooldown Trigger if Item is on CD on first login
-- Fix rename lua error
-- Add an option to squelch auras on load
-- AnimationOptions: Move to TimeMachine
-- Move ActionOptions to TimeMachine
-- InformationOptions: Move most Options to TimeMachine
-- MOP PTR: Hack code so that the fake nameplate anchor shows up
-- Icon: Fix ghost timed progress appearing on icons after Options close
-- Progress Bar: Make tooltip area configurable
-- Fix regression in tracking item cooldowns
+- Fix Renaming of Auras that are used as anchors to other auras
+- Custom Options: Fix setting of min/max values
+- Fix manual progress if the user never sets the total
+- Update Item Cooldowns on SPELL_UPDATE_USABLE
+- Update Discord List
 
-NoM0Re (10):
+Jettie (1):
 
-- Titan: Update EncounterAndZoneLists for Phase 4
-- Titan: Update Retribution Paladin Talents
-- Fix: Model thumbnail transform not resetting correctly after changing api
-- Minor fixes and cleanups across project
-- Set consistent empty font flags
-- Further Fix SetFont "None" flag
-- ProgressTexture: Fix SetCropY and SetRegionHeight setters
+- Fix bug: AdditionalProgress is not showing up when using circular mode. (#6243)
+
+NoM0Re (4):
+
 - Mists: TOC Bump
-- Mists: TOC Bump
-- BossMods: fix typo in expired states
+- TBC: TOC Bump
+- TBC/Mists: Disable AssistedCombat Trigger
+- Titan: Update Shadow Priest Talents
 
-Stanzilla (6):
+Stanzilla (3):
 
-- Update WeakAurasModelPaths from wago.tools
-- Harden GitHub Actions workflows
-- Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 - Update WeakAurasModelPaths from wago.tools
 
-dependabot[bot] (7):
+dependabot[bot] (3):
 
-- Bump Stanzilla/cat
-- Bump nebularg/actions-luacheck
-- Bump actions/github-script from 8.0.0 to 9.0.0
-- Bump nebularg/actions-discord-webhook
-- Update BigWigsMods/packager requirement to 12e08b28e30e3df84cc508525ebfcdf3818ad86c
-- Bump leafo/gh-actions-lua from 12.0.0 to 13.0.0
-- Bump cbrgm/mastodon-github-action from 2.1.27 to 2.2.0
-
-emptyrivers (1):
-
-- AuthorOptions: Adopt TimeMachine by ressurecting the code from PR #4863
-
-mrbuds (1):
-
-- Fix SetFont error with "None" flag
+- Bump Stanzilla/cat from 2.0.2 to 2.0.3
+- Bump cbrgm/mastodon-github-action from 2.2.0 to 2.2.1
+- Bump actions/checkout from 6.0.2 to 6.0.3
 
 ]==]
 }

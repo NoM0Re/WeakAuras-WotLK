@@ -3,6 +3,36 @@
 Write release notes under a heading that matches the tag version, for example `## 5.0.0`.
 Use :WALurk: or when in June :WALurkPride:
 
+## 5.21.8
+
+:WALurkPride: 5.21.8
+
+New Features:
+
+Fixes:
+- Adjust code options on the Action tab to TimeMachine
+- Fix renaming auras that are used as anchors by other auras
+- Custom Options: Fix setting min/max values
+- Fix manual progress when the total value was never set
+- Update item cooldown triggers on SPELL_UPDATE_USABLE
+- Fix Additional Progress not showing when using circular mode
+
+Backport New Features:
+- Add Resurrect Pending to the Unit Characteristics Trigger
+- Add a WotLK incoming resurrection compatibility layer backed by LibResComm, firing the `INCOMING_RESURRECT_CHANGED` trigger event and exposing the global `UnitHasIncomingResurrection(unit)` helper for custom triggers
+
+Backport Fixes:
+- Fix Awesome WotLK footer regression when Companion button is hidden
+- Fix profiling compatibility
+- Update LibGetFrame nameplate handling
+- Fix LibGetFrame callbacks when no unit is available
+- Fix GetNumGroupMembers compatibility function
+- Fix location zone checks in the Location Trigger
+- Modernize zoneId load checks to zoneIds
+- Deprecate WeakAuras.GetNamePlateForUnit, it is merged now into WeakAuras.GetUnitNameplate
+- Fix depth-based frame levels starting too low, which could place auras anchored to ElvUI unit frames behind the unit frame
+- Preserve model_path when modernizing model fileIds
+
 ## 5.21.7
 
 :WALurkPride: 5.21.7
