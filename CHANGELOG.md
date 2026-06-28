@@ -1,11 +1,11 @@
 # Changelog
 
 Write release notes under a heading that matches the tag version, for example `## 5.0.0`.
-Use :WALurk: or when in June :WALurkPride:
+Use [:WALurk:1341460510360604673] or when in June [:WALurkPride:1379014370197110916]
 
 ## 5.21.8
 
-:WALurkPride: 5.21.8
+[:WALurkPride:1379014370197110916] 5.21.8
 
 New Features:
 
@@ -35,7 +35,7 @@ Backport Fixes:
 
 ## 5.21.7
 
-:WALurkPride: 5.21.7
+[:WALurkPride:1379014370197110916] 5.21.7
 
 # WeakAuras WotLK is out of Beta!
 
@@ -92,11 +92,11 @@ Backport Fixes:
 
 ## 5.21.6
 
-:WALurk: 5.21.6
+[:WALurk:1341460510360604673] 5.21.6
 
 ## 5.21.5
 
-:WALurk: 5.21.5
+[:WALurk:1341460510360604673] 5.21.5
 
 Fixes:
 - Fix Boss Mods typo
@@ -106,7 +106,7 @@ Backport Fixes:
 
 ## 5.21.4
 
-:WALurk: 5.21.4
+[:WALurk:1341460510360604673] 5.21.4
 
 Fixes:
 - Fix regression in some triggers not hiding
@@ -114,7 +114,7 @@ Fixes:
 
 ## 5.21.3
 
-:WALurk: 5.21.3
+[:WALurk:1341460510360604673] 5.21.3
 
 New Features:
 - State System Changes
@@ -143,7 +143,7 @@ Backport Fixes:
 
 ## 5.21.2
 
-:WALurk: 5.21.2
+[:WALurk:1341460510360604673] 5.21.2
 
 Backport Fixes:
 - Removed the Midnight support ending warning
@@ -152,7 +152,7 @@ Backport Fixes:
 
 ## 5.21.1
 
-:WALurk: 5.21.1
+[:WALurk:1341460510360604673] 5.21.1
 
 Backport New Features:
 - Updated LibGetFrame
@@ -162,7 +162,7 @@ Backport Fixes:
 
 ## 5.21.0
 
-:WALurk: 5.21.0
+[:WALurk:1341460510360604673] 5.21.0
 
 New Features:
 - Talent Known: Trigger now uses WeakAurasMiniTalent
@@ -187,7 +187,7 @@ Backport Fixes:
 
 ## 5.20.7
 
-:WALurk: 5.20.7
+[:WALurk:1341460510360604673] 5.20.7
 
 New Features:
 - Character Stats: Add Defense
@@ -218,7 +218,7 @@ Backport Fixes:
 
 ## 5.20.6
 
-:WALurk: 5.20.6
+[:WALurk:1341460510360604673] 5.20.6
 
 New Features:
 - None
@@ -235,7 +235,7 @@ Backport Fixes:
 
 ## 5.20.5
 
-:WALurk: 5.20.5
+[:WALurk:1341460510360604673] 5.20.5
 
 New Features:
 - BT2: Make spell ID tooltip in options clickable
@@ -259,14 +259,14 @@ Backport Fixes:
 
 ## 5.20.4
 
-:WALurk: 5.20.4
+[:WALurk:1341460510360604673] 5.20.4
 
 Fixes:
 - No code changes since 5.20.3; CurseForge was not correctly distributing this version for their addon
 
 ## 5.20.3
 
-:WALurk: 5.20.3
+[:WALurk:1341460510360604673] 5.20.3
 
 New Features:
 - Text to speech voice via awesome_wotlk is no longer a per-aura setting and now follows the game's TTS CVars
@@ -299,7 +299,7 @@ Backport Fixes:
 
 ## 5.20.2
 
-:WALurk: 5.20.2
+[:WALurk:1341460510360604673] 5.20.2
 
 New Features:
 - None
@@ -315,7 +315,7 @@ Backport Fixes:
 
 ## 5.20.1
 
-:WALurk: 5.20.1
+[:WALurk:1341460510360604673] 5.20.1
 
 New Features:
 - Custom code OnUpdate: Added a built-in throttle option for custom code that runs every frame
@@ -336,7 +336,7 @@ Backport Fixes:
 
 ## 5.20.0
 
-:WALurk: 5.20.0
+[:WALurk:1341460510360604673] 5.20.0
 
 New Features:
 - Added Undo & Redo Framework for aura edits, currently testable on URL edits with `/wa feature enable undo`
@@ -361,7 +361,7 @@ Backport Fixes:
 
 ## 5.19.12
 
-:WALurkPride: 5.19.12
+[:WALurkPride:1379014370197110916] 5.19.12
 
 New Features:
 - None
@@ -382,7 +382,7 @@ Backport Fixes:
 
 ## 5.19.11
 
-:WALurkPride: 5.19.11
+[:WALurkPride:1379014370197110916] 5.19.11
 
 New Features:
 - None
@@ -405,7 +405,7 @@ Backport Fixes:
 
 ## 5.19.10
 
-:WALurkPride: 5.19.10
+[:WALurkPride:1379014370197110916] 5.19.10
 
 New Features:
 - Add a pride month logo and use it in June
@@ -465,7 +465,7 @@ Backport Fixes:
 
 ## 5.19.9
 
-:WALurk: 5.19.9
+[:WALurk:1341460510360604673] 5.19.9
 
 New Features:
 - Unit Characteristics trigger: Add creature type and family
@@ -488,7 +488,7 @@ Backport Fixes:
 
 ## 5.19.8
 
-:WALurk: 5.19.8
+[:WALurk:1341460510360604673] 5.19.8
 
 New Features:
 - `states:Replace(id, newstate)` and `states:Get(id, key)` are now available in TSU custom triggers
@@ -506,7 +506,7 @@ Backport Fixes:
 
 ## 5.19.7
 
-:WALurk: 5.19.7
+[:WALurk:1341460510360604673] 5.19.7
 
 Fixes:
 - Revert a change to item equipped load and triggers that caused unacceptable performance characteristics
@@ -514,7 +514,7 @@ Fixes:
 
 ## 5.19.6
 
-:WALurk: 5.19.6
+[:WALurk:1341460510360604673] 5.19.6
 
 Fixes:
 - Model regions now obey the rotation option
@@ -545,14 +545,14 @@ Backport Fixes:
 
 ## 5.19.5
 
-:WALurk: 5.19.5
+[:WALurk:1341460510360604673] 5.19.5
 
 Fixes:
 - Minor bug fixes
 
 ## 5.19.3
 
-:WALurk: 5.19.3
+[:WALurk:1341460510360604673] 5.19.3
 
 New Features:
 - New AllStates (TSU) helper methods for efficiently creating, updating, and removing states
@@ -569,14 +569,14 @@ Notes:
 
 ### 2026-05-24 - LibAPIAutoComplete
 
-:WALurk: Enable LibAPIAutoComplete for TextEditor and Events
+[:WALurk:1341460510360604673] Enable LibAPIAutoComplete for TextEditor and Events
 
 - LibAPIAutoComplete has been backported
 - Added APIDocumentation-based autocomplete to the WeakAuras text editor and event inputs
 
 ### 2026-05-22 - ProgressTexture Refactor Test Build
 
-:WALurk: Introduce sub elements for circular/linear Textures
+[:WALurk:1341460510360604673] Introduce sub elements for circular/linear Textures
 
 - Upcoming ProgressTexture refactor: https://github.com/NoM0Re/WeakAuras-WotLK/pull/108
 - Added the new shared circular/linear ProgressTexture code path
@@ -589,7 +589,7 @@ Notes:
 
 ### 2025-12-25 - Frame Level Overflow
 
-:WALurk: How a hidden WeakAuras bug survived almost four years
+[:WALurk:1341460510360604673] How a hidden WeakAuras bug survived almost four years
 
 - WeakAuras had a long-standing frame level issue introduced with nested groups in WA 4.0
 - On the WotLK client, frame levels are stored as a signed 8-bit integer, giving a safe range of 0-127
@@ -599,7 +599,7 @@ Notes:
 
 ### 2025-10-04 - Encounter Trigger / Load Options via DBM
 
-:WALurk: Encounter Trigger / Load Options via DBM
+[:WALurk:1341460510360604673] Encounter Trigger / Load Options via DBM
 
 - Adds support for Encounter Triggers and Load Options
 - Fires Blizz-like ENCOUNTER_START and ENCOUNTER_END events
@@ -609,7 +609,7 @@ Notes:
 
 ### 2025-10-03 - WeakAuras and Midnight
 
-:WALurk: Upcoming changes to Retail: Midnight
+[:WALurk:1341460510360604673] Upcoming changes to Retail: Midnight
 
 - Upstream WeakAuras announced major changes around the Midnight expansion
 - This WotLK port should remain mostly unchanged, with adjustments only if truly needed
@@ -617,7 +617,7 @@ Notes:
 
 ### 2025-10-01 - Wrath Private API Documentation
 
-:WALurk: Blizzard_APIDocumentation is finally updated with Wrath Private Data
+[:WALurk:1341460510360604673] Blizzard_APIDocumentation is finally updated with Wrath Private Data
 
 - Function APIs and Events are merged and can be looked up through the Code Editor with the Search API button
 - APIDocumentation is loaded on demand when Search API is clicked
@@ -625,7 +625,7 @@ Notes:
 
 ### 2025-08-25 - Text-to-Speech via awesome_wotlk
 
-:WALurk: Text-to-Speech in WeakAuras via awesome_wotlk
+[:WALurk:1341460510360604673] Text-to-Speech in WeakAuras via awesome_wotlk
 
 - With the awesome_wotlk retail backport of C_VoiceChat, Text-to-Speech can be used directly inside WeakAuras
 - Set it up through Conditions and Actions
@@ -633,7 +633,7 @@ Notes:
 
 ### 2025-07-05 - APIDocumentation
 
-:WALurk: Blizzard_APIDocumentation
+[:WALurk:1341460510360604673] Blizzard_APIDocumentation
 
 - APIDocumentation is now included, backported with data from Wrath of the Lich King Classic
 - It is accessible in the Code Editor via the Search API button
@@ -641,7 +641,7 @@ Notes:
 
 ### 2025-06-30 - Wiki Pages
 
-:WALurkPride: Added three new wiki pages
+[:WALurkPride:1379014370197110916] Added three new wiki pages
 
 - https://github.com/NoM0Re/WeakAuras-WotLK/wiki/Large-Address-Aware
 - https://github.com/NoM0Re/WeakAuras-WotLK/wiki/awesome_wotlk
@@ -649,20 +649,20 @@ Notes:
 
 ### 2025-06-19 - WeakAuras Templates
 
-:WALurkPride: WeakAuras Templates
+[:WALurkPride:1379014370197110916] WeakAuras Templates
 
 - WeakAurasTemplates is now included, backported with data from Wrath of the Lich King Classic
 - Provides a curated collection of premade WeakAura templates for classes and specializations
 
 ### 2025-06-04 - Wayback Machine Support
 
-:WALurkPride: Added Wayback Machine Support via Buttons
+[:WALurkPride:1379014370197110916] Added Wayback Machine Support via Buttons
 
 - The Wayback Machine is integrated using buttons because SetScript methods for OnKeyDown/OnKeyUp are not available on this game version
 
 ### 2025-05-01 - ProcGlow
 
-:WALurk: Added ProcGlow to LibCustomGlow-1.0 and WeakAuras
+[:WALurk:1341460510360604673] Added ProcGlow to LibCustomGlow-1.0 and WeakAuras
 
 - The retail ProcGlow animation is now part of the library
 - Backported with custom flipbook logic and support for start and loop sequences
@@ -675,7 +675,7 @@ Notes:
 
 ### 2025-04-22 - SharedMedia
 
-:WALurk: Ported Retail SharedMedia and SharedMediaAdditionalFonts
+[:WALurk:1341460510360604673] Ported Retail SharedMedia and SharedMediaAdditionalFonts
 
 - SharedMedia adds more bar textures and fonts
 - SharedMediaAdditionalFonts adds more fonts
@@ -683,7 +683,7 @@ Notes:
 
 ### 2025-04-15 - Faction Reputation Trigger
 
-:WALurk: Faction Reputation Trigger has been added
+[:WALurk:1341460510360604673] Faction Reputation Trigger has been added
 
 - Uses Retail FactionIDs
 - Depends on accurate translations
@@ -691,7 +691,7 @@ Notes:
 
 ### 2025-04-07 - DBM Compatibility
 
-:WALurk: WeakAuras now also supports DBM 7.0.5+ versions for trigger compatibility
+[:WALurk:1341460510360604673] WeakAuras now also supports DBM 7.0.5+ versions for trigger compatibility
 
 - Latest DBM-Warmane is still strongly recommended for full functionality and best support
 - Update DBM: https://github.com/Zidras/DBM-Warmane/?tab=readme-ov-file#how-to-install-for-the-first-time
