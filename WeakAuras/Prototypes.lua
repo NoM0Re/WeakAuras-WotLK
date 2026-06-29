@@ -4149,7 +4149,7 @@ Private.event_prototypes = {
         conditionType = "bool",
         conditionTest = function(state, needle)
         return state and
-          ((IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or state.spellname) == 1 and true or false) == (needle == 1))
+          ((IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or (state.spellname or "")) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
@@ -4164,7 +4164,7 @@ Private.event_prototypes = {
         conditionType = "bool",
         conditionTest = function(state, needle)
         return state and
-          ((select(2, IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or state.spellname)) == 1 and true or false) == (needle == 1))
+          ((select(2, IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or (state.spellname or ""))) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
