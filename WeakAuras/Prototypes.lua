@@ -4149,7 +4149,7 @@ Private.event_prototypes = {
         conditionType = "bool",
         conditionTest = function(state, needle)
         return state and
-          ((IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname) == 1 and true or false) == (needle == 1))
+          ((IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or state.spellname) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
@@ -4164,7 +4164,7 @@ Private.event_prototypes = {
         conditionType = "bool",
         conditionTest = function(state, needle)
         return state and
-          ((select(2, IsUsableSpell((type(state.spellname) == "number" and GetSpellInfo(state.spellname)) or state.spellname)) == 1 and true or false) == (needle == 1))
+          ((select(2, IsUsableSpell((tonumber(state.spellname) and (GetSpellInfo(tonumber(state.spellname)) or "")) or state.spellname)) == 1 and true or false) == (needle == 1))
         end,
         conditionEvents = AddTargetConditionEvents({
           "SPELL_UPDATE_USABLE",
@@ -5151,8 +5151,8 @@ Private.event_prototypes = {
     end,
     loadInternalEventFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if type(trigger.spellName) == "number" then
-        spellName = GetSpellInfo(spellName)
+      if tonumber(spellName) then
+        spellName = GetSpellInfo(tonumber(spellName))
       end
       if spellName == nil then return {} end
       return { "SPELL_COOLDOWN_CHANGED:" .. spellName }
@@ -5162,15 +5162,15 @@ Private.event_prototypes = {
     statesParameter = "one",
     loadFunc = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if type(trigger.spellName) == "number" then
-        spellName = GetSpellInfo(spellName)
+      if tonumber(spellName) then
+        spellName = GetSpellInfo(tonumber(spellName))
       end
       WeakAuras.WatchSpellCooldown(spellName, false);
     end,
     init = function(trigger)
       local spellName = type(trigger.spellName) ~= "table" and trigger.spellName or 0
-      if type(trigger.spellName) == "number" then
-        spellName = GetSpellInfo(spellName) or ""
+      if tonumber(spellName) then
+        spellName = GetSpellInfo(tonumber(spellName)) or ""
       end
       local ret = [=[
         local spellName = %s
