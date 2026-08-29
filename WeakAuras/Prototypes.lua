@@ -4363,7 +4363,9 @@ Private.event_prototypes = {
       local itemName = type(trigger.itemName) == "number" and trigger.itemName or string.format("%q", trigger.itemName or "0")
       local ret = [=[
         local itemname = %s;
-        local name = GetItemInfo(itemname or 0) or "Invalid"
+        local name, itemLink = GetItemInfo(itemname or 0)
+        name = name or "Invalid"
+        local itemId = tonumber(itemname) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         local icon = GetItemIcon(itemname) or ""
         local showgcd = %s
         local startTime, duration, enabled, gcdCooldown = WeakAuras.GetItemCooldown(itemname, showgcd);
@@ -4400,7 +4402,7 @@ Private.event_prototypes = {
         type = "item",
         test = "true"
       },
-      --[[{ maybe some day
+      {
         name = "itemId",
         display = WeakAuras.newFeatureString .. L["ItemId"],
         hidden = true,
@@ -4409,7 +4411,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "number",
         operator_types = "only_equal",
-      },]]
+      },
       {
         name = "remaining",
         display = L["Remaining Time"],
@@ -4694,16 +4696,6 @@ Private.event_prototypes = {
         store = true,
         conditionType = "string"
       },
-      --[[{ maybe some day
-        name = "itemId",
-        display = L["ItemId"],
-        hidden = true,
-        init = "item",
-        test = "true",
-        store = true,
-        conditionType = "number",
-        operator_types = "only_equal",
-      },]]
       {
         name = "icon",
         hidden = true,
@@ -4760,7 +4752,9 @@ Private.event_prototypes = {
     init = function(trigger)
       local ret = [[
         local itemName = %s
-        local name = GetItemInfo(itemName) or "Invalid"
+        local name, itemLink = GetItemInfo(itemName)
+        name = name or "Invalid"
+        local itemId = tonumber(itemName) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         local icon = GetItemIcon(itemName) or ""
       ]]
 
@@ -4781,7 +4775,7 @@ Private.event_prototypes = {
         type = "item",
         init = "arg"
       },
-      --[[{ maybe some day
+      {
         name = "itemId",
         display = WeakAuras.newFeatureString .. L["ItemId"],
         hidden = true,
@@ -4790,7 +4784,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "number",
         operator_types = "only_equal",
-      },]]
+      },
       {
         name = "name",
         display = L["Name"],
@@ -5653,6 +5647,8 @@ Private.event_prototypes = {
       local ret = [[
         local itemName = %s
         local exactSpellMatch = %s
+        local _, itemLink = GetItemInfo(itemName)
+        local itemId = tonumber(itemName) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         if not exactSpellMatch and tonumber(itemName) then
           itemName = GetItemInfo(itemName)
         end
@@ -5674,7 +5670,7 @@ Private.event_prototypes = {
         showExactOption = true,
         test = "true"
       },
-      --[[{ maybe some day
+      {
         name = "itemId",
         display = WeakAuras.newFeatureString .. L["ItemId"],
         hidden = true,
@@ -5683,7 +5679,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "number",
         operator_types = "only_equal",
-      },]]
+      },
       {
         name = "name",
         display = L["Name"],
@@ -6217,7 +6213,7 @@ Private.event_prototypes = {
         },
         preamble = "local spellChecker = Private.ExecEnv.CreateSpellChecker()",
         preambleGroup = "spell",
-        test = "spellChecker:Check(spellNames)",
+        test = "spellChecker:CheckName(spellNames)",
         noValidation = true,
       },
       {
@@ -6607,6 +6603,8 @@ Private.event_prototypes = {
       local ret = [[
         local inverse = %s
         local triggerItemName = %s
+        local _, itemLink = GetItemInfo(triggerItemName)
+        local itemId = tonumber(triggerItemName) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         local icon = GetItemIcon(triggerItemName) or ""
         local itemSlot = %s
       ]]
@@ -6633,7 +6631,7 @@ Private.event_prototypes = {
         test = "true",
         only_exact = true
       },
-      --[[{ maybe some day
+      {
         name = "itemId",
         display = WeakAuras.newFeatureString .. L["ItemId"],
         hidden = true,
@@ -6642,7 +6640,7 @@ Private.event_prototypes = {
         store = true,
         conditionType = "number",
         operator_types = "only_equal",
-      },]]
+      },
       {
         name = "itemSlot",
         display = WeakAuras.newFeatureString .. L["Item Slot"],
