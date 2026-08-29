@@ -2524,9 +2524,9 @@ function Private.AddMany(tbl, takeSnapshots)
       end), 'normal')
     else
       if next(WeakAuras.LoadFromArchive("Repository", "migration").stores) ~= nil then
-        timer:ScheduleTimer(function()
+        Private.C_Timer.After(1, function()
           prettyPrint(L["WeakAuras has detected empty settings. If this is unexpected, ask for assistance on https://discord.gg/UXSc7nt."])
-        end, 1)
+        end)
       end
     end
   end

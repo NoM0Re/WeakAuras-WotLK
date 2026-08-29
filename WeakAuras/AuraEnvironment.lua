@@ -589,7 +589,9 @@ local exec_env_custom = setmetatable(CopyTable(mixins),
     elseif k == "C_Timer" then
       return current_aura_env and Private.AuraEnvironmentWrappedSystem.Get("C_Timer",
                                       current_aura_env.id, current_aura_env.cloneId)
-                              or C_Timer
+                              or Private.C_Timer
+    elseif k == "C_FunctionContainers" then
+      return Private.C_FunctionContainers
     elseif blockedFunctions[k] then
       blocked(k)
       return function(_) end

@@ -711,10 +711,10 @@ function OptionsPrivate.CreateFrame()
     -- Buttons behave in a strange way if they are disabled inside of the OnClick handler
     -- where the pushed texture refuses to vanish until the button is enabled & user clicks it again
     -- so, just disable the button after next frame draw, so it's imperceptible to the user but we're not in the OnClick handler
-    WeakAuras.timer:ScheduleTimer(function()
+    OptionsPrivate.Private.C_Timer.After(0, function()
       self.undo:SetDisabled(OptionsPrivate.Private.TimeMachine:DescribePrevious() == nil)
       self.redo:SetDisabled(OptionsPrivate.Private.TimeMachine:DescribeNext() == nil)
-    end, 0)
+    end)
   end
   tmControls:Step()
   OptionsPrivate.Private.TimeMachine.sub:AddSubscriber("Step", tmControls)

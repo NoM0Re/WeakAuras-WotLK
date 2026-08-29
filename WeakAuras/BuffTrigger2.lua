@@ -1953,11 +1953,11 @@ local function EventHandler(frame, event, arg1, arg2, ...)
       -- Initial login has a bug where the tooltip information is not available,
       -- so update tooltips 2s after login
       isInitialLogin = false
-      timer:ScheduleTimer(function()
+      Private.C_Timer.After(3, function()
         for unit in pairs(matchData) do
           EventHandler(frame, "UNIT_AURA", unit)
         end
-      end, 3)
+      end)
     end
 
   elseif event == "RAID_TARGET_UPDATE" then

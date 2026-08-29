@@ -544,14 +544,14 @@ local function ConstructTextEditor(frame)
   filterInput:SetFrameLevel(5)
   filterInput:SetScript("OnTextChanged", function(self)
     WA_SearchBoxTemplate_OnTextChanged(self)
-    if APISearchCTimer and WeakAuras.timer:TimeLeft(APISearchCTimer) then
-      WeakAuras.timer:CancelTimer(APISearchCTimer)
+    if APISearchCTimer then
+      APISearchCTimer:Cancel()
     end
-    APISearchCTimer = WeakAuras.timer:ScheduleTimer(
+    APISearchCTimer = OptionsPrivate.Private.C_Timer.NewTimer(
+      APISearchTextChangeDelay,
       function()
         makeAPISearch(filterInput:GetText())
-      end,
-      APISearchTextChangeDelay
+      end
     )
   end)
   filterInput:SetHeight(15)
