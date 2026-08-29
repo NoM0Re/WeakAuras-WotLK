@@ -1160,7 +1160,7 @@ local function TriggerInfoApplies(triggerInfo, unit)
     return false
   end
 
-  if triggerInfo.groupRole and not triggerInfo.groupRole[WeakAuras.LGT:GetUnitRole(controllingUnit) or ""] then
+  if triggerInfo.groupRole and not triggerInfo.groupRole[select(2, Private.LibSpecWrapper.SpecRolePositionForUnit(controllingUnit)) or ""] then
     return false
   end
 
@@ -1169,9 +1169,7 @@ local function TriggerInfoApplies(triggerInfo, unit)
   end
 
   if triggerInfo.specId then
-    if not triggerInfo.specId[Private.ExecEnv.GetSpecID(
-            (select(2, UnitClass(controllingUnit)) or "") ..
-            (Private.ExecEnv.GetUnitTalentSpec(controllingUnit) or ""))] then
+    if not triggerInfo.specId[Private.LibSpecWrapper.SpecForUnit(controllingUnit)] then
       return false
     end
   end
@@ -1278,7 +1276,7 @@ end
 
 local function roleForTriggerInfo(triggerInfo, unit)
   if triggerInfo.fetchRole then
-    return WeakAuras.GetUnitRole(unit)
+    return select(2, Private.LibSpecWrapper.SpecRolePositionForUnit(unit))
   end
 end
 
@@ -1977,8 +1975,8 @@ local function EventHandler(frame, event, arg1, arg2, ...)
   Private.StopProfileSystem("bufftrigger2 - ".. event)
 end
 
-Private.LibGroupTalentsWrapper.Register(function(unit)
-  Private.StartProfileSystem("bufftrigger2 - LibGroupTalentsWrapper")
+Private.LibSpecWrapper.Register(function(unit)
+  Private.StartProfileSystem("bufftrigger2 - LibSpecWrapper")
 
   local deactivatedTriggerInfos = {}
   RecheckActiveForUnitType("group", unit, deactivatedTriggerInfos)
@@ -1987,7 +1985,7 @@ Private.LibGroupTalentsWrapper.Register(function(unit)
   end
   DeactivateScanFuncs(deactivatedTriggerInfos)
 
-  Private.StopProfileSystem("bufftrigger2 - LibGroupTalentsWrapper")
+  Private.StopProfileSystem("bufftrigger2 - LibSpecWrapper")
 end)
 
 Buff2Frame:RegisterEvent("UNIT_AURA")

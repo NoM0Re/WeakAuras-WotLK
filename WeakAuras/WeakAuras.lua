@@ -41,11 +41,14 @@ local prettyPrint = WeakAuras.prettyPrint
 WeakAurasTimers = setmetatable({}, {__tostring=function() return "WeakAuras" end})
 LibStub("AceTimer-3.0"):Embed(WeakAurasTimers)
 
-WeakAuras.LGT = LibStub("LibGroupTalents-1.0") or {
+WeakAuras.LGT = LibStub("LibGroupTalents-1.0", true) or {
+  RegisterCallback = function(_, _, _) end,
   GetUnitTalentSpec = function(_) end,
   GetUnitRole = function(_) end,
+  UnitHasTalent = function(_, _) end,
+  UnitHasGlyph = function(_, _) end,
 }
-WeakAuras.LRC = LibStub("LibResComm-1.0") or {
+WeakAuras.LRC = LibStub("LibResComm-1.0", true) or {
   RegisterCallback = function(_, _, _) end,
   IsUnitBeingRessed = function(_) end,
 }
@@ -1598,10 +1601,7 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
   local _, race = UnitRace("player")
   local faction = UnitFactionGroup("player")
   local zoneId = GetCurrentMapAreaID()
-  local role = WeakAuras.LGT:GetUnitRole("player")
-  local postion = role == "caster" and "RANGED"
-                  or role == "melee" and "MELEE"
-                  or role
+  local specId, role, position = Private.LibSpecWrapper.SpecRolePositionForUnit("player")
   local raidRole = false;
   local raidID = UnitInRaid("player")
   if raidID then
@@ -1649,8 +1649,8 @@ local function scanForLoadsImpl(toCheck, event, arg1, ...)
     if (data and not data.controlledChildren) then
       local loadFunc = loadFuncs[id];
       local loadOpt = loadFuncsForOptions[id];
-      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, postion, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
-      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, player, realm, guild, race, faction, playerLevel, role, postion, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
+      shouldBeLoaded = loadFunc and loadFunc("ScanForLoads_Auras", inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, specId, player, realm, guild, race, faction, playerLevel, role, position, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
+      couldBeLoaded =  loadOpt and loadOpt("ScanForLoads_Auras",   inCombat, alive, inEncounter, pvp, vehicle, vehicleUi, mounted, class, specId, player, realm, guild, race, faction, playerLevel, role, position, raidRole, group, groupSize, raidMemberType, zone, zoneId, subzone, encounter_id, size, difficulty);
 
       if(shouldBeLoaded and not loaded[id]) then
         changed = changed + 1;

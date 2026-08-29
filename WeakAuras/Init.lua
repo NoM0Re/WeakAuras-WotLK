@@ -115,9 +115,10 @@ Private.frames = {}
 --- @field noreset_swing_spells table<number, boolean>
 --- @field RunCustomTextFunc fun(region: table, f: function): string?
 --- @field spark_rotation_types table<string, string>
---- @field spec_types string[]
---- @field spec_types_3 string[]
---- @field spec_types_2 string[]
+--- @field spec_types_all table<number, string>
+--- @field specs_sorted number[]
+--- @field specInfoByID table<number, specInfo>
+--- @field specIDByClassAndTree table<string, number[]>
 --- @field SquelchingActions fun(uid: uid): boolean
 --- @field StartProfileAura fun(id: auraId)
 --- @field StartProfileSystem fun(system: string)

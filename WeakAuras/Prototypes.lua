@@ -708,42 +708,6 @@ Private.tinySecondFormat = function(value)
   end
 end
 
-function Private.ExecEnv.GetSpecIcon(specID)
-  return specID and Private.specid_to_icon[specID] or ""
-end
-
-function Private.ExecEnv.GetSpecName(specID)
-  return specID and Private.specid_to_name[specID] or ""
-end
-
-function Private.ExecEnv.GetSpecID(specName)
-  return specName and Private.specname_to_id[specName] or 0
-end
-
-function Private.ExecEnv.GetUnitTalentSpec(unit)
-  local spec = WeakAuras.LGT:GetUnitTalentSpec(unit)
-  -- LibGroupTalents misses Guardian for tanks, so we fix it here
-  if spec == L["Feral Combat"] then
-    return (WeakAuras.LGT:GetUnitRole(unit) == "tank" and L["Guardian"]) or spec
-  end
-  return spec
-end
-
-function WeakAuras.CheckClassSpec(specID)
-  specID = tonumber(specID)
-  if not specID then return end
-  local class = select(2, UnitClass("player")) or ""
-  local currentSpec = Private.ExecEnv.GetUnitTalentSpec("player") or ""
-  return Private.ExecEnv.GetSpecName(specID) == class .. currentSpec
-end
-
-function WeakAuras.SpecForUnit(unit)
-  if not unit then return 0 end
-  local spec = Private.ExecEnv.GetUnitTalentSpec(unit)
-  local class = select(2, UnitClass(unit))
-  return (spec and class) and Private.ExecEnv.GetSpecID(class .. spec) or 0
-end
-
 function Private.ExecEnv.ParseStringCheck(input)
   if not input then return end
   local matcher = {
@@ -944,11 +908,8 @@ end
 
 local function valuesForTalentFunction(trigger)
   return function()
-    local single_class =
-      Private.specid_to_class[
-        Private.checkForSingleLoadCondition(trigger, "class_and_spec") or ""
-      ]
-      or Private.checkForSingleLoadCondition(trigger, "class")
+    local specInfo = Private.specInfoByID[Private.checkForSingleLoadCondition(trigger, "class_and_spec") or 0]
+    local single_class = specInfo and specInfo.class or Private.checkForSingleLoadCondition(trigger, "class")
     if not single_class then
       single_class = select(2, UnitClass("player"));
     end
@@ -1087,19 +1048,21 @@ Private.load_prototype = {
       type = "description",
     },
     {
-      name = "class_and_spec",
-      display = L["Class and Specialization"],
-      type = "multiselect",
-      values = "spec_types_all",
-      test = "WeakAuras.CheckClassSpec(%s)",
-      events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
-    },
-    {
       name = "class",
       display = L["Player Class"],
       type = "multiselect",
       values = "class_types",
       init = "arg"
+    },
+    {
+      name = "class_and_spec",
+      display = L["Class and Specialization"],
+      type = "multiselect",
+      values = "spec_types_all",
+      init = "arg",
+      events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
+      sorted = true,
+      sortOrder = Private.specs_sorted,
     },
     {
       name = "talent",
@@ -1840,6 +1803,8 @@ Private.event_prototypes = {
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party" or trigger.unit == "player"
         end,
         desc = L["Requires syncing the specialization via LibGroupTalents."],
+        sorted = true,
+        sortOrder = Private.specs_sorted,
       },
       {
         name = "classification",
@@ -1890,7 +1855,7 @@ Private.event_prototypes = {
         name = "role",
         display = L["Assigned Role"],
         type = "select",
-        init = "WeakAuras.LGT:GetUnitRole(unit)",
+        init = "select(2, WeakAuras.SpecRolePositionForUnit(unit))",
         values = "role_types",
         store = true,
         conditionType = "select",
@@ -2589,12 +2554,14 @@ Private.event_prototypes = {
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party" or trigger.unit == "player"
         end,
         desc = L["Requires syncing the specialization via LibGroupTalents."],
+        sorted = true,
+        sortOrder = Private.specs_sorted,
       },
       {
         name = "role",
         display = L["Assigned Role"],
         type = "select",
-        init = "WeakAuras.LGT:GetUnitRole(unit)",
+        init = "select(2, WeakAuras.SpecRolePositionForUnit(unit))",
         values = "role_types",
         store = true,
         conditionType = "select",
@@ -3069,12 +3036,14 @@ Private.event_prototypes = {
           return trigger.unit == "group" or trigger.unit == "raid" or trigger.unit == "party" or trigger.unit == "player"
         end,
         desc = L["Requires syncing the specialization via LibGroupTalents."],
+        sorted = true,
+        sortOrder = Private.specs_sorted,
       },
       {
         name = "role",
         display = L["Assigned Role"],
         type = "select",
-        init = "WeakAuras.LGT:GetUnitRole(unit)",
+        init = "select(2, WeakAuras.SpecRolePositionForUnit(unit))",
         values = "role_types",
         store = true,
         conditionType = "select",
@@ -5423,13 +5392,13 @@ Private.event_prototypes = {
     internal_events = {"UNIT_SPEC_CHANGED_player", "WA_DELAYED_PLAYER_ENTERING_WORLD"},
     force_events = "UNIT_SPEC_CHANGED_player",
     name = L["Class and Specialization"],
-    init = function(trigger)
-      local class = select(2, UnitClass("player")) or "UNKNOWN"
-      return ([[
-        local specName = Private.ExecEnv.GetUnitTalentSpec("player") or "Unknown"
-        local specId = Private.ExecEnv.GetSpecID("%s" .. specName)
-        local specIcon = Private.ExecEnv.GetSpecIcon(specId)
-      ]]):format(class)
+    init = function()
+      return [[
+        local specId = WeakAuras.SpecForUnit("player")
+        local specInfo = Private.specInfoByID[specId]
+        local specName = specInfo and specInfo.name or "Unknown"
+        local specIcon = specInfo and specInfo.icon or ""
+      ]]
     end,
     args = {
       {
@@ -5439,6 +5408,8 @@ Private.event_prototypes = {
         values = "spec_types_all",
         store = "true",
         conditionType = "select",
+        sorted = true,
+        sortOrder = Private.specs_sorted,
       },
       {
         hidden = true,
@@ -7315,7 +7286,7 @@ Private.event_prototypes = {
         name = "role",
         display = L["Assigned Role"],
         type = "select",
-        init = "WeakAuras.LGT:GetUnitRole(unit)",
+        init = "select(2, WeakAuras.SpecRolePositionForUnit(unit))",
         values = "role_types",
         store = true,
         conditionType = "select",

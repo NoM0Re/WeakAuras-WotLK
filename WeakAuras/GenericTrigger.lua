@@ -3447,7 +3447,7 @@ function WeakAuras.WatchUnitChange(unit)
         watchUnitChange.unitRaidRole[unit] = newRaidRole
       end
       local oldRole = watchUnitChange.unitRoles[unit]
-      local newRole = WeakAuras.LGT:GetUnitRole(unit)
+      local newRole = select(2, Private.LibSpecWrapper.SpecRolePositionForUnit(unit))
       if oldRole ~= newRole then
         eventsToSend["UNIT_ROLE_CHANGED_" .. unit] = unit
         watchUnitChange.unitRoles[unit] = newRole
@@ -4180,11 +4180,18 @@ end
 -- LibSpecWrapper
 -- We always register, because it's probably not that often called, and ScanEvents checks
 -- early if anyone wants the event
-Private.LibGroupTalentsWrapper.Register(function(unit)
+Private.LibSpecWrapper.Register(function(unit)
+  local specEvent = "UNIT_SPEC_CHANGED_" .. unit
   if unit == "player" then
-    Private.ScanForLoads(nil, "UNIT_SPEC_CHANGED_" .. unit)
+    Private.ScanForLoads(nil, specEvent)
   end
-  WeakAuras.ScanEvents("UNIT_SPEC_CHANGED_" .. unit, unit)
+  WeakAuras.ScanEvents(specEvent, unit)
+
+  local roleEvent = "UNIT_ROLE_CHANGED_" .. unit
+  if unit == "player" then
+    Private.ScanForLoads(nil, roleEvent)
+  end
+  WeakAuras.ScanEvents(roleEvent, unit)
 end)
 
 -- If DBM is available, map its pull/kill/wipe callbacks to Blizzard encounter
