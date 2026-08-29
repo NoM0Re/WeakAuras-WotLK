@@ -1698,13 +1698,11 @@ function Private.ExecEnv.GetTotalCountCurrencies(currencyID)
   return 0
 end
 
+local currenciesInitialized
+
 local function InitializeCurrencies()
-  if Private.discovered_currencies then
-    for key in pairs(Private.discovered_currencies) do
-      if key ~= "member" then
-        return
-      end
-    end
+  if currenciesInitialized then
+    return
   end
   ---@type table<number, string>
   Private.discovered_currencies = {}
@@ -1713,6 +1711,8 @@ local function InitializeCurrencies()
   ---@type table<string, boolean>
   Private.discovered_currencies_headers = {}
   local expanded = {}
+  local complete = true
+  local hasCurrency
 
   for index = GetCurrencyListSize(), 1, -1 do
   local name, isHeader, isExpanded = GetCurrencyListInfo(index)
@@ -1731,14 +1731,17 @@ local function InitializeCurrencies()
     elseif currencyType == 2 then -- Honor points
       icon = "Interface\\BattlefieldFrame\\Battleground-".. UnitFactionGroup("player")
     end
-    if itemID and iconFileID then
-      icon = icon or iconFileID or "Interface\\Icons\\INV_Misc_QuestionMark" -- iconFileID not available on first login
+    if itemID and (icon or iconFileID) then
+      icon = icon or iconFileID
       Private.discovered_currencies[itemID] = "|T" .. icon .. ":0|t" .. name
       Private.discovered_currencies_sorted[itemID] = index
+      hasCurrency = true
     elseif isHeader then
       Private.discovered_currencies[name] = name
       Private.discovered_currencies_sorted[name] = index
       Private.discovered_currencies_headers[name] = true
+    else
+      complete = false
     end
   end
 
@@ -1751,6 +1754,7 @@ local function InitializeCurrencies()
 
   Private.discovered_currencies["member"] = "|Tinterface\\common\\ui-searchbox-icon:0:0:0:-2|t"..L["Specific Currency"];
   Private.discovered_currencies_sorted["member"] = -1;
+  currenciesInitialized = complete and hasCurrency
 end
 
 ---@type function
