@@ -93,3 +93,15 @@ WeakAuras.SpecForUnit = Private.LibSpecWrapper.SpecForUnit
 WeakAuras.SpecRolePositionForUnit = Private.LibSpecWrapper.SpecRolePositionForUnit
 WeakAuras.CheckTalentForUnit = Private.LibSpecWrapper.CheckTalentForUnit
 WeakAuras.CheckGlyphForUnit = Private.LibSpecWrapper.CheckGlyphForUnit
+
+-- Export for Spec & Class Trigger
+function Private.ExecEnv.GetSpecialization()
+  return Private.LibSpecWrapper.SpecForUnit("player")
+end
+
+function Private.ExecEnv.GetSpecializationInfo(specID)
+  local specInfo = Private.specInfoByID[specID]
+  if specInfo then
+    return specInfo.id, specInfo.name, nil, specInfo.icon
+  end
+end

@@ -5388,10 +5388,7 @@ Private.event_prototypes = {
     name = L["Class and Specialization"],
     init = function()
       return [[
-        local specId = WeakAuras.SpecForUnit("player")
-        local specInfo = Private.specInfoByID[specId]
-        local specName = specInfo and specInfo.name or "Unknown"
-        local specIcon = specInfo and specInfo.icon or ""
+        local specId, specName, _, specIcon = Private.ExecEnv.GetSpecializationInfo(Private.ExecEnv.GetSpecialization())
       ]]
     end,
     args = {
