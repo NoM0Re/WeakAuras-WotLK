@@ -6,13 +6,15 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0"
-local MINOR_VERSION = 21
+local MINOR_VERSION = 25
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
+local Masque = LibStub("Masque", true)
+local AnimateTexCoords = AnimateTexCoords
 
 local pairs, ipairs = pairs, ipairs
-local ceil, floor, min, mod = math.ceil, math.floor, math.min, mod
+local abs, floor, min = math.abs, math.floor, math.min
 local tinsert, tremove = table.insert, table.remove
 
 -- ===============================================================================
@@ -28,10 +30,17 @@ local tinsert, tremove = table.insert, table.remove
 local texturePath = [[Interface\AddOns\WeakAuras\Libs\]]
 
 local textureList = {
-  ["empty"] = texturePath .. [[LibCustomGlow-1.0\AM_29]],
-  ["white"] = [[Interface\BUTTONS\WHITE8X8]],
-  ["shine"] = texturePath .. [[LibCustomGlow-1.0\Artifacts]]
+  buttonGlow = texturePath .. [[LibCustomGlow-1.0\IconAlert]],
+  buttonGlowAnts = texturePath .. [[LibCustomGlow-1.0\IconAlertAnts]],
+  buttonGlowAntsDesaturated = texturePath .. [[LibCustomGlow-1.0\IconAlertAnts_desaturated]],
+  empty = texturePath .. [[LibCustomGlow-1.0\AM_29]],
+  proc = texturePath .. [[LibCustomGlow-1.0\UIActionBarFX]],
+  procDesaturated = texturePath .. [[LibCustomGlow-1.0\UIActionBarFX_desaturated]],
+  white = [[Interface\BUTTONS\WHITE8X8]],
+  shine = texturePath .. [[LibCustomGlow-1.0\Artifacts]],
+  shineDesaturated = texturePath .. [[LibCustomGlow-1.0\Artifacts_desaturated]]
 }
+local shineCoords = {0.8115234375, 0.9169921875, 0.8798828125, 0.9853515625}
 
 function lib.RegisterTextures(texture, id)
   textureList[id] = texture
@@ -47,7 +56,7 @@ local TexPoolResetter = function(pool, tex)
   tex:Hide()
   tex:ClearAllPoints()
 end
-local GlowTexPool = CreateTexturePool(GlowParent, "ARTWORK", nil, nil, TexPoolResetter)
+local GlowTexPool = CreateTexturePool(GlowParent, "ARTWORK", 7, nil, TexPoolResetter)
 lib.GlowTexPool = GlowTexPool
 
 local FramePoolResetter = function(framePool, frame)
@@ -79,17 +88,15 @@ lib.GlowFramePool = GlowFramePool
 local function addFrameAndTex(r, color, name, key, N, xOffset, yOffset, texture, texCoord, desaturated, frameLevel)
   key = key or ""
   frameLevel = frameLevel or 8
-
   if not r[name..key] then
     r[name..key] = GlowFramePool:Acquire()
     r[name..key]:SetParent(r)
     r[name..key].name = name..key
   end
-
   local f = r[name..key]
   f:SetFrameLevel(r:GetFrameLevel() + frameLevel)
-  f:SetPoint("TOPLEFT", r, "TOPLEFT", -xOffset, yOffset)
-  f:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", xOffset, -yOffset)
+  f:SetPoint("TOPLEFT", r, "TOPLEFT", -xOffset + 0.05, yOffset + 0.05)
+  f:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", xOffset, -yOffset + 0.05)
   f:Show()
 
   if not f.textures then
@@ -99,11 +106,17 @@ local function addFrameAndTex(r, color, name, key, N, xOffset, yOffset, texture,
   for i = 1, N do
     if not f.textures[i] then
       f.textures[i] = GlowTexPool:Acquire()
-      f.textures[i]:SetTexture(texture)
       f.textures[i]:SetTexCoord(texCoord[1], texCoord[2], texCoord[3], texCoord[4])
       f.textures[i]:SetParent(f)
+      f.textures[i]:SetDrawLayer("ARTWORK", 7)
+      if name == "_AutoCastGlow" then
+        f.textures[i]:SetBlendMode("ADD")
+      else
+        f.textures[i]:SetBlendMode("BLEND")
+      end
     end
 
+    f.textures[i]:SetTexture(texture)
     f.textures[i]:SetVertexColor(color[1], color[2], color[3], color[4])
     f.textures[i]:Show()
   end
@@ -113,7 +126,6 @@ local function addFrameAndTex(r, color, name, key, N, xOffset, yOffset, texture,
     tremove(f.textures)
   end
 end
-
 
 --Pixel Glow Functions--
 local pPoint = {
@@ -228,9 +240,8 @@ function lib.PixelGlow_Start(r, color, N, frequency, length, th, xOffset, yOffse
   f.timer = f.timer or 0
   f.info = f.info or {}
   f.info.N = N
-  f.info.period = (not frequency or frequency == 0) and 4 or (1 / frequency)
+  f.info.period = (not frequency or abs(frequency) < 0.000001) and 4 or (1 / frequency)
   f.info.th = th or 1
-
   if f.info.length ~= length then
     f.info.width = nil
     f.info.length = length
@@ -243,7 +254,9 @@ function lib.PixelGlow_Start(r, color, N, frequency, length, th, xOffset, yOffse
 end
 
 function lib.PixelGlow_Stop(r, key)
-  if not r then return end
+  if not r then
+    return
+  end
   key = key or ""
   if not r["_PixelGlow"..key] then
     return false
@@ -257,41 +270,37 @@ lib.startList["Pixel Glow"] = lib.PixelGlow_Start
 lib.stopList["Pixel Glow"] = lib.PixelGlow_Stop
 
 
---Autocast Glow Funcitons--
+--Autocast Glow Functions--
 local acSizes = {7, 6, 5, 4}
 
-local function acSizeChanged(self, width, height)
-  if not (width or height) then
-    width, height = self:GetSize()
-  end
-
-  if width ~= self.info.width or height ~= self.info.height then
-    if width*height == 0 then return end
-    self.info.width = width
-    self.info.height = height
-    self.info.perimeter = 2 * (width + height)
-    self.info.bottomlim = height * 2 + width
-    self.info.rightlim = height + width
-    self.info.space = self.info.perimeter / self.info.N
-  end
-end
-
 local function acUpdate(self, elapsed)
-  local texIndex, info = 0, self.info
+  local width, height = self:GetSize()
+  local rectWidth, rectHeight
+  if width <= 0 or height <= 0 then
+    rectWidth, rectHeight = select(3, self:GetRect())
+    width, height = rectWidth or width, rectHeight or height
+  end
+  if width <= 0 or height <= 0 then return end
+
+  local perimeter = 2 * (width + height)
+  local bottomlim = height * 2 + width
+  local rightlim = height + width
+  local space = perimeter / self.info.N
+  local texIndex = 0
   for k = 1, 4 do
-    self.timer[k] = self.timer[k] + elapsed / (info.period * k)
+    self.timer[k] = self.timer[k] + elapsed / (self.info.period * k)
     if self.timer[k] > 1 or self.timer[k] < -1 then
       self.timer[k] = self.timer[k] % 1
     end
-    for i = 1, info.N do
+    for i = 1, self.info.N do
       texIndex = texIndex + 1
-      local position = (info.space * i + info.perimeter * self.timer[k]) % info.perimeter
-      if position > info.bottomlim then
-        self.textures[texIndex]:SetPoint("CENTER", self, "BOTTOMRIGHT", -position + info.bottomlim, 0)
-      elseif position > info.rightlim then
-        self.textures[texIndex]:SetPoint("CENTER", self, "TOPRIGHT", 0, -position + info.rightlim)
-      elseif position > info.height then
-        self.textures[texIndex]:SetPoint("CENTER", self, "TOPLEFT", position - info.height, 0)
+      local position = (space * i + perimeter * self.timer[k]) % perimeter
+      if position > bottomlim then
+        self.textures[texIndex]:SetPoint("CENTER", self, "BOTTOMRIGHT", -position + bottomlim, 0)
+      elseif position > rightlim then
+        self.textures[texIndex]:SetPoint("CENTER", self, "TOPRIGHT", 0, -position + rightlim)
+      elseif position > height then
+        self.textures[texIndex]:SetPoint("CENTER", self, "TOPLEFT", position - height, 0)
       else
         self.textures[texIndex]:SetPoint("CENTER", self, "BOTTOMLEFT", 0, position)
       end
@@ -308,7 +317,8 @@ function lib.AutoCastGlow_Start(r, color, N, frequency, scale, xOffset, yOffset,
   yOffset = yOffset or 0
   key = key or ""
 
-  addFrameAndTex(r, color or {.95, .95, .32, 1}, "_AutoCastGlow", key, N * 4, xOffset, yOffset, textureList.shine, {0.8115234375, 0.9169921875, 0.8798828125, 0.9853515625}, true, frameLevel)
+  local texture = color and textureList.shineDesaturated or textureList.shine
+  addFrameAndTex(r, color or {.95, .95, .32, 1}, "_AutoCastGlow", key, N * 4, xOffset, yOffset, texture, shineCoords, true, frameLevel)
   local f = r["_AutoCastGlow"..key]
   for k, size in pairs(acSizes) do
     for i = 1, N do
@@ -319,16 +329,16 @@ function lib.AutoCastGlow_Start(r, color, N, frequency, scale, xOffset, yOffset,
   f.timer = f.timer or {0, 0, 0, 0}
   f.info = f.info or {}
   f.info.N = N
-  f.info.period = (not frequency or frequency == 0) and 4 or (1 / frequency)
+  f.info.period = (not frequency or abs(frequency) < 0.000001) and 8 or (1 / frequency)
 
-  acSizeChanged(f)
-  f:SetScript("OnSizeChanged", acSizeChanged)
   f:SetScript("OnUpdate", acUpdate)
   acUpdate(f, 0)
 end
 
 function lib.AutoCastGlow_Stop(r, key)
-  if not r then return end
+  if not r then
+    return
+  end
 
   key = key or ""
   if not r["_AutoCastGlow"..key] then
@@ -544,38 +554,6 @@ local function CreateScaleAnim(group, target, order, duration, x, y, delay, smoo
   scale:SetScript("OnFinished", ScaleAnimation_OnStop)
 end
 
-local function AnimateTexCoords(texture, textureWidth, textureHeight, frameWidth, frameHeight, numFrames, elapsed, throttle)
-  if not texture.frame then
-    texture.frame = 1
-    texture.throttle = throttle
-    texture.numColumns = floor(textureWidth / frameWidth)
-    texture.numRows = floor(textureHeight / frameHeight)
-    texture.columnWidth = frameWidth / textureWidth
-    texture.rowHeight = frameHeight / textureHeight
-  end
-
-  if not texture.throttle or texture.throttle > throttle then
-    local frame = texture.frame
-    local framesToAdvance = floor(texture.throttle / throttle)
-    while frame + framesToAdvance > numFrames do
-      frame = frame - numFrames
-    end
-
-    frame = frame + framesToAdvance
-    texture.throttle = 0
-
-    local left = mod(frame - 1, texture.numColumns) * texture.columnWidth
-    local right = left + texture.columnWidth
-    local bottom = ceil(frame / texture.numColumns) * texture.rowHeight
-    local top = bottom - texture.rowHeight
-    texture:SetTexCoord(left, right, top, bottom)
-
-    texture.frame = frame
-  else
-    texture.throttle = texture.throttle + elapsed
-  end
-end
-
 --Action Button Glow--
 local function ButtonGlowResetter(framePool,frame)
 --	frame:SetScript("OnUpdate",nil)
@@ -634,7 +612,7 @@ local function bgHide(self)
 end
 
 local function bgUpdate(self, elapsed)
-  AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, self.throttle)
+  AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed * 0.1 / self.throttle)
 end
 
 local function IsAnimPlaying(self)
@@ -645,14 +623,14 @@ local function configureButtonGlow(f, alpha)
   f.spark = f:CreateTexture(nil, "BACKGROUND")
   f.spark:SetPoint("CENTER")
   f.spark:SetAlpha(0)
-  f.spark:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
+  f.spark:SetTexture(textureList.buttonGlow)
   f.spark:SetTexCoord(0.00781250, 0.61718750, 0.00390625, 0.26953125)
 
   -- inner glow
   f.innerGlow = f:CreateTexture()
   f.innerGlow:SetPoint("CENTER")
   f.innerGlow:SetAlpha(0)
-  f.innerGlow:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
+  f.innerGlow:SetTexture(textureList.buttonGlow)
   f.innerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
   f.innerGlow:Show()
 
@@ -661,14 +639,14 @@ local function configureButtonGlow(f, alpha)
   f.innerGlowOver:SetPoint("TOPLEFT", f.innerGlow, "TOPLEFT")
   f.innerGlowOver:SetPoint("BOTTOMRIGHT", f.innerGlow, "BOTTOMRIGHT")
   f.innerGlowOver:SetAlpha(0)
-  f.innerGlowOver:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
+  f.innerGlowOver:SetTexture(textureList.buttonGlow)
   f.innerGlowOver:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
 
   -- outer glow
   f.outerGlow = f:CreateTexture()
   f.outerGlow:SetPoint("CENTER")
   f.outerGlow:SetAlpha(0)
-  f.outerGlow:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
+  f.outerGlow:SetTexture(textureList.buttonGlow)
   f.outerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
 
   -- outer glow over
@@ -676,14 +654,21 @@ local function configureButtonGlow(f, alpha)
   f.outerGlowOver:SetPoint("TOPLEFT", f.outerGlow, "TOPLEFT")
   f.outerGlowOver:SetPoint("BOTTOMRIGHT", f.outerGlow, "BOTTOMRIGHT")
   f.outerGlowOver:SetAlpha(0)
-  f.outerGlowOver:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlert]])
+  f.outerGlowOver:SetTexture(textureList.buttonGlow)
   f.outerGlowOver:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
 
   -- ants
   f.ants = f:CreateTexture(nil, "OVERLAY")
   f.ants:SetPoint("CENTER")
   f.ants:SetAlpha(0)
-  f.ants:SetTexture(texturePath .. [[LibCustomGlow-1.0\IconAlertAnts]])
+  f.ants:SetTexture(textureList.buttonGlowAnts)
+  -- Wrath's AnimateTexCoords does not floor partial texture columns.
+  -- Seed the 5x5 grid used by this 256x256 sheet with 48x48 frames.
+  f.ants.frame = 1
+  f.ants.numColumns = 5
+  f.ants.numRows = 5
+  f.ants.columnWidth = 48 / 256
+  f.ants.rowHeight = 48 / 256
 
   f.animIn = f:CreateAnimationGroup()
   f.animIn.appear = {}
@@ -737,6 +722,18 @@ end
 
 local ButtonGlowTextures = {["spark"] = true, ["innerGlow"] = true, ["innerGlowOver"] = true, ["outerGlow"] = true, ["outerGlowOver"] = true, ["ants"] = true}
 
+local function updateButtonGlowTextures(f, hasColor)
+  if hasColor then
+    f.innerGlow:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
+    f.outerGlow:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
+    f.ants:SetTexture(textureList.buttonGlowAntsDesaturated)
+  else
+    f.innerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
+    f.outerGlow:SetTexCoord(0.00781250, 0.50781250, 0.27734375, 0.52734375)
+    f.ants:SetTexture(textureList.buttonGlowAnts)
+  end
+end
+
 local function noZero(num)
     if num == 0 then
         return 0.001
@@ -766,19 +763,22 @@ function lib.ButtonGlow_Start(r, color, frequency, frameLevel)
     end
 
     if not color then
+      updateButtonGlowTextures(f, false)
       for texture in pairs(ButtonGlowTextures) do
+        f[texture]:SetDesaturated(nil)
         f[texture]:SetVertexColor(1, 1, 1)
         local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1), 1)
-                f[texture]:SetAlpha(alpha)
+        f[texture]:SetAlpha(alpha)
         updateAlphaAnim(f, 1)
       end
       f.color = false
     else
+      updateButtonGlowTextures(f, true)
       for texture in pairs(ButtonGlowTextures) do
         f[texture]:SetVertexColor(color[1], color[2], color[3])
-                local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1)*color[4], 1)
-                f[texture]:SetAlpha(alpha)
-        updateAlphaAnim(f,color and color[4] or 1)
+        local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1)*color[4], 1)
+        f[texture]:SetAlpha(alpha)
+        updateAlphaAnim(f, color and color[4] or 1)
       end
       f.color = color
     end
@@ -799,11 +799,14 @@ function lib.ButtonGlow_Start(r, color, frequency, frameLevel)
     f:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", width * 0.2, -height * 0.2)
     if not color then
       f.color = false
+      updateButtonGlowTextures(f, false)
       for texture in pairs(ButtonGlowTextures) do
+        f[texture]:SetDesaturated(nil)
         f[texture]:SetVertexColor(1, 1, 1)
       end
     else
       f.color = color
+      updateButtonGlowTextures(f, true)
       for texture in pairs(ButtonGlowTextures) do
         f[texture]:SetVertexColor(color[1], color[2], color[3])
       end
@@ -812,6 +815,10 @@ function lib.ButtonGlow_Start(r, color, frequency, frameLevel)
     f:SetScript("OnUpdate", bgUpdate)
 
     f.animIn:Play()
+
+    if Masque and Masque.UpdateSpellAlert then
+      Masque:UpdateSpellAlert(r, f)
+    end
   end
 end
 
@@ -932,8 +939,8 @@ local function ProcGlowResetter(framePool, frame)
   frame:SetScript("OnHide", nil)
   frame:SetScript("OnUpdate", nil)
   local parent = frame:GetParent()
-  if frame.name and parent[frame.name] then
-    parent[frame.name] = nil
+  if frame.key and parent[frame.key] then
+    parent[frame.key] = nil
   end
 end
 
@@ -944,7 +951,7 @@ local function InitProcGlow(f)
   -- Start-Flipbook
   f.ProcStart = f:CreateTexture(nil, "ARTWORK")
   f.ProcStart:SetBlendMode("ADD")
-  f.ProcStart:SetTexture(texturePath .. [[LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcStart:SetTexture(textureList.proc)
   f.ProcStart:SetTexCoord(0.0827148248, 0.1649413686, 0.000976562, 0.165364635) -- First Frame
   f.ProcStart:SetAlpha(1)
   f.ProcStart:SetSize(150, 150)
@@ -953,7 +960,7 @@ local function InitProcGlow(f)
 
   -- Loop-Flipbook
   f.ProcLoop = f:CreateTexture(nil, "ARTWORK")
-  f.ProcLoop:SetTexture(texturePath .. [[LibCustomGlow-1.0\UIActionBarFX]])
+  f.ProcLoop:SetTexture(textureList.proc)
   f.ProcLoop:SetTexCoord(0.412598, 0.4451174, 0.000976562, 0.066080801666667) -- First Frame
   f.ProcLoop:SetAlpha(1)
   f.ProcLoop:SetAllPoints()
@@ -961,7 +968,7 @@ local function InitProcGlow(f)
 end
 
 local function SetupProcGlow(f, options)
-  f.name = "_ProcGlow" .. options.key
+  f.key = "_ProcGlow" .. options.key -- for resetter
 
   f:SetScript("OnHide", function(self)
     StopFlipbook(self)
@@ -977,6 +984,10 @@ local function SetupProcGlow(f, options)
       StartFlipbook(self, self.ProcLoop , 6, 5, 30, (30 / options.duration), nil, nil, "Loop")
     end
   end)
+
+  local texture = options.color and textureList.procDesaturated or textureList.proc
+  f.ProcStart:SetTexture(texture)
+  f.ProcLoop:SetTexture(texture)
 
   local color = options.color or {1, 1, 1, 1}
   f.ProcStart:SetVertexColor(unpack(color))
@@ -996,7 +1007,9 @@ local ProcGlowDefaults = {
 }
 
 function lib.ProcGlow_Start(r, options)
-  if not r then return end
+  if not r then
+      return
+  end
   options = options or {}
   setmetatable(options, { __index = ProcGlowDefaults })
   local key = "_ProcGlow" .. options.key
