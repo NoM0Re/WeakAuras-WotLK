@@ -11,11 +11,42 @@ if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
 local Masque = LibStub("Masque", true)
-local AnimateTexCoords = AnimateTexCoords
 
 local pairs, ipairs = pairs, ipairs
-local abs, floor, min = math.abs, math.floor, math.min
+local abs, ceil, floor, min, mod = math.abs, math.ceil, math.floor, math.min, mod
 local tinsert, tremove = table.insert, table.remove
+
+local function AnimateTexCoords(texture, textureWidth, textureHeight, frameWidth, frameHeight, numFrames, elapsed, throttle)
+  if not texture.frame then
+    texture.frame = 1
+    texture.throttle = throttle
+    texture.numColumns = floor(textureWidth / frameWidth)
+    texture.numRows = floor(textureHeight / frameHeight)
+    texture.columnWidth = frameWidth / textureWidth
+    texture.rowHeight = frameHeight / textureHeight
+  end
+
+  local frame = texture.frame
+  if not texture.throttle or texture.throttle > throttle then
+    local framesToAdvance = floor(texture.throttle / throttle)
+    while frame + framesToAdvance > numFrames do
+      frame = frame - numFrames
+    end
+
+    frame = frame + framesToAdvance
+    texture.throttle = 0
+
+    local left = mod(frame - 1, texture.numColumns) * texture.columnWidth
+    local right = left + texture.columnWidth
+    local bottom = ceil(frame / texture.numColumns) * texture.rowHeight
+    local top = bottom - texture.rowHeight
+    texture:SetTexCoord(left, right, top, bottom)
+
+    texture.frame = frame
+  else
+    texture.throttle = texture.throttle + elapsed
+  end
+end
 
 -- ===============================================================================
 -- !!! IMPORTANT: Requires Pools.lua to be loaded before this file !!!
@@ -612,7 +643,7 @@ local function bgHide(self)
 end
 
 local function bgUpdate(self, elapsed)
-  AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed * 0.1 / self.throttle)
+  AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, self.throttle)
 end
 
 local function IsAnimPlaying(self)
@@ -662,13 +693,6 @@ local function configureButtonGlow(f, alpha)
   f.ants:SetPoint("CENTER")
   f.ants:SetAlpha(0)
   f.ants:SetTexture(textureList.buttonGlowAnts)
-  -- Wrath's AnimateTexCoords does not floor partial texture columns.
-  -- Seed the 5x5 grid used by this 256x256 sheet with 48x48 frames.
-  f.ants.frame = 1
-  f.ants.numColumns = 5
-  f.ants.numRows = 5
-  f.ants.columnWidth = 48 / 256
-  f.ants.rowHeight = 48 / 256
 
   f.animIn = f:CreateAnimationGroup()
   f.animIn.appear = {}
