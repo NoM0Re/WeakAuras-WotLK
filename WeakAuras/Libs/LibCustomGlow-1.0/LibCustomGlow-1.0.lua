@@ -868,65 +868,55 @@ lib.stopList["Action Button Glow"] = lib.ButtonGlow_Stop
 
 -- ProcGlow
 
-local BaseTexCoord = {
-  ["Loop"] = {0.412598, 0.575195, 0.000976562, 0.391602},
-  ["Start"] = {0.000488281, 0.411621, 0.000976562, 0.987305},
+local ProcGlowRows = 6
+local ProcGlowColumns = 5
+local ProcGlowFrames = 30
+local ProcGlowStartDuration = 0.7
+
+local ProcGlowTexCoord = {
+  ["Loop"] = {
+    left = 0.412598,
+    top = 0.000976562,
+    frameWidth = (0.575195 - 0.412598) / ProcGlowColumns,
+    frameHeight = (0.391602 - 0.000976562) / ProcGlowRows,
+  },
+  ["Start"] = {
+    left = 0.000488281,
+    top = 0.000976562,
+    frameWidth = (0.411621 - 0.000488281) / ProcGlowColumns,
+    frameHeight = (0.987305 - 0.000976562) / ProcGlowRows,
+  },
 }
 
-local function SetTile(texture, frame, rows, columns, frameScaleW, frameScaleH, key)
+local function SetTile(texture, frame, texCoord)
   frame = frame - 1
-  local row = math.floor(frame / columns)
-  local column = frame % columns
-
-  local leftStart, rightEnd, topStart, bottomEnd = BaseTexCoord[key][1], BaseTexCoord[key][2], BaseTexCoord[key][3], BaseTexCoord[key][4]
-
-  local fullWidth = rightEnd - leftStart
-  local fullHeight = bottomEnd - topStart
-
-  local baseDeltaX = fullWidth / columns
-  local baseDeltaY = fullHeight / rows
-
-  local deltaX = baseDeltaX * frameScaleW
-  local deltaY = baseDeltaY * frameScaleH
-
-  local left = leftStart + baseDeltaX * column + (baseDeltaX - deltaX) / 2
-  local right = left + deltaX
-
-  local top = topStart + baseDeltaY * row + (baseDeltaY - deltaY) / 2
-  local bottom = top + deltaY
-
-  pcall(function()
-    texture:SetTexCoord(left, right, top, bottom)
-  end)
+  local row = floor(frame / ProcGlowColumns)
+  local column = mod(frame, ProcGlowColumns)
+  local left = texCoord.left + texCoord.frameWidth * column
+  local top = texCoord.top + texCoord.frameHeight * row
+  texture:SetTexCoord(left, left + texCoord.frameWidth, top, top + texCoord.frameHeight)
 end
 
 local StartFlipbook
-local FlipbookAnimation_OnUpdate
 
-FlipbookAnimation_OnUpdate = function(self, elapsed)
+local function FlipbookAnimation_OnUpdate(self, elapsed)
   local data = self.flipbookData
   if not data then return end
 
-  if data.animElapsed then
-    data.animElapsed = data.animElapsed + elapsed
-    if data.animElapsed >= 0.7 then
-      if self:IsShown() then
-        StartFlipbook(self, self.ProcLoop, 6, 5, 30, ((data.animOptions and (30 / data.animOptions)) or 30), nil, nil, "Loop")
-      end
-      data.animElapsed = nil
-      data.animOptions = nil
-    end
-  end
   data.elapsedTime = data.elapsedTime + elapsed
-  local frameDuration = 1 / data.frameRate
 
-  if data.elapsedTime >= frameDuration then
-    data.elapsedTime = data.elapsedTime - frameDuration
-    data.currentFrame = data.currentFrame + 1
-    if data.currentFrame > data.totalFrames then
-      data.currentFrame = 1
-    end
-    SetTile(data.texture, data.currentFrame, data.rows, data.columns, 1, 1, data.key)
+  if data.loopDuration and data.elapsedTime >= ProcGlowStartDuration then
+    local loopElapsed = data.elapsedTime - ProcGlowStartDuration
+    StartFlipbook(self, self.ProcLoop, ProcGlowFrames / data.loopDuration, "Loop")
+    data = self.flipbookData
+    data.elapsedTime = loopElapsed
+  end
+
+  local framesToAdvance = floor(data.elapsedTime * data.frameRate)
+  if framesToAdvance > 0 then
+    data.elapsedTime = data.elapsedTime - framesToAdvance / data.frameRate
+    data.currentFrame = mod(data.currentFrame - 1 + framesToAdvance, ProcGlowFrames) + 1
+    SetTile(data.texture, data.currentFrame, data.texCoord)
   end
 end
 
@@ -938,20 +928,17 @@ local function StopFlipbook(f)
   f.flipbookData = nil
 end
 
-StartFlipbook = function(f, texture, rows, columns, totalFrames, frameRate, startAnim, startOptionsDur, key)
+StartFlipbook = function(f, texture, frameRate, key, loopDuration)
   StopFlipbook(f)
   f.flipbookData = {
-    key = key,
     texture = texture,
-    rows = rows,
-    columns = columns,
-    totalFrames = totalFrames,
+    texCoord = ProcGlowTexCoord[key],
     frameRate = frameRate,
     currentFrame = 1,
     elapsedTime = 0,
-    animElapsed = startAnim,
-    animOptions = startOptionsDur,
+    loopDuration = loopDuration,
   }
+  SetTile(texture, 1, f.flipbookData.texCoord)
   texture:Show()
   f:SetScript("OnUpdate", FlipbookAnimation_OnUpdate)
 end
@@ -1003,9 +990,9 @@ local function SetupProcGlow(f, options)
     if self.startAnim then
       local width, height = self:GetSize()
       self.ProcStart:SetSize((width / 42 * 150) / 1.4, (height / 42 * 150) / 1.4)
-      StartFlipbook(self, self.ProcStart, 6, 5, 30, 30, 0, options.duration, "Start")
+      StartFlipbook(self, self.ProcStart, ProcGlowFrames / ProcGlowStartDuration, "Start", options.duration)
     else
-      StartFlipbook(self, self.ProcLoop , 6, 5, 30, (30 / options.duration), nil, nil, "Loop")
+      StartFlipbook(self, self.ProcLoop, ProcGlowFrames / options.duration, "Loop")
     end
   end)
 
