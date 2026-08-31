@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0"
-local MINOR_VERSION = 25
+local MINOR_VERSION = 26
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -905,11 +905,15 @@ local function FlipbookAnimation_OnUpdate(self, elapsed)
 
   data.elapsedTime = data.elapsedTime + elapsed
 
-  if data.loopDuration and data.elapsedTime >= ProcGlowStartDuration then
-    local loopElapsed = data.elapsedTime - ProcGlowStartDuration
-    StartFlipbook(self, self.ProcLoop, ProcGlowFrames / data.loopDuration, "Loop")
-    data = self.flipbookData
-    data.elapsedTime = loopElapsed
+  if data.loopDuration then
+    -- Keep the start duration separate from the per-frame remainder below.
+    data.startElapsed = data.startElapsed + elapsed
+    if data.startElapsed >= ProcGlowStartDuration then
+      local loopElapsed = data.startElapsed - ProcGlowStartDuration
+      StartFlipbook(self, self.ProcLoop, ProcGlowFrames / data.loopDuration, "Loop")
+      data = self.flipbookData
+      data.elapsedTime = loopElapsed
+    end
   end
 
   local framesToAdvance = floor(data.elapsedTime * data.frameRate)
@@ -936,6 +940,7 @@ StartFlipbook = function(f, texture, frameRate, key, loopDuration)
     frameRate = frameRate,
     currentFrame = 1,
     elapsedTime = 0,
+    startElapsed = loopDuration and 0,
     loopDuration = loopDuration,
   }
   SetTile(texture, 1, f.flipbookData.texCoord)
