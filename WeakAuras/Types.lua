@@ -1731,7 +1731,7 @@ local function InitializeCurrencies()
     elseif currencyType == 2 then -- Honor points
       icon = "Interface\\BattlefieldFrame\\Battleground-".. UnitFactionGroup("player")
     end
-    if itemID and (icon or iconFileID) then
+    if name and itemID and (icon or iconFileID) then
       icon = icon or iconFileID
       Private.discovered_currencies[itemID] = "|T" .. icon .. ":0|t" .. name
       Private.discovered_currencies_sorted[itemID] = index
