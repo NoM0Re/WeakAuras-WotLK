@@ -94,7 +94,7 @@ Important files:
 
 * `WeakAuras/WeakAuras.toc` and `WeakAurasOptions/WeakAurasOptions.toc`: load order and addon metadata.
 * `WeakAuras/Init.lua`, `WeakAuras/WeakAuras.lua`, `WeakAuras/DefaultOptions.lua`: initialization and core state.
-* `WeakAuras/Types_ClassicPlus.lua`, `WeakAuras/Types_Wrath.lua`, `WeakAuras/Types.lua`: type and option data. Load order matters.
+* `WeakAuras/Types_Wrath.lua`, `WeakAuras/Types.lua`: type and option data. Load order matters.
 * `WeakAuras/BuffTrigger2.lua`, `WeakAuras/GenericTrigger.lua`: trigger/event evaluation.
 * `WeakAurasOptions/TriggerOptions.lua`, `WeakAurasOptions/BuffTrigger2.lua`, `WeakAurasOptions/GenericTrigger.lua`: trigger configuration UI.
 

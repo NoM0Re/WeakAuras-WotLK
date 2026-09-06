@@ -1294,9 +1294,6 @@ WeakAuras.class_types = {}
 for i, class in ipairs(CLASS_SORT_ORDER) do
   WeakAuras.class_types[class] = WrapTextInColorCode(LOCALIZED_CLASS_NAMES_MALE[class], WA_GetClassColor(class))
 end
-if WeakAuras.IsClassicPlus() then
-  WeakAuras.class_types["DEATHKNIGHT"] = nil
-end
 
 -- Extract Race names from faction IDs
 WeakAuras.race_types = {}
@@ -1312,10 +1309,6 @@ do
               :match("^%s*(.-)%s*$")
               or key
     WeakAuras.race_types[key] = (name == "" and key) or name
-  end
-  if WeakAuras.IsClassicPlus() then
-    WeakAuras.race_types["Draenei"] = nil
-    WeakAuras.race_types["BloodElf"] = nil
   end
 end
 
@@ -4103,10 +4096,6 @@ do
       }
     },
   }
-
-  if WeakAuras.IsClassicPlus() then
-    tremove(classData, 1)
-  end
 
   -- Creates the options layout. Due to CUSTOM_CLASS_COLORS, it needs to be created dynamically.
   local function createSpecString(classInfo, specInfo)

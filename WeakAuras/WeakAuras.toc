@@ -34,7 +34,6 @@ DefaultOptions.lua
 SubscribableObject.lua
 Features.lua
 TimeMachine.lua
-Types_ClassicPlus.lua
 Types_Wrath.lua
 Types.lua
 Prototypes.lua
