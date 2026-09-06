@@ -1266,6 +1266,7 @@ function HandleEvent(frame, event, arg1, arg2, ...)
       Private.CheckCooldownReady();
       Private.CheckItemCooldowns()
       Private.CheckItemSlotCooldowns()
+      Private.CheckWeaponEnchants()
       Private.StopProfileSystem("generictrigger WA_DELAYED_PLAYER_ENTERING_WORLD");
       Private.PreShowModels()
     end,
@@ -3727,6 +3728,7 @@ do
   local tenchFrame = nil
   Private.frames["Temporary Enchant Handler"] = tenchFrame;
   local tenchTip;
+  local tenchUpdate
 
   ---@private
   function WeakAuras.TenchInit()
@@ -3755,7 +3757,7 @@ do
         return "Unknown", "Unknown";
       end
 
-      local function tenchUpdate()
+      tenchUpdate = function()
         Private.StartProfileSystem("generictrigger temporary enchant");
         local _, mh_rem, oh_rem, rw_rem
         _, mh_rem, mh_charges, _, oh_rem, oh_charges, _, rw_rem, rw_charges = GetWeaponEnchantInfo();
@@ -3797,14 +3799,20 @@ do
         Private.StopProfileSystem("generictrigger temporary enchant");
       end
 
-      tenchFrame:SetScript("OnEvent", function(_,_,unit, ...)
-        if unit and unit ~= "player" then return end
+      tenchFrame:SetScript("OnEvent", function(_, event, unit)
+        if event == "UNIT_INVENTORY_CHANGED" and unit ~= "player" then return end
         Private.StartProfileSystem("generictrigger temporary enchant");
         timer:ScheduleTimer(tenchUpdate, 0.1)
         Private.StopProfileSystem("generictrigger temporary enchant");
       end);
 
       tenchUpdate();
+    end
+  end
+
+  function Private.CheckWeaponEnchants()
+    if tenchUpdate then
+      tenchUpdate()
     end
   end
 
