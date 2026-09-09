@@ -2059,19 +2059,25 @@ do
   local mainSpeed, offSpeed = UnitAttackSpeed("player")
   local casting = false
   local skipNextAttack, skipNextAttackCount
-  local isAttacking
+  local isAttacking, isShooting
+  local pauseSwingTime, pausedSwingMain, pausedSwingOff
+
+  local plannedSwingMain, plannedSwingOff = 0, 0
+  local offSwingOffset = false
 
   ---@param hand string
   ---@return number duration
   ---@return number expirationTime
   ---@return string? weaponName
   ---@return number? icon
+  ---@return boolean? paused
+  ---@return number? remaining
   function WeakAuras.GetSwingTimerInfo(hand)
     if(hand == "main") then
       local itemId = GetInventoryItemID("player", mh);
       local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemId or 0);
       if(lastSwingMain) then
-        return swingDurationMain, lastSwingMain + swingDurationMain - mainSwingOffset, name, icon;
+        return swingDurationMain, lastSwingMain + swingDurationMain - mainSwingOffset, name, icon, pausedSwingMain ~= nil, pausedSwingMain;
       else
         return 0, math.huge, name, icon;
       end
@@ -2079,7 +2085,7 @@ do
       local itemId = GetInventoryItemID("player", oh);
       local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemId or 0);
       if(lastSwingOff) then
-        return swingDurationOff, lastSwingOff + swingDurationOff, name, icon;
+        return swingDurationOff, lastSwingOff + swingDurationOff, name, icon, pausedSwingOff ~= nil, pausedSwingOff;
       else
         return 0, math.huge, name, icon;
       end
@@ -2111,30 +2117,32 @@ do
     swingTriggerUpdate()
   end
 
-  local function swingStart(hand, curTime)
+  local function swingStart(hand, curTime, expirationTime)
     mainSpeed, offSpeed = UnitAttackSpeed("player")
     offSpeed = offSpeed or 0
     local currentTime = curTime or GetTime()
     if hand == "main" then
       lastSwingMain = currentTime
       swingDurationMain = mainSpeed
-      mainSwingOffset = 0
+      plannedSwingMain = expirationTime or (currentTime + mainSpeed)
+      mainSwingOffset = currentTime + mainSpeed - plannedSwingMain
       if mainTimer then
         timer:CancelTimer(mainTimer)
       end
       if mainSpeed and mainSpeed > 0 then
-        mainTimer = timer:ScheduleTimer(swingEnd, mainSpeed, hand)
+        mainTimer = timer:ScheduleTimer(swingEnd, math.max(0, plannedSwingMain - currentTime), hand)
       else
         swingEnd(hand)
       end
     elseif hand == "off" then
-      lastSwingOff = currentTime
+      plannedSwingOff = expirationTime or (currentTime + offSpeed)
+      lastSwingOff = plannedSwingOff - offSpeed
       swingDurationOff = offSpeed
       if offTimer then
         timer:CancelTimer(offTimer)
       end
       if offSpeed and offSpeed > 0 then
-        offTimer = timer:ScheduleTimer(swingEnd, offSpeed, hand)
+        offTimer = timer:ScheduleTimer(swingEnd, math.max(0, plannedSwingOff - currentTime), hand)
       else
         swingEnd(hand)
       end
@@ -2153,6 +2161,27 @@ do
     end
   end
 
+  local function swingResume(succeeded, now)
+    local resumeTime = succeeded and now or pauseSwingTime
+    local mainRemaining, offRemaining = pausedSwingMain, pausedSwingOff
+    pauseSwingTime, pausedSwingMain, pausedSwingOff = nil, nil, nil
+    if mainRemaining then
+      local expirationTime = resumeTime + mainRemaining
+      if not succeeded and expirationTime < now and isAttacking then
+        expirationTime = expirationTime + mainSpeed
+      end
+      swingStart("main", now, expirationTime)
+    end
+    if offRemaining then
+      local expirationTime = resumeTime + offRemaining
+      if not succeeded and expirationTime < now and isAttacking then
+        expirationTime = expirationTime + offSpeed
+      end
+      swingStart("off", now, expirationTime)
+    end
+    swingTriggerUpdate()
+  end
+
   local function swingTimerCLEUCheck(ts, event, sourceGUID, _, _, destGUID, _, _, ...)
     Private.StartProfileSystem("generictrigger swing");
     if(sourceGUID == selfGUID) then
@@ -2163,31 +2192,47 @@ do
         if tonumber(skipNextAttack) and (ts - skipNextAttack) < 0.04 and tonumber(skipNextAttackCount) then
           if skipNextAttackCount > 0 then
             skipNextAttackCount = skipNextAttackCount - 1
+            Private.StopProfileSystem("generictrigger swing")
             return
           end
         end
 
         local currentTime = GetTime()
-        local hand = "main"
-        if offSpeed and offSpeed > 0 and lastSwingMain then
-          if (currentTime - lastSwingMain) < (mainSpeed * 0.6) then
-            hand = "off"
+        mainSpeed, offSpeed = UnitAttackSpeed("player")
+        offSpeed = offSpeed or 0
+        local diffMain = math.abs(currentTime - plannedSwingMain)
+        local diffOff = math.abs(currentTime - plannedSwingOff)
+        if plannedSwingMain + 0.15 < currentTime and plannedSwingOff + 0.15 < currentTime then
+          swingStart("main", currentTime)
+          offSwingOffset = false
+          if offSpeed > 0 and offSpeed ~= mainSpeed then
+            offSwingOffset = true
+            swingStart("off", currentTime, currentTime + 0.2)
           end
+        elseif offSpeed == 0 or (diffMain <= diffOff and diffMain < 0.15) or plannedSwingMain <= plannedSwingOff then
+          swingStart("main", currentTime)
+        else
+          swingStart("off", currentTime, currentTime + offSpeed - (offSwingOffset and 0.2 or 0))
+          offSwingOffset = false
         end
-        swingStart(hand, currentTime)
         swingTriggerUpdate()
       end
     elseif (destGUID == selfGUID and (... == "PARRY" or select(4, ...) == "PARRY")) then
       if (lastSwingMain) then
-        local timeLeft = lastSwingMain + swingDurationMain - GetTime() - (mainSwingOffset or 0);
+        local timeLeft = plannedSwingMain - (pauseSwingTime or GetTime());
         if (timeLeft > 0.2 * swingDurationMain) then
           local offset = 0.4 * swingDurationMain
           if (timeLeft - offset < 0.2 * swingDurationMain) then
             offset = timeLeft - 0.2 * swingDurationMain
           end
           timer:CancelTimer(mainTimer);
-          mainTimer = timer:ScheduleTimer(swingEnd, timeLeft - offset, "main");
+          if pausedSwingMain then
+            pausedSwingMain = timeLeft - offset
+          else
+            mainTimer = timer:ScheduleTimer(swingEnd, timeLeft - offset, "main");
+          end
           mainSwingOffset = (mainSwingOffset or 0) + offset
+          plannedSwingMain = lastSwingMain + swingDurationMain - mainSwingOffset
           swingTriggerUpdate()
         end
       end
@@ -2199,63 +2244,130 @@ do
     if event ~= "PLAYER_EQUIPMENT_CHANGED" and unit and unit ~= "player" then return end
     Private.StartProfileSystem("generictrigger swing");
     local now = GetTime()
-    if event == "UNIT_ATTACK_SPEED" then
+    if event == "UNIT_ATTACK_SPEED" or event == "UNIT_RANGEDDAMAGE" then
+      local referenceTime = pauseSwingTime or now
       local mainSpeedNew, offSpeedNew = UnitAttackSpeed("player")
       offSpeedNew = offSpeedNew or 0
-      if lastSwingMain then
-        if mainSpeedNew ~= mainSpeed then
-          timer:CancelTimer(mainTimer)
-          local multiplier = mainSpeedNew / mainSpeed
-          local timeLeft = (lastSwingMain + swingDurationMain - now) * multiplier
-          swingDurationMain = mainSpeedNew
-          mainSwingOffset = (lastSwingMain + swingDurationMain) - (now + timeLeft)
+      if lastSwingMain and mainSpeedNew ~= mainSpeed and mainSpeed > 0 then
+        timer:CancelTimer(mainTimer)
+        local timeLeft = math.max(0, plannedSwingMain - referenceTime) * mainSpeedNew / mainSpeed
+        plannedSwingMain = referenceTime + timeLeft
+        swingDurationMain = mainSpeedNew
+        mainSwingOffset = lastSwingMain + swingDurationMain - plannedSwingMain
+        if pausedSwingMain then
+          pausedSwingMain = timeLeft
+        else
           mainTimer = timer:ScheduleTimer(swingEnd, timeLeft, "main")
         end
       end
-      if lastSwingOff then
-        if offSpeedNew ~= offSpeed then
+      if offSpeedNew == 0 then
+        if offTimer then
           timer:CancelTimer(offTimer)
-          local multiplier = offSpeedNew / mainSpeed
-          local timeLeft = (lastSwingOff + swingDurationOff - now) * multiplier
-          swingDurationOff = offSpeedNew
+        end
+        lastSwingOff, swingDurationOff = nil, nil
+        plannedSwingOff, offSwingOffset, pausedSwingOff = 0, false, nil
+      elseif not offSpeed or offSpeed == 0 then
+        offSwingOffset = false
+        swingStart("off", now)
+      elseif lastSwingOff and offSpeedNew ~= offSpeed then
+        timer:CancelTimer(offTimer)
+        local timeLeft = math.max(0, plannedSwingOff - referenceTime) * offSpeedNew / offSpeed
+        plannedSwingOff = referenceTime + timeLeft
+        swingDurationOff = offSpeedNew
+        lastSwingOff = plannedSwingOff - swingDurationOff
+        if pausedSwingOff then
+          pausedSwingOff = timeLeft
+        else
           offTimer = timer:ScheduleTimer(swingEnd, timeLeft, "off")
         end
       end
       mainSpeed, offSpeed = mainSpeedNew, offSpeedNew
+      local rangeSpeedNew = UnitRangedDamage("player") or 0
+      if lastSwingRange and rangeSpeedNew ~= swingDurationRange then
+        timer:CancelTimer(rangeTimer)
+        if rangeSpeedNew > 0 and swingDurationRange > 0 then
+          local timeLeft = math.max(0, lastSwingRange + swingDurationRange - now) * rangeSpeedNew / swingDurationRange
+          swingDurationRange = rangeSpeedNew
+          lastSwingRange = now + timeLeft - rangeSpeedNew
+          rangeTimer = timer:ScheduleTimer(swingEnd, timeLeft, "ranged")
+        else
+          lastSwingRange, swingDurationRange = nil, nil
+        end
+      end
       swingTriggerUpdate()
+    elseif pauseSwingTime and Private.pause_swing_spells[spell]
+      and (event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED")
+    then
+      swingResume(false, now)
     elseif casting and (event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED") then
       casting = false
-    elseif event == "PLAYER_EQUIPMENT_CHANGED" and isAttacking then
+    elseif event == "PLAYER_EQUIPMENT_CHANGED" and (unit == mh or unit == oh or unit == ranged) and (isAttacking or isShooting) then
+      pauseSwingTime, pausedSwingMain, pausedSwingOff = nil, nil, nil
+      offSwingOffset = false
       swingStart("main")
       swingStart("off")
       swingStart("ranged")
       swingTriggerUpdate()
     elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
-      if Private.reset_swing_spells[spell] or casting then
+      if Private.pause_swing_spells[spell] then
+        if pauseSwingTime then
+          swingResume(true, now)
+        end
+      elseif Private.next_swing_spells[spell] then
+        local _, currentOffSpeed = UnitAttackSpeed("player")
+        if currentOffSpeed and currentOffSpeed > 0 and plannedSwingMain > plannedSwingOff then
+          swingStart("off", now, plannedSwingMain)
+        end
+        offSwingOffset = false
+        swingStart("main", now)
+        swingTriggerUpdate()
+      elseif Private.reset_swing_spells[spell] or casting then
         if casting then
           casting = false
         end
-        -- check next frame
         swingTimerFrame:SetScript("OnUpdate", function(self)
           if isAttacking then
+            offSwingOffset = false
             swingStart("main")
+            swingStart("off")
             swingTriggerUpdate()
           end
           self:SetScript("OnUpdate", nil)
         end)
       end
       if Private.reset_ranged_swing_spells[spell] then
-          swingStart("ranged")
+        swingStart("ranged")
         swingTriggerUpdate()
       end
     elseif event == "UNIT_SPELLCAST_START" then
-      if not Private.noreset_swing_spells[spell] then
-        -- pause swing timer
+      if Private.pause_swing_spells[spell] then
+        pauseSwingTime = now
+        if lastSwingMain then
+          pausedSwingMain = math.max(0, plannedSwingMain - now)
+          timer:CancelTimer(mainTimer)
+        end
+        if lastSwingOff then
+          pausedSwingOff = math.max(0, plannedSwingOff - now)
+          timer:CancelTimer(offTimer)
+        end
+        swingTriggerUpdate()
+      elseif not Private.noreset_swing_spells[spell] then
         casting = true
+        if mainTimer then
+          timer:CancelTimer(mainTimer)
+        end
+        if offTimer then
+          timer:CancelTimer(offTimer)
+        end
         lastSwingMain, swingDurationMain, mainSwingOffset = nil, nil, nil
         lastSwingOff, swingDurationOff = nil, nil
+        plannedSwingMain, plannedSwingOff, offSwingOffset = 0, 0, false
         swingTriggerUpdate()
       end
+    elseif event == "START_AUTOREPEAT_SPELL" then
+      isShooting = true
+    elseif event == "STOP_AUTOREPEAT_SPELL" then
+      isShooting = nil
     elseif event == "PLAYER_ENTER_COMBAT" then
       isAttacking = true
     elseif event == "PLAYER_LEAVE_COMBAT" then
@@ -2273,6 +2385,9 @@ do
       swingTimerFrame:RegisterEvent("PLAYER_LEAVE_COMBAT");
       swingTimerFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
       swingTimerFrame:RegisterEvent("UNIT_ATTACK_SPEED");
+      swingTimerFrame:RegisterEvent("UNIT_RANGEDDAMAGE")
+      swingTimerFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
+      swingTimerFrame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
       swingTimerFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
       swingTimerFrame:RegisterEvent("UNIT_SPELLCAST_START")
       swingTimerFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
@@ -3872,7 +3987,7 @@ do
           castLatencyFrame.sendTime = GetTime()
           return
         end
-        if event == "UNIT_SPELLCAST_SUCCEEDED" or event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then
+        if event == "UNIT_SPELLCAST_SUCCEEDED" or event == "UNIT_SPELLCAST_CHANNEL_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then
           castLatencyFrame.sendTime = nil
           return
         end

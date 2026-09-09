@@ -3819,7 +3819,8 @@ Private.weapon_enchant_types = {
   showAlways = L["Always"],
 }
 Private.reset_swing_spells = {
-  [GetSpellInfo(1464)] = true, -- Slam
+  [GetSpellInfo(57755)] = true, -- Heroic Throw
+  [GetSpellInfo(64382)] = true, -- Shattering Throw
   [GetSpellInfo(78)] = true, -- Heroic Strike
   [GetSpellInfo(845)] = true, -- Cleave
   [GetSpellInfo(2973)] = true, -- Raptor Strike
@@ -3831,11 +3832,23 @@ Private.reset_swing_spells = {
   [GetSpellInfo(5019)] = true, -- Shoot
 }
 
+Private.next_swing_spells = {
+  [GetSpellInfo(78)] = true, -- Heroic Strike
+  [GetSpellInfo(845)] = true, -- Cleave
+  [GetSpellInfo(2973)] = true, -- Raptor Strike
+  [GetSpellInfo(6807)] = true, -- Maul
+  [GetSpellInfo(56815)] = true, -- Rune Strike
+}
+
 Private.reset_ranged_swing_spells = {
   [GetSpellInfo(2764)] = true, -- Throw
   [GetSpellInfo(5019)] = true, -- Shoot Wands
   [GetSpellInfo(75)] = true, -- Auto Shot
   [GetSpellInfo(5384)] = true, -- Feign Death
+}
+
+Private.pause_swing_spells = {
+  [GetSpellInfo(1464)] = true, -- Slam
 }
 
 Private.noreset_swing_spells = {

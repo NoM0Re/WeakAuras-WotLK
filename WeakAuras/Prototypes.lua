@@ -4992,11 +4992,12 @@ Private.event_prototypes = {
         local inverse = %s;
         local hand = %q;
         local triggerRemaining = %s
-        local duration, expirationTime, name, icon = WeakAuras.GetSwingTimerInfo(hand)
-        local remaining = expirationTime and expirationTime - GetTime()
+        local duration, expirationTime, name, icon, paused, remaining = WeakAuras.GetSwingTimerInfo(hand)
+        paused = paused or false
+        remaining = paused and remaining or (expirationTime and expirationTime - GetTime())
         local remainingCheck = not triggerRemaining or remaining and remaining %s triggerRemaining
 
-        if triggerRemaining and remaining and remaining >= triggerRemaining and remaining > 0 then
+        if not paused and triggerRemaining and remaining and remaining >= triggerRemaining and remaining > 0 then
           Private.ExecEnv.ScheduleScan(expirationTime - triggerRemaining, "SWING_TIMER_UPDATE")
         end
       ]=];
@@ -5061,7 +5062,16 @@ Private.event_prototypes = {
         store = true
       },
       {
+        name = "paused",
+        init = "paused",
+        hidden = true,
+        test = "true",
+        store = true
+      },
+      {
         name = "remaining",
+        init = "remaining",
+        store = true,
         display = L["Remaining Time"],
         type = "number",
         enable = function(trigger) return not trigger.use_inverse end,
