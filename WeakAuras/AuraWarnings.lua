@@ -79,8 +79,8 @@ local severityLevel = {
 
 --- @type table<AuraWarningSeverity, string>
 local icons = {
-  info = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\friendsframe-informationicon.blp",
-  sound = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\chatframe-button-icon-voicechat",
+  info = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\friendsframe-informationicon",
+  sound = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ChatFrame",
   tts = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\chatframe-button-icon-TTS",
   warning = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\ServicesAtlas",
   error = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\HelpIcon-Bug"
