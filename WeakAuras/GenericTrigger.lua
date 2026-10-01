@@ -71,6 +71,7 @@ local timer = WeakAuras.timer;
 local events = {}
 local loaded_events = {}
 local loaded_unit_events = {};
+local unitEventProviders = {}
 local watched_trigger_events = Private.watched_trigger_events
 local delayTimerEvents = {}
 local loaded_auras = {}; -- id to bool map
@@ -1558,18 +1559,26 @@ function GenericTrigger.LoadDisplays(toLoad, loadEvent, ...)
   end
 
   for event in pairs(eventsToRegister) do
-    pcall(frame.RegisterEvent, frame, event)
+    if unitEventProviders[event] then
+      unitEventProviders[event]()
+    else
+      pcall(frame.RegisterEvent, frame, event)
+    end
     genericTriggerRegisteredEvents[event] = true;
   end
 
   for unit, events in pairs(unitEventsToRegister) do
     for event in pairs(events) do
-      if not frame.unitFrames[unit] then
-        frame.unitFrames[unit] = CreateFrame("Frame")
-        frame.unitFrames[unit].unit = unit
-        frame.unitFrames[unit]:SetScript("OnEvent", HandleUnitEvent);
+      if unitEventProviders[event] then
+        unitEventProviders[event]()
+      else
+        if not frame.unitFrames[unit] then
+          frame.unitFrames[unit] = CreateFrame("Frame")
+          frame.unitFrames[unit].unit = unit
+          frame.unitFrames[unit]:SetScript("OnEvent", HandleUnitEvent);
+        end
+        pcall(frame.unitFrames[unit].RegisterEvent, frame.unitFrames[unit], event)
       end
-      pcall(frame.unitFrames[unit].RegisterEvent, frame.unitFrames[unit], event)
       genericTriggerRegisteredUnitEvents[unit] = genericTriggerRegisteredUnitEvents[unit] or {};
       genericTriggerRegisteredUnitEvents[unit][event] = true;
     end
@@ -4162,6 +4171,150 @@ do
       Private.frames["Player In Range Frame"] = inRangeFrame
     end
     inRangeFrame:SetScript("OnUpdate", PlayerInRangeUpdate)
+  end
+end
+
+do
+  local Absorbs = LibStub("SpecializedAbsorbs-1.0")
+  local HealComm = LibStub("LibHealComm-4.0")
+  local clearedAbsorbGUID
+
+  ---@param unit UnitToken
+  ---@return number amount
+  local function UnitGetTotalAbsorbs(unit)
+    local guid = unit and UnitGUID(unit)
+    if not guid or guid == clearedAbsorbGUID then
+      return 0
+    end
+    return math.max(0, Absorbs.UnitTotal(guid) or 0)
+  end
+
+  ---@param unit UnitToken
+  ---@return number amount
+  local function UnitGetTotalHealAbsorbs(unit)
+    local guid = unit and UnitGUID(unit)
+    if not guid then
+      return 0
+    end
+    return math.max(0, Absorbs.UnitTotalHealAbsorbs(guid) or 0)
+  end
+
+  ---@param unit UnitToken
+  ---@param healer? UnitToken
+  ---@return number? amount
+  local function UnitGetIncomingHeals(unit, healer)
+    local guid = unit and UnitGUID(unit)
+    local healerGUID = healer and UnitGUID(healer)
+    if not guid or (healer and not healerGUID) then
+      return nil
+    end
+    local amount = HealComm:GetHealAmount(guid, HealComm.CASTED_HEALS, nil, healerGUID)
+    if not amount then
+      return nil
+    end
+    return math.max(0, amount * HealComm:GetHealModifier(guid))
+  end
+
+  local exports = {
+    UnitGetTotalAbsorbs = UnitGetTotalAbsorbs,
+    UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs,
+    UnitGetIncomingHeals = UnitGetIncomingHeals,
+  }
+  for name, value in pairs(exports) do
+    Private[name] = value
+    Private.AuraEnvOverrides[name] = value
+    if not _G[name] then
+      _G[name] = value
+    end
+  end
+
+  local function ScanHealthPrediction(event, ...)
+    if WeakAuras.IsPaused() then
+      return
+    end
+    if loaded_events[event] and next(loaded_events[event]) then
+      for unit in pairs(Private.baseUnitId) do
+        local guid = UnitGUID(unit)
+        if guid then
+          for i = 1, select("#", ...) do
+            if guid == select(i, ...) then
+              Private.ScanEvents(event, unit)
+              break
+            end
+          end
+        end
+      end
+    end
+    for unit, unitEvents in pairs(loaded_unit_events) do
+      if unitEvents[event] and next(unitEvents[event]) then
+        local guid = UnitGUID(unit)
+        if guid then
+          for i = 1, select("#", ...) do
+            if guid == select(i, ...) then
+              Private.ScanUnitEvents(event, unit)
+              break
+            end
+          end
+        end
+      end
+    end
+  end
+
+  local function AbsorbsUpdated(event, guid)
+    local previousClearedGUID = clearedAbsorbGUID
+    clearedAbsorbGUID = event == "UnitCleared" and guid or nil
+    ScanHealthPrediction("UNIT_ABSORB_AMOUNT_CHANGED", guid)
+    clearedAbsorbGUID = previousClearedGUID
+  end
+
+  local function HealsUpdated(_, _, _, healType, _, ...)
+    if bit.band(healType, HealComm.CASTED_HEALS) ~= 0 then
+      ScanHealthPrediction("UNIT_HEAL_PREDICTION", ...)
+    end
+  end
+
+  local function HealModifierChanged(_, guid)
+    ScanHealthPrediction("UNIT_HEAL_PREDICTION", guid)
+  end
+
+  local watchingAbsorbs, watchingHeals, watchingHealAbsorbs
+
+  unitEventProviders.UNIT_ABSORB_AMOUNT_CHANGED = function()
+    if not watchingAbsorbs then
+      watchingAbsorbs = true
+      Absorbs.RegisterUnitCallbacks(WeakAuras, AbsorbsUpdated)
+    end
+  end
+
+  unitEventProviders.UNIT_HEAL_PREDICTION = function()
+    if not watchingHeals then
+      watchingHeals = true
+      HealComm.RegisterCallback(WeakAuras, "HealComm_HealStarted", HealsUpdated)
+      HealComm.RegisterCallback(WeakAuras, "HealComm_HealUpdated", HealsUpdated)
+      HealComm.RegisterCallback(WeakAuras, "HealComm_HealStopped", HealsUpdated)
+      HealComm.RegisterCallback(WeakAuras, "HealComm_HealDelayed", HealsUpdated)
+      HealComm.RegisterCallback(WeakAuras, "HealComm_ModifierChanged", HealModifierChanged)
+      HealComm.RegisterCallback(WeakAuras, "HealComm_GUIDDisappeared", HealModifierChanged)
+    end
+  end
+
+  unitEventProviders.UNIT_HEAL_ABSORB_AMOUNT_CHANGED = function()
+    if not watchingHealAbsorbs then
+      watchingHealAbsorbs = true
+      Absorbs.Core.Frame:HookScript("OnEvent", function(_, event, _, subevent, _, _, _, destGUID, _, _, ...)
+        if event ~= "COMBAT_LOG_EVENT_UNFILTERED" then
+          return
+        end
+        if subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED" then
+          ScanHealthPrediction("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", destGUID)
+        elseif subevent == "SPELL_HEAL" or subevent == "SPELL_PERIODIC_HEAL" then
+          local absorbed = select(6, ...)
+          if absorbed and absorbed > 0 then
+            ScanHealthPrediction("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", destGUID)
+          end
+        end
+      end)
+    end
   end
 end
 

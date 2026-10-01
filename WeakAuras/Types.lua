@@ -3316,6 +3316,13 @@ Private.bool_types = {
 }
 
 ---@type table<string, string>
+Private.absorb_modes = {
+  OVERLAY_FROM_START = L["Attach to Start"],
+  OVERLAY_FROM_END = L["Attach to End"],
+  OVERLAY_FROM_END_REVERSE = L["Attach to End, backwards"]
+}
+
+---@type table<string, string>
 Private.aurabar_tooltip_areas = {
   ICON = L["Icon"],
   BAR = L["Bar"],

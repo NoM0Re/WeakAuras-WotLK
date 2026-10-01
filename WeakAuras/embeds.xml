@@ -18,4 +18,6 @@
   <Include file="Libs\LibSerialize\lib.xml"/>
   <Include file="Libs\LibGroupTalents-1.0\lib.xml"/>
   <Include file="Libs\LibResComm-1.0\LibResComm-1.0.xml"/>
+  <Script file="Libs\LibHealComm-4.0\LibHealComm-4.0.lua"/>
+  <Script file="Libs\SpecializedAbsorbs-1.0\SpecializedAbsorbs-1.0.lua"/>
 </Ui>

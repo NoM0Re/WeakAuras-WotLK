@@ -47,6 +47,12 @@ L["Abbreviate"] = "Abréger"
 L["AbbreviateLargeNumbers (Blizzard)"] = "AbrégerGrandsNombres (Blizzard)"
 L["AbbreviateNumbers (Blizzard)"] = "AbrégerNombres (Blizzard)"
 L["Absorb"] = "Absorbe"
+--[[Translation missing --]]
+L["Absorb and Healing"] = "Absorb and Healing"
+--[[Translation missing --]]
+L["Absorb Heal Overlay"] = "Absorb Heal Overlay"
+--[[Translation missing --]]
+L["Absorb Overlay"] = "Absorb Overlay"
 L["Absorbed"] = "Absorbé"
 L["Action Button Glow"] = "Bouton d'action brillant"
 L["Actions"] = "Actions"
@@ -117,7 +123,10 @@ L["At Percent"] = "À pourcentage"
 L["At Value"] = "À la valeur"
 --[[Translation missing --]]
 L["At War"] = "At War"
+L["Attach to End"] = "Attacher à la Fin"
+L["Attach to End, backwards"] = "Attacher à la fin, en arrière"
 L["Attach to Point"] = "Attacher au point"
+L["Attach to Start"] = "Attacher au Début"
 L["Attack Power"] = "Puissance d'attaque"
 L["Attackable"] = "Attaquable"
 L["Attackable Target"] = "Cible attaquable"
@@ -575,6 +584,10 @@ L["Feature %q is already disabled"] = "Feature %q is already disabled"
 --[[Translation missing --]]
 L["Feature %q is already enabled"] = "Feature %q is already enabled"
 --[[Translation missing --]]
+L["Fetch Absorb"] = "Fetch Absorb"
+--[[Translation missing --]]
+L["Fetch Heal Absorb"] = "Fetch Heal Absorb"
+--[[Translation missing --]]
 L["Fill Area"] = "Fill Area"
 --[[Translation missing --]]
 L["Filter messages with format <message>"] = "Filter messages with format <message>"
@@ -690,6 +703,8 @@ L["HasPet"] = "Avoir un familier (vivant)"
 L["Haste (%)"] = "Hâte (%)"
 L["Haste Rating"] = "Score de hâte"
 L["Heal"] = "Soin"
+--[[Translation missing --]]
+L["Heal Absorb"] = "Heal Absorb"
 L["Health"] = "Vie"
 L["Health (%)"] = "Vie (%)"
 --[[Translation missing --]]
@@ -760,6 +775,7 @@ L["Include Bank"] = "Inclure la Banque"
 L["Include Charges"] = "Inclure charges"
 L["Include Death Runes"] = "Inclure les Runes de la mort"
 L["Include Pets"] = "Inclure les familiers"
+L["Incoming Heal"] = "Soins en Cours"
 --[[Translation missing --]]
 L["Increase Precision Below"] = "Increase Precision Below"
 --[[Translation missing --]]
@@ -1318,6 +1334,7 @@ L["Show"] = "Montrer"
 L["Show CD of Charge"] = "Afficher le Temps de Recharge de la charge"
 L["Show GCD"] = "Afficher GCD"
 L["Show Global Cooldown"] = "Afficher le Temps de Recharge Global"
+L["Show Incoming Heal"] = "Afficher les Soins en Cours"
 L["Show On"] = "Afficher Sur"
 L["Show Rested Overlay"] = "Superposer l'XP en reposé"
 L["Shrink"] = "Rétrécir"
