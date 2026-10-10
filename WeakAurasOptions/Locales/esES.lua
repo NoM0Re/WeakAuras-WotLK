@@ -86,6 +86,7 @@ local L = WeakAuras.L
 	L["|cFFFF0000default|r texture"] = "textura |cFFFF0000predeterminada|r"
 	L["|cFFFF0000desaturated|r "] = "|cFFFF0000desaturado|r"
 	L["|cFFFF0000Note:|r The unit '%s' is not a trackable unit."] = "|cFFFF0000Nota:|r La unidad '%s' no es una unidad rastreable."
+	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000Nota:|r La unidad '%s' requiere que las cvars de objetivos flexibles estén habilitadas."
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"] = "|cFFffcc00Anclas:|r anclado |cFFFF0000%s|r al |cFFFF0000%s|r del marco"
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00Anclas:|r anclado |cFFFF0000%s|r al |cFFFF0000%s|r del marco con compensación |cFFFF0000%s/%s|r"
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"] = "|cFFffcc00Anclas:|r anclado al |cFFFF0000%s|r del marco"
@@ -366,6 +367,7 @@ Off Screen]=] ] = "El aura está fuera de la pantalla"
 	L["File Height"] = "Altura de archivo"
 	L["File Width"] = "Anchura de archivo"
 	L["Filter based on the spell Name string."] = "Filtro basado en la cadena del nombre del hechizo."
+	L["Filter by Arena Spec"] = "Filtrar por especialización de arena"
 	L["Filter by Class"] = "Filtrar por clase"
 	L["Filter by Group Role"] = "Filtrar por rol de grupo"
 	L["Filter by Hostility"] = "Filtrar por hostilidad"
@@ -431,6 +433,8 @@ Con |cFF00CC00>= 0|r se activará siempre.]=]
 	L["Group Role"] = "Rol de grupo"
 	L["Group Scale"] = "Escala de grupo"
 	L["Group Settings"] = "Configuración de grupo"
+	--[[Translation missing --]]
+	L["Hardcore has very low script time out limits. We recommend using a normal server to modify auras."] = "Hardcore has very low script time out limits. We recommend using a normal server to modify auras."
 	L["Hawk"] = "Halcón"
 	L["Help"] = "Ayuda"
 	L["Hide After"] = "Ocultar después"
@@ -511,6 +515,7 @@ Con |cFF00CC00>= 0|r se activará siempre.]=]
 	L["LibDeflate: Yoursafety"] = "LibDeflate: Yoursafety"
 	L["LibDispel: Simpy"] = "LibDispel: Simpy"
 	L["LibSerialize: Sanjo"] = "LibSerialize: Sanjo"
+	L["LibSpecialization: Funkeh"] = "LibSpecialization: Funkeh"
 	L["Limit"] = "Límite"
 	L["Line"] = "Línea"
 	L["Linear Texture %s"] = "Textura lineal de %s"
@@ -660,6 +665,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = "Ocurrencia d
 	L["Report bugs on our issue tracker."] = "Informa de los errores en nuestro rastreador de problemas."
 	L["Require unit from trigger"] = "Requiere unidad del activador"
 	L["Required for Activation"] = "Necesario para la activación"
+	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "Requiere LibSpecialization, es decir, una versión actualizada de WeakAuras."
 	L["Reset all options to their default values."] = "Restablece todas las opciones a sus valores por defecto."
 	L["Reset Entry"] = "Restablecer entrada"
 	L["Reset to Defaults"] = "Restablecer valores"
@@ -864,6 +870,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Unit %s is not a valid unit for RegisterUnitEvent"] = "La unidad %s no es una unidad válida para RegisterUnitEvent"
 	L["Unit Count"] = "Recuento de unidad"
 	L["Unknown"] = "Desconocido"
+	L["Unknown Encounter's Spell Id"] = "ID de hechizo de encuentro desconocido"
 	L["Unknown property '%s' found in '%s'"] = "Propiedad desconocida '%s' encontrada en '%s'"
 	L["Unknown Spell"] = "Hechizo desconocido"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "Ignorar animaciones de inicio y final: la animación principal se repetirá hasta que el aura se oculte."
@@ -910,6 +917,11 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You already have this group/aura. Importing will create a duplicate."] = "Ya tienes este grupo/aura. La importación creará un duplicado."
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "Estás a punto de eliminar aura(s) %d. |cFFFF0000¡Esto no se puede deshacer!|r ¿Te gustarías continuar?"
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "Estás a punto de eliminar un activador. |cFFFF0000¡Esto no se puede deshacer!|r ¿Te gustaría continuar?"
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = "Estás a punto de importar un aura con código Lua personalizado en un servidor Hardcore. |cFFFF0000¡Existe el riesgo de que el código personalizado pueda usarse para matar a tu personaje hardcore!|r ¿Deseas continuar?"
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
 WeakAuras will always run custom anchor code if you include 'changed' in this list, or when a region is added, removed, or re-ordered.]=] ] = "Puedes agregar aquí una lista de valores de estado separados por comas en los que (cuando se modifican) WeakAuras también debería ejecutar el código anclaje. WeakAuras siempre ejecutará el código de orden personalizado si incluye \"cambiado\" en esta lista, o cuando se agrega, se elimina, o se reordena una región"

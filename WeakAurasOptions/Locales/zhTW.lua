@@ -86,6 +86,7 @@ local L = WeakAuras.L
 	L["|cFFFF0000default|r texture"] = "|cFFFF0000預設|r材質"
 	L["|cFFFF0000desaturated|r "] = "|cFFFF0000去色|r "
 	L["|cFFFF0000Note:|r The unit '%s' is not a trackable unit."] = "|cFFFF0000注意:|r 單位 '%s' 不是可以監控的單位。"
+	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000注意:|r 單位 '%s' 需要啟用軟目標 CVar 遊戲參數。"
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"] = "|cFFffcc00對齊:|r |cFFFF0000%s|r對齊到框架的|cFFFF0000%s|r"
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00對齊:|r |cFFFF0000%s|r對齊到框架的|cFFFF0000%s|r，位移|cFFFF0000%s/%s|r"
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"] = "|cFFffcc00對齊:|r 對齊到框架的|cFFFF0000%s|r"
@@ -381,6 +382,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["File Height"] = "列高"
 	L["File Width"] = "列寬"
 	L["Filter based on the spell Name string."] = "根據法術名稱字符過濾。"
+	L["Filter by Arena Spec"] = "依競技場專精過濾"
 	L["Filter by Class"] = "依職業過濾"
 	L["Filter by Group Role"] = "依角色職責過濾"
 	L["Filter by Hostility"] = "依敵方過濾"
@@ -452,6 +454,8 @@ Bleed classification via LibDispel]=] ] = "只過濾被 LibDispel 分類為流�
 	L["Group Role"] = "角色職責"
 	L["Group Scale"] = "群組縮放大小"
 	L["Group Settings"] = "群組設定"
+	--[[Translation missing --]]
+	L["Hardcore has very low script time out limits. We recommend using a normal server to modify auras."] = "Hardcore has very low script time out limits. We recommend using a normal server to modify auras."
 	L["Hawk"] = "老鷹"
 	L["Help"] = "說明"
 	L["Hide After"] = "隱藏之後的"
@@ -533,6 +537,7 @@ Bleed classification via LibDispel]=] ] = "只過濾被 LibDispel 分類為流�
 	L["LibDeflate: Yoursafety"] = "LibDeflate: Yoursafety"
 	L["LibDispel: Simpy"] = "LibDispel: Simpy"
 	L["LibSerialize: Sanjo"] = "LibSerialize: Sanjo"
+	L["LibSpecialization: Funkeh"] = "LibSpecialization: Funkeh"
 	L["Limit"] = "限制"
 	L["Line"] = "線"
 	L["Linear Texture %s"] = "線性材質 %s"
@@ -688,6 +693,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[事件發�
 	L["Report bugs on our issue tracker."] = "請在我們的問題追蹤網頁回報 bug。"
 	L["Require unit from trigger"] = "需要來自觸發的單位"
 	L["Required for Activation"] = "啟用需要"
+	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "需要 LibSpecialization，也就是最新的 WeakAuras 版本"
 	L["Reset all options to their default values."] = "重置所有選項，恢復成預設值。"
 	L["Reset Entry"] = "重置項目"
 	L["Reset to Defaults"] = "重置為預設值"
@@ -901,6 +907,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Unit %s is not a valid unit for RegisterUnitEvent"] = "%s 不是 RegisterUnitEvent 的有效單位"
 	L["Unit Count"] = "單位數量"
 	L["Unknown"] = "未知"
+	L["Unknown Encounter's Spell Id"] = "未知的首領戰法術 ID"
 	L["Unknown property '%s' found in '%s'"] = "發現未知屬性 '%s'，在 '%s'"
 	L["Unknown Spell"] = "未知的法術"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "不同於開始或結束時的動畫，主要動畫將重複循環直到提醒效果被隱藏。"
@@ -948,6 +955,11 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You already have this group/aura. Importing will create a duplicate."] = "你已經有了這個群組/提醒效果。匯入後將會建立另一個複製版本。"
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "你正準備要刪除 %d 個提醒效果，刪除後將|cFFFF0000無法還原!|r 請問是否要繼續?"
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "你正要刪除觸發。 |cFFFF0000刪除後將無法還原!|r 是否確定要繼續?"
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = "你即將在專家伺服器上匯入一個包含自訂 Lua 程式碼的提醒效果。|cFFFF0000存在自訂程式碼可能被利用來殺死你的專家角色的風險!|r 你確定要繼續嗎?"
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
 WeakAuras will always run custom anchor code if you include 'changed' in this list, or when a region is added, removed, or re-ordered.]=] ] = "您可以在此處添加一個以逗號分隔的狀態值清單，當這些值發生變化時，WeakAuras 也會運行錨點程式碼 (Anchor Code)。如果您在此清單中包含 'changed'，或者新增、刪除或重新排序某個區塊時，WeakAuras 將會永遠運行自定錨點程式碼。"

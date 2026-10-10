@@ -139,6 +139,8 @@ local L = WeakAuras.L
 	--[[Translation missing --]]
 	L["|cFFFF0000Note:|r The unit '%s' is not a trackable unit."] = "|cFFFF0000Note:|r The unit '%s' is not a trackable unit."
 	--[[Translation missing --]]
+	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."
+	--[[Translation missing --]]
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"] = "|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"
 	--[[Translation missing --]]
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"
@@ -597,6 +599,8 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	--[[Translation missing --]]
 	L["Filter based on the spell Name string."] = "Filter based on the spell Name string."
 	--[[Translation missing --]]
+	L["Filter by Arena Spec"] = "Filter by Arena Spec"
+	--[[Translation missing --]]
 	L["Filter by Class"] = "Filter by Class"
 	--[[Translation missing --]]
 	L["Filter by Group Role"] = "Filter by Group Role"
@@ -706,6 +710,8 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["Group Scale"] = "Group Scale"
 	--[[Translation missing --]]
 	L["Group Settings"] = "Group Settings"
+	--[[Translation missing --]]
+	L["Hardcore has very low script time out limits. We recommend using a normal server to modify auras."] = "Hardcore has very low script time out limits. We recommend using a normal server to modify auras."
 	--[[Translation missing --]]
 	L["Hawk"] = "Hawk"
 	L["Help"] = "Ajuda"
@@ -854,6 +860,8 @@ If the entered number is a decimal (e.g. 0.5), fraction (e.g. 1/2), or percentag
 	L["LibDispel: Simpy"] = "LibDispel: Simpy"
 	--[[Translation missing --]]
 	L["LibSerialize: Sanjo"] = "LibSerialize: Sanjo"
+	--[[Translation missing --]]
+	L["LibSpecialization: Funkeh"] = "LibSpecialization: Funkeh"
 	--[[Translation missing --]]
 	L["Limit"] = "Limit"
 	--[[Translation missing --]]
@@ -1116,6 +1124,8 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=]
 	--[[Translation missing --]]
 	L["Require unit from trigger"] = "Require unit from trigger"
 	L["Required for Activation"] = "Requerido para Ativar"
+	--[[Translation missing --]]
+	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"
 	--[[Translation missing --]]
 	L["Reset all options to their default values."] = "Reset all options to their default values."
 	--[[Translation missing --]]
@@ -1484,6 +1494,8 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	--[[Translation missing --]]
 	L["Unknown"] = "Unknown"
 	--[[Translation missing --]]
+	L["Unknown Encounter's Spell Id"] = "Unknown Encounter's Spell Id"
+	--[[Translation missing --]]
 	L["Unknown property '%s' found in '%s'"] = "Unknown property '%s' found in '%s'"
 	--[[Translation missing --]]
 	L["Unknown Spell"] = "Unknown Spell"
@@ -1572,6 +1584,16 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"
 	--[[Translation missing --]]
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"
+	--[[Translation missing --]]
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=]
 	--[[Translation missing --]]
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 

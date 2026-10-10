@@ -3,6 +3,23 @@
 Write release notes under a heading that matches the tag version, for example `## 5.0.0`.
 Use <:WALurk:1341460510360604673> or when in June <:WALurkPride:1379014370197110916>
 
+## 5.22.1
+
+<:WALurk:1341460510360604673> 5.22.1
+
+Fixes:
+Improve sandbox protection for custom aura code
+Remove the non-working Cartoon Hop sound from the sound list
+
+Backport New Features:
+Add Absorb, Heal Absorb and Incoming Heal support to the Health Trigger, including overlays
+Make absorb and incoming heal values available to custom aura code
+
+Backport Fixes:
+Finally improve Swing Timer accuracy for dual wielding, haste changes, Slam and attacks that reset the swing timer
+Fix weapon enchant information being unavailable after login or loading screens
+Fix Lua errors when delayed triggers finish after an aura has been unloaded
+
 ## 5.22.0
 
 <:WALurk:1341460510360604673> 5.22.0

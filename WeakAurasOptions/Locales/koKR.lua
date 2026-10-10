@@ -86,6 +86,7 @@ local L = WeakAuras.L
 	L["|cFFFF0000default|r texture"] = "|cFFFF0000기본|r 텍스처"
 	L["|cFFFF0000desaturated|r "] = "|cFFFF0000흑백|r"
 	L["|cFFFF0000Note:|r The unit '%s' is not a trackable unit."] = "|cFFFF0000참고:|r '%s' 유닛은 추적할 수 없습니다."
+	L["|cFFFF0000Note:|r The unit '%s' requires soft target cvars to be enabled."] = "|cFFFF0000참고:|r '%s' 유닛은 액션 대상 지정 관련 cvar의 활성화를 필요로 합니다."
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r"] = "|cFFffcc00고정:|r |cFFFF0000%s|r|1을;를; 프레임의 |cFFFF0000%s|r에 고정"
 	L["|cFFffcc00Anchors:|r Anchored |cFFFF0000%s|r to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00고정:|r |cFFFF0000%s|r|1을;를; 프레임의 |cFFFF0000%s|r에 |cFFFF0000%s/%s|r 위치 조정을 해서 고정"
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"] = "|cFFffcc00고정:|r 프레임의 |cFFFF0000%s|r에 고정됨"
@@ -400,6 +401,7 @@ UNIT_POWER_UPDATE:player, UNIT_AURA:nameplate:group PLAYER_TARGET_CHANGED CLEU:S
 	L["File Height"] = "파일 높이"
 	L["File Width"] = "파일 너비"
 	L["Filter based on the spell Name string."] = "주문 이름 문자열을 필터링합니다."
+	L["Filter by Arena Spec"] = "투기장 전문화별 필터"
 	L["Filter by Class"] = "직업별 필터"
 	L["Filter by Group Role"] = "그룹 역할별 필터"
 	L["Filter by Hostility"] = "적/아군 필터"
@@ -470,6 +472,8 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 	L["Group Role"] = "그룹 역할"
 	L["Group Scale"] = "그룹 크기"
 	L["Group Settings"] = "그룹 설정"
+	--[[Translation missing --]]
+	L["Hardcore has very low script time out limits. We recommend using a normal server to modify auras."] = "Hardcore has very low script time out limits. We recommend using a normal server to modify auras."
 	L["Hawk"] = "매"
 	L["Help"] = "도움말"
 	L["Hide After"] = "이후 숨기기"
@@ -550,6 +554,7 @@ Bleed classification via LibDispel]=] ] = [=[여러 속성 중 해제가 되는 
 	L["LibDeflate: Yoursafety"] = "LibDeflate: Yoursafety"
 	L["LibDispel: Simpy"] = "LibDispel: Simpy"
 	L["LibSerialize: Sanjo"] = "LibSerialize: Sanjo"
+	L["LibSpecialization: Funkeh"] = "LibSpecialization: Funkeh"
 	L["Limit"] = "제한"
 	L["Line"] = "줄"
 	L["Linear Texture %s"] = "직진 텍스처 %s"
@@ -708,6 +713,7 @@ every 3 events starting from 2nd and ending at 11th: 2-11/3]=] ] = [=[이벤트 
 	L["Report bugs on our issue tracker."] = "이슈 트래커에 버그를 제보해 주세요."
 	L["Require unit from trigger"] = "활성 조건에서 유닛 필요"
 	L["Required for Activation"] = "활성화 필수 조건"
+	L["Requires LibSpecialization, that is e.g. a up-to date WeakAuras version"] = "LibSpecialization이 필요하며, WeakAuras 버전을 최신으로 유지하면 됩니다."
 	L["Reset all options to their default values."] = "모든 옵션을 기본값으로 초기화합니다."
 	L["Reset Entry"] = "항목 초기화"
 	L["Reset to Defaults"] = "기본값으로 재설정"
@@ -910,6 +916,7 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["Unit %s is not a valid unit for RegisterUnitEvent"] = "%s 유닛은 RegisterUnitEvent에 적합하지 않습니다."
 	L["Unit Count"] = "유닛 수"
 	L["Unknown"] = "알 수 없음"
+	L["Unknown Encounter's Spell Id"] = "알 수 없는 보스전의 주문 ID"
 	L["Unknown property '%s' found in '%s'"] = "'%2$s'에 알 수 없는 속성 '%1$s'|1이;가; 있음"
 	L["Unknown Spell"] = "알 수 없는 주문"
 	L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "시작 또는 종료 애니메이션과 달리 메인 애니메이션은 디스플레이가 숨겨질 때까지 계속 반복됩니다."
@@ -956,6 +963,11 @@ Upgrade your version of WeakAuras or wait for next release before installing thi
 	L["You already have this group/aura. Importing will create a duplicate."] = "이미 이 그룹/위크오라가 있습니다. 가져오면 복사본이 생성됩니다."
 	L["You are about to delete %d aura(s). |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "위크오라 %d개를 삭제하려고 합니다. |cFFFF0000이는 되돌릴 수 없습니다!|r 계속할까요?"
 	L["You are about to delete a trigger. |cFFFF0000This cannot be undone!|r Would you like to continue?"] = "이 활성 조건을 삭제하려고 합니다. |cFFFF0000이는 되돌릴 수 없습니다!|r 계속할까요?"
+	L[ [=[You are about to Import an Aura with custom Lua code on a Hardcore server.
+
+|cFFFF0000There is a risk the custom code could be used to kill your hardcore character!|r
+
+Would you like to continue?]=] ] = "하드코어 서버에서 사용자 정의 Lua 코드가 포함된 위크오라를 가져오고 있습니다. |cFFFF0000사용자 정의 코드가 당신의 하드코어 캐릭터를 죽이는 데 사용될 위험이 있습니다!|r 계속하시겠습니까?"
 	L[ [=[You can add a comma-separated list of state values here that (when changed) WeakAuras should also run the Anchor Code on.
 
 WeakAuras will always run custom anchor code if you include 'changed' in this list, or when a region is added, removed, or re-ordered.]=] ] = "이곳에 State 테이블 값들을 쉼표로 구분해서 목록으로 만들어 넣을 수 있으며 (값이 바뀔 때) WeakAuras가 위치 고정 코드를 실행하게 됩니다. 이 목록에 테이블 값 'changed'를 넣을 경우 또는 표시 영역(region)이 추가, 삭제, 재정렬 될 때 WeakAuras는 반드시 사용자 정의 고정 코드를 실행합니다."
