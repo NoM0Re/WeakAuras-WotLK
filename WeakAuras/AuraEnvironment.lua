@@ -174,16 +174,19 @@ local blockedFunctions = {
   RunScript = true,
   AcceptTrade = true,
   SetSendMailMoney = true,
-  EditMacro = true,
   DevTools_DumpCommand = true,
   hash_SlashCmdList = true,
   RegisterNewSlashCommand = true,
   CreateMacro = true,
+  EditMacro = true,
+  DeleteMacro = true,
   SetBindingMacro = true,
   GuildDisband = true,
   GuildUninvite = true,
   securecall = true,
   DeleteCursorItem = true,
+  AbandonSkill = true,
+  PetAbandon = true,
   ChatEdit_SendText = true,
   ChatEdit_ActivateChat = true,
   ChatEdit_ParseText = true,
@@ -192,6 +195,22 @@ local blockedFunctions = {
   -- GetEditBoxMetatable = true,
   -- GetFontStringMetatable = true,
   -- GetFrameMetatable = true,
+}
+
+local blockedNamespaceFunctions = {
+  -- blocked WoW API
+  C_PetInfo = {
+    PetAbandon = true,
+  },
+  C_GuildInfo = {
+    Disband = true,
+    Uninvite = true,
+  },
+  C_TradeInfo = {
+    AddTradeMoney = true,
+    SetTradeMoney = true,
+    PickupTradeMoney = true,
+  },
 }
 
 local blockedTables = {
@@ -561,6 +580,25 @@ local overridden = {
 }
 for k, v in pairs(Private.AuraEnvOverrides) do
   overridden[k] = v
+end
+
+-- Block global function names in namespace API tables
+for name, functions in pairs(blockedNamespaceFunctions) do
+  local namespaceName = name
+  local namespace = _G[namespaceName]
+  if type(namespace) == "table" then
+    overridden[namespaceName] = MakeReadOnly(namespace, {
+      blockedFunctions = functions,
+      blockedTables = {},
+      override = {},
+      blocked = function(key)
+        blocked(namespaceName .. "." .. tostring(key))
+      end,
+      setBlocked = function()
+        blocked(namespaceName)
+      end,
+    })
+  end
 end
 
 -- WORKAROUND API which return Mixin'd values need those mixin "rawgettable" in caller's fenv #5071
