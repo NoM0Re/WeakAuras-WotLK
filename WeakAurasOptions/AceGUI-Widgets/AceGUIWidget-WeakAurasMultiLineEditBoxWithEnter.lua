@@ -4,7 +4,7 @@ if not WeakAuras.IsLibsOK() then return end
 local OptionsPrivate = select(2, ...)
 
 -- based on the AceGUI widget, overwrites the enter handling
-local Type, Version = "WeakAuras-MultiLineEditBoxWithEnter", 2
+local Type, Version = "WeakAuras-MultiLineEditBoxWithEnter", 3
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local LAAC = LibStub("LibAPIAutoComplete-1.0")
