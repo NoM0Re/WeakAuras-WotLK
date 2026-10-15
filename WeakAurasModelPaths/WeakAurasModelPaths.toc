@@ -10,6 +10,7 @@
 ## Notes-ruRU: Ссылки на файлы моделей WeakAuras
 ## Notes-zhTW: WeakAuras的模組路徑
 ## X-Category: Interface Enhancements
+## X-Part-Of: WeakAuras
 ## Globe-Main: WeakAuras
 ## DefaultState: Enabled
 ## LoadOnDemand: 1

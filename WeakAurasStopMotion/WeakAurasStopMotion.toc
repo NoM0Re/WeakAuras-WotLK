@@ -3,6 +3,7 @@
 ## Author: Infus
 ## Notes: Textures for Stop Motion
 ## X-Category: Interface Enhancements
+## X-Part-Of: WeakAuras
 ## DefaultState: Enabled
 ## Dependencies: WeakAuras
 

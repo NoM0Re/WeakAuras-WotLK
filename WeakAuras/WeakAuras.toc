@@ -11,6 +11,7 @@
 ## Notes-ruRU: Мощный, многосторонний инструмент для отображения графики и информации, основанной на баффах, дебаффах и других триггерах.
 ## Notes-zhTW: 一個強大且全面實用的顯示圖形和訊息基於增益，減益和其它觸發。
 ## X-Category: Interface Enhancements
+## X-Part-Of: WeakAuras
 ## Globe-Post: WeakAurasOptions, WeakAurasModelPaths, WeakAurasTemplates
 ## X-Website: https://www.github.com/NoM0Re/WeakAuras-WotLK
 ## DefaultState: Enabled

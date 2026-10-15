@@ -7,6 +7,7 @@
 ## Notes-esES: Plantillas para WeakAuras
 ## Notes-esMX: Plantillas para WeakAuras
 ## X-Category: Interface Enhancements
+## X-Part-Of: WeakAuras
 ## Globe-Main: WeakAuras
 ## DefaultState: Enabled
 ## LoadOnDemand: 1

@@ -13,6 +13,7 @@
 ## Notes-zhTW: 一個全面的暴雪 API 文檔，包括常量、函數和事件。
 ## Notes-zhCN: 一份全面的暴雪 API 文档，包括常量、函数和事件。
 ## X-Category: Documentation
+## X-Part-Of: WeakAuras
 ## X-Website: https://www.github.com/NoM0Re/WeakAuras-WotLK
 ## DefaultState: Enabled
 ## LoadOnDemand: 1
