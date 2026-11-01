@@ -3596,7 +3596,7 @@ function WeakAuras.WatchUnitChange(unit)
 
     local handleEvent = {
       PLAYER_ENTERING_WORLD = function(_, eventsToSend)
-        for unit in pairs(watchUnitChange.unitIdToGUID) do
+        for unit in pairs(watchUnitChange.trackedUnits) do
           handleUnit(unit, eventsToSend, unitUpdate, markerUpdate, reactionUpdate)
         end
       end,
@@ -3635,6 +3635,7 @@ function WeakAuras.WatchUnitChange(unit)
       UNIT_PET = function(unit, eventsToSend)
         local pet = WeakAuras.unitToPetUnit[unit]
         if pet and watchUnitChange.trackedUnits[pet] then
+          handleUnit(pet, eventsToSend, unitUpdate, markerInit, reactionInit)
           eventsToSend["UNIT_CHANGED_" .. pet] = pet
         end
       end,
@@ -3711,7 +3712,7 @@ function WeakAuras.GetEquipmentSetInfo(itemSetName, partial)
       if (name ~= nil) then
         equipmentSetItemIDs = GetEquipmentSetItemIDs(name, equipmentSetItemIDs)
         for slot, item in ipairs(equipmentSetItemIDs) do
-          if item > 0 then
+          if item > 1 or item == -1 then
             numItems = numItems + 1
             if equipmentItemIDs[slot] == item then
               numEquipped = numEquipped + 1
@@ -3822,12 +3823,17 @@ end
 ---@param powerTypeToCheck integer
 ---@return number? cost
 function WeakAuras.GetSpellCost(powerTypeToCheck)
-  local spellName = WeakAuras.UnitCastingInfo("player")
+  local spellName, spellRank = WeakAuras.UnitCastingInfo("player")
   if not spellName then -- not casting so check if it is queued
     spellName = WeakAuras.GetQueuedSpell()
   end
   if spellName then
-    local _, _, _, powerCost, _, powerType = GetSpellInfo(spellName);
+    local _, _, _, powerCost, _, powerType
+    if spellRank and spellRank ~= "" then
+      _, _, _, powerCost, _, powerType = GetSpellInfo(spellName, spellRank)
+    else
+      _, _, _, powerCost, _, powerType = GetSpellInfo(spellName)
+    end
     if powerType and powerCost then
       if powerType == powerTypeToCheck then
         return powerCost;
@@ -3840,16 +3846,12 @@ end
 do
   local mh = GetInventorySlotInfo("MainHandSlot")
   local oh = GetInventorySlotInfo("SecondaryHandSlot")
-  local rw = GetInventorySlotInfo("RangedSlot")
 
   local mh_name, mh_shortenedName, mh_exp, mh_dur, mh_charges;
   local mh_icon = GetInventoryItemTexture("player", mh);
 
   local oh_name, oh_shortenedName, oh_exp, oh_dur, oh_charges;
   local oh_icon = GetInventoryItemTexture("player", oh);
-
-  local rw_name, rw_shortenedName, rw_exp, rw_dur, rw_charges;
-  local rw_icon = GetInventoryItemTexture("player", rw) or "Interface\\Icons\\INV_Misc_QuestionMark"
 
   local tenchFrame = nil
   Private.frames["Temporary Enchant Handler"] = tenchFrame;
@@ -3885,12 +3887,11 @@ do
 
       tenchUpdate = function()
         Private.StartProfileSystem("generictrigger temporary enchant");
-        local _, mh_rem, oh_rem, rw_rem
-        _, mh_rem, mh_charges, _, oh_rem, oh_charges, _, rw_rem, rw_charges = GetWeaponEnchantInfo();
+        local _, mh_rem, oh_rem
+        _, mh_rem, mh_charges, _, oh_rem, oh_charges = GetWeaponEnchantInfo();
         local time = GetTime();
         local mh_exp_new = mh_rem and (time + (mh_rem / 1000));
         local oh_exp_new = oh_rem and (time + (oh_rem / 1000));
-        local rw_exp_new = rw_rem and (time + (rw_rem / 1000));
         if(math.abs((mh_exp or 0) - (mh_exp_new or 0)) > 1) then
           mh_exp = mh_exp_new;
           mh_dur = mh_rem and mh_rem / 1000;
@@ -3910,16 +3911,6 @@ do
             oh_name, oh_shortenedName = "None", "None"
           end
           oh_icon = GetInventoryItemTexture("player", oh)
-        end
-        if(math.abs((rw_exp or 0) - (rw_exp_new or 0)) > 1) then
-          rw_exp = rw_exp_new;
-          rw_dur = rw_rem and rw_rem / 1000;
-          if rw_exp then
-            rw_name, rw_shortenedName = getTenchName(rw)
-          else
-            rw_name, rw_shortenedName = "None", "None"
-          end
-          rw_icon = GetInventoryItemTexture("player", rw)
         end
         Private.ScanEvents("TENCH_UPDATE");
         Private.StopProfileSystem("generictrigger temporary enchant");
@@ -3950,9 +3941,6 @@ do
     return oh_exp, oh_dur, oh_name, oh_shortenedName, oh_icon, oh_charges;
   end
 
-  function WeakAuras.GetRangeTenchInfo()
-    return rw_exp, rw_dur, rw_name, rw_shortenedName, rw_icon, rw_charges;
-  end
 end
 
 -- Pets
@@ -4842,9 +4830,6 @@ local commonConditions = {
       if not state or not state.itemname or not state.show or not UnitExists('target') then
         return false
       end
-      if InCombatLockdown() and not UnitCanAttack('player', 'target') then
-        return false
-      end
       return IsItemInRange(state.itemname, 'target') == 1 == (needle == 1)
     end,
     events = Private.AddTargetConditionEvents({
@@ -5197,7 +5182,7 @@ WeakAuras.CheckForItemEquipped = function(itemId, specificSlot)
   end
   local equippedItemID = GetInventoryItemID("player", specificSlot)
   if equippedItemID then
-    return itemId == equippedItemID
+    return tonumber(itemId) == equippedItemID
   end
 end
 

@@ -5271,7 +5271,6 @@ Private.event_prototypes = {
         ["events"] = events,
         ["unit_events"] = unit_events or {
           ["player"] = {
-          "UNIT_POWER",
           "UNIT_ENERGY",
           "UNIT_MANA",
           "UNIT_RAGE"
@@ -6048,14 +6047,12 @@ Private.event_prototypes = {
         local triggerStack = %s
         local triggerRemaining = %s
         local triggerShowOn = %q
-        local expirationTime, duration, name, icon, stacks
+        local expirationTime, duration, name, shortenedName, icon, stacks
 
         if triggerWeaponType == "main" then
           expirationTime, duration, name, shortenedName, icon, stacks = WeakAuras.GetMHTenchInfo()
         elseif triggerWeaponType == "off" then
           expirationTime, duration, name, shortenedName, icon, stacks = WeakAuras.GetOHTenchInfo()
-        elseif triggerWeaponType == "ranged" then
-          expirationTime, duration, name, shortenedName, icon, stacks = WeakAuras.GetRangeTenchInfo()
         end
 
         local remaining = expirationTime and expirationTime - GetTime()

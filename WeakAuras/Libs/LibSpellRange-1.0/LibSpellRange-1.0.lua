@@ -10,7 +10,7 @@
 -- @name LibSpellRange-1.0.lua
 
 local major = "SpellRange-1.0"
-local minor = 19
+local minor = 20
 
 assert(LibStub, format("%s requires LibStub.", major))
 
@@ -26,6 +26,7 @@ local GetSpellInfo = _G.GetSpellInfo
 local GetSpellLink = _G.GetSpellLink
 local GetSpellName = _G.GetSpellName
 local GetSpellTabInfo = _G.GetSpellTabInfo
+local HasPetSpells = _G.HasPetSpells
 
 local IsSpellInRange = _G.IsSpellInRange
 local SpellHasRange = _G.SpellHasRange
@@ -81,12 +82,16 @@ local function UpdateBook(bookType)
 	local _, offs, numspells
 	local max = 0
 
-	for i = MAX_SKILLLINE_TABS, 1, -1 do
-		_, _, offs, numspells = GetSpellTabInfo(i)
+	if bookType == "pet" then
+		max = HasPetSpells() or 0
+	else
+		for i = MAX_SKILLLINE_TABS, 1, -1 do
+			_, _, offs, numspells = GetSpellTabInfo(i)
 
-		if numspells > 0 then
-			max = offs + numspells
-			break
+			if numspells > 0 then
+				max = offs + numspells
+				break
+			end
 		end
 	end
 
@@ -101,7 +106,7 @@ local function UpdateBook(bookType)
 		local spellName, rank = GetSpellName(spellBookID, bookType)
 
 		if spellName and (rank == "" or rank:match("%d+")) then
-			local link = GetSpellLink(spellName, rank)
+			local link = GetSpellLink(spellBookID, bookType)
 			local spellID = tonumber(link and link:gsub("|", "||"):match("spell:(%d+)"))
 
 			if spellName then
@@ -121,6 +126,8 @@ if not Lib.updaterFrame then
 end
 Lib.updaterFrame:UnregisterAllEvents()
 Lib.updaterFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+Lib.updaterFrame:RegisterEvent("SPELLS_CHANGED")
+Lib.updaterFrame:RegisterEvent("PET_BAR_UPDATE")
 Lib.updaterFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 local function UpdateSpells(_, event)
@@ -150,6 +157,7 @@ UpdateSpells()
 -- local inRange = SpellRange.IsSpellInRange(17364, "mouseover")
 function Lib.IsSpellInRange(spellInput, unit)
 	if isNumber[spellInput] then
+		spellInput = isNumber[spellInput]
 		local spell = spellsByID_spell[spellInput]
 		if spell then
 			return IsSpellInRange(spell, "spell", unit)
@@ -208,6 +216,7 @@ end
 -- local hasRange = SpellRange.SpellHasRange(17364)
 function Lib.SpellHasRange(spellInput)
 	if isNumber[spellInput] then
+		spellInput = isNumber[spellInput]
 		local spell = spellsByID_spell[spellInput]
 		if spell then
 			return SpellHasRange(spell, "spell")

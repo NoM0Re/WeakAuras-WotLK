@@ -2461,7 +2461,7 @@ local function createScanFunc(trigger)
   if trigger.useNamePattern and trigger.namePattern_operator and trigger.namePattern_name then
     if trigger.namePattern_operator == "==" then
       local ret2 = [=[
-      if not matchData.name == %s then
+      if matchData.name ~= %s then
         return false
       end
       ]=]
@@ -3350,6 +3350,9 @@ local function RemoveMatchDataMulti(base, destGUID, key, sourceGUID)
       end
     end
     base[key][sourceGUID] = nil
+    if not next(base[key]) then
+      base[key] = nil
+    end
   end
 end
 
@@ -3386,6 +3389,10 @@ local function CleanUpMulti(guid)
       cleanupTimerMulti[guid].handle = timer:ScheduleTimer(CleanUpMulti, timeUntilNext, guid)
       cleanupTimerMulti[guid].nextTime = nextCheck
    end
+  else
+    matchDataMulti[guid] = nil
+    cleanupTimerMulti[guid] = nil
+    pendingTracks[guid] = nil
   end
 end
 
@@ -3410,6 +3417,7 @@ local function UpdateMatchDataMulti(time, base, key, event, sourceGUID, sourceNa
     base[key][sourceGUID] = {
       name = spellName,
       icon = icon,
+      stacks = amount,
       duration = 0,
       expirationTime = math.huge,
       spellId = spellId,
@@ -3461,8 +3469,8 @@ local function UpdateMatchDataMulti(time, base, key, event, sourceGUID, sourceNa
       updated = true
     end
 
-    if match.count ~= amount then
-      match.count = amount
+    if amount ~= nil and match.stacks ~= amount then
+      match.stacks = amount
       updated = true
     end
 
@@ -3535,7 +3543,7 @@ local function AugmentMatchDataMultiWith(matchData, unit, name, icon, stacks, de
   end
 
   if matchData.spellId ~= spellId then
-    matchData.spellId = name
+    matchData.spellId = spellId
     changed = true
   end
   return changed
@@ -3717,11 +3725,14 @@ function BuffTrigger.HandleMultiEvent(frame, event, ...)
   elseif event == "PLAYER_LEAVING_WORLD" then
     -- Remove everything..
     for GUID, GUIDData  in pairs(matchDataMulti) do
-      for key in pairs(GUIDData) do
-        RemoveMatchDataMulti(GUIDData, GUID, key)
+      for key, sources in pairs(GUIDData) do
+        for sourceGUID in pairs(sources) do
+          RemoveMatchDataMulti(GUIDData, GUID, key, sourceGUID)
+        end
       end
     end
     wipe(matchDataMulti)
+    wipe(pendingTracks)
   end
   Private.StopProfileSystem(system)
 end

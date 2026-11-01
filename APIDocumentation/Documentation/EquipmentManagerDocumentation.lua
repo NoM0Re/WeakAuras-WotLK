@@ -134,11 +134,12 @@ local EquipmentManager =
 			Arguments =
 			{
 				{ Name = "name", Type = "string", Nilable = false },
+				{ Name = "returnTable", Type = "table", Nilable = true },
 			},
 
 			Returns =
 			{
-				{ Name = "itemIDs", Type = "table", Nilable = false },
+				{ Name = "itemIDs", Type = "table", Nilable = true },
 			},
 		},
 		{

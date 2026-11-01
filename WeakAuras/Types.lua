@@ -2494,7 +2494,6 @@ Private.string_operator_types = {
 Private.weapon_types = {
   ["main"] = MAINHANDSLOT,
   ["off"] = SECONDARYHANDSLOT,
-  ["ranged"] = RANGEDSLOT,
 }
 
 ---@type table<string, string>

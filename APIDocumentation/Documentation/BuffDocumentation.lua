@@ -41,12 +41,12 @@ local Buff =
 
 			Returns =
 			{
-				{ Name = "hasMainHandEnchant", Type = "bool", Nilable = false },
-				{ Name = "mainHandExpiration", Type = "number", Nilable = false },
-				{ Name = "mainHandCharges", Type = "number", Nilable = false },
-				{ Name = "hasOffHandEnchant", Type = "bool", Nilable = false },
-				{ Name = "offHandExpiration", Type = "number", Nilable = false },
-				{ Name = "offHandCharges", Type = "number", Nilable = false },
+				{ Name = "hasMainHandEnchant", Type = "bool", Nilable = true },
+				{ Name = "mainHandExpiration", Type = "number", Nilable = true },
+				{ Name = "mainHandCharges", Type = "number", Nilable = true },
+				{ Name = "hasOffHandEnchant", Type = "bool", Nilable = true },
+				{ Name = "offHandExpiration", Type = "number", Nilable = true },
+				{ Name = "offHandCharges", Type = "number", Nilable = true },
 			},
 		},
 		{
