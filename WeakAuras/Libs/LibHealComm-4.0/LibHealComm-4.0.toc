@@ -1,0 +1,10 @@
+## Interface: 30300
+## Title: Lib: HealComm-4.0
+## Notes: Library for showing incoming heals and hots
+## Author: Shadowed, xbeeps, Azilroka, Tsoukie
+## X-Category: Library
+
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+
+LibHealComm-4.0.xml

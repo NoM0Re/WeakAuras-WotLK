@@ -1,0 +1,99 @@
+name: Update Externals
+
+on:
+  schedule:
+    # Check the day interval below so month boundaries do not reset the cadence.
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-externals
+  cancel-in-progress: false
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    outputs:
+      due: ${{ steps.interval.outputs.due }}
+    steps:
+      - name: Check three-day interval
+        id: interval
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]] || (( $(date -u +%s) / 86400 % 3 == 0 )); then
+            echo "due=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  update:
+    name: Update ${{ matrix.name }}
+    needs: schedule
+    if: needs.schedule.outputs.due == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # Add another entry here to track another external file.
+        # Use a unique name; it also identifies the library's PR branch.
+        include:
+          - name: LibHealComm-4.0
+            repository: https://gitlab.com/tsoukie-3.3.5/libhealcomm-4.0.git
+            ref: main
+            source: LibHealComm-4.0/LibHealComm-4.0.lua
+            target: WeakAuras/Libs/LibHealComm-4.0/LibHealComm-4.0.lua
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Fetch external file
+        id: upstream
+        env:
+          UPSTREAM_REPOSITORY: ${{ matrix.repository }}
+          UPSTREAM_REF: ${{ matrix.ref }}
+          UPSTREAM_SOURCE: ${{ matrix.source }}
+          TARGET_FILE: ${{ matrix.target }}
+        run: |
+          upstream="$RUNNER_TEMP/external-upstream"
+          git clone --depth 1 --branch "$UPSTREAM_REF" --single-branch \
+            "$UPSTREAM_REPOSITORY" "$upstream"
+          revision="$(git -C "$upstream" rev-parse HEAD)"
+          source="$upstream/$UPSTREAM_SOURCE"
+          test -s "$source"
+          mkdir -p "$(dirname "$TARGET_FILE")"
+          cp "$source" "$TARGET_FILE"
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+          echo "short-revision=${revision:0:8}" >> "$GITHUB_OUTPUT"
+
+      - name: Check whitespace
+        run: git diff --check
+
+      # Enable "Allow GitHub Actions to create and approve pull requests" in
+      # Settings > Actions > General > Workflow permissions.
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: codex/update-external-${{ matrix.name }}
+          delete-branch: true
+          add-paths: ${{ matrix.target }}
+          commit-message: 'Update ${{ matrix.name }} (${{ steps.upstream.outputs.short-revision }})'
+          title: 'Update ${{ matrix.name }}'
+          body: |
+            Update `${{ matrix.target }}` from [${{ matrix.name }}](${{ matrix.repository }}).
+
+            Source file: `${{ matrix.source }}` on `${{ matrix.ref }}`.
+            Source commit: `${{ steps.upstream.outputs.revision }}`.
+
+            Please verify the update in the WoW 3.3.5a client before merging.
+
+            The workflow checks every three days and can also be run manually.
+            It updates this PR when further changes are available; it does not merge automatically.
+            PRs created with `GITHUB_TOKEN` do not trigger the separate lint workflows automatically.
