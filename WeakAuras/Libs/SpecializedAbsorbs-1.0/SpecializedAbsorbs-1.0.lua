@@ -2,7 +2,7 @@
 -- SpecializedAbsorbs
 ------------------------------------------------------------------------
 
-local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 5
+local MAJOR, MINOR = "SpecializedAbsorbs-1.0", 7
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 local Core
@@ -10,6 +10,7 @@ local Core
 local error = error
 local pairs, select = pairs, select
 local min, max, floor = math.min, math.max, math.floor
+local band = bit.band
 local setmetatable, getmetatable = setmetatable, getmetatable
 local tinsert, tremove, tsort = table.insert, table.remove, table.sort
 local UnitBuff, UnitHealthMax, UnitAttackPower = UnitBuff, UnitHealthMax, UnitAttackPower
@@ -66,7 +67,7 @@ local lastCombatLogEvent = 0.0
 -- at spellid == -1 there is a numeric entry with the total remaining value,
 -- at spellid == -2 there is a numeric entry with the total quality (that is, the minimal quality)
 -- The priority is also in this table for performance reasons during sort
--- [GUID] = { [spellid] = {spellid, priority, remainingValue, maxValue, quality, durationTimerHandle, extra} }
+-- [GUID] = { [spellid] = {spellid, priority, remainingValue, maxValue, quality, durationTimerHandle, timestamp, extra = extra} }
 -- Shortcut to Core.activeEffects.bySpell
 local activeEffectsBySpell
 
@@ -301,7 +302,7 @@ end
 
 -- Tries to get a working unitId
 local function GetUnitId(guid, name)
-	if name and UnitGUID(name) then
+	if name and UnitGUID(name) == guid then
 		return name
 	end
 	if UnitGUID("target") == guid then
@@ -343,14 +344,7 @@ end
 
 -- Tries to get a working unitId and calls the given UnitXXX() function
 local function UnitDispatch(func, guid, name)
-	local result = func(name)
-	if not result then
-		local unit = GetUnitId(guid, name)
-		if unit then
-			result = func(unit)
-		end
-	end
-	return result
+	return func(GetUnitId(guid, name))
 end
 
 --------------------
@@ -433,6 +427,8 @@ function Core.Enable()
 
 	if Events.GLYPH_UPDATED then
 		Core.RegisterEvent("GLYPH_UPDATED")
+		Core.RegisterEvent("GLYPH_ADDED")
+		Core.RegisterEvent("GLYPH_REMOVED")
 	end
 
 	if Events.PLAYER_EQUIPMENT_CHANGED then
@@ -508,20 +504,20 @@ function Core.ApplySingularEffect(timestamp, srcGUID, srcName, dstGUID, dstName,
 	local effectInfo = Effects[spellid]
 	local effectEntry
 
-	local value, quality = effectInfo[3](srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
+	local value, quality, extra = effectInfo[3](srcGUID, srcName, dstGUID, dstName, spellid, destEffects)
 	if value == nil then return end
 
 	-- No entry yet for this unit
 	if not destEffects then
 		-- Not this specific effect yet
-		effectEntry = {spellid, effectInfo[1], value, value, quality, 0, timestamp}
+		effectEntry = {spellid, effectInfo[1], value, value, quality, 0, timestamp, extra = extra}
 		destEffects = {[-1] = 0, [-2] = 1.0, [spellid] = effectEntry}
 		activeEffectsBySpell[dstGUID] = destEffects
 		activeEffectsByPriority[dstGUID] = {effectEntry}
 		callbacks:Fire("EffectApplied", srcGUID, srcName, dstGUID, dstName, spellid, spellschool, value, quality, effectInfo[2])
 	elseif not destEffects[spellid] then
 		-- Effect exists already
-		effectEntry = {spellid, effectInfo[1], value, value, quality, 0, timestamp}
+		effectEntry = {spellid, effectInfo[1], value, value, quality, 0, timestamp, extra = extra}
 		destEffects[spellid] = effectEntry
 		tinsert(activeEffectsByPriority[dstGUID], effectEntry)
 		tsort(activeEffectsByPriority[dstGUID], SortEffects)
@@ -534,6 +530,7 @@ function Core.ApplySingularEffect(timestamp, srcGUID, srcName, dstGUID, dstName,
 		effectEntry[4] = value
 		effectEntry[5] = quality
 		effectEntry[7] = timestamp
+		effectEntry.extra = extra
 
 		tsort(activeEffectsByPriority[dstGUID], SortEffects)
 		callbacks:Fire("EffectUpdated", dstGUID, spellid, value, quality, effectInfo[2])
@@ -720,6 +717,7 @@ function Core.RemoveActiveEffect(guid, spellid)
 	if not guidEffects then return end
 
 	local effectEntry = guidEffects[spellid]
+	if not effectEntry then return end
 
 	-- This is a shared effect with a triggerGUID
 	if effectEntry[8] then
@@ -733,6 +731,7 @@ function Core.RemoveActiveEffect(guid, spellid)
 			if effectEntry[6] then
 				Core:CancelTimer(effectEntry[6], true)
 			end
+			activeAreaEffects[effectEntry[8]] = nil
 			callbacks:Fire("AreaCleared", effectEntry[8])
 		end
 	else
@@ -894,7 +893,7 @@ function Core.SendScaling()
 		Core:SendCommMessage(COMM_SCALING_ALT, Core:Serialize(playerid, playerclass, Events.OnScalingEncode()), curChatChannel)
 
 		CommScalingCooldown = true
-		Core:ScheduleTimer(ClearCommStatsCooldown, 30)
+		Core:ScheduleTimer(ClearCommScalingCooldown, 30)
 	end
 end
 
@@ -923,14 +922,12 @@ end
 
 function Core.SetVerbose()
 	Core.RegisterEvent("PARTY_MEMBERS_CHANGED")
-	Core.RegisterEvent("RAID_ROSTER_UPDATE")
 	lib.Silent = false
 	Events.GROUPING_CHANGED()
 end
 
 function Core.SetSilent()
 	Core.UnregisterEvent("PARTY_MEMBERS_CHANGED")
-	Core.UnregisterEvent("RAID_ROSTER_UPDATE")
 	lib.Silent = true
 	curChatChannel = nil
 end
@@ -1065,6 +1062,7 @@ function Events.COMBAT_LOG_EVENT_UNFILTERED(timestamp, etype, srcGUID, srcName, 
 end
 
 function Events.GROUPING_CHANGED()
+	lastAP, lastSP = nil, nil
 	-- Note that the order here is VERY important
 	if UnitInBattleground("player") then
 		curChatChannel = "BATTLEGROUND"
@@ -1103,7 +1101,7 @@ end
 function Events.STATS_CHANGED()
 	local baseAP, plusAP, minusAP = UnitAttackPower("player")
 
-	UnitStatsTable[playerid][2] = baseAP + plusAP - minusAP
+	UnitStatsTable[playerid][2] = baseAP + plusAP + minusAP
 	-- TODO: What about spell power ~= healing spell power?
 	UnitStatsTable[playerid][3] = GetSpellBonusHealing()
 	if curChatChannel then
@@ -1152,6 +1150,7 @@ function Events.OnPeriodicBroadcast()
 	local playerScaling = Scaling[playerid]
 
 	if not CommStatsCooldown then
+		lastAP, lastSP = nil, nil
 		Core:ScheduleUniqueTimer("comm_stats", Core.SendUnitStats, 5)
 	end
 
@@ -1177,6 +1176,7 @@ function Events.OnSingularActivityCheck(args)
 		if not name then
 			Core:CancelTimer(activeEffectsBySpell[guid][spellid][6])
 			RemoveActiveEffect(guid, spellid)
+			return
 		end
 
 		local stillActive = false
@@ -1194,9 +1194,6 @@ function Events.OnSingularActivityCheck(args)
 			Core:CancelTimer(activeEffectsBySpell[guid][spellid][6])
 			RemoveActiveEffect(guid, spellid)
 		end
-	else
-		-- Make sure to remove the timer
-		Core:CancelTimer(activeEffectsBySpell[guid][spellid][6])
 	end
 end
 
@@ -1204,6 +1201,11 @@ end
 function Events.OnAreaTimeout(areaEntry)
 	-- Disable the timer handle entry already
 	areaEntry[6] = nil
+	if areaEntry[9] == 0 then
+		activeAreaEffects[areaEntry[8]] = nil
+		callbacks:Fire("AreaCleared", areaEntry[8])
+		return
+	end
 
 	for guid, guidEffects in pairs(activeEffectsBySpell) do
 		if areaEntry[9] == 0 then return end
@@ -1220,7 +1222,7 @@ end
 
 -- Map client events to our callbacks
 Events.PARTY_MEMBERS_CHANGED = Events.GROUPING_CHANGED
-Events.RAID_ROSTER_UPDATE = Events.GROUPING_CHANGED
+Events.RAID_ROSTER_UPDATE = nil
 Events.PLAYER_DAMAGE_DONE_MODS = Events.STATS_CHANGED
 Events.UNIT_ATTACK_POWER = Events.STATS_CHANGED
 
@@ -1246,7 +1248,7 @@ function lib.RegisterAreaCallbacks(self, funcCreated, funcUpdated, funcCleared)
 end
 
 function lib.GetLowValueTolerance()
-	return LOW_VALUE_TOLERANE
+	return LOW_VALUE_TOLERANCE
 end
 
 function lib.SetLowValueTolerance(value)
@@ -1424,56 +1426,56 @@ local function generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool
 end
 
 local function Physical_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_PHYSICAL then
+	if band(spellschool, SCHOOL_MASK_PHYSICAL) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Holy_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_HOLY then
+	if band(spellschool, SCHOOL_MASK_HOLY) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Fire_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_FIRE then
+	if band(spellschool, SCHOOL_MASK_FIRE) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Nature_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_NATURE then
+	if band(spellschool, SCHOOL_MASK_NATURE) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Frost_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_FROST then
+	if band(spellschool, SCHOOL_MASK_FROST) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function FrostFire_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= (SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST) then
+	if band(spellschool, SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Shadow_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_SHADOW then
+	if band(spellschool, SCHOOL_MASK_SHADOW) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function Arcane_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_ARCANE then
+	if band(spellschool, SCHOOL_MASK_ARCANE) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
@@ -1504,7 +1506,7 @@ local function deathknight_AntiMagicShell_Hit(effectEntry, absorbedRemaining, ov
 		return 0, true
 	end
 
-	local maxAbsorb = floor((absorbedRemaining + overkill) * effectEntry[7])
+	local maxAbsorb = floor((absorbedRemaining + overkill) * (effectEntry.extra or 0.75))
 	if effectEntry[3] < maxAbsorb then
 		return effectEntry[3], false
 	end
@@ -1638,14 +1640,14 @@ local function mage_IceBarrier_Create(srcGUID, srcName, dstGUID, dstName, spelli
 end
 
 local function mage_FireWard_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_FIRE then
+	if band(spellschool, SCHOOL_MASK_FIRE) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 end
 
 local function mage_FrostWard_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_FROST then
+	if band(spellschool, SCHOOL_MASK_FROST) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
@@ -1669,6 +1671,8 @@ end
 
 function OnEnableClass.MAGE()
 	Events.GLYPH_UPDATED = mage_OnGlyphUpdated
+	Events.GLYPH_ADDED = mage_OnGlyphUpdated
+	Events.GLYPH_REMOVED = mage_OnGlyphUpdated
 	mage_OnGlyphUpdated()
 end
 
@@ -1841,7 +1845,7 @@ local function priest_UpdatePlayerScaling()
 	spFactor = spFactor + (privateScaling["BorrowedTime"] * 0.08)
 	spFactor = spFactor * (1.0 + (privateScaling["TwinDisc"] * 0.01) + (privateScaling["FocusedPower"] * 0.02) + (privateScaling["SpiritualHealing"] * 0.02)) * (1.0 + ((privateScaling["ImpPWS"] + privateScaling["4pcRaid10"]) * 0.05))
 	privateScaling.sp = spFactor
-	privateScaling.DA = (privateScaling["DivineAegis"] * 0.1) * (1 + (privateScaling["4pcRaid9"] * 0.03))
+	privateScaling.DA = (privateScaling["DivineAegis"] * 0.1) * (1 + (privateScaling["4pcRaid9"] * 0.10))
 	priest_ApplyScaling(playerid, UnitLevel("player"), privateScaling.base, privateScaling.sp, privateScaling.DA)
 	lib.ScheduleScalingBroadcast()
 end
@@ -2002,7 +2006,7 @@ end
 local function shaman_AstralShift_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
 	local total = absorbedRemaining + overkill
 
-	return floor(total * effectEntry[7]), true
+	return floor(total * (effectEntry.extra or 0)), true
 end
 
 local function shaman_OnTalentUpdate()
@@ -2054,7 +2058,7 @@ local function warlock_Sacrifice_Create(srcGUID, srcName, dstGUID, dstName, spel
 end
 
 local function warlock_ShadowWard_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
-	if spellschool ~= SCHOOL_MASK_SHADOW then
+	if band(spellschool, SCHOOL_MASK_SHADOW) == 0 then
 		return 0, true
 	end
 	return generic_Hit(effectEntry, absorbedRemaining, overkill, spellschool)
@@ -2136,7 +2140,7 @@ local mage_FrostWard_Entry = {2.0, 30, generic_SpellScalingByTable_Create, mage_
 local mage_IceBarrier_Entry = {1.0, 60, mage_IceBarrier_Create, generic_Hit}
 local mage_ManaShield_Entry = {1.0, 60, generic_SpellScalingByTable_Create, generic_Hit, mage_Absorb_Spells, 0.8053}
 local priest_PWS_Entry = {1.0, 30, priest_PowerWordShield_Create, generic_Hit}
-local warlock_Sacrifice_Entry = {1.0, 30, generic_ConstantByTable_Create, generic_Hit, warlock_Sacrifice_Spells}
+local warlock_Sacrifice_Entry = {1.0, 30, warlock_Sacrifice_Create, generic_Hit, warlock_Sacrifice_Spells}
 local warlock_ShadowWard_Entry = {2.0, 30, generic_SpellScalingByTable_Create, warlock_ShadowWard_Hit, warlock_ShadowWard_Spells, 0.8053}
 
 -- INCOMPLETE
@@ -2249,11 +2253,11 @@ Core.Effects = {
 	[53911] = {1.0, 120, function() return 3100, 1.0 end, Fire_Hit}, -- Mighty Fire Protection Potion
 	[53910] = {1.0, 120, function() return 3100, 1.0 end, Arcane_Hit}, -- Mighty Arcane Protection Potion
 	[17548] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, --  Greater Shadow Protection Potion
-	[17546] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, -- Greater Nature Protection Potion
-	[17545] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, -- Greater Holy Protection Potion
-	[17544] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, -- Greater Frost Protection Potion
-	[17543] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, -- Greater Fire Protection Potion
-	[17549] = {1.0, 120, function() return 2600, 1.0 end, Shadow_Hit}, -- Greater Arcane Protection Potion
+	[17546] = {1.0, 120, function() return 2600, 1.0 end, Nature_Hit}, -- Greater Nature Protection Potion
+	[17545] = {1.0, 120, function() return 2600, 1.0 end, Holy_Hit}, -- Greater Holy Protection Potion
+	[17544] = {1.0, 120, function() return 2600, 1.0 end, Frost_Hit}, -- Greater Frost Protection Potion
+	[17543] = {1.0, 120, function() return 2600, 1.0 end, Fire_Hit}, -- Greater Fire Protection Potion
+	[17549] = {1.0, 120, function() return 2600, 1.0 end, Arcane_Hit}, -- Greater Arcane Protection Potion
 	[28527] = {1.0, 15, function() return 1000, 1.0 end, generic_Hit}, -- Fel Blossom
 	[29432] = {1.0, 3600, function() return 2000, 1.0 end, Fire_Hit}, -- Frozen Rune
 	[25750] = {1.0, 15, function() return 151, 1.0 end, Physical_Hit}, -- Defiler's Talisman/Talisman of Arathor
