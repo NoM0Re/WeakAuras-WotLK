@@ -344,7 +344,9 @@ end
 
 -- Tries to get a working unitId and calls the given UnitXXX() function
 local function UnitDispatch(func, guid, name)
-	return func(GetUnitId(guid, name))
+	local unit = GetUnitId(guid, name)
+	if not unit then return 0 end
+	return func(unit)
 end
 
 --------------------
