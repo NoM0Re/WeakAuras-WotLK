@@ -3812,7 +3812,10 @@ Private.event_prototypes = {
           return trigger.subeventSuffix and trigger.subeventPrefix and (trigger.subeventSuffix == "_DAMAGE" or trigger.subeventPrefix == "DAMAGE_SHIELD" or trigger.subeventPrefix == "DAMAGE_SPLIT" or trigger.subeventSuffix == "_HEAL")
         end,
         store = true,
-        conditionType = "bool"
+        conditionType = "bool",
+        conditionTest = function(state, needle)
+          return state and (state.critical == 1) == (needle == 1)
+        end,
       },
       {
         name = "glancing",
@@ -3823,7 +3826,10 @@ Private.event_prototypes = {
           return trigger.subeventSuffix and trigger.subeventPrefix and (trigger.subeventSuffix == "_DAMAGE" or trigger.subeventPrefix == "DAMAGE_SHIELD" or trigger.subeventPrefix == "DAMAGE_SPLIT")
         end,
         store = true,
-        conditionType = "bool"
+        conditionType = "bool",
+        conditionTest = function(state, needle)
+          return state and (state.glancing == 1) == (needle == 1)
+        end,
       },
       {
         name = "crushing",
@@ -3834,7 +3840,10 @@ Private.event_prototypes = {
           return trigger.subeventSuffix and trigger.subeventPrefix and (trigger.subeventSuffix == "_DAMAGE" or trigger.subeventPrefix == "DAMAGE_SHIELD" or trigger.subeventPrefix == "DAMAGE_SPLIT")
         end,
         store = true,
-        conditionType = "bool"
+        conditionType = "bool",
+        conditionTest = function(state, needle)
+          return state and (state.crushing == 1) == (needle == 1)
+        end,
       },
       -- we don't have isOffHand :(
       {
@@ -3847,17 +3856,6 @@ Private.event_prototypes = {
         end,
         store = true,
         conditionType = "number"
-      },
-      {
-        name = "overEnergize",
-        display = L["Over Energize"],
-        type = "number",
-        init = "arg",
-        store = true,
-        conditionType = "number",
-        enable = function(trigger)
-          return trigger.subeventSuffix and (trigger.subeventSuffix == "_ENERGIZE")
-        end
       },
       {
         name = "powerType",
