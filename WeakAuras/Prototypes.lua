@@ -4492,7 +4492,7 @@ Private.event_prototypes = {
     type = "item",
     events = {},
     internal_events = function(trigger, untrigger)
-      local itemName = type(trigger.itemName) == "number" and trigger.itemName or string.format("%q", trigger.itemName or "0")
+      local itemName = trigger.itemName or 0
       local events = {
         "ITEM_COOLDOWN_READY:" .. itemName,
         "ITEM_COOLDOWN_CHANGED:" .. itemName,
@@ -5808,10 +5808,10 @@ Private.event_prototypes = {
       local ret = [[
         local itemName = %s
         local exactSpellMatch = %s
-        local _, itemLink = GetItemInfo(itemName)
+        local name, itemLink = GetItemInfo(itemName)
         local itemId = tonumber(itemName) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         if not exactSpellMatch and tonumber(itemName) then
-          itemName = GetItemInfo(itemName)
+          itemName = name or itemName
         end
         local count = GetItemCount(itemName or "", %s, %s);
       ]];
@@ -6097,16 +6097,6 @@ Private.event_prototypes = {
         desc = L["Enchant Name or ID"],
         type = "string",
         test = "true"
-      },
-      {
-        name = "enchantID",
-        hidden = true,
-        test = "true",
-        display = L["Enchant ID"],
-        store = true,
-        conditionType = "number",
-        operator_types = "only_equal",
-        noProgressSource = true
       },
       {
         name = "stacks",
@@ -6759,14 +6749,13 @@ Private.event_prototypes = {
       local ret = [[
         local inverse = %s
         local triggerItemName = %s
-        local _, itemLink = GetItemInfo(triggerItemName)
+        local itemName, itemLink = GetItemInfo(triggerItemName)
         local itemId = tonumber(triggerItemName) or (itemLink and tonumber(itemLink:match("item:(%%d+)")))
         local icon = GetItemIcon(triggerItemName) or ""
         local itemSlot = %s
       ]]
 
       ret = ret ..[[
-        local itemName = triggerItemName
         local equipped = WeakAuras.CheckForItemEquipped(triggerItemName, itemSlot)
       ]]
 
@@ -7156,6 +7145,7 @@ Private.event_prototypes = {
   ["Crowd Controlled"] = {
     type = "unit",
     events = {
+      ["events"] = {"PLAYER_CONTROL_LOST", "PLAYER_CONTROL_GAINED"},
       ["unit_events"] = {
         ["player"] = {"UNIT_AURA"}
       }

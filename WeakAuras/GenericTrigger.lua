@@ -3090,7 +3090,9 @@ do
     itemSlotsCdHandles[id] = nil;
     itemSlotsCdDurs[id] = nil;
     itemSlotsCdExps[id] = nil;
-    Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_READY", id);
+    if itemSlots[id] == GetInventoryItemID("player", id) then
+      Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_READY", id);
+    end
   end
 
   ---@type fun()
@@ -3287,6 +3289,18 @@ do
   end
 
   function Private.CheckItemSlotCooldown(id, itemId)
+    local newItemId = GetInventoryItemID("player", id) or 0
+    local itemChanged = itemId ~= newItemId
+    if itemChanged then
+      if itemSlotsCdExps[id] then
+        if itemSlotsCdHandles[id] then
+          timer:CancelTimer(itemSlotsCdHandles[id]);
+        end
+        ItemSlotCooldownFinished(id);
+      end
+      itemSlots[id] = newItemId
+    end
+
     local startTime, duration, enable = GetInventoryItemCooldown("player", id);
     itemSlotsEnable[id] = enable;
     startTime = startTime or 0;
@@ -3332,12 +3346,8 @@ do
       end
     end
 
-    local newItemId = GetInventoryItemID("player", id);
-    if (itemId ~= newItemId) then
-      if not WeakAuras.IsPaused() then
-        Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_ITEM_CHANGED", id)
-      end
-      itemSlots[id] = newItemId or 0;
+    if itemChanged and not WeakAuras.IsPaused() then
+      Private.ScanEventsByID("ITEM_SLOT_COOLDOWN_ITEM_CHANGED", id)
     end
   end
 
@@ -3398,8 +3408,6 @@ do
 
     if not(items[id]) then
       items[id] = true;
-      itemCdDurs[id] = 0
-      itemCdExps[id] = 0
 
       -- TODO: In 10.2.6 the apis return values changed from 1,0 for enabled to true, false
       -- We should adjust once its on all versions
@@ -3432,7 +3440,7 @@ do
     if not id or id == 0 then return end
 
     if not(itemSlots[id]) then
-      itemSlots[id] = GetInventoryItemID("player", id)
+      itemSlots[id] = GetInventoryItemID("player", id) or 0
       local startTime, duration, enable = GetInventoryItemCooldown("player", id);
       itemSlotsEnable[id] = enable;
 
@@ -3707,6 +3715,7 @@ function WeakAuras.GetEquipmentSetInfo(itemSetName, partial)
 
   for id = 1, GetNumEquipmentSets() do
     local numItems, numEquipped = 0, 0
+    local emptySlotsMatch = true
     local name, icon = GetEquipmentSetInfo(id);
     if (itemSetName == nil or (name and itemSetName == name)) then
       if (name ~= nil) then
@@ -3717,9 +3726,11 @@ function WeakAuras.GetEquipmentSetInfo(itemSetName, partial)
             if equipmentItemIDs[slot] == item then
               numEquipped = numEquipped + 1
             end
+          elseif item == 0 and equipmentItemIDs[slot] ~= 0 then
+            emptySlotsMatch = false
           end
         end
-        local match = (not partial and numItems == numEquipped)
+        local match = (not partial and emptySlotsMatch and numItems == numEquipped)
           or (partial and (numEquipped or 0) > bestMatchNumEquipped);
         if (match) then
           bestMatchNumEquipped = numEquipped;
@@ -5187,7 +5198,8 @@ WeakAuras.CheckForItemEquipped = function(itemId, specificSlot)
 end
 
 Private.ExecEnv.IsEquippedItemType = function(itemType)
-  return IsEquippedItemType(Private.item_weapon_types[itemType] or '')
+  local name = Private.item_weapon_types[itemType]
+  return name and IsEquippedItemType(name)
 end
 
 ---@return integer critChance
