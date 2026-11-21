@@ -96,23 +96,30 @@ do
     ticker.callbackView = nil
   end
 
-  local function WaitFunc(self, elapsed)
-    local total = #waitTable
+  local total = 0
+
+  local function WaitFunc(self)
+    local now = GetTime()
     local i = 1
 
     while i <= total do
       local ticker = waitTable[i]
+      local elapsed = floor((now - ticker.lastUpdate) * 1000 + 0.5) % 2^32
 
       if ticker.state.cancelled then
         ReleaseTicker(table.remove(waitTable, i))
         total = total - 1
       elseif ticker.delay > elapsed then
         ticker.delay = ticker.delay - elapsed
+        ticker.lastUpdate = now
         i = i + 1
       else
+        if ticker.iterations ~= 1 then
+          ticker.lastUpdate = GetTime()
+        end
         local ok, err = pcall(ticker.state.callback, ticker.callbackView)
         if not ok then
-          geterrorhandler()(err)
+          pcall(geterrorhandler(), err)
         end
 
         if ticker.state.cancelled then
@@ -132,7 +139,8 @@ do
       end
     end
 
-    if #waitTable == 0 then
+    total = #waitTable
+    if total == 0 then
       self:Hide()
     end
   end
@@ -142,6 +150,13 @@ do
   waitFrame:SetScript("OnUpdate", WaitFunc)
 
   local function AddDelayedCall(ticker)
+    local delay = floor(ticker.delay * 1000)
+    if delay * 0.001 < ticker.delay then
+      delay = delay + 1
+    end
+    ticker.delay = delay
+    ticker.duration = delay
+    ticker.lastUpdate = GetTime()
     table.insert(waitTable, ticker)
     waitFrame:Show()
   end
@@ -188,7 +203,6 @@ do
       iterations = iterations or -1,
       delay = math.max(0.01, duration),
     }
-    ticker.duration = ticker.delay
 
     AddDelayedCall(ticker)
     return CreateContainerView(state)
