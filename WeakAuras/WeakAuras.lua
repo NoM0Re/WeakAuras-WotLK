@@ -3456,7 +3456,7 @@ function Private.HandleChatAction(message_type, message, message_dest, message_d
     end
   elseif(message_type == "SMARTRAID") then
     if UnitInBattleground("player") then
-      pcall(function() SendChatMessage(message, "CHAT_MSG_BATTLEGROUND") end)
+      pcall(function() SendChatMessage(message, "BATTLEGROUND") end)
     elseif UnitInRaid("player") then
       pcall(function() SendChatMessage(message, "RAID") end)
     elseif UnitInParty("player") then
