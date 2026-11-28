@@ -305,9 +305,9 @@ local function createIcon()
   local data = {
     model_fileId = "Creature/Arthaslichking/arthaslichking.m2", -- "122968"
     modelIsUnit = false,
-    model_x = 0,
+    model_x = 0.35,
     model_y = 0,
-    model_z = 0.35,
+    model_z = 0,
     sequence = 1,
     advance = false,
     rotation = 0,
