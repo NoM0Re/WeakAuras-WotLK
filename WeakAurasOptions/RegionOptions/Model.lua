@@ -291,13 +291,13 @@ local function modifyThumbnail(parent, region, data)
     WeakAuras.SetModel(model, nil, data.model_fileId, data.modelIsUnit, data.modelDisplayInfo)
     -- model:SetPortraitZoom(data.portraitZoom and 1 or 0)
     -- model:ClearTransform();
-    model:SetPosition(data.model_z, data.model_x, data.model_y);
+    model:SetPosition(data.model_x, data.model_y, data.model_z);
     model:SetFacing(rad(data.rotation));
   end);
   region:SetScript("OnShow", function() model:Show() end);
   region:SetScript("OnHide", function() model:Hide() end);
 
-  model:SetPosition(data.model_z, data.model_x, data.model_y);
+  model:SetPosition(data.model_x, data.model_y, data.model_z);
   model:SetFacing(rad(data.rotation));
 end
 

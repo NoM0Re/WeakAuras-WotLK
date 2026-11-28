@@ -56,7 +56,7 @@ local function PreShow(self)
   -- Adjust model
   local modelId = data.model_fileId
   if modelId then
-    pcall(self.SetModel, self, modelId)
+    WeakAuras.SetModel(self, nil, modelId)
   end
 
   -- self:ClearTransform()
@@ -112,7 +112,7 @@ local function AcquireModel(region, data)
   -- Adjust model
   local modelId = data.model_fileId
   if modelId then
-    pcall(model.SetModel, model, modelId)
+    WeakAuras.SetModel(model, nil, modelId)
   end
 
   -- model:ClearTransform()

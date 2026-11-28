@@ -5966,6 +5966,8 @@ function Private.FindUnusedId(prefix)
 end
 
 function WeakAuras.SetModel(frame, unused, model_fileId, isUnit, isDisplayInfo)
+  local x, y, z = frame:GetPosition()
+  frame:SetPosition(0, 0, 0)
   if isDisplayInfo then
     pcall(frame.SetDisplayInfo, frame, model_fileId)
   elseif isUnit then
@@ -5973,6 +5975,7 @@ function WeakAuras.SetModel(frame, unused, model_fileId, isUnit, isDisplayInfo)
   else
     pcall(frame.SetModel, frame, model_fileId)
   end
+  frame:SetPosition(x, y, z)
 end
 
 function Private.IsCLEUSubevent(subevent)

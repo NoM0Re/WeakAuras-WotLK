@@ -151,18 +151,19 @@ local function ConstructModelPicker(frame)
   model:SetFrameStrata("FULLSCREEN");
   group.model = model;
 
-  local startX, rotation
+  local startX, startRotation, rotation
   local function OnUpdateScript()
     local uiScale, x = UIParent:GetEffectiveScale(), GetCursorPosition()
-    local screenW, screenH = GetScreenWidth(), GetScreenHeight()
+    local screenW = GetScreenWidth()
     local diffX = startX/uiScale - x/uiScale
-    rotation = (rotation + 180 / screenW * diffX) % 360
+    rotation = (startRotation + 180 / screenW * diffX) % 360
     model:SetFacing(rad(rotation))
   end
   model:EnableMouse(false)
   model:SetScript("OnMouseDown", function(self)
     startX = GetCursorPosition()
-    rotation = group.selectedValues.rotation or 0
+    startRotation = group.selectedValues.rotation or 0
+    rotation = startRotation
     self:SetScript("OnUpdate", OnUpdateScript)
   end)
   model:SetScript("OnMouseUp", function(self)
@@ -198,10 +199,12 @@ local function ConstructModelPicker(frame)
     self.selectedValues.model_z = model_z or self.selectedValues.model_z
     self.selectedValues.rotation = rotation or self.selectedValues.rotation
 
-    WeakAuras.SetModel(self.model, nil, self.selectedValues.model_fileId)
+    if model_fileId then
+      WeakAuras.SetModel(self.model, nil, self.selectedValues.model_fileId)
+    end
 
     -- self.model:ClearTransform();
-    self.model:SetPosition(self.selectedValues.model_z, self.selectedValues.model_x, self.selectedValues.model_y);
+    self.model:SetPosition(self.selectedValues.model_x, self.selectedValues.model_y, self.selectedValues.model_z);
     self.model:SetFacing(rad(self.selectedValues.rotation));
 
     for child in OptionsPrivate.Private.TraverseLeafsOrAura(self.baseObject) do
@@ -231,7 +234,7 @@ local function ConstructModelPicker(frame)
     self.selectedValues.rotation = GetAll(baseObject, path, "rotation", 0)
 
     -- self.model:ClearTransform();
-    self.model:SetPosition(self.selectedValues.model_z, self.selectedValues.model_x, self.selectedValues.model_y);
+    self.model:SetPosition(self.selectedValues.model_x, self.selectedValues.model_y, self.selectedValues.model_z);
     self.model:SetFacing(rad(self.selectedValues.rotation));
     modelPickerZ:SetValue(self.selectedValues.model_z);
     modelPickerZ.editbox:SetText(("%.2f"):format(self.selectedValues.model_z));
