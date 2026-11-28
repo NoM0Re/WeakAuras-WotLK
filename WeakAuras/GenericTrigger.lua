@@ -3749,7 +3749,9 @@ function Private.ExecEnv.CheckTotemName(totemName, triggerTotemName, triggerTote
     return false
   end
 
-  if triggerTotemName and #triggerTotemName > 0 and triggerTotemName ~= totemName then
+  if triggerTotemName and #triggerTotemName > 0
+    and triggerTotemName ~= totemName and triggerTotemName ~= totemName:match("^(.*) [IVX]+$")
+  then
     return false
   end
 
@@ -3770,13 +3772,6 @@ function Private.ExecEnv.CheckTotemName(totemName, triggerTotemName, triggerTote
   end
 
   return true
-end
-
-function Private.ExecEnv.CheckTotemIcon(totemIcon, triggerTotemIcon, operator)
-  if not triggerTotemIcon then
-    return true
-  end
-  return (totemIcon == triggerTotemIcon) == (operator == "==")
 end
 
 -- Queueable Spells

@@ -2845,7 +2845,7 @@ Private.event_prototypes = {
       local result = {}
       local powerType = trigger.use_powertype and trigger.powertype
 
-      if trigger.powertype == 4 then
+      if powerType == 4 then
         local _, class = UnitClass("player")
         result.events = result.events or {}
         tinsert(result.events, "UNIT_COMBO_POINTS")
@@ -2871,7 +2871,7 @@ Private.event_prototypes = {
       end
 
       -- Register shared events unless we're in the FRAME_UPDATE case
-      if (not (unit and not Private.multiUnitUnits[unit])) or (trigger.powertype == 4) then
+      if (not (unit and not Private.multiUnitUnits[unit])) or (powerType == 4) then
         AddUnitEventForEvents(result, unit, "UNIT_DISPLAYPOWER")
         AddUnitEventForEvents(result, unit, "UNIT_NAME_UPDATE")
         if trigger.use_ignoreDead or trigger.use_ignoreDisconnected then
@@ -5602,13 +5602,11 @@ Private.event_prototypes = {
     progressType = "timed",
     triggerFunction = function(trigger)
       local ret = [[return
-      function (states)
+      function (states, event, slotId)
         local totemType = %s;
         local triggerTotemName = %q
         local triggerTotemPattern = %q
         local triggerTotemPatternOperator = %q
-        local triggerTotemIcon = %s
-        local triggerTotemIconOperator = %q
         local clone = %s
         local inverse = %s
         local remainingCheck = %s
@@ -5618,15 +5616,16 @@ Private.event_prototypes = {
         end
 
         if (totemType) then -- Check a specific totem slot
+          if slotId and event == "PLAYER_TOTEM_UPDATE" and totemType ~= slotId then
+            -- PLAYER_TOTEM_UPDATE for a different slot
+            return false
+          end
+
           local _, totemName, startTime, duration, icon = GetTotemInfo(totemType);
-          active = (startTime and startTime ~= 0);
+          local active = (startTime and startTime ~= 0);
 
           if not Private.ExecEnv.CheckTotemName(totemName, triggerTotemName, triggerTotemPattern, triggerTotemPatternOperator) then
             active = false;
-          end
-
-          if not Private.ExecEnv.CheckTotemIcon(icon, triggerTotemIcon, triggerTotemIconOperator) then
-            active = false
           end
 
           if (inverse) then
@@ -5659,10 +5658,9 @@ Private.event_prototypes = {
         elseif inverse then -- inverse without a specific slot
           local found = false;
           for i = 1, 4 do
-            local _, totemName, startTime, duration, icon = GetTotemInfo(i);
+            local _, totemName, startTime = GetTotemInfo(i);
             if ((startTime and startTime ~= 0)
               and Private.ExecEnv.CheckTotemName(totemName, triggerTotemName, triggerTotemPattern, triggerTotemPatternOperator)
-              and Private.ExecEnv.CheckTotemIcon(icon, triggerTotemIcon, triggerTotemIconOperator)
             ) then
               found = true;
             end
@@ -5675,18 +5673,17 @@ Private.event_prototypes = {
             state.name = triggerTotemName;
             state.totemName = triggerTotemName;
             if (triggerTotemName) then
-              state.icon = Private.ExecEnv.GetSpellIcon(triggerTotemName)
+              state.icon = select(3, GetSpellInfo(triggerTotemName))
             end
           else
             states[cloneId] = nil
           end
-        else -- check all slots
+        else -- cloning, check all slots
           for i = 1, 4 do
             local _, totemName, startTime, duration, icon = GetTotemInfo(i);
-            active = (startTime and startTime ~= 0);
+            local active = (startTime and startTime ~= 0);
 
             if not Private.ExecEnv.CheckTotemName(totemName, triggerTotemName, triggerTotemPattern, triggerTotemPatternOperator)
-              or not Private.ExecEnv.CheckTotemIcon(icon, triggerTotemIcon, triggerTotemIconOperator)
             then
               active = false;
             end
@@ -5721,13 +5718,12 @@ Private.event_prototypes = {
         return true;
       end
       ]];
-      local totemName = tonumber(trigger.totemName) and GetSpellInfo(tonumber(trigger.totemName)) or trigger.totemName;
+      local spellId = trigger.use_totemName and tonumber(trigger.totemName);
+      local totemName = spellId and GetSpellInfo(spellId) or trigger.totemName;
       ret = ret:format(trigger.use_totemType and tonumber(trigger.totemType) or "nil",
         trigger.use_totemName and totemName or "",
         trigger.use_totemNamePattern and trigger.totemNamePattern or "",
         trigger.use_totemNamePattern and trigger.totemNamePattern_operator or "",
-        trigger.use_icon and trigger.icon or "nil",
-        trigger.use_icon and trigger.icon_operator or "",
         trigger.use_clones and "true" or "false",
         trigger.use_inverse and "true" or "false",
         trigger.use_remaining and tonumber(trigger.remaining or 0) or "nil",
@@ -5753,14 +5749,6 @@ Private.event_prototypes = {
         name = "totemNamePattern",
         display = L["Totem Name Pattern Match"],
         type = "longstring",
-      },
-      {
-        name = "icon",
-        display = L["Totem Icon"],
-        type = "number",
-        conditionType = "number",
-        operator_types = "only_equal",
-        store = true,
       },
       {
         name = "inverse",
