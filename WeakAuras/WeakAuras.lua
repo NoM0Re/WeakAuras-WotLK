@@ -1544,6 +1544,8 @@ local function GetInstanceTypeAndSize()
       elseif playerDifficulty == 1 then
         difficulty = "heroic"
       end
+    elseif instanceType == "party" and difficultyIndex == 2 then
+      difficulty = "heroic"
     else
       if difficultyIndex == 1 or difficultyIndex == 2 then
         difficulty = "normal"
